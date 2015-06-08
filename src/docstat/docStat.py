@@ -20,14 +20,18 @@ logger = logging.getLogger(__name__)
 class LowDocumentCollection():
     documents = []
     vocabulary = {}
+    storage = ''
+    fhandle = ''
 
     def __init__(self):
         self.documents = []
         self.vocabulary = {}
+        self.storage = ''
 
     def __init__(self, lowfile = ''):
         self.documents = []
         self.vocabulary = {}
+        self.storage = lowfile
         if lowfile:
             self.read_lowfile(lowfile)
 
@@ -38,14 +42,15 @@ class LowDocumentCollection():
             docid = line[:index]
             tokens = line[index:].split()
 
-            logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens[:3]))
+#            logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens[:3]))
 
             words = {}
             for word in tokens:
-                if word in words:
-                    words[word] += 1
-                else:
-                    words[word] = 1
+#it's too memeory hungry for this simple implemntation
+#                if word in words:
+#                    words[word] += 1
+#                else:
+#                    words[word] = 1
 
                 if word in self.vocabulary:
                     self.vocabulary[word] += 1
@@ -53,15 +58,15 @@ class LowDocumentCollection():
                     self.vocabulary[word] = 1
     
 
-            logger.debug('add document:docid=%s, words=%s'%( docid, words))
+#           logger.debug('add document:docid=%s, words=%s'%( docid, words))
             self.documents.append((docid, words))
 
-    def read_document(self, doc):
+    def read_document(self, doc= (1,{})):
         """
         read from a document:=(docid, wordmap) object
 
         """
-        self.documents.append(doc)
+        self.documents.append((doc[0], {}))
         for word in doc[1]:
             if word in self.vocabulary:
                 self.vocabulary[word] += 1
@@ -74,8 +79,47 @@ class LowDocumentCollection():
     def get_vocab_size(self):
         return len(self.vocabulary)
 
+    def get_lowfile(self):
+        return self.storage
+
     def __str__(self):
         return('Collection doc_no:%d, vocabulary size:%d\n'%(self.get_doc_number(), self.get_vocab_size()))
+
+    def rewind(self):
+        if self.fhandle == '':
+            self.fhandle = open(self.storage, 'r')
+        else:
+            self.fhandle.seek(0)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        """
+        iterator for the documents
+        """
+        if self.fhandle == '':
+            self.fhandle = open(self.storage, 'r')
+        
+        line = self.fhandle.readline()
+        logger.debug('read line as %s', line)
+        if line == '':
+            raise StopIteration
+            #yield none
+
+        index =  line.find('\t')
+        docid = line[:index]
+        tokens = line[index:].split()
+
+        words = {}
+        for word in tokens:
+            if word in words:
+                words[word] += 1
+            else:
+                words[word] = 1
+
+        return (docid, words)
+        # yield (docid, words)
 
     def split(self, splitCnt, splitType = 'SEQ'):
         """
@@ -89,23 +133,28 @@ class LowDocumentCollection():
         return:
         splitCnt LowDocumentCollection objects
         """
+        
         docCollection = []
         for i in range(splitCnt):
             docCollection.append( LowDocumentCollection() )
+            docCollection[i].sotrage = self.storage + '_%03d'%(i) 
 
-        if splitType == 'SEQ':
-            part_size = math.ceil( float(self.get_doc_number()) / splitCnt)
-            for id  in xrange(self.get_doc_number()):
+        part_size = math.ceil( float(self.get_doc_number()) / splitCnt)
+        
+        self.rewind()
+        id = 0
+        for doc in self:
+            logger.debug('next doc : %s', doc)
+            if splitType == 'SEQ':
                 part_no = int(id / part_size)
-                docCollection[part_no].read_document(self.documents[id])
-
-        elif splitType == 'HASH':
-            for doc in self.documents:
-                part_no = int(hash(doc[0]) % splitCnt)
                 docCollection[part_no].read_document(doc)
+                id += 1
+
+            elif splitType == 'HASH':
+                    part_no = int(hash(doc[0]) % splitCnt)
+                    docCollection[part_no].read_document(doc)
 
         return docCollection
-
 
 if __name__ == '__main__':
     """ usage: docStat.py lowfile splitCnt splitType logger_level
