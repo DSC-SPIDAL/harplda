@@ -17,6 +17,13 @@ low format document collection file
 
 logger = logging.getLogger(__name__)
 
+
+def progress(width, percent):
+    print "%s %d%%\r" % (('%%-%ds' % width) % (width * percent / 100 * "="), percent),
+    if percent >= 100:
+        print
+        sys.stdout.flush()
+
 class LowDocumentCollection():
     documents = []
     vocabulary = {}
@@ -36,37 +43,46 @@ class LowDocumentCollection():
             self.read_lowfile(lowfile)
 
     def read_lowfile(self, lowfile):
+        id = 0
         lf = open(lowfile,'r')
         for line in lf:
-            index =  line.find('\t')
-            docid = line[:index]
-            tokens = line[index:].split()
-
-#            logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens[:3]))
-
-            words = {}
-            for word in tokens:
-#it's too memeory hungry for this simple implemntation
-#                if word in words:
-#                    words[word] += 1
-#                else:
-#                    words[word] = 1
-
-                if word in self.vocabulary:
-                    self.vocabulary[word] += 1
-                else:
-                    self.vocabulary[word] = 1
+#            index =  line.find('\t')
+#            docid = line[:index]
+#            tokens = line[index:].split()
+            tokens = line.split(' ')
+            doc_token = tokens[0].split('\t')
+            docid = doc_token[0]
+            
+            # logger.debug('split to : docid = %s, tokens = %s, %s'%(docid, doc_token,tokens))
+            
+            if len(doc_token) > 1:
+                tokens[0] = doc_token[1]
     
+                #logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens[:3]))
+    
+                for word in tokens:
+                    if word in self.vocabulary:
+                        self.vocabulary[word] += 1
+                    else:
+                        self.vocabulary[word] = 1
+        
 
 #           logger.debug('add document:docid=%s, words=%s'%( docid, words))
-            self.documents.append((docid, words))
+            self.documents.append((docid, 0))
+
+            if (id % 10000) == 0 :
+                print "\r" + "." * int(id/10000), 
+            id += 1
+
+        #close end
+        lf.close()
 
     def read_document(self, doc= (1,{})):
         """
         read from a document:=(docid, wordmap) object
 
         """
-        self.documents.append((doc[0], {}))
+        self.documents.append((doc[0], 0))
         for word in doc[1]:
             if word in self.vocabulary:
                 self.vocabulary[word] += 1
@@ -98,26 +114,30 @@ class LowDocumentCollection():
         """
         iterator for the documents
         """
-        if self.fhandle == '':
-            self.fhandle = open(self.storage, 'r')
+        #if self.fhandle == '':
+        #self.fhandle = open(self.storage, 'r')
         
         line = self.fhandle.readline()
-        logger.debug('read line as %s', line)
+        #logger.debug('read line as %s', line)
         if line == '':
             raise StopIteration
             #yield none
 
-        index =  line.find('\t')
-        docid = line[:index]
-        tokens = line[index:].split()
-
+        tokens = line.split(' ')
+        doc_token = tokens[0].split('\t')
+        docid = doc_token[0]
+        
+        # logger.debug('split to : docid = %s, tokens = %s, %s'%(docid, doc_token,tokens))
+        
         words = {}
-        for word in tokens:
-            if word in words:
-                words[word] += 1
-            else:
-                words[word] = 1
-
+        if len(doc_token) > 1:
+            tokens[0] = doc_token[1]
+            for word in tokens:
+                if word in words:
+                    words[word] += 1
+                else:
+                    words[word] = 1
+    
         return (docid, words)
         # yield (docid, words)
 
@@ -143,18 +163,32 @@ class LowDocumentCollection():
         
         self.rewind()
         id = 0
+        progress = int(self.get_doc_number() / 100)
         for doc in self:
             logger.debug('next doc : %s', doc)
             if splitType == 'SEQ':
                 part_no = int(id / part_size)
                 docCollection[part_no].read_document(doc)
-                id += 1
-
             elif splitType == 'HASH':
-                    part_no = int(hash(doc[0]) % splitCnt)
-                    docCollection[part_no].read_document(doc)
+                part_no = int(hash(doc[0]) % splitCnt)
+                docCollection[part_no].read_document(doc)
+            
+            
+            if (id % progress) == 0 :
+                finish_ratio = int(id * 100 / self.get_doc_number())
+                print "\r%s%02d%%"%('='*int(finish_ratio/10), finish_ratio), 
+            id += 1
+
+        finish_ratio = int(id * 100 / self.get_doc_number())
+        print "\r%s%02d%%"%('='*int(finish_ratio/10), finish_ratio)
 
         return docCollection
+
+
+def test_main(lowfile, test_cnt):
+    for i in range(test_cnt):
+        collection = LowDocumentCollection(lowfile)
+        print(collection)
 
 if __name__ == '__main__':
     """ usage: docStat.py lowfile splitCnt splitType logger_level
