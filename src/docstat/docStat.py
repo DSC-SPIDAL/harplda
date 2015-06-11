@@ -56,16 +56,25 @@ class LowDocumentCollection():
             # logger.debug('split to : docid = %s, tokens = %s, %s'%(docid, doc_token,tokens))
             
             if len(doc_token) > 1:
-                tokens[0] = doc_token[1]
-    
-                #logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens[:3]))
-    
-                for word in tokens:
-                    if word in self.vocabulary:
-                        self.vocabulary[word] += 1
-                    else:
-                        self.vocabulary[word] = 1
-        
+                tokens[0] = doc_token[1].strip()
+
+#                if len(tokens) < 3:
+#                    logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens))
+
+                if tokens[0] != '':
+                    # last \n
+                    tokens[-1] = tokens[-1].strip()
+
+#                    if len(tokens) < 3:
+#                        logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens))
+
+                    for word in tokens:
+                        if word in self.vocabulary:
+                            self.vocabulary[word] += 1
+                        else:
+                            self.vocabulary[word] = 1
+            else:
+                logger.debug('doc_token=0, where docid=%s', docid)
 
 #           logger.debug('add document:docid=%s, words=%s'%( docid, words))
             self.documents.append((docid, 0))
@@ -131,12 +140,15 @@ class LowDocumentCollection():
         
         words = {}
         if len(doc_token) > 1:
-            tokens[0] = doc_token[1]
-            for word in tokens:
-                if word in words:
-                    words[word] += 1
-                else:
-                    words[word] = 1
+            tokens[0] = doc_token[1].strip()
+            if tokens[0] != '':
+                # last \n
+                tokens[-1] = tokens[-1].strip()
+                for word in tokens:
+                    if word in words:
+                        words[word] += 1
+                    else:
+                        words[word] = 1
     
         return (docid, words)
         # yield (docid, words)
@@ -165,7 +177,7 @@ class LowDocumentCollection():
         id = 0
         progress = int(self.get_doc_number() / 100)
         for doc in self:
-            logger.debug('next doc : %s', doc)
+#            logger.debug('next doc : %s', doc)
             if splitType == 'SEQ':
                 part_no = int(id / part_size)
                 docCollection[part_no].read_document(doc)
