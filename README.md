@@ -25,10 +25,15 @@ testbed of some opensource lda toolkits
 
     Calculate likelihood on GibbsLDA++ mode just on the traning data, as below:
     
+    ```sh
     $ export TESTROOT="$HOME/lda-test"
     $ python $TESTROOT/src/evaluation/test_likelihood.py $TESTROOT/tool/blei/ $TESTROOT/data/ap-sample/models/ap-sample.gibbslda $TESTROOT/data/ap-sample/ap-sample.txt.ldac
+    ```
     
     GibbsLDA++ model likelihood: doccnt = 2248, likelihood = -1621.3218849
     
     You should change the model prefix to yours:
+    
+    ```sh
     $ python $TESTROOT/src/evaluation/test_likelihood.py $TESTROOT/tool/blei/ YOURMODEL_FILE_PREFIX $TESTROOT/data/ap-sample/ap-sample.txt.ldac
+    ```
