@@ -5,11 +5,16 @@ testbed of some opensource lda toolkits
 
 ## evaluation on the ap-sample dataset
 
-1. ap-sample dataset under directory: data/ap-sample
+1. clone this project
+
+   ap-sample dataset under directory: data/ap-sample
+   
+   Compile the blei's lda code under tool/blei, just enter the directory and type 'make'
 
 2. run your lda estimation program
 
 3. get phi in the final model, convert it to blei's .beta format
+
     .beta contains the log of the topic distributions.
     Each line is a topic; in line k, each entry is log p(w | z=k)
 
