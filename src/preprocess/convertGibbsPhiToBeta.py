@@ -1,13 +1,6 @@
 #This script slip corpus into 15 70 15 percentage for DEV, TRAIN, TEST
 import sys
-import scipy.io
-import numpy as np
-import random
-import re
-import os
-import glob
 import math
-import string
 
 if len(sys.argv) < 2:
     print "usage: gibbs phi input, output blei beta file"
@@ -35,5 +28,5 @@ output =open(output_file,"w")
 #read all text file from dir
 with open(input_file) as docFile:
     for docLine in docFile:
-        output.write(getBeta(docLine.rstrip(), vocab_size)+"\n")
+        output.write(getBeta(docLine.rstrip(), 0)+"\n")
 output.close()

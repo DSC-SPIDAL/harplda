@@ -34,7 +34,10 @@ def run_lda_inference(lda, settings, model, data):
     name = '.run_lda'
     command = lda + ' inf ' + settings + ' ' + model + ' ' + data + ' ' + name
 
-    os.system(command)
+    ret = os.system(command)
+    if ret:
+        # something wrong
+        return 0, ret
 
     #calc the likelihood
     l_file = name + '-lda-lhood.dat'
@@ -59,14 +62,21 @@ if __name__ == "__main__":
 
     lda = ldaPath + '/lda'
     settings = ldaPath + '/inf-settings.txt'
+    local_settings = '.inf-settings.txt'
     beta = modelname + '.beta'
     other = modelname + '.other'
     
     if os.path.exists(lda) and os.path.exists(settings):
         if os.path.exists(beta) and os.path.exists(other):
             if os.path.exists(data):
-                doccnt, likelihood = run_lda_inference(lda, settings, modelname, data)
-                print('doccnt = %d, likelihood = %f\n'%(doccnt, likelihood))
+                if os.path.exists(local_settings):
+                    doccnt, likelihood = run_lda_inference(lda, local_settings, modelname, data)
+                else:
+                    doccnt, likelihood = run_lda_inference(lda, settings, modelname, data)
+                if doccnt:
+                    print('doccnt = %d, likelihood = %f\n'%(doccnt, likelihood))
+                else:
+                    print('Error: run command failed\n')
             else:
                 print('Error: data file not exists!\n')
         else:
