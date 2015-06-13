@@ -3,6 +3,31 @@ lda-test
 
 testbed of some opensource lda toolkits
 
+## evaluation on simulation dataset
+
+Every matrix can be represented by an image.
+This procedure validate the LDA result by image the phi = V*K matrix.
+
+Run following shell script, change the command directory accordingly.
+
+```sh
+# create images from text
+python ~/hpda/lda-test/src/generator/generator.py --createImage default
+# sampling from the topic model(images), output to sample.txt
+python ~/hpda/lda-test/src/generator/generator.py --sampling 1000
+# run gibbs sampling on sample.txt
+~/workspace/GibbsLDA/GibbsLDA++-0.2/src/lda -est -alpha 1.0 -ntopics 4 -niters 1000 -dfile sample.txt
+# converte model file to blei's format
+python ~/hpda/lda-test/src/preprocess/extendphi.py wordmap.txt model-final.phi new.phi 10000
+python ~/hpda/lda-test/src/preprocess/convertGibbsPhiToBeta.py new.phi final.beta
+echo 'alpha 1.0' >final.other
+# check the model by convert it back to image
+python ~/hpda/lda-test/src/generator/generator.py --checkModel final
+```
+
+check the directory 'final'~
+
+
 ## evaluation on the ap-sample dataset
 
 1. clone this project

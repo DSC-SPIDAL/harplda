@@ -11,15 +11,15 @@ output_file = sys.argv[2]
 
 ##########get beta in ldac format from sequence file format#########3
 def getBeta(rawBeta, vSize):
-    values = rawBeta.split(" ")
+    values = rawBeta.strip().split(" ")
     output =list()
 
     sum = 0.0
     for prob in values:
         sum += float(prob)
-        output.append(str(math.log(float(prob))))
+        output.append(str(math.log(float(prob) + 1e-12)))
 
-    print "SUM is ",str(sum)
+    print "SUM is ",str(sum), "terms = ", len(values)
     return " ".join(output)
 
 
