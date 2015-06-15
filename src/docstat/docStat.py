@@ -27,12 +27,14 @@ def progress(width, percent):
 class LowDocumentCollection():
     documents = []
     vocabulary = {}
+    wordcnt = 0
     storage = ''
     fhandle = ''
 
     def __init__(self):
         self.documents = []
         self.vocabulary = {}
+        self.wordcnt = 0
         self.storage = ''
 
     def __init__(self, lowfile = ''):
@@ -42,50 +44,6 @@ class LowDocumentCollection():
         if lowfile:
             self.read_lowfile(lowfile)
 
-    def read_lowfile(self, lowfile):
-        id = 0
-        lf = open(lowfile,'r')
-        for line in lf:
-#            index =  line.find('\t')
-#            docid = line[:index]
-#            tokens = line[index:].split()
-            tokens = line.split(' ')
-            doc_token = tokens[0].split('\t')
-            docid = doc_token[0]
-            
-            # logger.debug('split to : docid = %s, tokens = %s, %s'%(docid, doc_token,tokens))
-            
-            if len(doc_token) > 1:
-                tokens[0] = doc_token[1].strip()
-
-#                if len(tokens) < 3:
-#                    logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens))
-
-                if tokens[0] != '':
-                    # last \n
-                    tokens[-1] = tokens[-1].strip()
-
-#                    if len(tokens) < 3:
-#                        logger.debug('split to : docid = %s, tokens = %s'%(docid, tokens))
-
-                    for word in tokens:
-                        if word in self.vocabulary:
-                            self.vocabulary[word] += 1
-                        else:
-                            self.vocabulary[word] = 1
-            else:
-                logger.debug('doc_token=0, where docid=%s', docid)
-
-#           logger.debug('add document:docid=%s, words=%s'%( docid, words))
-            self.documents.append((docid, 0))
-
-            if (id % 10000) == 0 :
-                print "\r" + "." * int(id/10000), 
-            id += 1
-
-        #close end
-        lf.close()
-
     def read_document(self, doc= (1,{})):
         """
         read from a document:=(docid, wordmap) object
@@ -93,10 +51,11 @@ class LowDocumentCollection():
         """
         self.documents.append((doc[0], 0))
         for word in doc[1]:
+            self.wordcnt += 1
             if word in self.vocabulary:
-                self.vocabulary[word] += 1
+                self.vocabulary[word] += doc[1][word]
             else:
-                self.vocabulary[word] = 1
+                self.vocabulary[word] = doc[1][word]
 
     def get_doc_number(self):
         return len(self.documents)
@@ -104,11 +63,19 @@ class LowDocumentCollection():
     def get_vocab_size(self):
         return len(self.vocabulary)
 
+    def get_wordcnt(self):
+        wordcnt = 0
+        for word in self.vocabulary:
+            wordcnt += self.vocabulary[word]
+        return wordcnt
+
     def get_lowfile(self):
         return self.storage
 
     def __str__(self):
-        return('Collection doc_no:%d, vocabulary size:%d\n'%(self.get_doc_number(), self.get_vocab_size()))
+        logger.debug('vocabulary=%s', self.vocabulary)
+        # return('Collection doc_no:%d, vocabulary size:%d, wordcnt:%d\n'%(self.get_doc_number(), self.get_vocab_size(), self.wordcnt))
+        return('Collection doc_no:%d, vocabulary size:%d, wordcnt:%d\n'%(self.get_doc_number(), self.get_vocab_size(), self.get_wordcnt()))
 
     def rewind(self):
         if self.fhandle == '':
@@ -153,6 +120,61 @@ class LowDocumentCollection():
         return (docid, words)
         # yield (docid, words)
 
+    def read_lowfileX(self, lowfile):
+        """
+        return : total word count
+        """
+        id = 0
+        cnt = 0
+        lf = open(lowfile,'r')
+        for line in lf:
+            tokens = line.split(' ')
+            doc_token = tokens[0].split('\t')
+            docid = doc_token[0]
+            
+            # logger.debug('split to : docid = %s, tokens = %s, %s'%(docid, doc_token,tokens))
+            
+            if len(doc_token) > 1:
+                tokens[0] = doc_token[1].strip()
+
+                if tokens[0] != '':
+                    # last \n
+                    tokens[-1] = tokens[-1].strip()
+
+                    for word in tokens:
+                        cnt += 1
+                        if word in self.vocabulary:
+                            self.vocabulary[word] += 1
+                        else:
+                            self.vocabulary[word] = 1
+            else:
+                logger.debug('doc_token=0, where docid=%s', docid)
+
+#           logger.debug('add document:docid=%s, words=%s'%( docid, words))
+            self.documents.append((docid, 0))
+
+            if (id % 10000) == 0 :
+                print "\r" + "." * int(id/10000), 
+            id += 1
+
+        #close end
+        lf.close()
+        self.wordcnt = cnt
+        return cnt
+
+    def read_lowfile(self, lowfile):
+        self.rewind()
+        id = 0
+        for doc in self:
+            if id % 10000 == 0:
+                print '\rloading %d'%id,
+                sys.stdout.flush()
+            self.read_document(doc)
+            id += 1
+
+        print '\rloading %d'%id
+        sys.stdout.flush()
+
     def split(self, splitCnt, splitType = 'SEQ'):
         """
         split the collection into splitCnt parts according to the splitType
@@ -175,7 +197,7 @@ class LowDocumentCollection():
         
         self.rewind()
         id = 0
-        progress = int(self.get_doc_number() / 100)
+        progress = max(1, int(self.get_doc_number() / 100))
         for doc in self:
 #            logger.debug('next doc : %s', doc)
             if splitType == 'SEQ':
@@ -189,10 +211,12 @@ class LowDocumentCollection():
             if (id % progress) == 0 :
                 finish_ratio = int(id * 100 / self.get_doc_number())
                 print "\r%s%02d%%"%('='*int(finish_ratio/10), finish_ratio), 
+                sys.stdout.flush()
             id += 1
 
         finish_ratio = int(id * 100 / self.get_doc_number())
         print "\r%s%02d%%"%('='*int(finish_ratio/10), finish_ratio)
+        sys.stdout.flush()
 
         return docCollection
 
