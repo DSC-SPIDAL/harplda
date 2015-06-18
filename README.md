@@ -3,6 +3,18 @@ lda-test
 
 testbed of some opensource lda toolkits
 
+## compare the distance between two models 
+
+To compare the similarity or distance between TopicModelA and TopicModelB,
+   the topics in two model should be first aligned.
+A greedy algorithm used to make the match as best as possible.
+
+```sh
+python $LDA_TEST_HOME/src/evaluation/calc_distancemap.py model1.beta model2.beta
+```
+The result distancemap.png saved
+
+
 ## evaluation on simulation dataset
 
 Every matrix can be represented by an image.
