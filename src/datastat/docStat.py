@@ -1,4 +1,5 @@
 import sys
+import os
 import math
 import logging
 
@@ -31,6 +32,10 @@ class LowDocumentCollection():
     wordcnt = 0
     storage = ''
     fhandle = ''
+
+    # constant
+    DOC = '.doc'
+    DICT = '.dict'
 
     def __init__(self):
         self.documents = []
@@ -74,9 +79,9 @@ class LowDocumentCollection():
         return self.storage
 
     def __str__(self):
-        logger.debug('vocabulary=%s', self.vocabulary)
+        #logger.debug('vocabulary=%s', self.vocabulary)
         # return('Collection doc_no:%d, vocabulary size:%d, wordcnt:%d\n'%(self.get_doc_number(), self.get_vocab_size(), self.wordcnt))
-        return('Collection doc_no:%d, vocabulary size:%d, wordcnt:%d\n'%(self.get_doc_number(), self.get_vocab_size(), self.get_wordcnt()))
+        return('Collection doc_no:%d, vocabulary size:%d, wordcnt:%d'%(self.get_doc_number(), self.get_vocab_size(), self.get_wordcnt()))
 
     def rewind(self):
         if self.fhandle == '':
@@ -121,48 +126,6 @@ class LowDocumentCollection():
         return (docid, words)
         # yield (docid, words)
 
-    def read_lowfileX(self, lowfile):
-        """
-        return : total word count
-        """
-        id = 0
-        cnt = 0
-        lf = open(lowfile,'r')
-        for line in lf:
-            tokens = line.split(' ')
-            doc_token = tokens[0].split('\t')
-            docid = doc_token[0]
-            
-            # logger.debug('split to : docid = %s, tokens = %s, %s'%(docid, doc_token,tokens))
-            
-            if len(doc_token) > 1:
-                tokens[0] = doc_token[1].strip()
-
-                if tokens[0] != '':
-                    # last \n
-                    tokens[-1] = tokens[-1].strip()
-
-                    for word in tokens:
-                        cnt += 1
-                        if word in self.vocabulary:
-                            self.vocabulary[word] += 1
-                        else:
-                            self.vocabulary[word] = 1
-            else:
-                logger.debug('doc_token=0, where docid=%s', docid)
-
-#           logger.debug('add document:docid=%s, words=%s'%( docid, words))
-            self.documents.append((docid, 0))
-
-            if (id % 10000) == 0 :
-                print "\r" + "." * int(id/10000), 
-            id += 1
-
-        #close end
-        lf.close()
-        self.wordcnt = cnt
-        return cnt
-
     def read_lowfile(self, lowfile):
         self.rewind()
         id = 0
@@ -175,6 +138,72 @@ class LowDocumentCollection():
 
         print '\rloading %d'%id
         sys.stdout.flush()
+
+    def save(self):
+        """
+        save statistics to files
+        documents to storage.DOC 
+        vocabulary to storage.DICT
+
+        """
+        docfile = self.storage + self.DOC
+        dictfile = self.storage + self.DICT
+        # save documents
+        docf = open(docfile,'w')
+        if docf:
+            docf.write('%d\n'%self.wordcnt)
+            logger.info('save documents to doc file %s', docfile)
+            for docid, _tmp in self.documents:
+                docf.write('%s\t%d\n'%(docid, _tmp))
+
+            docf.close()
+        else:
+            logger.error('open doc file %s failed', docfile)
+
+        # save vocabulary
+        dictf = open(dictfile,'w')
+        if dictf:
+            logger.info('write to dict file %s', dictfile)
+            for w in self.vocabulary:
+                dictf.write('%s\t%d\n'%(w, self.vocabulary[w]))
+
+            dictf.close()
+        else:
+            logger.error('open dict file %s failed', dictfile)
+
+    def load(self, basename):
+        """
+        load statistics from files
+        documents to storage.DOC 
+        vocabulary to storage.DICT
+
+        """
+        self.storage = basename
+        docfile = self.storage + self.DOC
+        dictfile = self.storage + self.DICT
+
+        if os.path.exists(docfile) and os.path.exists(dictfile):
+            # load documents
+            docf = open(docfile,'r')
+            logger.info('load documents from doc file %s', docfile)
+            self.wordcnt = int(docf.readline().strip())
+            for line in docf:
+                docid = line.strip().split('\t')
+                self.documents.append((docid[0], docid[1]))
+
+            docf.close()
+
+            # load vocabulary
+            dictf = open(dictfile,'r')
+            logger.info('load from dict file %s', dictfile)
+            for line in dictf:
+                data = line.strip().split('\t')
+                self.vocabulary[data[0]] = int(data[1])
+
+            dictf.close()
+        else:
+            logger.error('doc file or dict file of %s not exists error', basename)
+
 
     def split(self, splitCnt, splitType = 'SEQ'):
         """
@@ -193,7 +222,7 @@ class LowDocumentCollection():
         docCollection = []
         for i in range(splitCnt):
             docCollection.append( LowDocumentCollection() )
-            docCollection[i].sotrage = self.storage + '_%03d'%(i) 
+            docCollection[i].storage = self.storage + '_%03d'%(i) 
 
         part_size = math.ceil( float(self.get_doc_number()) / splitCnt)
         
@@ -234,6 +263,18 @@ class LowDocumentCollection():
 
         return docCollection
 
+    def load_splits(self, splitCnt):
+        """
+        load statistics from the last split output
+
+        """
+        docCollection = []
+        for i in range(splitCnt):
+            docCollection.append( LowDocumentCollection() )
+            storage = self.storage + '_%03d'%(i) 
+            docCollection[i].load(storage)
+
+        return docCollection
 
 def test_main(lowfile, test_cnt):
     for i in range(test_cnt):
@@ -268,14 +309,16 @@ if __name__ == '__main__':
 
     else:
         collection = LowDocumentCollection(lowfile)
-        
         print(collection)
+
+        collection.save()
 
         if splitCnt > 0:
             print('begin to split into %d parts\n'%(splitCnt))
             splits_col = collection.split(splitCnt, splitType)
             
             for split in splits_col:
+                split.save()
                 print(split)
 
 
