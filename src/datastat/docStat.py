@@ -11,7 +11,8 @@ test the assumption:
     optimization is possible.
 
 input:
-low format document collection file
+    low format document collection file
+    docid\twords.....
 
 """
 
@@ -183,6 +184,7 @@ class LowDocumentCollection():
         splitType:  
             SEQ     means by sequential split
             HASH    means by hash function on docid
+            PART    read in a part-id file, with group id each line
 
         return:
         splitCnt LowDocumentCollection objects
@@ -198,6 +200,14 @@ class LowDocumentCollection():
         self.rewind()
         id = 0
         progress = max(1, int(self.get_doc_number() / 100))
+
+        # initialize
+        if splitType == 'PART':
+            partid_f = open('part-id','r')
+            if partid_f == None:
+                logger.error('open part-id failed!')
+                return None
+
         for doc in self:
 #            logger.debug('next doc : %s', doc)
             if splitType == 'SEQ':
@@ -206,14 +216,18 @@ class LowDocumentCollection():
             elif splitType == 'HASH':
                 part_no = int(hash(doc[0]) % splitCnt)
                 docCollection[part_no].read_document(doc)
-            
-            
+            elif splitType == 'PART':
+                part_no = int (partid_f.readline().strip())
+                docCollection[part_no].read_document(doc)
+
+            # print processing status
             if (id % progress) == 0 :
                 finish_ratio = int(id * 100 / self.get_doc_number())
                 print "\r%s%02d%%"%('='*int(finish_ratio/10), finish_ratio), 
                 sys.stdout.flush()
             id += 1
 
+        # print processing status
         finish_ratio = int(id * 100 / self.get_doc_number())
         print "\r%s%02d%%"%('='*int(finish_ratio/10), finish_ratio)
         sys.stdout.flush()

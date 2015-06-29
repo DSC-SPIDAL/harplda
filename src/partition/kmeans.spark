@@ -1,0 +1,47 @@
+import org.apache.spark.mllib.clustering.{KMeans, KMeansModel}
+import org.apache.spark.mllib.linalg.Vectors
+import org.apache.spark.mllib.feature.HashingTF
+
+// Load and parse the data
+val data = sc.textFile("/user/pb/enwiki.low.txt")
+val hashingTF = new HashingTF(1000)
+//val parsedData = hashingTF.transform(data.map(_.split(' ').toSeq)).cache()
+val parsedData = hashingTF.transform(data.map(_.split('\t')).map(x => x(1).split(' ').toSeq)).cache()
+
+// Cluster the data into two classes using KMeans
+val numClusters = 1000
+val numIterations = 100
+val clusters = KMeans.train(parsedData, numClusters, numIterations)
+
+// Evaluate clustering by computing Within Set Sum of Squared Errors
+val WSSSE = clusters.computeCost(parsedData)
+println("Within Set Sum of Squared Errors = " + WSSSE)
+
+// Save and load model
+clusters.save(sc, "kmeans-enwiki-1000-100")
+
+-------
+val numClusters = 200 
+val numIterations = 20 
+
+val file = sc.textFile(".../file10k") 
+val lines = file.map(_.split("\001")).map(x => (x(1).toString, x(15).toString)) 
+val msgs = lines.map{case(val1, val2) => (val2).toString.replaceAll("[^a-zA-Z0-9]", " ").toLowerCase.split(" ").toSeq} 
+val hashingTF = new HashingTF() 
+val tf: RDD[Vector] = hashingTF.transform(msgs) 
+val idf = new IDF().fit(tf) 
+val tfidf: RDD[Vector] = idf.transform(tf) 
+val l2normalizer = new Normalizer() 
+val data = tfidf.map(x => l2normalizer.transform(x)) 
+
+val clusters = KMeans.train(data, numClusters, numIterations) 
+
+val WSSSE = clusters.computeCost(data) 
+val centtroids = clusters.clusterCenters map (_.toArray) 
+
+val result = clusters.predict(data) 
+val srcidx = result.zipWithIndex().map{case(val1, val2) => (val2, val1)} 
+val tktidx = tickets.zipWithIndex().map{case((val1, val2), val3) => (val3, (val1, val2))} 
+val joined = srcidx.join(tktidx).map{case(val1, (val2, (val3, val4))) => (val1, val2, val3, val4)} 
+joined.saveAsTextFile(".../clustersoutput.txt")
+
