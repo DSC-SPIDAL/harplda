@@ -35,7 +35,27 @@ class WordPartition():
         """
         return self.partmap[word]
 
+    def part_by_hash(self, dictfile):
+        """
+        Partition on data, simple hash
+        
+        input:
+        dictfile
 
+        """
+        # load dictionary
+        dictf = open(dictfile, 'r')
+        wordlist = []
+        totalCnt = 0
+        for line in dictf:
+            data = line.strip().split('\t')
+            wordlist.append( ( data[0], int(data[1])) )
+
+            totalCnt += int(data[1])
+
+        for id in xrange(len(wordlist)):
+            self.partmap[wordlist[id][0]] = int(hash(wordlist[id]) % self.partno)
+ 
     def part_by_freq(self, dictfile):
         """
         Partition on power-law data, group the words by their frequencies
@@ -101,7 +121,7 @@ if __name__ == '__main__':
         logging.basicConfig(filename='wordPartition.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
     if lowfile == '':
-        print("usage: wordPartition.py lowfile splitCnt partno logger_level")
+        print("usage: wordPartition.py lowfile splitCnt partno partType logger_level")
 
     else:
         collection = LowDocumentCollection()
@@ -110,8 +130,12 @@ if __name__ == '__main__':
 
         # test partition
         wordPartition = WordPartition(partno)
-        # do sort -nr -k2 xxx first
-        wordPartition.part_by_freq(lowfile + '.dict')
+    
+        splitType = 'HASH'
+        if splitType == 'HASH':
+            wordPartition.part_by_hash(lowfile + '.dict')
+        else:
+            wordPartition.part_by_freq(lowfile + '.dict')
 
         # test each splits, output it's partition count
         if splitCnt > 0:

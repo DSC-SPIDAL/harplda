@@ -152,7 +152,7 @@ class LowDocumentCollection():
         docf = open(docfile,'w')
         if docf:
             docf.write('%d\n'%self.wordcnt)
-            logger.info('save documents to doc file %s', docfile)
+            logger.debug('save documents to doc file %s', docfile)
             for docid, _tmp in self.documents:
                 docf.write('%s\t%d\n'%(docid, _tmp))
 
@@ -163,7 +163,7 @@ class LowDocumentCollection():
         # save vocabulary
         dictf = open(dictfile,'w')
         if dictf:
-            logger.info('write to dict file %s', dictfile)
+            logger.debug('write to dict file %s', dictfile)
             for w in self.vocabulary:
                 dictf.write('%s\t%d\n'%(w, self.vocabulary[w]))
 
@@ -303,12 +303,16 @@ if __name__ == '__main__':
     import logging.config
     if logger_level:
         logging.basicConfig(filename='docStat.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+    else:
+        logging.basicConfig(filename='docStat.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
 
     if lowfile == '':
         print("usage: docStat.py lowfile splitCnt splitType logger_level")
 
     else:
         collection = LowDocumentCollection(lowfile)
+        logger.info("%s"%collection)
         print(collection)
 
         collection.save()
@@ -319,6 +323,7 @@ if __name__ == '__main__':
             
             for split in splits_col:
                 split.save()
+                logger.info("%s"%split)
                 print(split)
 
 
