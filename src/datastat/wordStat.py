@@ -54,6 +54,21 @@ class WordStat():
 
         return groupstat
 
+
+# split the functions to support running in the shell interactively
+def load_collection(lowfile, splitCnt):
+    collection = LowDocumentCollection()
+    collection.load(lowfile)
+    splits_col = collection.load_splits(splitCnt)
+    
+    return collection, splits_col
+
+def word_stat(collection, splits):
+    wordStat = WordStat()
+    groupstat = wordStat.groupstat(collection, splits_col)
+    return groupstat
+
+
 if __name__ == '__main__':
     lowfile = ''
     splitCnt = 0
@@ -78,13 +93,10 @@ if __name__ == '__main__':
         print("usage: wordStat.py lowfile splitCnt partno partType logger_level")
 
     else:
-        collection = LowDocumentCollection()
-        collection.load(lowfile)
-        splits_col = collection.load_splits(splitCnt)
+        collection, splits_col = load_collection(lowfile, splitCnt)
 
         # run stat
-        wordStat = wordStat()
-        groupstat = wordStat.groupstat(collection, splits)
+        groupstat = word_stat(collection, splits_col)
     
         # print the result
         print(collection)

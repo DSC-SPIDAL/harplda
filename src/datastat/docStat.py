@@ -276,10 +276,26 @@ class LowDocumentCollection():
 
         return docCollection
 
-def test_main(lowfile, test_cnt):
-    for i in range(test_cnt):
-        collection = LowDocumentCollection(lowfile)
-        print(collection)
+
+# sub functions to run in shell
+def load_lowfile(lowfile):
+    collection = LowDocumentCollection(lowfile)
+    logger.info("%s"%collection)
+    print(collection)
+    collection.save()
+    return collection
+
+def split_collection(collection, splitCnt, splitType):
+    print('begin to split into %d parts\n'%(splitCnt))
+    splits_col = collection.split(splitCnt, splitType)
+    
+    for split in splits_col:
+        split.save()
+        logger.info("%s"%split)
+        print(split)
+
+    return splits_col
+
 
 if __name__ == '__main__':
     """ usage: docStat.py lowfile splitCnt splitType logger_level
@@ -307,24 +323,13 @@ if __name__ == '__main__':
         logging.basicConfig(filename='docStat.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
-    if lowfile == '':
+    if lowfile == '' or splitCnt <= 0:
         print("usage: docStat.py lowfile splitCnt splitType logger_level")
 
     else:
-        collection = LowDocumentCollection(lowfile)
-        logger.info("%s"%collection)
-        print(collection)
+        collection = load_lowfile(lowfile)
 
-        collection.save()
-
-        if splitCnt > 0:
-            print('begin to split into %d parts\n'%(splitCnt))
-            splits_col = collection.split(splitCnt, splitType)
-            
-            for split in splits_col:
-                split.save()
-                logger.info("%s"%split)
-                print(split)
+        splits_col = split_collection(collection, splitCnt, splitType)
 
 
 
