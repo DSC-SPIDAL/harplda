@@ -92,7 +92,7 @@ class WordPartition():
                 cnt = wordlist[id][1]
                 self.partmap[wordlist[id][0]] = blockid
 
-def test_main():
+def test_partition():
     pass
 
 
@@ -119,6 +119,8 @@ if __name__ == '__main__':
     import logging.config
     if logger_level:
         logging.basicConfig(filename='wordPartition.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+    else:
+        logging.basicConfig(filename='wordPartition.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     if lowfile == '':
         print("usage: wordPartition.py lowfile splitCnt partno partType logger_level")
