@@ -30,14 +30,14 @@ if __name__ == '__main__':
     logger.info("running %s" % ' '.join(sys.argv))
 
     # check and process input arguments
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 4:
         print(globals()['__doc__'] % locals())
         sys.exit(1)
-    inp, outp = sys.argv[1:3]
+    inp, outp,dictfile = sys.argv[1:4]
  
     #let's convert the file
     mm = MmCorpus(inp)
-    dictionary = Dictionary.load('wordids.txt.bz2')
+    dictionary = Dictionary.load_from_text(dictfile)
     low = LowCorpus.serialize(outp, mm, dictionary)
 
 
