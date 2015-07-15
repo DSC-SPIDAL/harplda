@@ -18,7 +18,7 @@ analysis:
     draw a heat map to visualize the distance matrix
 
 Usage:
-    analysis_converge <model dir> <dictfile> <sample_size=100> 
+    analysis_converge <model dir> <dictfile> <modeltype='gibbs'> <sample_size=100> 
 
 """
 
@@ -286,17 +286,20 @@ if __name__ == '__main__':
 
     modelDir = sys.argv[1]
     dictfile = sys.argv[2]
-    sample_size = 100
+    modeltype = MODELTYPE_GIBBS
     if len(sys.argv) > 3:
-        sample_size = int(sys.argv[3])
+        modeltype = sys.argv[3]
+    sample_size = 100
+    if len(sys.argv) > 4:
+        sample_size = int(sys.argv[4])
 
     id_samples, freq_samples = run_word_sampling(dictfile, sample_size)
     np.savetxt(modelDir + '.ids', np.array(id_samples), fmt='%d')
     np.savetxt(modelDir + '.freqs', np.array(freq_samples), fmt='%d')
 
-    models = load_models(modelDir,modeltype = 'gibbs')
+    models = load_models(modelDir,modeltype)
 
-    distance_matrix = calc_distance(models, id_samples, modeltype = 'gibbs')
+    distance_matrix = calc_distance(models, id_samples, modeltype)
     np.savetxt(modelDir + '.distance', distance_matrix)
 
     plot_matrix(distance_matrix, 'converge_map.png')
