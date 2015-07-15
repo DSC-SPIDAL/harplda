@@ -199,6 +199,9 @@ def load_models(modelDir, modeltype = MODELTYPE_RAW):
                     if modeltype != MODELTYPE_RAW:
                         # transpose K*V matrix to V*K
                         modeldata = np.transpose(modeldata)
+                    else:
+                        # first column is wordid
+                        modeldata = modeldata[:,1:]
 
                     models.append((iternum, modeldata))
                     logger.info('load model from %s as iternum = %d', f, iternum)
