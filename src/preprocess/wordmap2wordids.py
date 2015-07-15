@@ -1,14 +1,19 @@
-import sys
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 """
-convert wordmap from gibbslda output to gensim dictionary file
-input format:
-term_count
-term id
+Convert wordmap from gibbslda output to gensim dictionary file
 
+input format:
+    term_count
+    term id
 
 output format:
-Save this Dictionary to a text file, in format: id[TAB]word_utf8[TAB]document frequency[NEWLINE]. Sorted by word, or by decreasing word frequency.
+    Save this Dictionary to a text file, in format: 
+    id[TAB]word_utf8[TAB]word frequency[NEWLINE]. Sorted by word, or by decreasing word frequency.
+
+Usage:
+    wordmap2wordids <lowfile> <wordmap> <wordid>
 
 """
 
