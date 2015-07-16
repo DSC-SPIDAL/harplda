@@ -202,9 +202,10 @@ def load_models(modelDir, modeltype = MODELTYPE_RAW):
                     else:
                         # first column is wordid
                         modeldata = modeldata[:,1:]
+                    logger.info('load model from %s as iternum = %d in %s modeltype, modelmatrix as %s', 
+                            f, iternum, modeltype, modeldata.shape)
 
                     models.append((iternum, modeldata))
-                    logger.info('load model from %s as iternum = %d', f, iternum)
     
     models =  sorted(models, key = lambda modeltp : modeltp[0])
     logger.debug('models iternum as %s', [s[0] for s in models])
@@ -249,7 +250,7 @@ def calc_distance(models, sample_ids, modeltype = MODELTYPE_RAW):
     return distance_matrix
 
 
-def plot_matrix(distance_matrix, fig):
+def plot_matrix(distance_matrix, fig, show = False):
     """
     Input: a reordered distance matrix
     Output:
@@ -260,7 +261,8 @@ def plot_matrix(distance_matrix, fig):
     plt.imshow(distance_matrix, cmap=cm.bone)
     plt.colorbar()
     plt.savefig(fig)
-    plt.show()
+    if show:
+        plt.show()
 
 
 def run_word_sampling(dictfile, sample_size, sample_type = SAMPLETYPE_EVEN):
@@ -296,14 +298,22 @@ if __name__ == '__main__':
     if len(sys.argv) > 4:
         sample_size = int(sys.argv[4])
 
-    id_samples, freq_samples = run_word_sampling(dictfile, sample_size)
-    np.savetxt(modelDir + '.ids', np.array(id_samples), fmt='%d')
-    np.savetxt(modelDir + '.freqs', np.array(freq_samples), fmt='%d')
-
+    #1. load models
     models = load_models(modelDir,modeltype)
 
-    distance_matrix = calc_distance(models, id_samples, modeltype)
-    np.savetxt(modelDir + '.distance', distance_matrix)
+    #2. run sampling
+    sample_times = 5
+    for i in range(sample_times):
+        path = 'sample_%d/'%i 
+        os.mkdir(path)
 
-    plot_matrix(distance_matrix, 'converge_map.png')
+        id_samples, freq_samples = run_word_sampling(dictfile, sample_size)
+        np.savetxt(path + modelDir + '.ids', np.array(id_samples), fmt='%d')
+        np.savetxt(path + modelDir + '.freqs', np.array(freq_samples), fmt='%d')
+
+
+        distance_matrix = calc_distance(models, id_samples, modeltype)
+        np.savetxt(path + modelDir + '.distance', distance_matrix)
+
+        plot_matrix(distance_matrix, path + modelDir + 'converge_map.png')
 
