@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     logger.info('saving into %s', npfile)
     if compressmode:
-        np.savez(npfile, matrix)
+        np.savez_compressed(npfile, matrix)
     else:
         np.save(npfile, matrix)
 

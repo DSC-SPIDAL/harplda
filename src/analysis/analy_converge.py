@@ -188,18 +188,23 @@ def load_models(modelDir, modeltype = MODELTYPE_RAW):
 
     """
     models = []
+    if modeltype == MODELTYPE_RAW:
+        ext = '.npz'
+    else:
+        ext = '.phi'
     for dirpath, dnames, fnames in os.walk(modelDir):
         for f in fnames:
-            if f.endswith(".phi"):
-                m = re.search('.*-([0-9]*).phi', f)
+            if f.endswith(ext):
+                m = re.search('.*-([0-9]*)' + ext, f)
                 if m:
                     iternum = int(m.group(1))
                     # TODO, assume the id order here
-                    modeldata = np.loadtxt(os.path.join(dirpath, f))
                     if modeltype != MODELTYPE_RAW:
+                        modeldata = np.loadtxt(os.path.join(dirpath, f))
                         # transpose K*V matrix to V*K
                         modeldata = np.transpose(modeldata)
                     else:
+                        modeldata = np.load(os.path.join(dirpath, f))['arr_0']
                         # first column is wordid
                         modeldata = modeldata[:,1:]
                     logger.info('load model from %s as iternum = %d in %s modeltype, modelmatrix as %s', 
@@ -208,7 +213,11 @@ def load_models(modelDir, modeltype = MODELTYPE_RAW):
                     models.append((iternum, modeldata))
     
     models =  sorted(models, key = lambda modeltp : modeltp[0])
-    logger.debug('models iternum as %s', [s[0] for s in models])
+    if len(models) < 2:
+        logger.error('ERROR: load too few model files')
+        return None
+    else:
+        logger.debug('models iternum as %s', [s[0] for s in models])
 
     return models
 
@@ -227,21 +236,23 @@ def calc_distance(models, sample_ids, modeltype = MODELTYPE_RAW):
     logger.debug('calculate the distance matrix, shape =(%d, %d) ', M, N)
     for i in range(M):
         endDist = models[N -1][1][sample_ids[i]]
+        K = len(endDist)
+
         if modeltype == MODELTYPE_RAW:
-            endDist = endDist / (1.0 * sum(endDist))
+            endDist = (endDist + 1e-12)/ (sum(endDist) + K*(1e-12))
+            logger.debug('sample_ids[%d]=%d,iternum=%d, endDist=%s', i, sample_ids[i], N-1, endDist)
         elif modeltype == MODELTYPE_BLEI:
-            k, v = endDist.shape
-            endDist = np.exp(endDist) + np.ones((k,v)) * (1e-12)  
+            endDist = np.exp(endDist) + 1e-12
+        logger.debug('sample_ids[%d]=%d,iternum=%d, endDist=%s', i, sample_ids[i], N-1, endDist)
 
 
         for j in range(N):
             curDist = models[j][1][sample_ids[i]]
             if modeltype == MODELTYPE_RAW:
-                curDist = curDist / (1.0 * sum(curDist))
+                curDist = (curDist + 1e-12)/ (sum(curDist) + K*(1e-12))
+                logger.debug('sample_ids[%d]=%d,iternum=%d, Dist=%s', i, sample_ids[i], j, curDist)
             elif modeltype == MODELTYPE_BLEI:
-                k, v = endDist.shape
-                curDist = np.exp(curDist) + np.ones((k,v)) * (1e-12)  
-
+                curDist = np.exp(curDist) + 1e-12
 
             distance_matrix[i, j] = stats.entropy(curDist, endDist)*0.5 + \
                                     stats.entropy(endDist, curDist)*0.5
@@ -300,20 +311,24 @@ if __name__ == '__main__':
 
     #1. load models
     models = load_models(modelDir,modeltype)
+    if not models:
+        sys.exit(2)
 
     #2. run sampling
-    sample_times = 5
+    sample_times = 1
+    basename = os.path.basename(modelDir)
     for i in range(sample_times):
         path = 'sample_%d/'%i 
-        os.mkdir(path)
+        if not os.path.exists(path):
+            os.mkdir(path)
 
         id_samples, freq_samples = run_word_sampling(dictfile, sample_size)
-        np.savetxt(path + modelDir + '.ids', np.array(id_samples), fmt='%d')
-        np.savetxt(path + modelDir + '.freqs', np.array(freq_samples), fmt='%d')
+        np.savetxt(path + basename + '.ids', np.array(id_samples), fmt='%d')
+        np.savetxt(path + basename + '.freqs', np.array(freq_samples), fmt='%d')
 
 
         distance_matrix = calc_distance(models, id_samples, modeltype)
-        np.savetxt(path + modelDir + '.distance', distance_matrix)
+        np.savetxt(path + basename + '.distance', distance_matrix)
 
-        plot_matrix(distance_matrix, path + modelDir + 'converge_map.png')
+        plot_matrix(distance_matrix, path + basename + '_map.png')
 
