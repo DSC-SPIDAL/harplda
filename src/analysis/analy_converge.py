@@ -233,26 +233,25 @@ def calc_distance(models, sample_ids, modeltype = MODELTYPE_RAW):
     N = len (models)
     distance_matrix = np.zeros((M,N))
 
-    logger.debug('calculate the distance matrix, shape =(%d, %d) ', M, N)
+    logger.info('calculate the distance matrix, shape =(%d, %d) ', M, N)
     for i in range(M):
         endDist = models[N -1][1][sample_ids[i]]
         K = len(endDist)
 
         if modeltype == MODELTYPE_RAW:
             endDist = (endDist + 1e-12)/ (sum(endDist) + K*(1e-12))
-            logger.debug('sample_ids[%d]=%d,iternum=%d, endDist=%s', i, sample_ids[i], N-1, endDist)
         elif modeltype == MODELTYPE_BLEI:
             endDist = np.exp(endDist) + 1e-12
-        logger.debug('sample_ids[%d]=%d,iternum=%d, endDist=%s', i, sample_ids[i], N-1, endDist)
+        #logger.debug('sample_ids[%d]=%d,iternum=%d, endDist=%s', i, sample_ids[i], N-1, endDist)
 
 
         for j in range(N):
             curDist = models[j][1][sample_ids[i]]
             if modeltype == MODELTYPE_RAW:
                 curDist = (curDist + 1e-12)/ (sum(curDist) + K*(1e-12))
-                logger.debug('sample_ids[%d]=%d,iternum=%d, Dist=%s', i, sample_ids[i], j, curDist)
             elif modeltype == MODELTYPE_BLEI:
                 curDist = np.exp(curDist) + 1e-12
+            #logger.debug('sample_ids[%d]=%d,iternum=%d, Dist=%s', i, sample_ids[i], j, curDist)
 
             distance_matrix[i, j] = stats.entropy(curDist, endDist)*0.5 + \
                                     stats.entropy(endDist, curDist)*0.5
@@ -269,12 +268,13 @@ def plot_matrix(distance_matrix, fig, show = False):
     """
     logger.debug('plot the matrix')
 
+    plt.close('all')
     plt.imshow(distance_matrix, cmap=cm.bone)
     plt.colorbar()
     plt.savefig(fig)
     if show:
         plt.show()
-
+    
 
 def run_word_sampling(dictfile, sample_size, sample_type = SAMPLETYPE_EVEN):
     dt = Dictionary()
@@ -315,7 +315,7 @@ if __name__ == '__main__':
         sys.exit(2)
 
     #2. run sampling
-    sample_times = 1
+    sample_times = 5
     basename = os.path.basename(modelDir)
     for i in range(sample_times):
         path = 'sample_%d/'%i 
