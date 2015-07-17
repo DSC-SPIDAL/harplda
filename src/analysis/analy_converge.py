@@ -274,14 +274,7 @@ def plot_matrix(distance_matrix, fig, show = False):
     plt.savefig(fig)
     if show:
         plt.show()
-    
 
-def run_word_sampling(dictfile, sample_size, sample_type = SAMPLETYPE_EVEN):
-    dt = Dictionary()
-    dt.load_by_freq(dictfile)
-    id_samples = dt.sampling(sample_size)
-
-    return id_samples
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
@@ -309,6 +302,10 @@ if __name__ == '__main__':
     if len(sys.argv) > 4:
         sample_size = int(sys.argv[4])
 
+    #0. load dictionary
+    dt = Dictionary()
+    dt.load_by_freq(dictfile)
+
     #1. load models
     models = load_models(modelDir,modeltype)
     if not models:
@@ -322,7 +319,7 @@ if __name__ == '__main__':
         if not os.path.exists(path):
             os.mkdir(path)
 
-        id_samples, freq_samples = run_word_sampling(dictfile, sample_size)
+        id_samples, freq_samples = dt.sampling(sample_size)
         np.savetxt(path + basename + '.ids', np.array(id_samples), fmt='%d')
         np.savetxt(path + basename + '.freqs', np.array(freq_samples), fmt='%d')
 
