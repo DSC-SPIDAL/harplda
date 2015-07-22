@@ -2,6 +2,7 @@ import sys
 import os
 import math
 import logging
+import cPickle as pickle
 
 """
 statistics on word distribution of the document collection
@@ -31,24 +32,44 @@ class LowDocumentCollection():
     vocabulary = {}
     wordcnt = 0
     storage = ''
-    fhandle = ''
+    cachefile = ''
+    fhandle = None
+    fcache = None
+    useCache = False
 
     # constant
     DOC = '.doc'
     DICT = '.dict'
+    CACHE = '.pickle'
 
     def __init__(self):
         self.documents = []
         self.vocabulary = {}
         self.wordcnt = 0
         self.storage = ''
+        self.fhandle = None
+        self.fcache = None
 
     def __init__(self, lowfile = ''):
         self.documents = []
         self.vocabulary = {}
         self.storage = lowfile
+        self.useCache = False
+        self.fhandle = None
+        self.fcache = None
+
         if lowfile:
-            self.read_lowfile(lowfile)
+            lowname = os.path.splitext(os.path.basename(lowfile))[0]
+            self.cachefile = lowname + self.CACHE
+            if os.path.exists(self.cachefile):
+                lowfile = self.cachefile
+                self.storage = lowfile
+                self.useCache = True
+                self.read_lowfile()
+            else:
+                self.fcache =  open(self.cachefile, 'wb')
+                self.useCache = False
+                self.read_lowfile()
 
     def read_document(self, doc= (1,{})):
         """
@@ -84,9 +105,11 @@ class LowDocumentCollection():
         return('Collection doc_no:%d, vocabulary size:%d, wordcnt:%d'%(self.get_doc_number(), self.get_vocab_size(), self.get_wordcnt()))
 
     def rewind(self):
-        if self.fhandle == '':
+        if not self.fhandle:
+            logger.debug('rewind: open new file %s',self.storage)
             self.fhandle = open(self.storage, 'r')
         else:
+            logger.debug('rewind: seek 0')
             self.fhandle.seek(0)
 
     def __iter__(self):
@@ -96,6 +119,13 @@ class LowDocumentCollection():
         """
         iterator for the documents
         """
+        if self.useCache:
+            try:
+                obj = pickle.load(self.fhandle)
+            except:
+                raise StopIteration
+            return obj
+
         #if self.fhandle == '':
         #self.fhandle = open(self.storage, 'r')
         
@@ -126,7 +156,7 @@ class LowDocumentCollection():
         return (docid, words)
         # yield (docid, words)
 
-    def read_lowfile(self, lowfile):
+    def read_lowfile(self):
         self.rewind()
         id = 0
         for doc in self:
@@ -136,23 +166,45 @@ class LowDocumentCollection():
             self.read_document(doc)
             id += 1
 
+            # save cache file 
+            if not self.useCache:
+                pickle.dump(doc, self.fcache, pickle.HIGHEST_PROTOCOL)
+
         print '\rloading %d'%id
         sys.stdout.flush()
 
-    def save(self):
+        if not self.useCache:
+            # switch to useCache mode, now
+            self.useCache = True
+            self.fhandle.close()
+            self.fcache.close()
+            self.storage = self.cachefile
+            self.fhandle = None
+
+    def save(self, basename = ''):
         """
         save statistics to files
         documents to storage.DOC 
         vocabulary to storage.DICT
 
         """
-        docfile = self.storage + self.DOC
-        dictfile = self.storage + self.DICT
+        if basename == '':
+            basename = self.storage 
+
+        docfile = basename + self.DOC
+        dictfile = basename + self.DICT
+    
+        #check file
+        if os.path.exists(docfile) and os.path.exists(dictfile):
+            logger.info('Skip save existed collection files:%s(%s,%s)', basename,self.DOC, self.DICT)
+            return
+
+
+        logger.info('Save collection to file:%s(%s,%s)', basename,self.DOC, self.DICT)
         # save documents
         docf = open(docfile,'w')
         if docf:
             docf.write('%d\n'%self.wordcnt)
-            logger.debug('save documents to doc file %s', docfile)
             for docid, _tmp in self.documents:
                 docf.write('%s\t%d\n'%(docid, _tmp))
 
@@ -163,7 +215,6 @@ class LowDocumentCollection():
         # save vocabulary
         dictf = open(dictfile,'w')
         if dictf:
-            logger.debug('write to dict file %s', dictfile)
             for w in self.vocabulary:
                 dictf.write('%s\t%d\n'%(w, self.vocabulary[w]))
 
@@ -217,12 +268,17 @@ class LowDocumentCollection():
 
         return:
         splitCnt LowDocumentCollection objects
+        and save to splitxxx/shard_xxx.dict .doc
         """
-        
+        logger.info('split_collection splitCnt = %d, splitType = %s', splitCnt, splitType)
+
         docCollection = []
         for i in range(splitCnt):
             docCollection.append( LowDocumentCollection() )
-            docCollection[i].storage = self.storage + '_%03d'%(i) 
+            split_dir = 'split%d'%splitCnt
+            if not os.path.exists(split_dir):
+                os.mkdir(split_dir)
+            docCollection[i].storage = split_dir + '/shard_%03d'%(i) 
 
         part_size = math.ceil( float(self.get_doc_number()) / splitCnt)
         
@@ -261,6 +317,7 @@ class LowDocumentCollection():
         print "\r%s%02d%%"%('='*int(finish_ratio/10), finish_ratio)
         sys.stdout.flush()
 
+        logger.info('split_collection end!')
         return docCollection
 
     def load_splits(self, splitCnt):
@@ -271,7 +328,7 @@ class LowDocumentCollection():
         docCollection = []
         for i in range(splitCnt):
             docCollection.append( LowDocumentCollection() )
-            storage = self.storage + '_%03d'%(i) 
+            storage = 'split%d/shard_%03d'%(splitCnt, i) 
             docCollection[i].load(storage)
 
         return docCollection
@@ -282,7 +339,7 @@ def load_lowfile(lowfile):
     collection = LowDocumentCollection(lowfile)
     logger.info("%s"%collection)
     print(collection)
-    collection.save()
+    collection.save(lowfile)
     return collection
 
 def split_collection(collection, splitCnt, splitType):
