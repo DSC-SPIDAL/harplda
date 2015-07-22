@@ -28,6 +28,8 @@ def progress(width, percent):
         sys.stdout.flush()
 
 class LowDocumentCollection():
+    rawdata = []
+    rawdataIndex = -1
     documents = []
     vocabulary = {}
     wordcnt = 0
@@ -36,13 +38,17 @@ class LowDocumentCollection():
     fhandle = None
     fcache = None
     useCache = False
+    keepInMemory = False
 
     # constant
     DOC = '.doc'
     DICT = '.dict'
     CACHE = '.pickle'
+    MEMCACHE = '.mem'
 
     def __init__(self):
+        self.rawdata = []
+        self.rawdataIndex = -1
         self.documents = []
         self.vocabulary = {}
         self.wordcnt = 0
@@ -51,15 +57,22 @@ class LowDocumentCollection():
         self.fcache = None
 
     def __init__(self, lowfile = ''):
+        self.rawdata = []
+        self.rawdataIndex = -1
         self.documents = []
         self.vocabulary = {}
         self.storage = lowfile
-        self.useCache = False
         self.fhandle = None
         self.fcache = None
+        self.useCache = False
+        self.keepInMemory = False
 
         if lowfile:
             lowname = os.path.splitext(os.path.basename(lowfile))[0]
+            if os.path.exists(lowname + self.MEMCACHE):
+                logger.info('Set keepInMemory=True, %s found', lowname+self.MEMCACHE)
+                self.keepInMemory = True
+
             self.cachefile = lowname + self.CACHE
             if os.path.exists(self.cachefile):
                 lowfile = self.cachefile
@@ -112,6 +125,10 @@ class LowDocumentCollection():
             logger.debug('rewind: seek 0')
             self.fhandle.seek(0)
 
+        if self.keepInMemory and len(self.rawdata) != 0:
+            logger.debug('rewind: use in memory cache')
+            self.rawdataIndex = 0
+
     def __iter__(self):
         return self
 
@@ -119,6 +136,15 @@ class LowDocumentCollection():
         """
         iterator for the documents
         """
+        if self.rawdataIndex >= 0:
+            #current in memory cache working
+            if self.rawdataIndex == len(self.rawdata):
+                raise StopIteration
+            else:
+                obj = self.rawdata[self.rawdataIndex]
+                self.rawdataIndex += 1
+                return obj
+
         if self.useCache:
             try:
                 obj = pickle.load(self.fhandle)
@@ -169,6 +195,10 @@ class LowDocumentCollection():
             # save cache file 
             if not self.useCache:
                 pickle.dump(doc, self.fcache, pickle.HIGHEST_PROTOCOL)
+                
+            # keep in memory
+            if self.keepInMemory:
+                self.rawdata.append(doc)
 
         print '\rloading %d'%id
         sys.stdout.flush()
