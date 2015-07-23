@@ -197,7 +197,7 @@ class LowDocumentCollection():
                 pickle.dump(doc, self.fcache, pickle.HIGHEST_PROTOCOL)
                 
             # keep in memory
-            if self.keepInMemory:
+            if self.keepInMemory and self.rawdataIndex < 0:
                 self.rawdata.append(doc)
 
         print '\rloading %d'%id
