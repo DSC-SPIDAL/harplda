@@ -119,10 +119,48 @@ if __name__ == '__main__':
     logger.debug('model stat: %s', model_stat)
 
     # draw the result
+    # doccnt
     plt.errorbar(x, model_stat[0,:,0], yerr = model_stat[1,:,0])
+    plt.savefig('doccnt.png')
+    # vocab
+    plt.close('all')
+    plt.errorbar(x, model_stat[0,:,1], yerr = model_stat[1,:,1])
+    plt.savefig('vocab.png')
+    # wordcnt
+    plt.close('all')
+    plt.errorbar(x, model_stat[0,:,2], yerr = model_stat[1,:,2])
+    plt.savefig('wordcnt.png')
+
+    #fit the vocab function
+    plt.close('all')
+    y = model_stat[0, :, 1] 
+
+    y = y / 1000000
+
+    z = np.polyfit(x, y, 1)
+    logger.info('polyfit z = %s, ratio=%f', z, z[0]/z[1])
+    p1 = np.poly1d(z)
+
+    z2 = np.polyfit(x[3:8], y[3:8],1)
+    p2 = np.poly1d(z2)
+    logger.info('polyfit 3..8, z = %s, ratio=%f', z2, z2[0]/z2[1])
+
+    z3 = np.polyfit(x[6:], y[6:],1)
+    p3 = np.poly1d(z3)
+    logger.info('polyfit 6.., z = %s, ratio=%f', z3, z3[0]/z3[1])
+
+#    z2 = np.polyfit(x, y, 2)
+#    p2 = np.poly1d(z2)
+
+    xp = np.linspace(0, 11, 100)
+    plt.title('Model Size Nonlinear Decrease')
+    plt.xlabel('Document Partition Count 2^x')
+    plt.ylabel('Model Size')
+    #plt.plot(x, y, '.', xp, p1(xp), '-')
+    plt.plot(x, y, '.', xp, p1(xp), '-', xp, p2(xp), '--',xp, p3(xp), '+')
+    plt.legend()
+    plt.savefig('modelSize.png')
     plt.show()
-
-
 
 
 
