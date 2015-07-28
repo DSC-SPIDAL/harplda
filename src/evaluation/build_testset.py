@@ -33,7 +33,7 @@ def run_random_sample(lowfile, totalDocCnt, testsetDocCnt):
     
     # sample by random.randint, repeat sample is possible occur in the result
     testset = sorted(np.random.randint(0, totalDocCnt, testsetDocCnt*2))
-    logger.debug('samples id = %s', testset)
+    logger.debug('samples id = %s', testset[:20])
 
     lf = open(lowfile, 'r')
     trainf = open(lowfile + '.train', 'w')

@@ -1,5 +1,5 @@
-import sys,os
-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 """
 compute the held-out likelihood by blei's lda implementation.
@@ -21,9 +21,18 @@ input:
 3. held-out text file
 
 output:
-likelihood
+    doccnt, likelihood
 
+Usage: test_likelihood <lda-install-path> <model-name> <data>
 """
+
+import sys,os,re
+import numpy as np
+import matplotlib.pyplot as plt
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 
 def run_lda_inference(lda, settings, model, data):
@@ -50,22 +59,26 @@ def run_lda_inference(lda, settings, model, data):
 
     return num_docs, l_sum/float(num_docs)
 
-if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print('Usage: test_likelihood <lda-install-path> <model-name> <data>')
-        sys.exit(0)
 
-    # check the path
-    ldaPath = sys.argv[1]
-    modelname = sys.argv[2]
-    data = sys.argv[3]
+def calc_file(ldaPath, modelname, data, ext = '.beta'):
+    """
+    Calculate likelihood of one model output phi on testset
+
+    input:
+        modelname   model file name, '.beta', '.other' should exist
+    return:
+        doccnt, likelihood
+        doccnt = 0 in error
+    """
 
     lda = ldaPath + '/lda'
     settings = ldaPath + '/inf-settings.txt'
     local_settings = '.inf-settings.txt'
-    beta = modelname + '.beta'
+    beta = modelname + ext
     other = modelname + '.other'
     
+    doccnt, likelihood = 0,0 
+
     if os.path.exists(lda) and os.path.exists(settings):
         if os.path.exists(beta) and os.path.exists(other):
             if os.path.exists(data):
@@ -74,25 +87,112 @@ if __name__ == "__main__":
                 else:
                     doccnt, likelihood = run_lda_inference(lda, settings, modelname, data)
                 if doccnt:
-                    print('doccnt = %d, likelihood = %f\n'%(doccnt, likelihood))
+                    logger.info('doccnt = %d, likelihood = %f\n'%(doccnt, likelihood))
                 else:
-                    print('Error: run command failed\n')
+                    logger.error('Error: run command failed\n')
             else:
-                print('Error: data file not exists!\n')
+                logger.error('Error: data file not exists!\n')
         else:
-            print('Error: .beta or .other file not found at %s, %s\n'%(beta, other))
+            logger.error('Error: %s or .other file not found at %s, %s\n'%(ext, beta, other))
     else:
-        print('Error: lda not found at %s\n'%lda)
+        logger.error('Error: lda not found at %s\n'%lda)
     
+    return doccnt, likelihood
+
+def calc_dir(ldaPath, modelDir, data, ext = '.beta'):
+    """
+    Calculate likelihood on models output of different iterations
+
+    input:
+        modelDir   directory name
+    return:
+        array [iternum, likelihood]
+    """
+    # cache file
+    cacheFile = modelDir + '.likelihood'
+    if os.path.exists(cacheFile):
+        logger.info('Cache file found at %s, loading likelihoods', cacheFile)
+        likelihoods = np.loadtxt(cacheFile)
+        return likelihoods
+
+    models = []
+    for dirpath, dnames, fnames in os.walk(modelDir):
+        for f in fnames:
+            if f.endswith(ext):
+                m = re.search('.*-([0-9]*)' + ext, f)
+                if m:
+                    iternum = int(m.group(1))
+
+                    logger.info('load model from %s as iternum = %d', f, iternum)
+                    basename = os.path.splitext(f)[0]
+                    models.append((iternum, os.path.join(dirpath, basename)))
+    
+    models =  sorted(models, key = lambda modeltp : modeltp[0])
+    if len(models) < 2:
+        logger.error('ERROR: load too few model files')
+        return None
+
+    logger.debug('models iternum as %s', [s[0] for s in models])
+    likelihoods = np.zeros((len(models), 2))
+
+    for idx in range( len(models) ):
+        doccnt, likelihood = calc_file(ldaPath, models[idx][1], data, ext)
+
+        likelihoods[idx][0] = models[idx][0]
+        likelihoods[idx][1] = likelihood
+
+    # save result
+    np.savetxt(cacheFile, likelihoods)
+
+    return likelihoods
+
+def draw_likelihood(likelihoods, modelname, fig, show = False):
+    logger.debug('plot the matrix')
+
+    x = likelihoods[:,0]
+    y = likelihoods[:,1]
+    plt.title('Convergence of likelihood')
+    plt.xlabel('Iteration Number')
+    plt.ylabel('Likelihood')
+    plt.plot(x, y, 'b.-', label=modelname)
+    plt.legend()
+
+    plt.savefig(fig)
+    if show:
+        plt.show()
+
+if __name__ == "__main__":
+    program = os.path.basename(sys.argv[0])
+    logger = logging.getLogger(program)
+
+    # logging configure
+    import logging.config
+    #logging.basicConfig(filename='debug_calcdistance.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    #                    level=logging.DEBUG)
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+    logging.root.setLevel(level=logging.DEBUG)
+    logger.info("running %s" % ' '.join(sys.argv))
+
+    # check and process input arguments
+    if len(sys.argv) < 3:
+        logger.error(globals()['__doc__'] % locals())
+        sys.exit(1)
 
 
+    # check the path
+    ldaPath = sys.argv[1]
+    modelname = sys.argv[2]
+    data = sys.argv[3]
 
+    if os.path.exists(modelname):
+        # if input a directory name
+        likelihoods = calc_dir(ldaPath, modelname, data)
 
+        #draw it
+        draw_likelihood(likelihoods, modelname, modelname + '.png', True)
 
-
-
-
-
-
+    else:
+        calc_file(ldaPath, modelname, data)
+    
 
 
