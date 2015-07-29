@@ -40,24 +40,34 @@ def run_lda_inference(lda, settings, model, data):
     Refer to blei's lda readme
     run "lda inf [settings] [model] [data] [name]"
     """
-    name = '.run_lda'
-    command = lda + ' inf ' + settings + ' ' + model + ' ' + data + ' ' + name
+    name = model
+    if os.path.exists(name):
+        logger.info('%s exists, skip call lda', name)
+    else:
+        command = lda + ' inf ' + settings + ' ' + model + ' ' + data + ' ' + name
+        logger.info('call lda inference: %s', command)
+        ret = os.system(command)
+        if ret:
+            # something wrong
+            return 0, ret
 
-    ret = os.system(command)
-    if ret:
-        # something wrong
-        return 0, ret
-
-    #calc the likelihood
-    l_file = name + '-lda-lhood.dat'
-    num_docs =0
-    l_sum =0
+    #calc the likelihood and perplexity 
+    l_file = model + '-lda-lhood.dat'
+    num_docs, num_words =0, 0
+    l_sum = 0.
     with open(l_file, 'r') as file:
         for line in file:
             num_docs+=1
             l_sum+= float(line.rstrip())
 
-    return num_docs, l_sum/float(num_docs)
+    with open(data, 'r') as ldacf:
+        for line in ldacf:
+            # format: wordcnt word1:cnt1 word2:cnt2 .....
+            num_words += int(line[:line.find(' ')])
+
+    perplexity = np.exp(-l_sum / num_words)
+
+    return num_docs, l_sum, num_words, perplexity
 
 
 def calc_file(ldaPath, modelname, data, ext = '.beta'):
@@ -78,16 +88,17 @@ def calc_file(ldaPath, modelname, data, ext = '.beta'):
     other = modelname + '.other'
     
     doccnt, likelihood = 0,0 
+    wordcnt, perplexity = 0,0
 
     if os.path.exists(lda) and os.path.exists(settings):
         if os.path.exists(beta) and os.path.exists(other):
             if os.path.exists(data):
                 if os.path.exists(local_settings):
-                    doccnt, likelihood = run_lda_inference(lda, local_settings, modelname, data)
+                    doccnt, likelihood, wordcnt, perplexity = run_lda_inference(lda, local_settings, modelname, data)
                 else:
-                    doccnt, likelihood = run_lda_inference(lda, settings, modelname, data)
+                    doccnt, likelihood, wordcnt, perplexity = run_lda_inference(lda, settings, modelname, data)
                 if doccnt:
-                    logger.info('doccnt = %d, likelihood = %f\n'%(doccnt, likelihood))
+                    logger.info('doccnt = %d, wordcnt = %d, likelihood = %f, perplexity = %f\n'%(doccnt, wordcnt, likelihood, perplexity))
                 else:
                     logger.error('Error: run command failed\n')
             else:
@@ -97,7 +108,7 @@ def calc_file(ldaPath, modelname, data, ext = '.beta'):
     else:
         logger.error('Error: lda not found at %s\n'%lda)
     
-    return doccnt, likelihood
+    return doccnt, likelihood, wordcnt, perplexity
 
 def calc_dir(ldaPath, modelDir, data, ext = '.beta'):
     """
@@ -133,13 +144,14 @@ def calc_dir(ldaPath, modelDir, data, ext = '.beta'):
         return None
 
     logger.debug('models iternum as %s', [s[0] for s in models])
-    likelihoods = np.zeros((len(models), 2))
+    likelihoods = np.zeros((len(models), 3))
 
     for idx in range( len(models) ):
-        doccnt, likelihood = calc_file(ldaPath, models[idx][1], data, ext)
+        doccnt, likelihood, wordcnt, perplexity = calc_file(ldaPath, models[idx][1], data, ext)
 
         likelihoods[idx][0] = models[idx][0]
         likelihoods[idx][1] = likelihood
+        likelihoods[idx][2] = perplexity
 
     # save result
     np.savetxt(cacheFile, likelihoods)
@@ -151,10 +163,12 @@ def draw_likelihood(likelihoods, modelname, fig, show = False):
 
     x = likelihoods[:,0]
     y = likelihoods[:,1]
+    z = likelihoods[:,2]
     plt.title('Convergence of likelihood')
     plt.xlabel('Iteration Number')
     plt.ylabel('Likelihood')
-    plt.plot(x, y, 'b.-', label=modelname)
+    #plt.plot(x, y, 'b.-', label=modelname+' likelihood' )
+    plt.plot(x, z, 'c.-', label=modelname+' perplexity' )
     plt.legend()
 
     plt.savefig(fig)
