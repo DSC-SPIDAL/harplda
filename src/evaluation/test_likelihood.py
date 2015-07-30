@@ -23,7 +23,10 @@ input:
 output:
     doccnt, likelihood
 
-Usage: test_likelihood <lda-install-path> <model-name> <data>
+Usage: 
+    test_likelihood <lda-install-path> <model-name> <data>
+    test_likelihood -draw fig-name
+
 """
 
 import sys,os,re
@@ -39,6 +42,11 @@ def run_lda_inference(lda, settings, model, data):
     """
     Refer to blei's lda readme
     run "lda inf [settings] [model] [data] [name]"
+
+    return:
+        0  on error
+        likelihood  log likelihood sum
+
     """
     name = model
     if os.path.exists(name + '-lda-lhood.dat'):
@@ -49,28 +57,19 @@ def run_lda_inference(lda, settings, model, data):
         ret = os.system(command)
         if ret:
             # something wrong
-            return 0, ret
+            return 0
 
     #calc the likelihood and perplexity 
     l_file = model + '-lda-lhood.dat'
-    num_docs, num_words =0, 0
     l_sum = 0.
     with open(l_file, 'r') as file:
         for line in file:
-            num_docs+=1
             l_sum+= float(line.rstrip())
 
-    with open(data, 'r') as ldacf:
-        for line in ldacf:
-            # format: wordcnt word1:cnt1 word2:cnt2 .....
-            num_words += int(line[:line.find(' ')])
-
-    perplexity = np.exp(-l_sum / num_words)
-
-    return num_docs, l_sum, num_words, perplexity
+    return l_sum
 
 
-def calc_file(ldaPath, modelname, data, ext = '.beta'):
+def calc_file(ldaPath, modelname, data, doccnt, wordcnt, ext = '.beta'):
     """
     Calculate likelihood of one model output phi on testset
 
@@ -87,17 +86,21 @@ def calc_file(ldaPath, modelname, data, ext = '.beta'):
     beta = modelname + ext
     other = modelname + '.other'
     
-    doccnt, likelihood = 0,0 
-    wordcnt, perplexity = 0,0
+    likelihood = 0 
+    perplexity = 0
 
     if os.path.exists(lda) and os.path.exists(settings):
         if os.path.exists(beta) and os.path.exists(other):
             if os.path.exists(data):
                 if os.path.exists(local_settings):
-                    doccnt, likelihood, wordcnt, perplexity = run_lda_inference(lda, local_settings, modelname, data)
+                    likelihood = run_lda_inference(lda, local_settings, modelname, data)
                 else:
-                    doccnt, likelihood, wordcnt, perplexity = run_lda_inference(lda, settings, modelname, data)
-                if doccnt:
+                    likelihood = run_lda_inference(lda, settings, modelname, data)
+
+
+
+                if likelihood != 0:
+                    perplexity = np.exp(- likelihood / wordcnt)
                     logger.info('doccnt = %d, wordcnt = %d, likelihood = %f, perplexity = %f\n'%(doccnt, wordcnt, likelihood, perplexity))
                 else:
                     logger.error('Error: run command failed\n')
@@ -107,10 +110,10 @@ def calc_file(ldaPath, modelname, data, ext = '.beta'):
             logger.error('Error: %s or .other file not found at %s, %s\n'%(ext, beta, other))
     else:
         logger.error('Error: lda not found at %s\n'%lda)
-    
-    return doccnt, likelihood, wordcnt, perplexity
+ 
+    return likelihood, perplexity
 
-def calc_dir(ldaPath, modelDir, data, ext = '.beta'):
+def calc_dir(ldaPath, modelDir, data, doccnt, wordcnt, ext = '.beta'):
     """
     Calculate likelihood on models output of different iterations
 
@@ -147,7 +150,7 @@ def calc_dir(ldaPath, modelDir, data, ext = '.beta'):
     likelihoods = np.zeros((len(models), 3))
 
     for idx in range( len(models) ):
-        doccnt, likelihood, wordcnt, perplexity = calc_file(ldaPath, models[idx][1], data, ext)
+        likelihood, perplexity = calc_file(ldaPath, models[idx][1], data, doccnt, wordcnt, ext)
 
         likelihoods[idx][0] = models[idx][0]
         likelihoods[idx][1] = likelihood
@@ -197,7 +200,7 @@ def draw_convergence(fig, show = False):
                 x = likelihoods[:,0]
                 y = likelihoods[:,1]
                 z = likelihoods[:,2]
-                plt.plot(x, z, colors[idx] + '.-', label=modelname+' perplexity' )
+                plt.plot(x, z, colors[idx] + '.-', label=modelname )
                 idx += 1
 
     plt.legend()
@@ -218,28 +221,38 @@ if __name__ == "__main__":
     logger.info("running %s" % ' '.join(sys.argv))
 
     # check and process input arguments
-    if len(sys.argv) < 3:
-        logger.error(globals()['__doc__'] % locals())
-        sys.exit(1)
+    if len(sys.argv) < 4:
+        if len(sys.argv) == 3 and sys.argv[1] == '-draw':
+            draw_convergence(sys.argv[2] + '.png', True)
+            sys.exit(0)
+        else:
+            logger.error(globals()['__doc__'] % locals())
+            sys.exit(1)
 
     # check the path
     ldaPath = sys.argv[1]
     modelname = sys.argv[2]
     data = sys.argv[3]
 
-    if ldaPath == '-draw':
-        draw_convergence(modelname + '.png', True)
-        sys.exit(0)
+    # get wordnum in data
+    num_docs, num_words = 0, 0
+    with open(data, 'r') as ldacf:
+        for line in ldacf:
+            num_docs += 1
+            # format: wordcnt word1:cnt1 word2:cnt2 .....
+            num_words += int(line[:line.find(' ')])
+
+    logger.info('test set %s has %d docs and %d words', data, num_docs, num_words)
 
     if os.path.exists(modelname):
         # if input a directory name
-        likelihoods = calc_dir(ldaPath, modelname, data)
+        likelihoods = calc_dir(ldaPath, modelname, data, num_docs, num_words)
 
         #draw it
         draw_likelihood(likelihoods, modelname, modelname + '.png', True)
 
     else:
-        calc_file(ldaPath, modelname, data)
+        calc_file(ldaPath, modelname, data, num_docs, num_words)
     
 
 
