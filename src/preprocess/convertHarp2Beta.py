@@ -41,16 +41,23 @@ def load_model(modelDir, beta):
                 model = np.concatenate((model, modeldata), axis=0)
             else:
                 model = modeldata
-    
-    model = np.sort(model, axis=0)
-    
+
+    # sort the matrix by the first column            
+    model = model[model[:,0].argsort()]
+    #model = np.sort(model, axis=0)
+
     model = model[:, 1:]
     K, V = model.shape
     model = np.transpose(model)
     logger.info('load model data as %s', model.shape)
 
     # convert to probility
-    model = (model + beta) / ( sum(model) + beta * K)
+    model = np.matrix(model)
+    sum_k = model.sum(axis = 1)
+
+    logger.debug('sum_k is %s', sum_k)
+
+    model = (model + beta) / ( sum_k + beta * K)
     model = np.log(model)
 
     return model
@@ -78,4 +85,4 @@ if __name__ == '__main__':
     model = load_model(modelDir, beta)
     
     logger.info('saving to .beta')
-    np.savetxt('harp-'+modelDir+'.beta', model, fmt="%.10f")
+    np.savetxt('harp-'+modelDir+'.beta', model, fmt="%.8f")

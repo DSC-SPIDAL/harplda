@@ -41,7 +41,7 @@ def run_lda_inference(lda, settings, model, data):
     run "lda inf [settings] [model] [data] [name]"
     """
     name = model
-    if os.path.exists(name):
+    if os.path.exists(name + '-lda-lhood.dat'):
         logger.info('%s exists, skip call lda', name)
     else:
         command = lda + ' inf ' + settings + ' ' + model + ' ' + data + ' ' + name
@@ -166,11 +166,41 @@ def draw_likelihood(likelihoods, modelname, fig, show = False):
     z = likelihoods[:,2]
     plt.title('Convergence of likelihood')
     plt.xlabel('Iteration Number')
-    plt.ylabel('Likelihood')
+    plt.ylabel('Perplexity')
     #plt.plot(x, y, 'b.-', label=modelname+' likelihood' )
     plt.plot(x, z, 'c.-', label=modelname+' perplexity' )
     plt.legend()
 
+    plt.savefig(fig)
+    if show:
+        plt.show()
+
+def draw_convergence(fig, show = False):
+    """
+    Draw convergence graph, load likelihood data from .likelihood data
+    """
+    plt.title('Convergence of LDA Topic Model')
+    plt.xlabel('Iteration Number')
+    plt.ylabel('Perplexity')
+
+    colors = ['b','c','r','g','y']
+    idx = 0
+
+    for dirpath, dnames, fnames in os.walk("."):
+        for f in fnames:
+            if f.find('.likelihood') > 0:
+                modelname =os.path.splitext(f)[0]
+                filename = os.path.join(dirpath, f)
+                logger.info('load likelihood data from %s', filename)
+                likelihoods = np.loadtxt(filename)
+
+                x = likelihoods[:,0]
+                y = likelihoods[:,1]
+                z = likelihoods[:,2]
+                plt.plot(x, z, colors[idx] + '.-', label=modelname+' perplexity' )
+                idx += 1
+
+    plt.legend()
     plt.savefig(fig)
     if show:
         plt.show()
@@ -192,11 +222,14 @@ if __name__ == "__main__":
         logger.error(globals()['__doc__'] % locals())
         sys.exit(1)
 
-
     # check the path
     ldaPath = sys.argv[1]
     modelname = sys.argv[2]
     data = sys.argv[3]
+
+    if ldaPath == '-draw':
+        draw_convergence(modelname + '.png', True)
+        sys.exit(0)
 
     if os.path.exists(modelname):
         # if input a directory name
