@@ -55,7 +55,7 @@ def load_model(modelDir, beta):
     model = np.matrix(model)
     sum_k = model.sum(axis = 1)
 
-    logger.debug('sum_k is %s', sum_k)
+    #logger.debug('sum_k is %s', sum_k)
 
     model = (model + beta) / ( sum_k + beta * K)
     model = np.log(model)
