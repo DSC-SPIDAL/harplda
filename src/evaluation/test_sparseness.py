@@ -6,17 +6,25 @@ Validate the sparseness property in the topic model outputed by lda.
 Each model is a V*K matrix with every element a log probability
 
 prob(v=k | model) = (C(v,k) + beta ) /(sigma(C(v,k) + V*beta)
-minval = argmin(model[k]) = 1/V
+minval = argmin(model[k]) ~ 1/V
 
 So, the sparseness can be represented by:
 1. ratio of prob > minval
 2. heat map
 
-Output the sparseness map
+Usage:
+    test_sparseness -file <model file>
+    Output the sparseness measure
+
+    test_sparseness -dir <model dir>
+    Output the sparseness changes on iterations
+
+    test_sparseness -draw <fig file>
+    Output the sparseness map
 
 """
 
-import sys, os
+import sys, os, re
 import numpy as np
 from scipy import stats
 from scipy.stats import entropy
@@ -41,63 +49,15 @@ def calc_sparseness(model):
 #        logger.debug('topicB row %d sum=%f', row, sum(topicB[row]))
 
     sparseness = np.zeros((K,1))
-    minval = 1/V + 1e-12
+    # minval = 1/V + 1e-12
 
     logger.debug('calculate the sparseness, shape =(%d, %d) ', K, V)
     for i in range(K):
+        minval = min(model[i])
         sparseness[i] = np.where(model[i] > minval)[0].shape[0] * 1.0 / V
 
-    logger.debug('End of calculate, sparseness matrix=%s', sparseness)        
+    logger.debug('End of calculate, sparseness matrix=%s', sum(sparseness) / K )
     return sparseness
-
-
-def match_topics(distance_matrix):
-    """
-    return : 
-        a list of index holding the indexes most match
-
-    """
-    if topicA.shape != topicB.shape:
-        logger.error('topicA has different shape with topicB', topicA.shape, topicB.shape)
-        return None
-    
-    copy = distance_matrix.copy()
-    K,V = topicA.shape
-
-    logger.debug('greedy search for most similar topics')
-    match_ids = [] 
-    for i in range(K):
-        # search for the most similar
-        idx = np.argmin(copy)
-        row, col = idx/K, idx % K
-
-        match_ids.append((row, col))
-
-        copy[row].fill(10)
-        copy[:,col].fill(10)
-        
-#        logger.debug('argmin found at row=%d, col=%d, fill copy matrix is:\n%s', row, col, copy)
-
-    logger.debug('End of match, match_ids = %s', match_ids)
-    return match_ids
-
-def reorder_matrix(distance_matrix, match_ids):
-    """
-    Reorder the distance matrix, swap the rows according to the match_ids
-    return a new reordered matrix
-    """
-    reorder_matrix = np.zeros(distance_matrix.shape)
-    r_m = np.zeros(distance_matrix.shape)
-    KA, KB = distance_matrix.shape
-    for idx in range(KA):
-        #reorder_matrix[match_ids[idx][1]]  = distance_matrix[match_ids[idx][0]]
-        # match_ids[idx][0] --> idx row, [1] --> idx col
-        r_m[idx] = distance_matrix[match_ids[idx][0]]
-    for idx in range(KA):
-        reorder_matrix[:, idx] = r_m[:, match_ids[idx][1]]
-
-    logger.debug('End of reorder')
-    return reorder_matrix
 
 def plot_matrix(model, fig):
     """
@@ -119,26 +79,103 @@ def plot_matrix(model, fig):
     plt.show()
 
 def load_model(topicFile):
+    """
+    input:
+        .beta model file, log(p(w|k))
+    output:
+        p(w|k) 
+    """
     topic = np.loadtxt(topicFile)
 
     k , v = topic.shape
     tA = np.exp(topic)
-    epsi = np.ones((k,v)) * (1e-12)
+    #epsi = np.ones((k,v)) * (1e-12)
+    epsi = 1e-12
     model = tA + epsi
     return model
 
+
+def calc_dir(modelDir, ext = '.beta'):
+    """
+    Calculate the sparseness change/decrease on iterations
+    input:
+        .beta files   xxx-###.beta
+    output:
+        .sparseness   matrix<iternum, sparseness>
+
+    """
+    # cache file
+    cacheFile = modelDir + '.sparseness'
+    if os.path.exists(cacheFile):
+        logger.info('Cache file found at %s, loading sparseness', cacheFile)
+        sparseness = np.loadtxt(cacheFile)
+        return sparseness
+
+    models = []
+    for dirpath, dnames, fnames in os.walk(modelDir):
+        for f in fnames:
+            if f.endswith(ext):
+                m = re.search('.*-([0-9]*)' + ext, f)
+                if m:
+                    iternum = int(m.group(1))
+
+                    logger.info('load model from %s as iternum = %d', f, iternum)
+                    model = load_model(os.path.join(dirpath, f))
+
+                    models.append((iternum, model))
+
+    models =  sorted(models, key = lambda modeltp : modeltp[0])
+    if len(models) < 2:
+        logger.error('ERROR: load too few model files')
+        return None
+
+    logger.debug('models iternum as %s', [s[0] for s in models])
+    sparseness = np.zeros((len(models), 2))
+
+    K, V = models[0][1].shape
+    for idx in range( len(models) ):
+        sp = calc_sparseness(models[idx][1])
+
+        sparseness[idx][0] = models[idx][0]
+        sparseness[idx][1] = sum(sp) / K
+ 
+    # save result
+    np.savetxt(cacheFile, sparseness)
+
+    return sparseness
+
 if __name__ == '__main__':
+    program = os.path.basename(sys.argv[0])
+    logger = logging.getLogger(program)
+
     # logging configure
     import logging.config
-    logging.basicConfig(filename='debug_testsparseness.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                        level=logging.DEBUG)
+    #logging.basicConfig(filename='debug_calcdistance.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    #                    level=logging.DEBUG)
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+    logging.root.setLevel(level=logging.DEBUG)
+    logger.info("running %s" % ' '.join(sys.argv))
 
-    if len(sys.argv) != 2:
-        print "Usage: test_sparseness <model file>"
-        sys.exit(0)
+    # check and process input arguments
+    if len(sys.argv) < 3:
+        print(globals()['__doc__'] % locals())
+        sys.exit(1)
 
-    model = load_model(sys.argv[1])
+    cmd = sys.argv[1]
+    filename = sys.argv[2]
 
-    sparse = calc_sparseness(model)
+    if cmd == '-file':
+        model = load_model(filename)
+        sparse = calc_sparseness(model)
+    elif cmd == '-dir':
+        sparseness = calc_dir(filename)
+    elif cmd == '-draw':
+        model = load_model(filename)
+        plot_matrix(model, filename + '-model.png')
+    else:
+        print(globals()['__doc__'] % locals())
+        sys.exit(1)
+
+
+
     
-    plot_matrix(model, 'model.png')
