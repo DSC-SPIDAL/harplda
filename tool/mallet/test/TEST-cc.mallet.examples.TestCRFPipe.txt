@@ -1,0 +1,15 @@
+Testsuite: cc.mallet.examples.TestCRFPipe
+Tests run: 2, Failures: 0, Errors: 2, Time elapsed: 0.021 sec
+
+Testcase: initializationError took 0.001 sec
+	Caused an ERROR
+Test class should have exactly one public zero-argument constructor
+java.lang.Exception: Test class should have exactly one public zero-argument constructor
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+
+Testcase: initializationError took 0 sec
+	Caused an ERROR
+No runnable methods
+java.lang.Exception: No runnable methods
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+

@@ -1,0 +1,56 @@
+Testsuite: cc.mallet.classify.tests.TestNaiveBayes
+Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 0.106 sec
+------------- Standard Output ---------------
+fdict.size=0
+ldict.size=2
+fdict.size=3
+inst.data = win(0)=1.0
+speech(3)=1.0
+
+l.getBestIndex=1
+testEmptyStringBug
+Training 1
+Initial Classification = 
+data alphabet puppy
+woof
+goodbye
+
+label alphabet src/cc/mallet/classify/tests/NaiveBayesData/learn/a
+src/cc/mallet/classify/tests/NaiveBayesData/learn/b
+
+data alphabet size 3
+target alphabet size 2
+Training 2
+data alphabet size 3
+target alphabet size 3
+Accuracy on training set = 1.0
+testIncrementallyTrainedGrowingAlphabets
+Training 1
+data alphabet size 3
+target alphabet size 2
+Training 2
+data alphabet size 3
+target alphabet size 2
+testIncrementallyTrained
+Training 1
+Initial Classification = 
+data alphabet puppy
+woof
+goodbye
+
+label alphabet src/cc/mallet/classify/tests/NaiveBayesData/learn/a
+src/cc/mallet/classify/tests/NaiveBayesData/learn/b
+
+data alphabet size 3
+target alphabet size 2
+Training 2
+data alphabet size 3
+target alphabet size 2
+------------- ---------------- ---------------
+
+Testcase: testNonTrained took 0.054 sec
+Testcase: testEmptyStringBug took 0.026 sec
+Testcase: testStringTrained took 0.002 sec
+Testcase: testRandomTrained took 0.014 sec
+Testcase: testIncrementallyTrainedGrowingAlphabets took 0.002 sec
+Testcase: testIncrementallyTrained took 0.003 sec

@@ -1,0 +1,31 @@
+Testsuite: cc.mallet.extract.test.TestDocumentExtraction
+Tests run: 4, Failures: 4, Errors: 0, Time elapsed: 0.091 sec
+
+Testcase: testNestedXMLTokenizationFilter took 0.076 sec
+	FAILED
+null expected:<...ck brown <MAMMAL>fox[ </MAMMAL></ANIMAL><VERB>leapt </VERB>]over <ANIMAL>the <AD...> but was:<...ck brown <MAMMAL>fox[</MAMMAL></ANIMAL> <VERB>leapt</VERB> ]over <ANIMAL>the <AD...>
+junit.framework.ComparisonFailure: null expected:<...ck brown <MAMMAL>fox[ </MAMMAL></ANIMAL><VERB>leapt </VERB>]over <ANIMAL>the <AD...> but was:<...ck brown <MAMMAL>fox[</MAMMAL></ANIMAL> <VERB>leapt</VERB> ]over <ANIMAL>the <AD...>
+	at cc.mallet.extract.test.TestDocumentExtraction.testNestedXMLTokenizationFilter(TestDocumentExtraction.java:123)
+
+Testcase: testToXmlBIO took 0.001 sec
+	FAILED
+null expected:<... <ANIMAL>quick brown[ </ANIMAL><ANIMAL>fox </ANIMAL><VERB>leapt over </VERB>]the <ANIMAL>lazy dog...> but was:<... <ANIMAL>quick brown[</ANIMAL> <ANIMAL>fox</ANIMAL> <VERB>leapt over</VERB> ]the <ANIMAL>lazy dog...>
+junit.framework.ComparisonFailure: null expected:<... <ANIMAL>quick brown[ </ANIMAL><ANIMAL>fox </ANIMAL><VERB>leapt over </VERB>]the <ANIMAL>lazy dog...> but was:<... <ANIMAL>quick brown[</ANIMAL> <ANIMAL>fox</ANIMAL> <VERB>leapt over</VERB> ]the <ANIMAL>lazy dog...>
+	at cc.mallet.extract.test.TestDocumentExtraction.testToXmlBIO(TestDocumentExtraction.java:72)
+
+Testcase: testNestedToXML took 0.002 sec
+	FAILED
+null expected:<...ck brown <MAMMAL>fox[ </MAMMAL></ANIMAL><VERB>leapt </VERB>over <ANIMAL>the <ADJ>lazy </ADJ>]dog</ANIMAL></doc>
+> but was:<...ck brown <MAMMAL>fox[</MAMMAL></ANIMAL> <VERB>leapt</VERB> over <ANIMAL>the <ADJ>lazy</ADJ> ]dog</ANIMAL></doc>
+>
+junit.framework.ComparisonFailure: null expected:<...ck brown <MAMMAL>fox[ </MAMMAL></ANIMAL><VERB>leapt </VERB>over <ANIMAL>the <ADJ>lazy </ADJ>]dog</ANIMAL></doc>
+> but was:<...ck brown <MAMMAL>fox[</MAMMAL></ANIMAL> <VERB>leapt</VERB> over <ANIMAL>the <ADJ>lazy</ADJ> ]dog</ANIMAL></doc>
+>
+	at cc.mallet.extract.test.TestDocumentExtraction.testNestedToXML(TestDocumentExtraction.java:100)
+
+Testcase: testToXml took 0.001 sec
+	FAILED
+null expected:<...IMAL>quick brown fox[ </ANIMAL><VERB>leapt </VERB>]over the <ANIMAL>laz...> but was:<...IMAL>quick brown fox[</ANIMAL> <VERB>leapt</VERB> ]over the <ANIMAL>laz...>
+junit.framework.ComparisonFailure: null expected:<...IMAL>quick brown fox[ </ANIMAL><VERB>leapt </VERB>]over the <ANIMAL>laz...> but was:<...IMAL>quick brown fox[</ANIMAL> <VERB>leapt</VERB> ]over the <ANIMAL>laz...>
+	at cc.mallet.extract.test.TestDocumentExtraction.testToXml(TestDocumentExtraction.java:53)
+

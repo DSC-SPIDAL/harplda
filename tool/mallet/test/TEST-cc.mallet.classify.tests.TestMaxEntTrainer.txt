@@ -1,0 +1,175 @@
+Testsuite: cc.mallet.classify.tests.TestMaxEntTrainer
+Tests run: 3, Failures: 0, Errors: 0, Time elapsed: 0.165 sec
+------------- Standard Output ---------------
+TestMaximizable testGetSetParameters
+epsilon = 3.0959752321981426E-4 tolerance=0.0015479876160990713
+value=-31.191623125197502 epsValue=-31.169035086394377 slope[0] = 72.9593653340937 gradient[]=73.0
+value=-31.191623125197502 epsValue=-31.190695842275193 slope[1] = 2.9951238390567525 gradient[]=3.0
+value=-31.191623125197502 epsValue=-31.20540739179553 slope[2] = -44.523181111625796 gradient[]=-44.5
+value=-31.191623125197502 epsValue=-31.189456421788105 slope[3] = 6.998452012353233 gradient[]=7.0
+value=-31.191623125197502 epsValue=-31.197816729085176 slope[4] = -20.005340557186244 gradient[]=-20.0
+value=-31.191623125197502 epsValue=-31.19580382998717 slope[5] = -13.503676470628463 gradient[]=-13.5
+value=-31.191623125197502 epsValue=-31.191468913521042 slope[6] = 0.4981037149647704 gradient[]=0.5
+value=-31.191623125197502 epsValue=-31.214236324784462 slope[7] = -73.040634665881 gradient[]=-73.0
+value=-31.191623125197502 epsValue=-31.192553427414513 slope[8] = -3.004876160945038 gradient[]=-3.0
+value=-31.191623125197502 epsValue=-31.177853212228957 slope[9] = 44.476818888400764 gradient[]=44.5
+value=-31.191623125197502 epsValue=-31.19379078711318 slope[10] = -7.001547987639469 gradient[]=-7.0
+value=-31.191623125197502 epsValue=-31.18543282815638 slope[11] = 19.994659442825693 gradient[]=20.0
+value=-31.191623125197502 epsValue=-31.187444696860233 slope[12] = 13.496323529379595 gradient[]=13.5
+value=-31.191623125197502 epsValue=-31.191778511044262 slope[13] = -0.501896285035528 gradient[]=-0.5
+analyticGradient.twoNorm = 126.09321948463366
+empiricalGradient.twoNorm = 126.09323741062992
+epsilon = 2.978616494404321E-4 tolerance=0.0014893082472021606
+value=-32.81448845063704 epsValue=-32.79169651584224 slope[0] = 76.51852743587648 gradient[]=76.55751563963446
+value=-32.81448845063704 epsValue=-32.81351220162533 slope[1] = 3.277525030657693 gradient[]=3.2822118572976264
+value=-32.81448845063704 epsValue=-32.82809471141888 slope[2] = -45.679800697389304 gradient[]=-45.65751922918322
+value=-32.81448845063704 epsValue=-32.8122989678294 slope[3] = 7.350670392637932 gradient[]=7.3521575010666185
+value=-32.81448845063704 epsValue=-32.82058498350428 slope[4] = -20.467666376965933 gradient[]=-20.462532086927954
+value=-32.81448845063704 epsValue=-32.81860795312168 slope[5] = -13.830254725217289 gradient[]=-13.826719959876305
+value=-32.81448845063704 epsValue=-32.814273189178856 slope[6] = 0.7226894049361267 gradient[]=0.7245113722011206
+value=-32.81448845063704 epsValue=-32.83730361071262 slope[7] = -76.59650081987613 gradient[]=-76.55751563963447
+value=-32.81448845063704 epsValue=-32.815467491692274 slope[8] = -3.2868986560388715 gradient[]=-3.2822118572976264
+value=-32.81448845063704 epsValue=-32.80089546366254 slope[9] = 45.63523703047136 gradient[]=45.65751922918324
+value=-32.81448845063704 epsValue=-32.81667881934606 slope[10] = -7.353644596848111 gradient[]=-7.3521575010666185
+value=-32.81448845063704 epsValue=-32.808394976411506 slope[11] = 20.457397711267188 gradient[]=20.462532086927958
+value=-32.81448845063704 epsValue=-32.81037105390392 slope[12] = 13.823185162832633 gradient[]=13.826719959876302
+value=-32.81448845063704 epsValue=-32.81470479749179 slope[13] = -0.7263333670373262 gradient[]=-0.7245114031608765
+analyticGradient.twoNorm = 131.3080935714251
+empiricalGradient.twoNorm = 131.30810739838788
+epsilon = 1.0 tolerance=5.0
+value=-1.0080527624891722 epsValue=-2.2275869784005407 slope[0] = -1.2195342159113685 gradient[]=-1.0360334871317711E-4
+value=-1.0080527624891722 epsValue=-2.9021874838761663 slope[1] = -1.8941347213869941 gradient[]=-0.001016358226989568
+value=-1.0080527624891722 epsValue=-10.81981219918195 slope[2] = -9.811759436692778 gradient[]=1.8716105239258152E-4
+value=-1.0080527624891722 epsValue=-1.6562691003481842 slope[3] = -0.648216337859012 gradient[]=-9.789722260118289E-4
+value=-1.0080527624891722 epsValue=-2.7502778411012105 slope[4] = -1.7422250786120383 gradient[]=7.455058436225404E-4
+value=-1.0080527624891722 epsValue=-2.694903913114275 slope[5] = -1.6868511506251027 gradient[]=-0.001112180365466925
+value=-1.0080527624891722 epsValue=-1.689624645636491 slope[6] = -0.6815718831473188 gradient[]=-2.278447271106543E-4
+value=-1.0080527624891722 epsValue=-14.598004461538544 slope[7] = -13.589951699049372 gradient[]=1.0360334867787202E-4
+value=-1.0080527624891722 epsValue=-2.894560623048222 slope[8] = -1.88650786055905 gradient[]=0.0010163582269909488
+value=-1.0080527624891722 epsValue=-2.4204270662574796 slope[9] = -1.4123743037683074 gradient[]=-1.8716105239219294E-4
+value=-1.0080527624891722 epsValue=-1.664445801356094 slope[10] = -0.6563930388669219 gradient[]=9.789722260093309E-4
+value=-1.0080527624891722 epsValue=-1.6975776905777114 slope[11] = -0.6895249280885392 gradient[]=-7.455058436238726E-4
+value=-1.0080527624891722 epsValue=-2.1150949850949274 slope[12] = -1.1070422226057552 gradient[]=0.0011121803654687568
+value=-1.0080527624891722 epsValue=-1.6815852955724746 slope[13] = -0.6735325330833024 gradient[]=2.2784472711677092E-4
+analyticGradient.twoNorm = 0.0027863133083508374
+empiricalGradient.twoNorm = 17.347540408934616
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+Value (labelProb=31.191623125197502 prior=0.0) loglikelihood = -31.191623125197502
+Value (labelProb=31.169035038469065 prior=4.7925313191921716E-8) loglikelihood = -31.169035086394377
+TestMaximizable checking singleIndex 0: gradient slope = 73.0, value+epsilon slope = 72.9593653340937: slope difference = -0.040634665906296163
+Value (labelProb=31.19069579434988 prior=4.7925313191921716E-8) loglikelihood = -31.190695842275193
+TestMaximizable checking singleIndex 1: gradient slope = 3.0, value+epsilon slope = 2.9951238390567525: slope difference = -0.004876160943247498
+Value (labelProb=31.205407343870217 prior=4.7925313191921716E-8) loglikelihood = -31.20540739179553
+TestMaximizable checking singleIndex 2: gradient slope = -44.5, value+epsilon slope = -44.523181111625796: slope difference = -0.023181111625795836
+Value (labelProb=31.189456373862793 prior=4.7925313191921716E-8) loglikelihood = -31.189456421788105
+TestMaximizable checking singleIndex 3: gradient slope = 7.0, value+epsilon slope = 6.998452012353233: slope difference = -0.0015479876467665576
+Value (labelProb=31.197816681159864 prior=4.7925313191921716E-8) loglikelihood = -31.197816729085176
+TestMaximizable checking singleIndex 4: gradient slope = -20.0, value+epsilon slope = -20.005340557186244: slope difference = -0.005340557186244155
+Value (labelProb=31.19580378206186 prior=4.7925313191921716E-8) loglikelihood = -31.19580382998717
+TestMaximizable checking singleIndex 5: gradient slope = -13.5, value+epsilon slope = -13.503676470628463: slope difference = -0.00367647062846288
+Value (labelProb=31.19146886559573 prior=4.7925313191921716E-8) loglikelihood = -31.191468913521042
+TestMaximizable checking singleIndex 6: gradient slope = 0.5, value+epsilon slope = 0.4981037149647704: slope difference = -0.0018962850352295946
+Value (labelProb=31.21423627685915 prior=4.7925313191921716E-8) loglikelihood = -31.214236324784462
+TestMaximizable checking singleIndex 7: gradient slope = -73.0, value+epsilon slope = -73.040634665881: slope difference = -0.04063466588100084
+Value (labelProb=31.1925533794892 prior=4.7925313191921716E-8) loglikelihood = -31.192553427414513
+TestMaximizable checking singleIndex 8: gradient slope = -3.0, value+epsilon slope = -3.004876160945038: slope difference = -0.004876160945038066
+Value (labelProb=31.177853164303645 prior=4.7925313191921716E-8) loglikelihood = -31.177853212228957
+TestMaximizable checking singleIndex 9: gradient slope = 44.5, value+epsilon slope = 44.476818888400764: slope difference = -0.02318111159923575
+Value (labelProb=31.193790739187868 prior=4.7925313191921716E-8) loglikelihood = -31.19379078711318
+TestMaximizable checking singleIndex 10: gradient slope = -7.0, value+epsilon slope = -7.001547987639469: slope difference = -0.0015479876394692837
+Value (labelProb=31.185432780231068 prior=4.7925313191921716E-8) loglikelihood = -31.18543282815638
+TestMaximizable checking singleIndex 11: gradient slope = 20.0, value+epsilon slope = 19.994659442825693: slope difference = -0.005340557174307037
+Value (labelProb=31.18744464893492 prior=4.7925313191921716E-8) loglikelihood = -31.187444696860233
+TestMaximizable checking singleIndex 12: gradient slope = 13.5, value+epsilon slope = 13.496323529379595: slope difference = -0.0036764706204053255
+Value (labelProb=31.19177846311895 prior=4.7925313191921716E-8) loglikelihood = -31.191778511044262
+TestMaximizable checking singleIndex 13: gradient slope = -0.5, value+epsilon slope = -0.501896285035528: slope difference = -0.001896285035527967
+TestMaximizable angle is zero.
+Gradient two-Norm = 126.098738167606
+  max parameter change = -0.07301191950454877
+Value (labelProb=32.814408946178204 prior=7.950445883731225E-5) loglikelihood = -32.81448845063704
+Value (labelProb=32.7916191417677 prior=7.737407454117225E-5) loglikelihood = -32.79169651584224
+TestMaximizable checking singleIndex 0: gradient slope = 76.55751563963446, value+epsilon slope = 76.51852743587648: slope difference = -0.038988203757980955
+Value (labelProb=32.8134327422887 prior=7.945933663032576E-5) loglikelihood = -32.81351220162533
+TestMaximizable checking singleIndex 1: gradient slope = 3.2822118572976264, value+epsilon slope = 3.277525030657693: slope difference = -0.004686826639933361
+Value (labelProb=32.8280138374031 prior=8.087401577958777E-5) loglikelihood = -32.82809471141888
+TestMaximizable checking singleIndex 2: gradient slope = -45.65751922918322, value+epsilon slope = -45.679800697389304: slope difference = -0.022281468206081456
+Value (labelProb=32.81221962757288 prior=7.934025652260932E-5) loglikelihood = -32.8122989678294
+TestMaximizable checking singleIndex 3: gradient slope = 7.3521575010666185, value+epsilon slope = 7.350670392637932: slope difference = -0.00148710842868649
+Value (labelProb=32.820504839076634 prior=8.014442764576157E-5) loglikelihood = -32.82058498350428
+TestMaximizable checking singleIndex 4: gradient slope = -20.462532086927954, value+epsilon slope = -20.467666376965933: slope difference = -0.005134290037979383
+Value (labelProb=32.81852800228336 prior=7.995083832250163E-5) loglikelihood = -32.81860795312168
+TestMaximizable checking singleIndex 5: gradient slope = -13.826719959876305, value+epsilon slope = -13.830254725217289: slope difference = -0.0035347653409836255
+Value (labelProb=32.814193655356064 prior=7.95338227915622E-5) loglikelihood = -32.814273189178856
+TestMaximizable checking singleIndex 6: gradient slope = 0.7245113722011206, value+epsilon slope = 0.7226894049361267: slope difference = -0.0018219672649939511
+Value (labelProb=32.83722188714792 prior=8.172356469565963E-5) loglikelihood = -32.83730361071262
+TestMaximizable checking singleIndex 7: gradient slope = -76.55751563963447, value+epsilon slope = -76.59650081987613: slope difference = -0.038985180241652984
+Value (labelProb=32.815387853389666 prior=7.963830260650612E-5) loglikelihood = -32.815467491692274
+TestMaximizable checking singleIndex 8: gradient slope = -3.2822118572976264, value+epsilon slope = -3.2868986560388715: slope difference = -0.004686798741245113
+Value (labelProb=32.80081724003909 prior=7.822362345724411E-5) loglikelihood = -32.80089546366254
+TestMaximizable checking singleIndex 9: gradient slope = 45.65751922918324, value+epsilon slope = 45.63523703047136: slope difference = -0.022282198711877754
+Value (labelProb=32.816599061963345 prior=7.975738271422257E-5) loglikelihood = -32.81667881934606
+TestMaximizable checking singleIndex 10: gradient slope = -7.3521575010666185, value+epsilon slope = -7.353644596848111: slope difference = -0.001487095781492087
+Value (labelProb=32.808316023199914 prior=7.895321159107031E-5) loglikelihood = -32.808394976411506
+TestMaximizable checking singleIndex 11: gradient slope = 20.462532086927958, value+epsilon slope = 20.457397711267188: slope difference = -0.005134375660770019
+Value (labelProb=32.81029190710301 prior=7.914680091433025E-5) loglikelihood = -32.81037105390392
+TestMaximizable checking singleIndex 12: gradient slope = 13.826719959876302, value+epsilon slope = 13.823185162832633: slope difference = -0.003534797043668547
+Value (labelProb=32.81462523366613 prior=7.956382566699256E-5) loglikelihood = -32.81470479749179
+TestMaximizable checking singleIndex 13: gradient slope = -0.7245114031608765, value+epsilon slope = -0.7263333670373262: slope difference = -0.0018219638764497281
+TestMaximizable angle is zero.
+Value (labelProb=31.191623125197502 prior=0.0) loglikelihood = -31.191623125197502
+Value (labelProb=0.8091813823594523 prior=0.4999999999999997) loglikelihood = -1.309181382359452
+Value (labelProb=0.6968997403494337 prior=0.5124197699933849) loglikelihood = -1.2093195103428185
+Value (labelProb=0.5066615872362373 prior=0.5551671516415952) loglikelihood = -1.0618287388778325
+Value (labelProb=0.4598503669820786 prior=0.5796035663843414) loglikelihood = -1.0394539333664201
+Value (labelProb=0.41801244513047875 prior=0.6076511007155764) loglikelihood = -1.0256635458460552
+Value (labelProb=0.3483269583347696 prior=0.6629135878458035) loglikelihood = -1.0112405461805731
+Value (labelProb=0.3376345933418448 prior=0.6717224062314807) loglikelihood = -1.0093569995733256
+Value (labelProb=0.3394561084804697 prior=0.6687575886926287) loglikelihood = -1.0082136971730984
+Value (labelProb=0.34575877066123833 prior=0.6623000706409864) loglikelihood = -1.0080588413022247
+Value (labelProb=0.3463834287022782 prior=0.6616738711225247) loglikelihood = -1.008057299824803
+Exiting L-BFGS on termination #1:
+value difference below tolerance (oldValue: -1.0080588413022247 newValue: -1.008057299824803
+Value (labelProb=34.53629839934899 prior=0.9274407141812213) loglikelihood = -35.46373911353022
+Value (labelProb=0.43584533013043564 prior=0.6432505554283943) loglikelihood = -1.07909588555883
+Value (labelProb=0.3492464564490113 prior=0.6593815395531117) loglikelihood = -1.0086279960021232
+Value (labelProb=0.34661367973833224 prior=0.6614401379655834) loglikelihood = -1.0080538177039156
+Value (labelProb=0.34665628768825335 prior=0.6613964748009188) loglikelihood = -1.0080527624891722
+Exiting L-BFGS on termination #1:
+value difference below tolerance (oldValue: -1.0080538177039156 newValue: -1.0080527624891722
+
+
+Value (labelProb=0.4878624685307922 prior=1.7397245098697487) loglikelihood = -2.2275869784005407
+TestMaximizable checking singleIndex 0: gradient slope = -1.0360334871317711E-4, value+epsilon slope = -1.2195342159113685: slope difference = -1.2194306125626553
+Value (labelProb=1.6872165687761083 prior=1.214970915100058) loglikelihood = -2.9021874838761663
+TestMaximizable checking singleIndex 1: gradient slope = -0.001016358226989568, value+epsilon slope = -1.8941347213869941: slope difference = -1.8931183631600046
+Value (labelProb=10.117861840080302 prior=0.7019503591016489) loglikelihood = -10.81981219918195
+TestMaximizable checking singleIndex 2: gradient slope = 1.8716105239258152E-4, value+epsilon slope = -9.811759436692778: slope difference = -9.811946597745171
+Value (labelProb=0.4195232246641594 prior=1.2367458756840248) loglikelihood = -1.6562691003481842
+TestMaximizable checking singleIndex 3: gradient slope = -9.789722260118289E-4, value+epsilon slope = -0.648216337859012: slope difference = -0.6472373656330002
+Value (labelProb=1.8987118423697245 prior=0.851565998731486) loglikelihood = -2.7502778411012105
+TestMaximizable checking singleIndex 4: gradient slope = 7.455058436225404E-4, value+epsilon slope = -1.7422250786120383: slope difference = -1.7429705844556609
+Value (labelProb=1.638487637586101 prior=1.056416275528174) loglikelihood = -2.694903913114275
+TestMaximizable checking singleIndex 5: gradient slope = -0.001112180365466925, value+epsilon slope = -1.6868511506251027: slope difference = -1.6857389702596357
+Value (labelProb=0.5449286623146106 prior=1.1446959833218804) loglikelihood = -1.689624645636491
+TestMaximizable checking singleIndex 6: gradient slope = -2.278447271106543E-4, value+epsilon slope = -0.6815718831473188: slope difference = -0.6813440384202081
+Value (labelProb=14.014936021806434 prior=0.5830684397321096) loglikelihood = -14.598004461538544
+TestMaximizable checking singleIndex 7: gradient slope = 1.0360334867787202E-4, value+epsilon slope = -13.589951699049372: slope difference = -13.59005530239805
+Value (labelProb=1.78673858854644 prior=1.1078220345017822) loglikelihood = -2.894560623048222
+TestMaximizable checking singleIndex 8: gradient slope = 0.0010163582269909488, value+epsilon slope = -1.88650786055905: slope difference = -1.8875242187860408
+Value (labelProb=0.7995844757572836 prior=1.6208425905001957) loglikelihood = -2.4204270662574796
+TestMaximizable checking singleIndex 9: gradient slope = -1.8716105239219294E-4, value+epsilon slope = -1.4123743037683074: slope difference = -1.4121871427159152
+Value (labelProb=0.5783987274382801 prior=1.0860470739178139) loglikelihood = -1.664445801356094
+TestMaximizable checking singleIndex 10: gradient slope = 9.789722260093309E-4, value+epsilon slope = -0.6563930388669219: slope difference = -0.6573720110929312
+Value (labelProb=0.22635073970735753 prior=1.471226950870354) loglikelihood = -1.6975776905777114
+TestMaximizable checking singleIndex 11: gradient slope = -7.455058436238726E-4, value+epsilon slope = -0.6895249280885392: slope difference = -0.6887794222449153
+Value (labelProb=0.8487183110212647 prior=1.2663766740736626) loglikelihood = -2.1150949850949274
+TestMaximizable checking singleIndex 12: gradient slope = 0.0011121803654687568, value+epsilon slope = -1.1070422226057552: slope difference = -1.108154402971224
+Value (labelProb=0.5034883292925164 prior=1.1780969662799583) loglikelihood = -1.6815852955724746
+TestMaximizable checking singleIndex 13: gradient slope = 2.2784472711677092E-4, value+epsilon slope = -0.6735325330833024: slope difference = -0.6737603778104192
+TestMaximizable angle = 1.6327367350791933
+------------- ---------------- ---------------
+
+Testcase: testSetGetParameters took 0.082 sec
+Testcase: testRandomMaximizable took 0.04 sec
+Testcase: testTrainedMaximizable took 0.039 sec

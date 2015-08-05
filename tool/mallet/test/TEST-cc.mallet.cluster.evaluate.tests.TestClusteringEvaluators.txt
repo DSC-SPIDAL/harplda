@@ -1,0 +1,677 @@
+Testsuite: cc.mallet.cluster.evaluate.tests.TestClusteringEvaluators
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.102 sec
+------------- Standard Error -----------------
+12 instances
+truth=#Clusters: 3
+
+--CLUSTER 0--
+	feature61(0)=1.0
+feature94(1)=1.0
+feature95(2)=1.0
+feature90(3)=2.0
+feature27(4)=1.0
+feature42(5)=1.0
+feature16(6)=1.0
+feature19(7)=1.0
+feature31(8)=1.0
+
+	feature78(9)=1.0
+feature9(10)=1.0
+feature50(11)=1.0
+feature89(12)=1.0
+feature14(13)=1.0
+feature34(14)=1.0
+feature87(15)=1.0
+feature80(16)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+
+	feature55(19)=1.0
+feature72(20)=1.0
+feature7(21)=1.0
+feature57(22)=1.0
+feature39(23)=1.0
+feature54(24)=1.0
+feature46(25)=1.0
+feature32(26)=1.0
+feature22(27)=1.0
+feature74(28)=1.0
+
+	feature31(8)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+feature33(29)=1.0
+feature15(30)=1.0
+feature67(31)=1.0
+feature82(32)=2.0
+feature28(33)=1.0
+feature45(34)=1.0
+
+	feature27(4)=1.0
+feature54(24)=1.0
+feature53(35)=1.0
+feature38(36)=4.0
+feature84(37)=1.0
+feature92(38)=1.0
+feature97(39)=1.0
+
+--CLUSTER 1--
+	feature87(15)=2.0
+feature7(21)=1.0
+feature82(32)=1.0
+feature35(40)=1.0
+feature52(41)=1.0
+feature20(42)=1.0
+feature98(43)=1.0
+feature83(44)=1.0
+feature91(45)=1.0
+
+	feature57(22)=1.0
+feature39(23)=1.0
+feature46(25)=1.0
+feature82(32)=1.0
+feature38(36)=1.0
+feature35(40)=1.0
+feature2(46)=1.0
+feature6(47)=1.0
+feature24(48)=1.0
+feature10(49)=1.0
+
+--CLUSTER 2--
+	feature61(0)=1.0
+feature72(20)=1.0
+feature22(27)=1.0
+feature15(30)=1.0
+feature45(34)=1.0
+feature98(43)=1.0
+feature65(50)=1.0
+feature17(51)=1.0
+feature21(52)=1.0
+feature3(53)=1.0
+
+	feature89(12)=1.0
+feature69(18)=1.0
+feature46(25)=1.0
+feature20(42)=1.0
+feature91(45)=1.0
+feature13(54)=1.0
+feature36(55)=1.0
+feature64(56)=1.0
+feature44(57)=1.0
+feature25(58)=1.0
+
+	feature27(4)=1.0
+feature42(5)=1.0
+feature14(13)=1.0
+feature87(15)=1.0
+feature32(26)=1.0
+feature35(40)=1.0
+feature65(50)=1.0
+feature68(59)=1.0
+feature76(60)=1.0
+feature88(61)=1.0
+
+	feature18(17)=1.0
+feature54(24)=1.0
+feature32(26)=1.0
+feature36(55)=1.0
+feature25(58)=1.0
+feature88(61)=1.0
+feature71(62)=1.0
+feature11(63)=1.0
+feature49(64)=1.0
+feature93(65)=1.0
+
+	feature90(3)=2.0
+feature89(12)=1.0
+feature38(36)=1.0
+feature76(60)=1.0
+feature71(62)=1.0
+feature49(64)=1.0
+feature75(66)=2.0
+feature77(67)=1.0
+
+
+pred0=#Clusters: 2
+
+--CLUSTER 0--
+	feature61(0)=1.0
+feature94(1)=1.0
+feature95(2)=1.0
+feature90(3)=2.0
+feature27(4)=1.0
+feature42(5)=1.0
+feature16(6)=1.0
+feature19(7)=1.0
+feature31(8)=1.0
+
+	feature78(9)=1.0
+feature9(10)=1.0
+feature50(11)=1.0
+feature89(12)=1.0
+feature14(13)=1.0
+feature34(14)=1.0
+feature87(15)=1.0
+feature80(16)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+
+	feature55(19)=1.0
+feature72(20)=1.0
+feature7(21)=1.0
+feature57(22)=1.0
+feature39(23)=1.0
+feature54(24)=1.0
+feature46(25)=1.0
+feature32(26)=1.0
+feature22(27)=1.0
+feature74(28)=1.0
+
+	feature31(8)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+feature33(29)=1.0
+feature15(30)=1.0
+feature67(31)=1.0
+feature82(32)=2.0
+feature28(33)=1.0
+feature45(34)=1.0
+
+	feature27(4)=1.0
+feature54(24)=1.0
+feature53(35)=1.0
+feature38(36)=4.0
+feature84(37)=1.0
+feature92(38)=1.0
+feature97(39)=1.0
+
+--CLUSTER 1--
+	feature87(15)=2.0
+feature7(21)=1.0
+feature82(32)=1.0
+feature35(40)=1.0
+feature52(41)=1.0
+feature20(42)=1.0
+feature98(43)=1.0
+feature83(44)=1.0
+feature91(45)=1.0
+
+	feature57(22)=1.0
+feature39(23)=1.0
+feature46(25)=1.0
+feature82(32)=1.0
+feature38(36)=1.0
+feature35(40)=1.0
+feature2(46)=1.0
+feature6(47)=1.0
+feature24(48)=1.0
+feature10(49)=1.0
+
+	feature61(0)=1.0
+feature72(20)=1.0
+feature22(27)=1.0
+feature15(30)=1.0
+feature45(34)=1.0
+feature98(43)=1.0
+feature65(50)=1.0
+feature17(51)=1.0
+feature21(52)=1.0
+feature3(53)=1.0
+
+	feature89(12)=1.0
+feature69(18)=1.0
+feature46(25)=1.0
+feature20(42)=1.0
+feature91(45)=1.0
+feature13(54)=1.0
+feature36(55)=1.0
+feature64(56)=1.0
+feature44(57)=1.0
+feature25(58)=1.0
+
+	feature27(4)=1.0
+feature42(5)=1.0
+feature14(13)=1.0
+feature87(15)=1.0
+feature32(26)=1.0
+feature35(40)=1.0
+feature65(50)=1.0
+feature68(59)=1.0
+feature76(60)=1.0
+feature88(61)=1.0
+
+	feature18(17)=1.0
+feature54(24)=1.0
+feature32(26)=1.0
+feature36(55)=1.0
+feature25(58)=1.0
+feature88(61)=1.0
+feature71(62)=1.0
+feature11(63)=1.0
+feature49(64)=1.0
+feature93(65)=1.0
+
+	feature90(3)=2.0
+feature89(12)=1.0
+feature38(36)=1.0
+feature76(60)=1.0
+feature71(62)=1.0
+feature49(64)=1.0
+feature75(66)=2.0
+feature77(67)=1.0
+
+pairs: pr=0.6774193548387096 re=1.0 f1=0.8076923076923077
+bcube: pr=0.7619047619047619 re=1.0 f1=0.8648648648648648
+  muc: pr=0.9 re=1.0 f1=0.9473684210526316
+
+pred1=#Clusters: 2
+
+--CLUSTER 0--
+	feature61(0)=1.0
+feature94(1)=1.0
+feature95(2)=1.0
+feature90(3)=2.0
+feature27(4)=1.0
+feature42(5)=1.0
+feature16(6)=1.0
+feature19(7)=1.0
+feature31(8)=1.0
+
+	feature78(9)=1.0
+feature9(10)=1.0
+feature50(11)=1.0
+feature89(12)=1.0
+feature14(13)=1.0
+feature34(14)=1.0
+feature87(15)=1.0
+feature80(16)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+
+	feature55(19)=1.0
+feature72(20)=1.0
+feature7(21)=1.0
+feature57(22)=1.0
+feature39(23)=1.0
+feature54(24)=1.0
+feature46(25)=1.0
+feature32(26)=1.0
+feature22(27)=1.0
+feature74(28)=1.0
+
+	feature31(8)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+feature33(29)=1.0
+feature15(30)=1.0
+feature67(31)=1.0
+feature82(32)=2.0
+feature28(33)=1.0
+feature45(34)=1.0
+
+	feature27(4)=1.0
+feature54(24)=1.0
+feature53(35)=1.0
+feature38(36)=4.0
+feature84(37)=1.0
+feature92(38)=1.0
+feature97(39)=1.0
+
+	feature61(0)=1.0
+feature72(20)=1.0
+feature22(27)=1.0
+feature15(30)=1.0
+feature45(34)=1.0
+feature98(43)=1.0
+feature65(50)=1.0
+feature17(51)=1.0
+feature21(52)=1.0
+feature3(53)=1.0
+
+	feature89(12)=1.0
+feature69(18)=1.0
+feature46(25)=1.0
+feature20(42)=1.0
+feature91(45)=1.0
+feature13(54)=1.0
+feature36(55)=1.0
+feature64(56)=1.0
+feature44(57)=1.0
+feature25(58)=1.0
+
+	feature27(4)=1.0
+feature42(5)=1.0
+feature14(13)=1.0
+feature87(15)=1.0
+feature32(26)=1.0
+feature35(40)=1.0
+feature65(50)=1.0
+feature68(59)=1.0
+feature76(60)=1.0
+feature88(61)=1.0
+
+	feature18(17)=1.0
+feature54(24)=1.0
+feature32(26)=1.0
+feature36(55)=1.0
+feature25(58)=1.0
+feature88(61)=1.0
+feature71(62)=1.0
+feature11(63)=1.0
+feature49(64)=1.0
+feature93(65)=1.0
+
+	feature90(3)=2.0
+feature89(12)=1.0
+feature38(36)=1.0
+feature76(60)=1.0
+feature71(62)=1.0
+feature49(64)=1.0
+feature75(66)=2.0
+feature77(67)=1.0
+
+--CLUSTER 1--
+	feature87(15)=2.0
+feature7(21)=1.0
+feature82(32)=1.0
+feature35(40)=1.0
+feature52(41)=1.0
+feature20(42)=1.0
+feature98(43)=1.0
+feature83(44)=1.0
+feature91(45)=1.0
+
+	feature57(22)=1.0
+feature39(23)=1.0
+feature46(25)=1.0
+feature82(32)=1.0
+feature38(36)=1.0
+feature35(40)=1.0
+feature2(46)=1.0
+feature6(47)=1.0
+feature24(48)=1.0
+feature10(49)=1.0
+
+pairs: pr=0.45652173913043476 re=1.0 f1=0.626865671641791
+bcube: pr=0.5833333333333334 re=1.0 f1=0.7368421052631579
+  muc: pr=0.9 re=1.0 f1=0.9473684210526316
+
+pred2=#Clusters: 1
+
+--CLUSTER 0--
+	feature61(0)=1.0
+feature94(1)=1.0
+feature95(2)=1.0
+feature90(3)=2.0
+feature27(4)=1.0
+feature42(5)=1.0
+feature16(6)=1.0
+feature19(7)=1.0
+feature31(8)=1.0
+
+	feature78(9)=1.0
+feature9(10)=1.0
+feature50(11)=1.0
+feature89(12)=1.0
+feature14(13)=1.0
+feature34(14)=1.0
+feature87(15)=1.0
+feature80(16)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+
+	feature55(19)=1.0
+feature72(20)=1.0
+feature7(21)=1.0
+feature57(22)=1.0
+feature39(23)=1.0
+feature54(24)=1.0
+feature46(25)=1.0
+feature32(26)=1.0
+feature22(27)=1.0
+feature74(28)=1.0
+
+	feature31(8)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+feature33(29)=1.0
+feature15(30)=1.0
+feature67(31)=1.0
+feature82(32)=2.0
+feature28(33)=1.0
+feature45(34)=1.0
+
+	feature27(4)=1.0
+feature54(24)=1.0
+feature53(35)=1.0
+feature38(36)=4.0
+feature84(37)=1.0
+feature92(38)=1.0
+feature97(39)=1.0
+
+	feature87(15)=2.0
+feature7(21)=1.0
+feature82(32)=1.0
+feature35(40)=1.0
+feature52(41)=1.0
+feature20(42)=1.0
+feature98(43)=1.0
+feature83(44)=1.0
+feature91(45)=1.0
+
+	feature57(22)=1.0
+feature39(23)=1.0
+feature46(25)=1.0
+feature82(32)=1.0
+feature38(36)=1.0
+feature35(40)=1.0
+feature2(46)=1.0
+feature6(47)=1.0
+feature24(48)=1.0
+feature10(49)=1.0
+
+	feature61(0)=1.0
+feature72(20)=1.0
+feature22(27)=1.0
+feature15(30)=1.0
+feature45(34)=1.0
+feature98(43)=1.0
+feature65(50)=1.0
+feature17(51)=1.0
+feature21(52)=1.0
+feature3(53)=1.0
+
+	feature89(12)=1.0
+feature69(18)=1.0
+feature46(25)=1.0
+feature20(42)=1.0
+feature91(45)=1.0
+feature13(54)=1.0
+feature36(55)=1.0
+feature64(56)=1.0
+feature44(57)=1.0
+feature25(58)=1.0
+
+	feature27(4)=1.0
+feature42(5)=1.0
+feature14(13)=1.0
+feature87(15)=1.0
+feature32(26)=1.0
+feature35(40)=1.0
+feature65(50)=1.0
+feature68(59)=1.0
+feature76(60)=1.0
+feature88(61)=1.0
+
+	feature18(17)=1.0
+feature54(24)=1.0
+feature32(26)=1.0
+feature36(55)=1.0
+feature25(58)=1.0
+feature88(61)=1.0
+feature71(62)=1.0
+feature11(63)=1.0
+feature49(64)=1.0
+feature93(65)=1.0
+
+	feature90(3)=2.0
+feature89(12)=1.0
+feature38(36)=1.0
+feature76(60)=1.0
+feature71(62)=1.0
+feature49(64)=1.0
+feature75(66)=2.0
+feature77(67)=1.0
+
+pairs: pr=0.3181818181818182 re=1.0 f1=0.4827586206896552
+bcube: pr=0.375 re=1.0 f1=0.5454545454545454
+  muc: pr=0.8181818181818182 re=1.0 f1=0.9
+
+pred3=#Clusters: 12
+
+--CLUSTER 0--
+	feature61(0)=1.0
+feature94(1)=1.0
+feature95(2)=1.0
+feature90(3)=2.0
+feature27(4)=1.0
+feature42(5)=1.0
+feature16(6)=1.0
+feature19(7)=1.0
+feature31(8)=1.0
+
+--CLUSTER 1--
+	feature78(9)=1.0
+feature9(10)=1.0
+feature50(11)=1.0
+feature89(12)=1.0
+feature14(13)=1.0
+feature34(14)=1.0
+feature87(15)=1.0
+feature80(16)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+
+--CLUSTER 2--
+	feature55(19)=1.0
+feature72(20)=1.0
+feature7(21)=1.0
+feature57(22)=1.0
+feature39(23)=1.0
+feature54(24)=1.0
+feature46(25)=1.0
+feature32(26)=1.0
+feature22(27)=1.0
+feature74(28)=1.0
+
+--CLUSTER 3--
+	feature31(8)=1.0
+feature18(17)=1.0
+feature69(18)=1.0
+feature33(29)=1.0
+feature15(30)=1.0
+feature67(31)=1.0
+feature82(32)=2.0
+feature28(33)=1.0
+feature45(34)=1.0
+
+--CLUSTER 4--
+	feature27(4)=1.0
+feature54(24)=1.0
+feature53(35)=1.0
+feature38(36)=4.0
+feature84(37)=1.0
+feature92(38)=1.0
+feature97(39)=1.0
+
+--CLUSTER 5--
+	feature87(15)=2.0
+feature7(21)=1.0
+feature82(32)=1.0
+feature35(40)=1.0
+feature52(41)=1.0
+feature20(42)=1.0
+feature98(43)=1.0
+feature83(44)=1.0
+feature91(45)=1.0
+
+--CLUSTER 6--
+	feature57(22)=1.0
+feature39(23)=1.0
+feature46(25)=1.0
+feature82(32)=1.0
+feature38(36)=1.0
+feature35(40)=1.0
+feature2(46)=1.0
+feature6(47)=1.0
+feature24(48)=1.0
+feature10(49)=1.0
+
+--CLUSTER 7--
+	feature61(0)=1.0
+feature72(20)=1.0
+feature22(27)=1.0
+feature15(30)=1.0
+feature45(34)=1.0
+feature98(43)=1.0
+feature65(50)=1.0
+feature17(51)=1.0
+feature21(52)=1.0
+feature3(53)=1.0
+
+--CLUSTER 8--
+	feature89(12)=1.0
+feature69(18)=1.0
+feature46(25)=1.0
+feature20(42)=1.0
+feature91(45)=1.0
+feature13(54)=1.0
+feature36(55)=1.0
+feature64(56)=1.0
+feature44(57)=1.0
+feature25(58)=1.0
+
+--CLUSTER 9--
+	feature27(4)=1.0
+feature42(5)=1.0
+feature14(13)=1.0
+feature87(15)=1.0
+feature32(26)=1.0
+feature35(40)=1.0
+feature65(50)=1.0
+feature68(59)=1.0
+feature76(60)=1.0
+feature88(61)=1.0
+
+--CLUSTER 10--
+	feature18(17)=1.0
+feature54(24)=1.0
+feature32(26)=1.0
+feature36(55)=1.0
+feature25(58)=1.0
+feature88(61)=1.0
+feature71(62)=1.0
+feature11(63)=1.0
+feature49(64)=1.0
+feature93(65)=1.0
+
+--CLUSTER 11--
+	feature90(3)=2.0
+feature89(12)=1.0
+feature38(36)=1.0
+feature76(60)=1.0
+feature71(62)=1.0
+feature49(64)=1.0
+feature75(66)=2.0
+feature77(67)=1.0
+
+pairs: pr=NaN re=0.0 f1=NaN
+bcube: pr=1.0 re=0.25000000000000006 f1=0.4000000000000001
+  muc: pr=NaN re=0.0 f1=NaN
+totals:
+pairs: pr=0.4405594405594406 re=0.75 f1=0.5550660792951542
+bcube: pr=0.6800595238095237 re=0.8125 f1=0.7404037886340976
+  muc: pr=0.8709677419354839 re=0.75 f1=0.8059701492537312
+------------- ---------------- ---------------
+
+Testcase: testEvaluators took 0.099 sec

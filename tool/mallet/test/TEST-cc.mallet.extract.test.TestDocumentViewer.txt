@@ -1,0 +1,71 @@
+Testsuite: cc.mallet.extract.test.TestDocumentViewer
+Tests run: 1, Failures: 0, Errors: 1, Time elapsed: 0.254 sec
+------------- Standard Output ---------------
+State #0 "start"
+initialWeight=0.0, finalWeight=0.0
+#destinations=2
+-> start
+-> notstart
+State #1 "notstart"
+initialWeight=0.0, finalWeight=0.0
+#destinations=2
+-> start
+-> notstart
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+CRF: outputAlphabet.lookup class = java.lang.String
+CRF: outputAlphabet.lookup class = java.lang.String
+CRF weights[start->start:start] num features = 8
+CRF weights[start->notstart:notstart] num features = 63
+CRF weights[notstart->start:start] num features = 72
+CRF weights[notstart->notstart:notstart] num features = 169
+Number of weights = 316
+CRF about to train with 2147483647 iterations
+getValue() (loglikelihood, optimizable by label likelihood) = -112.98299043127126
+getValue() (loglikelihood, optimizable by label likelihood) = -81.68791364037904
+getValue() (loglikelihood, optimizable by label likelihood) = -72.25848457068977
+CRF finished one iteration of maximizer, i=0
+getValue() (loglikelihood, optimizable by label likelihood) = -57.76106918226742
+CRF finished one iteration of maximizer, i=1
+getValue() (loglikelihood, optimizable by label likelihood) = -50.73945185400652
+CRF finished one iteration of maximizer, i=2
+getValue() (loglikelihood, optimizable by label likelihood) = -39.30337445643808
+CRF finished one iteration of maximizer, i=3
+getValue() (loglikelihood, optimizable by label likelihood) = -35.161876870420066
+CRF finished one iteration of maximizer, i=4
+getValue() (loglikelihood, optimizable by label likelihood) = -34.211076083992936
+CRF finished one iteration of maximizer, i=5
+getValue() (loglikelihood, optimizable by label likelihood) = -36.60891431308333
+getValue() (loglikelihood, optimizable by label likelihood) = -34.02027365761046
+CRF finished one iteration of maximizer, i=6
+getValue() (loglikelihood, optimizable by label likelihood) = -33.7974604204141
+CRF finished one iteration of maximizer, i=7
+getValue() (loglikelihood, optimizable by label likelihood) = -33.50950938337477
+CRF finished one iteration of maximizer, i=8
+getValue() (loglikelihood, optimizable by label likelihood) = -33.4339063515656
+CRF finished one iteration of maximizer, i=9
+getValue() (loglikelihood, optimizable by label likelihood) = -33.38752110199027
+CRF finished one iteration of maximizer, i=10
+getValue() (loglikelihood, optimizable by label likelihood) = -33.35934572861555
+CRF finished one iteration of maximizer, i=11
+getValue() (loglikelihood, optimizable by label likelihood) = -33.362444418863575
+getValue() (loglikelihood, optimizable by label likelihood) = -33.35666064458722
+Exiting L-BFGS on termination #1:
+value difference below tolerance (oldValue: -33.35934572861555 newValue: -33.35666064458722
+CRF finished one iteration of maximizer, i=12
+CRF training has converged, i=12
+------------- ---------------- ---------------
+
+Testcase: testSpaceViewer took 0.249 sec
+	Caused an ERROR
+cc.mallet.extract.StringTokenization cannot be cast to java.lang.CharSequence
+java.lang.ClassCastException: cc.mallet.extract.StringTokenization cannot be cast to java.lang.CharSequence
+	at cc.mallet.pipe.CharSequence2TokenSequence.pipe(CharSequence2TokenSequence.java:63)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:295)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:283)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:291)
+	at cc.mallet.pipe.Pipe$SimplePipeInstanceIterator.next(Pipe.java:283)
+	at cc.mallet.types.InstanceList.addThruPipe(InstanceList.java:267)
+	at cc.mallet.extract.CRFExtractor.extract(CRFExtractor.java:151)
+	at cc.mallet.extract.test.TestDocumentViewer.testSpaceViewer(TestDocumentViewer.java:63)
+
