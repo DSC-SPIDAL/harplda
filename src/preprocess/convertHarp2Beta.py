@@ -47,17 +47,17 @@ def load_model(modelDir, beta):
     #model = np.sort(model, axis=0)
 
     model = model[:, 1:]
-    K, V = model.shape
+    # transpose from N(w,k) -> N(k,w)
     model = np.transpose(model)
     logger.info('load model data as %s', model.shape)
 
     # convert to probility
     model = np.matrix(model)
-    sum_k = model.sum(axis = 1)
+    sum_w = model.sum(axis = 1)
 
-    #logger.debug('sum_k is %s', sum_k)
-
-    model = (model + beta) / ( sum_k + beta * K)
+    #logger.debug('sum_w is %s', sum_w)
+    K, V = model.shape
+    model = (model + beta) / ( sum_w + beta * V)
     model = np.log(model)
 
     return model
