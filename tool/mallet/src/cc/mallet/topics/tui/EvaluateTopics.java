@@ -116,22 +116,34 @@ public class EvaluateTopics {
     		typeTopicCounts = new int[numTypes][];
     		tokensPerTopic = new int[numTopics];
     		
-    		for (int type = 0; type < numTypes; type++) {
-    			typeTopicCounts[type] = new int[numTopics];
-    		}
+    		//for (int type = 0; type < numTypes; type++) {
+    		//	typeTopicCounts[type] = new int[numTopics];
+    		//}
     		
-    		int count = 0;
+    		int count[] = new  int[numTopics];
     		for (int k=0; k<numTopics; k++){
     			tokensPerTopic[k] = 0;
     		}
     		for (int w = 0; w<numTypes; w++){
+    			int nonzeroCnt = 0;
     			for (int k=0; k<numTopics; k++){
-    				count = in.readInt();
-    				
-    				typeTopicCounts[w][k] = (count << topicBits) + k;
-					
-    				tokensPerTopic[k] += count;	
+    				count[k] = in.readInt();
+    				tokensPerTopic[k] += count[k];
+    				if (count[k] > 0){
+    					nonzeroCnt ++;
+    				}
     			}
+    			
+    			typeTopicCounts[w] = new int[nonzeroCnt];
+    			//update to sparse vector
+    			for (int k=0, j=0; k<numTopics; k++){
+    				if (count[k] > 0){
+    					typeTopicCounts[w][j] = (count[k] << topicBits) + k;
+    					j ++;
+    				}
+    			}
+    			
+    			
     		}
     		
         	in.close();

@@ -610,6 +610,10 @@ public class MarginalProbEstimator implements Serializable {
 
         out.writeDouble(smoothingOnlyMass);
 		out.writeObject(cachedCoefficients);
+		
+		
+
+		
     }
 
 	private void readObject (ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -635,6 +639,50 @@ public class MarginalProbEstimator implements Serializable {
         cachedCoefficients = (double[]) in.readObject();
     }
 
+	
+	public void writemodel(){
+		// hack to save .modeldata 
+	   	try {
+	   		System.out.print("output model to save-model.mallet");
+    		DataOutputStream out2;
+			out2 = new DataOutputStream(new FileOutputStream("save-model.mallet"));
+	
+    		//numTopics
+			out2.writeInt(numTopics);
+			int numTypes = typeTopicCounts.length;
+			out2.writeInt(numTypes);
+
+			out2.writeDouble(alpha[0]);
+			out2.writeDouble(beta);
+			
+    		int count, topic;    		
+    		for (int w = 0; w<numTypes; w++){
+				topic = typeTopicCounts[w][0] & topicMask;
+    			for (int k=0, j=0; k<numTopics; k++){
+    				if (k < topic) {
+    					count = 0;
+    					out2.writeInt(count);
+    				}
+    				else{
+    					count = typeTopicCounts[w][j] >> topicBits;
+    					out2.writeInt(count);
+    					j ++;
+    					if (j < typeTopicCounts[w].length ){
+							topic = typeTopicCounts[w][j] & topicMask;
+    					}
+    					else{
+    						topic = numTopics;
+    					}
+    				}
+    				
+    			}
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+		}
+	}
+	
     public static MarginalProbEstimator read (File f) throws Exception {
 
         MarginalProbEstimator estimator = null;
@@ -642,6 +690,10 @@ public class MarginalProbEstimator implements Serializable {
         ObjectInputStream ois = new ObjectInputStream (new FileInputStream(f));
         estimator = (MarginalProbEstimator) ois.readObject();
         ois.close();
+        
+        //hack
+        estimator.writemodel();
+        
 
         return estimator;
     }
