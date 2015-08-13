@@ -2,24 +2,27 @@
 # -*- coding: utf-8 -*-
 
 """
-compute the held-out likelihood by mallet evaluator
+compute the held-out likelihood by blei's lda implementation.
 
 dependency:
-mallet toolkit installed under $ROOT/tool/mallet
+blei's lda-c-dist installed under $ROOT/tool/blei
 
 input:
-    model file in mallet binary format (java use bigendian)
-    numTopics   int
-    numWords    int
-    alpha   double
-    beta    double
-    model Matrix[numWords][numTopics]   int
+1. model beta file
+    .beta contains the log of the topic distributions.
+    Each line is a topic; in line k, each entry is log p(w | z=k)
+2. model alpha file
+    .other contains alpha.
 
-    held-out text file
+    For example:
+    num_topics 20
+    num_terms 21774
+    alpha 0.015
+3. held-out text file
 
 Usage: 
     * calculate likelihoods and perplexity
-    test_likelihood <mallet path> <model dir| model file> <held-out data> <held-out.ldac>
+    test_likelihood <mallet path> <model dir| model file> <held-out data>
 
     * draw convergence fig from likelihoods result
     test_likelihood -draw fig-name
@@ -33,10 +36,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def run_mallet_evaluator(mallet, model, data):
+
+
+def run_lda_inference(lda, settings, model, data):
     """
-    Refer to mallet's manual
-    run "mallet evaluate-topics --modeldata <model> --input data --output-prob probfile"
+    Refer to blei's lda readme
+    run "lda inf [settings] [model] [data] [name]"
 
     return:
         0  on error
@@ -44,18 +49,18 @@ def run_mallet_evaluator(mallet, model, data):
 
     """
     name = model
-    l_file = model + '-mallet-lhood.dat'
-    if os.path.exists(l_file):
-        logger.info('%s exists, skip call mallet', l_file)
+    if os.path.exists(name + '-lda-lhood.dat'):
+        logger.info('%s exists, skip call lda', name)
     else:
-        command = mallet + ' evaluate-topics --modeldata ' + model + ' --input ' + data +' --output-prob ' + l_file
-        logger.info('call mallet evaluator: %s', command)
+        command = lda + ' inf ' + settings + ' ' + model + ' ' + data + ' ' + name
+        logger.info('call lda inference: %s', command)
         ret = os.system(command)
         if ret:
             # something wrong
             return 0
 
     #calc the likelihood and perplexity 
+    l_file = model + '-lda-lhood.dat'
     l_sum = 0.
     with open(l_file, 'r') as file:
         for line in file:
@@ -64,42 +69,51 @@ def run_mallet_evaluator(mallet, model, data):
     return l_sum
 
 
-def calc_file(malletPath, modelname, data, doccnt, wordcnt):
+def calc_file(ldaPath, modelname, data, doccnt, wordcnt, ext = '.beta'):
     """
     Calculate likelihood of one model output phi on testset
 
     input:
-        modelname   model file name
-        wordcnt     total word counts of the collection
+        modelname   model file name, '.beta', '.other' should exist
     return:
         doccnt, likelihood
         doccnt = 0 in error
     """
 
-    mallet = malletPath + '/mallet'
+    lda = ldaPath + '/lda'
+    settings = ldaPath + '/inf-settings.txt'
+    local_settings = '.inf-settings.txt'
+    beta = modelname + ext
+    other = modelname + '.other'
+    
     likelihood = 0 
     perplexity = 0
 
-    if os.path.exists(mallet):
-        if os.path.exists(modelname):
+    if os.path.exists(lda) and os.path.exists(settings):
+        if os.path.exists(beta) and os.path.exists(other):
             if os.path.exists(data):
-                likelihood = run_mallet_evaluator(mallet, modelname, data)
+                if os.path.exists(local_settings):
+                    likelihood = run_lda_inference(lda, local_settings, modelname, data)
+                else:
+                    likelihood = run_lda_inference(lda, settings, modelname, data)
+
+
 
                 if likelihood != 0:
                     perplexity = np.exp(- likelihood / wordcnt)
                     logger.info('doccnt = %d, wordcnt = %d, likelihood = %f, perplexity = %f\n'%(doccnt, wordcnt, likelihood, perplexity))
                 else:
-                    logger.error('Error: run command failed')
+                    logger.error('Error: run command failed\n')
             else:
-                logger.error('Error: data file not exists!')
+                logger.error('Error: data file not exists!\n')
         else:
-            logger.error('Error: model file not found at %s.',modelname)
+            logger.error('Error: %s or .other file not found at %s, %s\n'%(ext, beta, other))
     else:
-        logger.error('Error: mallet not found at %s', mallet)
+        logger.error('Error: lda not found at %s\n'%lda)
  
     return likelihood, perplexity
 
-def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext):
+def calc_dir(ldaPath, modelDir, data, doccnt, wordcnt, ext = '.beta'):
     """
     Calculate likelihood on models output of different iterations
 
@@ -136,7 +150,7 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext):
     likelihoods = np.zeros((len(models), 3))
 
     for idx in range( len(models) ):
-        likelihood, perplexity = calc_file(malletPath, models[idx][1] + ext, data, doccnt, wordcnt)
+        likelihood, perplexity = calc_file(ldaPath, models[idx][1], data, doccnt, wordcnt, ext)
 
         likelihoods[idx][0] = models[idx][0]
         likelihoods[idx][1] = likelihood
@@ -207,7 +221,7 @@ if __name__ == "__main__":
     logger.info("running %s" % ' '.join(sys.argv))
 
     # check and process input arguments
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 4:
         if len(sys.argv) == 3 and sys.argv[1] == '-draw':
             draw_convergence(sys.argv[2] + '.png', True)
             sys.exit(0)
@@ -216,15 +230,13 @@ if __name__ == "__main__":
             sys.exit(1)
 
     # check the path
-    malletPath = sys.argv[1]
+    ldaPath = sys.argv[1]
     modelname = sys.argv[2]
     data = sys.argv[3]
 
-    # read doccnt and wordcnt from .ldac format test file
-    ldac = sys.argv[4]
     # get wordnum in data
     num_docs, num_words = 0, 0
-    with open(ldac, 'r') as ldacf:
+    with open(data, 'r') as ldacf:
         for line in ldacf:
             num_docs += 1
             # format: wordcnt word1:cnt1 word2:cnt2 .....
@@ -234,13 +246,13 @@ if __name__ == "__main__":
 
     if os.path.exists(modelname):
         # if input a directory name
-        likelihoods = calc_dir(malletPath, modelname, data, num_docs, num_words,'.mallet')
+        likelihoods = calc_dir(ldaPath, modelname, data, num_docs, num_words)
 
         #draw it
         draw_likelihood(likelihoods, modelname, modelname + '.png', True)
 
     else:
-        calc_file(malletPath, modelname+'.mallet', data, num_docs, num_words)
+        calc_file(ldaPath, modelname, data, num_docs, num_words)
     
 
 

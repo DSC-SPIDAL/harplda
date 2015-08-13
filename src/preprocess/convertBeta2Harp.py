@@ -78,7 +78,8 @@ def load_model(betafile, dictfile, beta):
         logger.info('solve sum_w...., P=%s, sum_k=%s', P_K.shape, sum_k_K.shape)
         sum_w = linalg.solve(P_K, sum_k_K + K*beta)
         #sum_w = np.transpose(sum_w - V*beta)
-        logger.info('solve sum_w....done!, sum_w = %s,sum_w=%s', sum_w.shape, sum_w)
+        logger.info('solve sum_w....done!, sum_w = %s', sum_w.shape)
+        #logger.info('solve sum_w....done!, sum_w = %s,sum_w=%s', sum_w.shape, sum_w)
     else:
         # use pinv instead
         # todo, it doest not work now, 'array too large' error

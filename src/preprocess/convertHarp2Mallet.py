@@ -34,23 +34,30 @@ logger = logging.getLogger(__name__)
 def load_model(modelDir, beta):
     """
     input:
-        modelDir model file are <wordid, topicCnt....>
+        modelDir : model files inside are <wordid, topicCnt....>
+        or
+        modelfile
 
     return:
         model is a word-topic count matrix
     """
     model = None
-    for dirpath, dnames, fnames in os.walk(modelDir):
-        for f in fnames:
-            modeldata = np.loadtxt(os.path.join(dirpath, f))
-            # first column is wordid
-            # modeldata = modeldata[:,1:]
-            logger.info('load model from %s , modelmatrix as %s', 
-                    f, modeldata.shape)
-            if model != None:
-                model = np.concatenate((model, modeldata), axis=0)
-            else:
-                model = modeldata
+
+    if os.path.isdir(modelDir):
+        for dirpath, dnames, fnames in os.walk(modelDir):
+            for f in fnames:
+                modeldata = np.loadtxt(os.path.join(dirpath, f))
+                # first column is wordid
+                # modeldata = modeldata[:,1:]
+                logger.info('load model from %s , modelmatrix as %s', 
+                        f, modeldata.shape)
+                if model != None:
+                    model = np.concatenate((model, modeldata), axis=0)
+                else:
+                    model = modeldata
+    else:
+        # assume it's a file name
+        model = np.loadtxt(modelDir)
 
     # sort the matrix by the first column            
     model = model[model[:,0].argsort()]
@@ -96,8 +103,8 @@ def align_dict(model, malletDict, harpDict):
 
     # debug
     # 3161    christ  27
-    logger.debug('new: term = %s, id = 3137, topics count = %s', malletmap[3137], new_model[3137])
-    logger.debug('old: term = christ, id = %d, topics count = %s', harpmap['christ'], model[harpmap['christ']])
+    #logger.debug('new: term = %s, id = 3137, topics count = %s', malletmap[3137], new_model[3137])
+    #logger.debug('old: term = christ, id = %d, topics count = %s', harpmap['christ'], model[harpmap['christ']])
 
 
     logger.info('align model data as %s', new_model.shape)
@@ -150,5 +157,10 @@ if __name__ == '__main__':
         model = align_dict(model, malletDict, harpDict)
 
     logger.info('saving to .mallet')
-    save_model('harp-'+modelDir+'.mallet', model, alpha, beta)
+    if os.path.isdir(modelDir):
+        save_model('model-'+modelDir+'.mallet', model, alpha, beta)
+    else:
+        basename = os.path.splitext(modelDir)[0]
+        save_model(basename + '.mallet', model, alpha, beta)
+        
 
