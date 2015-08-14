@@ -19,7 +19,7 @@ input:
 
 Usage: 
     * calculate likelihoods and perplexity
-    test_likelihood <mallet path> <model dir| model file> <held-out data> <held-out.ldac>
+    test_likelihood <mallet path> <trainer> <model dir| model file> <held-out data> <held-out.ldac>
 
     * draw convergence fig from likelihoods result
     test_likelihood -draw fig-name
@@ -33,10 +33,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def run_mallet_evaluator(mallet, model, data):
+def run_mallet_evaluator(mallet, model, data, trainer):
     """
     Refer to mallet's manual
+    for 3rd party topic model trainer results:
     run "mallet evaluate-topics --modeldata <model> --input data --output-prob probfile"
+
+    for mallet results:
+    run "mallet evaluate-topics --modelfile <model> --input data --output-prob probfile"
 
     return:
         0  on error
@@ -48,7 +52,10 @@ def run_mallet_evaluator(mallet, model, data):
     if os.path.exists(l_file):
         logger.info('%s exists, skip call mallet', l_file)
     else:
-        command = mallet + ' evaluate-topics --modeldata ' + model + ' --input ' + data +' --output-prob ' + l_file
+        if trainer == 'mallet':
+            command = mallet + ' evaluate-topics --modelfile ' + model + ' --input ' + data +' --output-prob ' + l_file
+        else:
+            command = mallet + ' evaluate-topics --modeldata ' + model + ' --input ' + data +' --output-prob ' + l_file
         logger.info('call mallet evaluator: %s', command)
         ret = os.system(command)
         if ret:
@@ -64,12 +71,12 @@ def run_mallet_evaluator(mallet, model, data):
     return l_sum
 
 
-def calc_file(malletPath, modelname, data, doccnt, wordcnt):
+def calc_file(malletPath, modelfile, data, doccnt, wordcnt, trainer):
     """
     Calculate likelihood of one model output phi on testset
 
     input:
-        modelname   model file name
+        modelfile   model file name
         wordcnt     total word counts of the collection
     return:
         doccnt, likelihood
@@ -81,9 +88,9 @@ def calc_file(malletPath, modelname, data, doccnt, wordcnt):
     perplexity = 0
 
     if os.path.exists(mallet):
-        if os.path.exists(modelname):
+        if os.path.exists(modelfile):
             if os.path.exists(data):
-                likelihood = run_mallet_evaluator(mallet, modelname, data)
+                likelihood = run_mallet_evaluator(mallet, modelfile, data, trainer)
 
                 if likelihood != 0:
                     perplexity = np.exp(- likelihood / wordcnt)
@@ -93,13 +100,13 @@ def calc_file(malletPath, modelname, data, doccnt, wordcnt):
             else:
                 logger.error('Error: data file not exists!')
         else:
-            logger.error('Error: model file not found at %s.',modelname)
+            logger.error('Error: model file not found at %s.',modelfile)
     else:
         logger.error('Error: mallet not found at %s', mallet)
  
     return likelihood, perplexity
 
-def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext):
+def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer):
     """
     Calculate likelihood on models output of different iterations
 
@@ -119,7 +126,7 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext):
     for dirpath, dnames, fnames in os.walk(modelDir):
         for f in fnames:
             if f.endswith(ext):
-                m = re.search('.*-([0-9]*)' + ext, f)
+                m = re.search('.*[\.-]([0-9]*)' + ext, f)
                 if m:
                     iternum = int(m.group(1))
 
@@ -136,7 +143,7 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext):
     likelihoods = np.zeros((len(models), 3))
 
     for idx in range( len(models) ):
-        likelihood, perplexity = calc_file(malletPath, models[idx][1] + ext, data, doccnt, wordcnt)
+        likelihood, perplexity = calc_file(malletPath, models[idx][1] + ext, data, doccnt, wordcnt, trainer)
 
         likelihoods[idx][0] = models[idx][0]
         likelihoods[idx][1] = likelihood
@@ -207,7 +214,7 @@ if __name__ == "__main__":
     logger.info("running %s" % ' '.join(sys.argv))
 
     # check and process input arguments
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 6:
         if len(sys.argv) == 3 and sys.argv[1] == '-draw':
             draw_convergence(sys.argv[2] + '.png', True)
             sys.exit(0)
@@ -217,11 +224,12 @@ if __name__ == "__main__":
 
     # check the path
     malletPath = sys.argv[1]
-    modelname = sys.argv[2]
-    data = sys.argv[3]
+    trainer = sys.argv[2]
+    modelname = sys.argv[3]
+    data = sys.argv[4]
 
     # read doccnt and wordcnt from .ldac format test file
-    ldac = sys.argv[4]
+    ldac = sys.argv[5]
     # get wordnum in data
     num_docs, num_words = 0, 0
     with open(ldac, 'r') as ldacf:
@@ -234,13 +242,13 @@ if __name__ == "__main__":
 
     if os.path.exists(modelname):
         # if input a directory name
-        likelihoods = calc_dir(malletPath, modelname, data, num_docs, num_words,'.mallet')
+        likelihoods = calc_dir(malletPath, modelname, data, num_docs, num_words,'.mallet', trainer)
 
         #draw it
         draw_likelihood(likelihoods, modelname, modelname + '.png', True)
 
     else:
-        calc_file(malletPath, modelname+'.mallet', data, num_docs, num_words)
+        calc_file(malletPath, modelname+'.mallet', data, num_docs, num_words, trainer)
     
 
 
