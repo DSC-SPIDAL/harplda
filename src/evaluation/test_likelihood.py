@@ -19,7 +19,10 @@ input:
 
 Usage: 
     * calculate likelihoods and perplexity
-    test_likelihood <mallet path> <trainer> <model dir| model file> <held-out data> <held-out.ldac>
+    test_likelihood <mallet path> <trainer> <model dir| model file> <held-out data> <doccnt> <wordcnt>
+
+    * calculate likelihoods and perplexity
+    test_likelihood -update <likelihood file> <doccnt> <wordcnt>
 
     * draw convergence fig from likelihoods result
     test_likelihood -draw fig-name
@@ -154,6 +157,22 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer):
 
     return likelihoods
 
+
+def update_likelihood(likelihoodfile, num_docs, num_words):
+    if not os.path.exists(likelihoodfile):
+        logger.info('Likelihood file not found at %s', likelihoodfile)
+        return 
+
+    logger.info('update Likelihood file found at %s', likelihoodfile)
+    likelihoods = np.loadtxt(likelihoodfile)
+
+    M, N = likelihoods.shape
+    for idx in range(M):
+        likelihoods[idx][2] = np.exp(- likelihoods[idx][1] / num_words)
+
+    np.savetxt(likelihoodfile, likelihoods)
+
+
 def draw_likelihood(likelihoods, modelname, fig, show = False):
     logger.debug('plot the matrix')
 
@@ -214,10 +233,17 @@ if __name__ == "__main__":
     logger.info("running %s" % ' '.join(sys.argv))
 
     # check and process input arguments
-    if len(sys.argv) < 6:
+    if len(sys.argv) < 7:
         if len(sys.argv) == 3 and sys.argv[1] == '-draw':
             draw_convergence(sys.argv[2] + '.png', True)
             sys.exit(0)
+        elif len(sys.argv) == 5 and sys.argv[1] == '-update':
+            likelihoodfile = sys.argv[2]
+            num_docs = int(sys.argv[3])
+            num_words = int(sys.argv[4])
+            update_likelihood(likelihoodfile, num_docs, num_words)
+            sys.exit(0)
+
         else:
             logger.error(globals()['__doc__'] % locals())
             sys.exit(1)
@@ -228,15 +254,9 @@ if __name__ == "__main__":
     modelname = sys.argv[3]
     data = sys.argv[4]
 
-    # read doccnt and wordcnt from .ldac format test file
-    ldac = sys.argv[5]
     # get wordnum in data
-    num_docs, num_words = 0, 0
-    with open(ldac, 'r') as ldacf:
-        for line in ldacf:
-            num_docs += 1
-            # format: wordcnt word1:cnt1 word2:cnt2 .....
-            num_words += int(line[:line.find(' ')])
+    num_docs = int(sys.argv[5])
+    num_words = int(sys.argv[6])
 
     logger.info('test set %s has %d docs and %d words', data, num_docs, num_words)
 

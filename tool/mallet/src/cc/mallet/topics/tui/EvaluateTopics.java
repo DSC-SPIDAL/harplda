@@ -8,6 +8,10 @@ import java.io.*;
 
 public class EvaluateTopics {
 	
+	static CommandOption.String dumpAlphabet = new CommandOption.String(EvaluateTopics.class, "dumpAlphabet", "FILENAME", true, null,
+	         "The filename in which to write the dictionary of the dataset.  " +
+			 "By default this is null, indicating that no file will be written.", null);	
+	
 	static CommandOption.String wordTopicCountsFile = new CommandOption.String(EvaluateTopics.class, "word-topic-counts-file", "FILENAME", true, null,
 	         "The filename in which to write a sparse representation of topic-word assignments.  " +
 			 "By default this is null, indicating that no file will be written.", null);	
@@ -272,8 +276,36 @@ public class EvaluateTopics {
 
 			InstanceList instances = InstanceList.load (new File(inputFile.value));
 			
-			// show the Alphabet, the dictionary for wordid-feature
-			instances.dumpAlphabet("dict");
+			// show the total tokens number
+			if (instances.size() > 0 &&
+					instances.get(0) != null) {
+					Object data = instances.get(0).getData();
+					if (! (data instanceof FeatureSequence)) {
+						System.out.println("Topic modeling currently only supports feature sequences: use --keep-sequence option when importing data.");
+						System.exit(1);
+					}
+					
+					int maxTokens = 0,	totalTokens = 0;
+					int seqLen;
+
+					for (int doc = 0; doc < instances.size(); doc++) {
+						FeatureSequence fs = (FeatureSequence) instances.get(doc).getData();
+						seqLen = fs.getLength();
+						if (seqLen > maxTokens)
+							maxTokens = seqLen;
+						totalTokens += seqLen;
+					}
+
+					System.out.println("input max tokens: " + maxTokens);
+					System.out.println("input total tokens: " + totalTokens);
+				}
+			
+			
+			
+			if (dumpAlphabet.value != null){
+				// 	show the Alphabet, the dictionary for wordid-feature
+				instances.dumpAlphabet("dict");
+			}
 
 			outputStream.println(evaluator.evaluateLeftToRight(instances, numParticles.value, 
 															   usingResampling.value,
