@@ -8,12 +8,20 @@ import java.io.*;
 
 public class EvaluateTopics {
 	
+	static CommandOption.String wordTopicCountsFile = new CommandOption.String(EvaluateTopics.class, "word-topic-counts-file", "FILENAME", true, null,
+	         "The filename in which to write a sparse representation of topic-word assignments.  " +
+			 "By default this is null, indicating that no file will be written.", null);	
+	
     static CommandOption.String modeldataFilename = new CommandOption.String
             (EvaluateTopics.class, "modeldata", "FILENAME", true, null,
-    		 "A serialized model data from a trained topic model.\n" + 
+    		 "A serialized partial model data from a third-party trainer's result.\n" + 
              "By default this is null, indicating that no file will be read.", null);
 
-	
+    static CommandOption.String modelFilename = new CommandOption.String
+            (EvaluateTopics.class, "modelfile", "FILENAME", true, null,
+    		 "A serialized model data from a trained topic model by mallet.\n" + 
+             "By default this is null, indicating that no file will be read.", null);
+    
     static CommandOption.String evaluatorFilename = new CommandOption.String
         (EvaluateTopics.class, "evaluator", "FILENAME", true, null,
 		 "A serialized topic evaluator from a trained topic model.\n" + 
@@ -120,30 +128,54 @@ public class EvaluateTopics {
     		//	typeTopicCounts[type] = new int[numTopics];
     		//}
     		
-    		int count[] = new  int[numTopics];
     		for (int k=0; k<numTopics; k++){
     			tokensPerTopic[k] = 0;
     		}
-    		for (int w = 0; w<numTypes; w++){
-    			int nonzeroCnt = 0;
-    			for (int k=0; k<numTopics; k++){
-    				count[k] = in.readInt();
-    				tokensPerTopic[k] += count[k];
-    				if (count[k] > 0){
-    					nonzeroCnt ++;
-    				}
-    			}
-    			
-    			typeTopicCounts[w] = new int[nonzeroCnt];
-    			//update to sparse vector
-    			for (int k=0, j=0; k<numTopics; k++){
-    				if (count[k] > 0){
-    					typeTopicCounts[w][j] = (count[k] << topicBits) + k;
-    					j ++;
-    				}
-    			}
-    			
-    			
+ 
+    		boolean useSparseMatrixFormat = true;
+    		int count[] = new  int[numTopics];
+    		int topic[] = new  int[numTopics];
+    		if (useSparseMatrixFormat){
+	    		for (int w = 0; w<numTypes; w++){
+	    			int nonzeroCnt = 0;
+	    			for (int k=0; k<numTopics; k++){
+	    				count[k] = in.readInt();
+	    				topic[k] = in.readInt();
+	    				if (count[k] == 0){
+	    					//row end 
+	    					break;
+	    				}
+	    				nonzeroCnt ++;
+	    				tokensPerTopic[topic[k]] += count[k];
+	    			}
+	    			
+	    			typeTopicCounts[w] = new int[nonzeroCnt];
+	    			//update to sparse vector
+	    			for (int j=0; j<nonzeroCnt; j++){
+	    				typeTopicCounts[w][j] = (count[j] << topicBits) + topic[j];
+	    			}
+	    		}
+    		}
+    		else{
+	    		for (int w = 0; w<numTypes; w++){
+	    			int nonzeroCnt = 0;
+	    			for (int k=0; k<numTopics; k++){
+	    				count[k] = in.readInt();
+	    				tokensPerTopic[k] += count[k];
+	    				if (count[k] > 0){
+	    					nonzeroCnt ++;
+	    				}
+	    			}
+	    			
+	    			typeTopicCounts[w] = new int[nonzeroCnt];
+	    			//update to sparse vector
+	    			for (int k=0, j=0; k<numTopics; k++){
+	    				if (count[k] > 0){
+	    					typeTopicCounts[w][j] = (count[k] << topicBits) + k;
+	    					j ++;
+	    				}
+	    			}
+	    		}
     		}
     		
         	in.close();
@@ -205,14 +237,36 @@ public class EvaluateTopics {
 			}
 			
 			// add a new load estimator method, from converted model data --modeldata
-			MarginalProbEstimator evaluator; 
+			MarginalProbEstimator evaluator = null; 
 			if (evaluatorFilename.value != null) {
 				evaluator =	MarginalProbEstimator.read(new File(evaluatorFilename.value));
 			}
-			else{
+			else if (modeldataFilename.value != null){
+				
 				evaluator = readdata(modeldataFilename.value); 
 			}	
+			else if (modelFilename.value != null){
+				ParallelTopicModel topicModel = null;
+				try {
+					topicModel = ParallelTopicModel.read(new File(modelFilename.value));
+					evaluator = topicModel.getProbEstimator();
+				} catch (Exception e) {
+					System.out.println("Unable to restore saved topic model " + 
+								   modelFilename.value + ": " + e);
+					System.exit(1);
+				}				
+			}
+			
+			if (evaluator == null){
+				System.out.println("Unable to initialize a evaluator, quit");
+				System.exit(1);				
+			}
+			
+			if (wordTopicCountsFile.value != null){
 				
+				evaluator.printTypeTopicCounts(new File (wordTopicCountsFile.value));
+			}
+			
 			
 			evaluator.setPrintWords(showWords.value);
 

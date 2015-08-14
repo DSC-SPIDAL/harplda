@@ -122,6 +122,30 @@ def save_model(fname, model, alpha, beta):
             for k in range(K):
                 f.write(struct.pack('>i', model[w][k]))
 
+def save_model_sorted(fname, model, alpha, beta):
+    """
+    Save the topicCount[][] each line sorted by count descendently
+    """
+    with open(fname, 'wb') as f:
+        V, K = model.shape
+        f.write(struct.pack('>i', K))
+        f.write(struct.pack('>i', V))
+        f.write(struct.pack('>d', alpha))
+        f.write(struct.pack('>d', beta))
+
+        index = np.argsort(model)
+        for w in range(V):
+            for k in range(-1, -K-1, -1):
+                # sort in acscent order
+                col = index[w][k]
+                if (model[w][col] == 0):
+                    # a row end by (0,0) pair
+                    f.write(struct.pack('>i', 0))
+                    f.write(struct.pack('>i', 0))
+                    break
+
+                f.write(struct.pack('>i', model[w][col]))
+                f.write(struct.pack('>i', col))
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
@@ -158,9 +182,9 @@ if __name__ == '__main__':
 
     logger.info('saving to .mallet')
     if os.path.isdir(modelDir):
-        save_model('model-'+modelDir+'.mallet', model, alpha, beta)
+        save_model_sorted('model-'+modelDir+'.mallet', model, alpha, beta)
     else:
         basename = os.path.splitext(modelDir)[0]
-        save_model(basename + '.mallet', model, alpha, beta)
+        save_model_sorted(basename + '.mallet', model, alpha, beta)
         
 

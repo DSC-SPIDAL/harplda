@@ -102,6 +102,59 @@ public class MarginalProbEstimator implements Serializable {
 	public void setPrintWords(boolean shouldPrint) {
 		this.printWordProbabilities = shouldPrint;
 	}
+	
+	/**
+	 *  Write the internal representation of type-topic counts  
+	 *   (count/topic pairs in descending order by count) to a file.
+	 */
+	public void printTypeTopicCounts(File file) throws IOException {
+		PrintWriter out = new PrintWriter (new FileWriter (file) );
+		PrintWriter out2 = new PrintWriter (new FileWriter (file + ".hyper") );
+		
+		int numTypes = typeTopicCounts.length;
+		
+		//alpha, beta
+		out2.print("#alpha : ");
+		for (int topic = 0; topic < numTopics; topic++) {
+			out2.print(alpha[topic] + " ");
+		}
+		out2.println();
+		out2.println("#beta : " + beta);
+		out2.println("#numTopics : " + numTopics);
+		out2.println("#numTypes : " + numTypes);
+		
+		
+		out2.close();
+		
+		//typeTopicCounts
+		for (int type = 0; type < numTypes; type++) {
+
+			StringBuilder buffer = new StringBuilder();
+
+			//buffer.append(type + " " + alphabet.lookupObject(type));
+			//buffer.append(type + " ");
+
+			int[] topicCounts = typeTopicCounts[type];
+			int totalCount = 0;
+
+			int index = 0;
+			while (index < topicCounts.length &&
+				   topicCounts[index] > 0) {
+
+				int topic = topicCounts[index] & topicMask;
+				int count = topicCounts[index] >> topicBits;
+				
+				totalCount += count;
+				buffer.append(" " + topic + ":" + count);
+
+				index++;
+			}
+
+			out.println(type + " " + totalCount + " " + buffer);
+		}
+
+		out.close();
+	}	
 
 	public double evaluateLeftToRight (InstanceList testing, int numParticles, boolean usingResampling,
 									   PrintStream docProbabilityStream) {
