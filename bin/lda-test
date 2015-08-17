@@ -1,0 +1,98 @@
+#!/bin/bash
+
+
+homedir=`dirname $0`
+homedir=`dirname $homedir`
+
+# dataset
+# enwiki-100k
+datadir=$homedir/data/enwiki-100k
+gibbsdict=$datadir/enwiki-100k-gibbs.wordids
+harpdict=$datadir/enwiki-100k-reid.wordids
+testset=$datadir/test100k.mallet
+testdict=$datadir/test100k.mallet.dict
+testdoccnt=100000
+testwordcnt=32733688
+alpha=0.5
+beta=0.1
+
+# ap-sample
+datadir=$homedir/data/ap-sample-mallet
+gibbsdict=$datadir/ap-sample.mallet.wordids
+harpdict=$datadir/ap-sample.mallet.wordids
+testset=$datadir/ap-sample.mallet.input
+testdict=$datadir/ap-sample.mallet.dict
+testdoccnt=2278
+testwordcnt=463468
+alpha=2.5
+beta=0.1
+
+CMD=$1
+shift
+
+help()
+{
+cat <<EOF
+lda-test commands: 
+
+  evaluate-harp       load the model from harp lda trainer and test likelihood on held-out testset
+
+Include --help with any option for more information
+EOF
+}
+
+CLASS=
+
+case $CMD in
+	evaluate-harp) 
+        # <harp model dir> <runid>
+        modeldir=$1
+        runid=$2
+        mkdir $runid
+        cd $runid
+        for d in `ls`; do python $homedir/src/preprocess/convertHarp2Mallet.py $d $alpha $beta $testdict $harpdict; done
+        cd ..
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $runid $testset $testdoccnt $testwordcnt
+
+        ;;
+	evaluate-gibbs) 
+        # <gibbs model dir> <runid>
+        modeldir=$1
+        runid=$2
+        mkdir $runid
+
+        savedir=`pwd`
+        cd $modeldir
+        
+        phifiles=`ls *.phi`
+        betafiles=`ls *.beta`
+        if [ "$?" -ne "0" ] ; then
+            for f in $phifiles; do python $homedir/src/preprocess/convertGibbsPhiToBeta.py $f `basename $f .phi`.beta; done
+        fi
+
+
+        betafiles=`ls *.beta`
+        harpfiles=`ls *.harp`
+        if [ "$?" -ne "0" ] ; then
+            for f in $betafiles; do python $homedir/src/preprocess/convertBeta2Harp.py $f $harpdict $beta; done
+        fi
+
+        harpfiles=`ls *.harp`
+        malletfiles=`ls *.mallet`
+        if [ "$?" -ne "0" ] ; then
+            for f in $harpfiles; do python $homedir/src/preprocess/convertHarp2Mallet.py $f $alpha $beta $testdict $harpdict; done
+        fi
+
+        cd $savedir
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ gibbs $modeldir $testset $testdoccnt $testwordcnt
+
+        ;;
+	
+	run) 
+        CLASS=$1
+        shift
+        python $CLASS $*
+        ;;
+	*) echo "Unrecognized command: $CMD"; help; exit 1;;
+esac
+
