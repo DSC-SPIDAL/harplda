@@ -415,8 +415,9 @@ if __name__ == '__main__':
 
     else:
         collection = load_lowfile(lowfile)
-
-        splits_col = split_collection(collection, splitCnt, splitType)
+        
+        if splitCnt > 1:
+            splits_col = split_collection(collection, splitCnt, splitType)
 
 
 
