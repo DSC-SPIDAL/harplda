@@ -217,7 +217,7 @@ public class EvaluateTopics {
                                   "Estimate the marginal probability of new documents under ");
         CommandOption.process (EvaluateTopics.class, args);
 
-		if (modeldataFilename == null && evaluatorFilename.value == null) {
+		if (modelFilename == null && modeldataFilename == null && evaluatorFilename.value == null) {
 			System.err.println("You must specify a serialized topic evaluator. Use --help to list options.");
 			System.exit(0);
 		}
@@ -239,6 +239,41 @@ public class EvaluateTopics {
 				! probabilityFile.value.equals("-")) {
 				outputStream = new PrintStream(probabilityFile.value);
 			}
+			
+			InstanceList instances = InstanceList.load (new File(inputFile.value));
+			
+			// show the total tokens number
+			if (instances.size() > 0 &&
+					instances.get(0) != null) {
+					Object data = instances.get(0).getData();
+					if (! (data instanceof FeatureSequence)) {
+						System.out.println("Topic modeling currently only supports feature sequences: use --keep-sequence option when importing data.");
+						System.exit(1);
+					}
+					
+					int maxTokens = 0,	totalTokens = 0;
+					int seqLen;
+
+					for (int doc = 0; doc < instances.size(); doc++) {
+						FeatureSequence fs = (FeatureSequence) instances.get(doc).getData();
+						seqLen = fs.getLength();
+						if (seqLen > maxTokens)
+							maxTokens = seqLen;
+						totalTokens += seqLen;
+					}
+
+					System.out.println("input max tokens: " + maxTokens);
+					System.out.println("input total documents: " + instances.size());
+					System.out.println("input total tokens: " + totalTokens);
+				}
+			
+			
+			
+			if (dumpAlphabet.value != null){
+				// 	show the Alphabet, the dictionary for wordid-feature
+				instances.dumpAlphabet(dumpAlphabet.value);
+			}
+
 			
 			// add a new load estimator method, from converted model data --modeldata
 			MarginalProbEstimator evaluator = null; 
@@ -273,39 +308,6 @@ public class EvaluateTopics {
 			
 			
 			evaluator.setPrintWords(showWords.value);
-
-			InstanceList instances = InstanceList.load (new File(inputFile.value));
-			
-			// show the total tokens number
-			if (instances.size() > 0 &&
-					instances.get(0) != null) {
-					Object data = instances.get(0).getData();
-					if (! (data instanceof FeatureSequence)) {
-						System.out.println("Topic modeling currently only supports feature sequences: use --keep-sequence option when importing data.");
-						System.exit(1);
-					}
-					
-					int maxTokens = 0,	totalTokens = 0;
-					int seqLen;
-
-					for (int doc = 0; doc < instances.size(); doc++) {
-						FeatureSequence fs = (FeatureSequence) instances.get(doc).getData();
-						seqLen = fs.getLength();
-						if (seqLen > maxTokens)
-							maxTokens = seqLen;
-						totalTokens += seqLen;
-					}
-
-					System.out.println("input max tokens: " + maxTokens);
-					System.out.println("input total tokens: " + totalTokens);
-				}
-			
-			
-			
-			if (dumpAlphabet.value != null){
-				// 	show the Alphabet, the dictionary for wordid-feature
-				instances.dumpAlphabet("dict");
-			}
 
 			outputStream.println(evaluator.evaluateLeftToRight(instances, numParticles.value, 
 															   usingResampling.value,
