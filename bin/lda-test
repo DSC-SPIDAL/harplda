@@ -145,7 +145,7 @@ case $CMD in
         harpfiles=`ls *.harp 2>>/dev/null`
         malletfiles=`ls *.mallet 2>>/dev/null`
         if [ "$?" -ne "0" ] ; then
-            for f in $harpfiles; do python $homedir/src/preprocess/convertHarp2Mallet.py $f $alpha $beta $testdict $harpdict; done
+            for f in $harpfiles; do python $homedir/src/preprocess/convertHarp2Mallet.py $f $alpha $beta $testdict $gibbsdict; done
         fi
 
         cd $savedir
