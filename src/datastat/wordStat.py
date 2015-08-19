@@ -7,12 +7,12 @@ import logging
 from docStat import LowDocumentCollection
 
 """
-
+Test local vocabualry size under different partition schemes.
 
 input:
-    source text in low format
+    source text in mrlda low format
     docid\twords.....
-    
+
     dictionary file 
     word\tcnt
 

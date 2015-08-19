@@ -1,22 +1,31 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""
+Statistics on document collection
+
+input:
+    mrlda low format document collection file
+    docid\twords.....
+
+output:
+     doccnt, voacbsize, totalword
+     doclen, mean, std
+     voacb, highfreq, lowfreq, powerlaw ratio
+     doc-word matrix: sparseness
+
+usage: 
+    docStat lowfile
+
+"""
+
 import sys
 import os
 import math
+import numpy as np
 import logging
 import cPickle as pickle
 
-"""
-statistics on word distribution of the document collection
-
-test the assumption:
-1. local model size V*K is controllable by sharding the document collection
-2. local vocabulary size if much less than the global one, so that communication
-    optimization is possible.
-
-input:
-    low format document collection file
-    docid\twords.....
-
-"""
 
 logger = logging.getLogger(__name__)
 
@@ -87,15 +96,21 @@ class LowDocumentCollection():
     def read_document(self, doc= (1,{})):
         """
         read from a document:=(docid, wordmap) object
-
+        return: append (docid, doclen) into self.documents
         """
-        self.documents.append((doc[0], 0))
+        doclen = 0
         for word in doc[1]:
-            self.wordcnt += 1
+            wcnt = doc[1][word]
+
+            self.wordcnt += wcnt
             if word in self.vocabulary:
-                self.vocabulary[word] += doc[1][word]
+                self.vocabulary[word] += wcnt
             else:
-                self.vocabulary[word] = doc[1][word]
+                self.vocabulary[word] = wcnt
+
+            doclen += wcnt
+
+        self.documents.append((doc[0], doclen))
 
     def get_doc_number(self):
         return len(self.documents)
@@ -104,11 +119,28 @@ class LowDocumentCollection():
         return len(self.vocabulary)
 
     def get_wordcnt(self):
-        wordcnt = 0
-        for word in self.vocabulary:
-            wordcnt += self.vocabulary[word]
-        return wordcnt
+        # should equal to self.wordcnt
+        #wordcnt = 0
+        #for word in self.vocabulary:
+        #    wordcnt += self.vocabulary[word]
+        #return wordcnt
+        return self.wordcnt
 
+    def get_doclen(self):
+        doclen = np.array([doc[1] for doc in self.documents])
+        return np.mean(doclen), np.std(doclen)
+
+    def get_sparseness(self):
+        """
+        doc-word matrix sparseness = total wordcnt / doccnt * vocabsize
+        """
+        return self.get_wordcnt() * 1.0 / (self.get_doc_number() * self.get_vocab_size())
+
+    def get_vocabulary(self):
+        return self.vocabulary
+
+
+    ## functions
     def get_lowfile(self):
         return self.storage
 
@@ -235,8 +267,8 @@ class LowDocumentCollection():
         docf = open(docfile,'w')
         if docf:
             docf.write('%d\n'%self.wordcnt)
-            for docid, _tmp in self.documents:
-                docf.write('%s\t%d\n'%(docid, _tmp))
+            for docid, doclen in self.documents:
+                docf.write('%s\t%d\n'%(docid, doclen))
 
             docf.close()
         else:
@@ -385,39 +417,36 @@ def split_collection(collection, splitCnt, splitType):
 
 
 if __name__ == '__main__':
-    """ usage: docStat.py lowfile splitCnt splitType logger_level
+    program = os.path.basename(sys.argv[0])
+    logger = logging.getLogger(program)
 
-    """
-    lowfile = ''
-    splitCnt = 0
-    splitType = 'SEQ'
-    logger_level = ''
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+    logging.root.setLevel(level=logging.DEBUG)
 
-    if len(sys.argv) > 1:
-        lowfile = sys.argv[1]
-        if len(sys.argv) > 2:
-            splitCnt = int(sys.argv[2])
-            if len(sys.argv) > 3:
-                splitType = sys.argv[3]
-                if len(sys.argv) > 4:
-                    logger_level = sys.argv[4]
+    # check and process input arguments
+    if len(sys.argv) != 2:
+        logger.error(globals()['__doc__'] % locals())
+        sys.exit(1)
 
-    # logging configure
-    import logging.config
-    if logger_level:
-        logging.basicConfig(filename='docStat.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
-    else:
-        logging.basicConfig(filename='docStat.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+    logger.info("running %s" % ' '.join(sys.argv))
+    lowfile = sys.argv[1]
+
+    collection = load_lowfile(lowfile)
+
+    # output the statistics
+    print('doccnt = %s'%collection.get_doc_number())
+    print('vocabSize = %s'%collection.get_vocab_size())
+    print('wordcnt = %s'%collection.get_wordcnt())
+    doclen = collection.get_doclen()
+    print('doclen mean= %d, std= %d'% (int(doclen[0]), int(doclen[1])))
+    print('doc-word matrix sparsenes = %.4f'%collection.get_sparseness())
+
+    vocab = collection.get_vocabulary()
+    sortfreq = sorted(vocab.values())
+    print('highest word freq = %s'%sortfreq[-1])
+    print('lowest word freq = %s'%sortfreq[0])
 
 
-    if lowfile == '' or splitCnt <= 0:
-        print("usage: docStat.py lowfile splitCnt splitType logger_level")
-
-    else:
-        collection = load_lowfile(lowfile)
-        
-        if splitCnt > 1:
-            splits_col = split_collection(collection, splitCnt, splitType)
 
 
 
