@@ -6,15 +6,21 @@ then the result file is still a low dictionary file, which can support mm2low.py
 
 input format:
 id\tterm\tfreq
-
+or
+id\tfreq
 
 output format:
 Save this Dictionary to a text file, in format: id[TAB]word_utf8[TAB]document frequency[NEWLINE]. 
+id newid freq
+newid term freq
+
+
+
 
 """
 
 if len(sys.argv) != 4:
-    print('uasage: reorderid <wordids in> <wordids out>')
+    print('uasage: reorderid <wordids in> <wordids out> <newmap>')
     sys.exit(-1)
 
 wordid_in = open(sys.argv[1], 'r')
@@ -24,8 +30,11 @@ newmap = open(sys.argv[3], 'w')
 newid = 0
 for line in wordid_in:
     tokens = line.strip().split('\t')
-    wordid_out.write('%s\t%d\t%s\n'%(tokens[0], newid, tokens[2]))
-    newmap.write('%d\t%s\t%s\n'%(newid, tokens[1], tokens[2]))
+    if len(tokens) == 2:
+        wordid_out.write('%s\t%d\t%s\n'%(tokens[0], newid, tokens[1]))
+    else:
+        wordid_out.write('%s\t%d\t%s\n'%(tokens[0], newid, tokens[2]))
+        newmap.write('%d\t%s\t%s\n'%(newid, tokens[1], tokens[2]))
 
     newid += 1
 

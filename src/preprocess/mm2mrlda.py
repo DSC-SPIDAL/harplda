@@ -3,13 +3,20 @@
 #
 
 """
-USAGE: mm2mrlda <bow.mm> <mrlda file>
+convert mm file into MrLda input txt file with integer-id directly
 
-convert bow.mm into MrLda input txt file with integer-id directly
-bow.mm in mm format
+mm format
 %%MatrixMarket matrix coordinate real general
 doccnt  wordcnt  positioncnt
 docid  wordid   freq
+
+mrlda low format
+docid  wordlist....
+
+idmap format
+id  newid   freq
+
+USAGE: mm2mrlda <mm file> <mrlda file> <skip headline cnt> <idmap>
 
 """
 
@@ -30,21 +37,35 @@ if __name__ == '__main__':
         print(globals()['__doc__'] % locals())
         sys.exit(1)
     inp, outp = sys.argv[1:3]
+    skipLines = 2
+    idmap = {}
+
+    if len(sys.argv) == 5:
+        skipLines = int(sys.argv[3])
+        idmapf = open(sys.argv[4], 'r')
+        logger.info('use idmap from %s', sys.argv[4])
+        # load dictionary
+        for line in idmapf:
+            tokens = line.strip().split('\t')
+            idmap[tokens[0]] = tokens[1]
 
     mm = open(inp, 'r')
     mrlda = open(outp, 'w')
-    
-    mm.readline()
-    #read meta
-    line = mm.readline().strip()
-    line = mm.readline().strip()
-    
+
+    for i in range(skipLines):
+        line = mm.readline().strip()
+        logger.info('skip:%s', line)
+
     lastdocid = '-1'
     wordlist = []
     for line in mm:
         tokens = line.strip().split(' ')
         docid = tokens[0]
-        wordid = tokens[1]
+        if idmap:
+            wordid = idmap[tokens[1]]
+        else:
+            wordid = tokens[1]
+
         freq = int(tokens[2])
 
         if docid != lastdocid:
@@ -61,6 +82,6 @@ if __name__ == '__main__':
     # write the last line
     wordstring = ' '.join(wordlist)
     mrlda.write('%s\t%s\n'%(lastdocid, wordstring))
-        
-    
-    
+
+
+
