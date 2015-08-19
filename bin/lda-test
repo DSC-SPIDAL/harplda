@@ -139,13 +139,13 @@ case $CMD in
         betafiles=`ls *.beta 2>>/dev/null`
         harpfiles=`ls *.harp 2>>/dev/null`
         if [ "$?" -ne "0" ] ; then
-            for f in $betafiles; do python $homedir/src/preprocess/convertBeta2Harp.py $f $harpdict $beta; done
+            for f in $betafiles; do python $homedir/src/preprocess/convertBeta2Harp.py $f $gibbsdict $beta; done
         fi
 
         harpfiles=`ls *.harp 2>>/dev/null`
         malletfiles=`ls *.mallet 2>>/dev/null`
         if [ "$?" -ne "0" ] ; then
-            for f in $harpfiles; do python $homedir/src/preprocess/convertHarp2Mallet.py $f $alpha $beta $testdict $harpdict; done
+            for f in $harpfiles; do python $homedir/src/preprocess/convertHarp2Mallet.py $f $alpha $beta $testdict $gibbsdict; done
         fi
 
         cd $savedir
