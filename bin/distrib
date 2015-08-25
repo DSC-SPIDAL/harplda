@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# To distribute files under input directory to the same dir in the server list
+# ip/hostname each line in server list file
+#
+# Usage:
+#   distrib <source dir> <dest dir> <server list file>
+#
+
+if [ $# -ne "3" ]; then
+    echo "Usage: distrib <source dir> <dest dir> <server list file>"
+    echo
+    exit -1
+fi
+
+srcdir=$1
+destdir=$2
+slaves=$3
+
+files=`ls $srcdir`
+target=(`cat $slaves`)
+
+#mkdir output buffer dir
+for d in ${target[*]}; do
+    mkdir -p $d
+done
+
+#prepare the output files
+curid=0
+filecnt=0
+hostcnt=${#target[*]}
+for f in $files; do
+    ln -s $srcdir/$f ${target[curid]}/`basename $f` 
+    ((curid=($curid+1)%$hostcnt))
+    ((filecnt++))
+done
+echo "Total file cnt=", $filecnt
+echo "Server cnt=", ${#target[*]}
+
+#cexec mkdir -p $destdir
+for s in ${target[*]}; do
+    echo "copy file to $s:$destdir"
+    ssh $s mkdir -p $destdir
+    scp -r $s $s:$destdir
+    #ssh $s "cd $destdir && for f in `ls $s`; do mv \$f .; done"
+    #ssh $s "cd $destdir && mv $s/* ."
+done
+
+echo "Bye"
