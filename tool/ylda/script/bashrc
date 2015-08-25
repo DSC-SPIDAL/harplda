@@ -1,0 +1,33 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific aliases and functions
+export C3_PATH=/N/u/pengb/opt/c3-5
+export C3_CONF=/N/u/pengb/.c3conf
+
+# java
+export JAVA_HOME=/N/u/pengb/yahoolda/build/jdk1.8.0_51
+export PATH=$JAVA_HOME/bin:$PATH
+
+# hadoop env
+export HADOOP_HOME=/scratch/pengb/hadoop
+export HADOOP_YARN_HOME=/scratch/pengb/hadoop
+export HADOOP_PREFIX=/scratch/pengb/hadoop
+export HADOOP_MASTER=m0:/scratch/pengb/hadoop
+export HADOOP_CONF_DIR=/scratch/pengb/hadoop/etc/hadoop
+export PATH=$PATH:/scratch/pengb/hadoop/bin:
+
+# spark
+export SPARK_HOME=/scratch/pengb/spark
+export PATH=$PATH:/scratch/pengb/spark/bin:
+
+#
+#export LD_LIBRARY_PATH=/N/u/pengb/local/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/N/u/pengb/local/lib
+export ANT_HOME=/N/u/pengb/yahoolda/build/apache-ant-1.9.6
+export PATH=$PATH:$ANT_HOME/bin
+
