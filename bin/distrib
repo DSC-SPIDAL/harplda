@@ -7,6 +7,8 @@
 #   distrib <source dir> <dest dir> <server list file>
 #
 
+trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
+
 if [ $# -ne "3" ]; then
     echo "Usage: distrib <source dir> <dest dir> <server list file>"
     echo
