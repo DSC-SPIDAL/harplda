@@ -1,0 +1,120 @@
+#!/bin/bash
+#
+# Usage:
+#   lda-train <trainer> <trainset> <alpha> <beta>
+#
+
+trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
+
+homedir=`dirname $0`
+homedir=`dirname $homedir`
+
+check_ret()
+{
+if [ "$?" -ne "0" ] ; then
+    echo "run command error, quit...."
+    exit -2
+fi
+}
+
+
+help()
+{
+cat <<EOF
+lda-train commands: 
+  train-harp   <trainset>    
+  train-mallet <trainset>    
+  train-gibbs  <trainset>   
+  train-ylda  <trainset>    
+
+Include --help with any option for more information
+EOF
+}
+
+
+# dataset
+init()
+{
+    if [ "$trainset" == "enwiki-100k" ] ; then
+        # enwiki-100k
+        datadir=$homedir/data/enwiki-100k
+        trainset=$datadir/enwiki-100k.mallet.txt
+        alpha=0.5
+        beta=0.1
+    elif [ "$trainset" == "ap-sample" ] ; then
+        # ap-sample
+        datadir=$homedir/data/ap-sample-new
+        trainset=$datadir/ap-sample.mallet.txt
+        alpha=2.5
+        beta=0.1
+    elif [ "$trainset" == "pubmed" ] ; then
+        # ap-sample
+        datadir=$homedir/data/pubmed
+        trainset=$datadir/pubmed.mallet.txt
+        alpha=0.01
+        beta=0.01
+    else
+        echo "trainset '$trainset'=$trainset not found, quit..."
+        help
+        exit -2
+    fi
+}
+
+# start here
+
+CMD=$1
+shift
+trainset=$1
+shift
+savedir=`pwd`
+
+case $CMD in
+    train-harp) 
+        init
+        # <harp model dir> 
+        modeldir=$1
+        savedir=`pwd`
+        cd $modeldir
+
+        cd $savedir
+
+        ;;
+
+     train-mallet) 
+        init
+        mkdir -p work
+        cd work
+
+        num_topics=20
+        num_iters=1000
+        alphasum=0
+        alphasum=`echo "$alpha*$num_topics" |bc`
+
+        cmd="$homedir/tool/mallet/bin/mallet train-topics --input $input $trainset --num-topics $num_topics --num-iterations $num_iters --inferencer-filename infer --evaluator-filename evaluator --alpha $alphasum --beta $beta --use-symmetric-alpha true"
+        echo $cmd
+        python $homedir/run/learn.py "$cmd"
+
+
+        ;;
+
+    train-gibbs) 
+        init
+        # <gibbs model dir> 
+        modeldir=$1
+        savedir=`pwd`
+        cd $modeldir
+
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ gibbs $modeldir $trainset $testdoccnt $testwordcnt
+
+        ;;
+
+    run) 
+        CLASS=$1
+        shift
+        python $CLASS $*
+        ;;
+    *) echo "Unrecognized command: $CMD"; help; exit 1;;
+esac
+
+cd $savedir
+echo 'End'
