@@ -6,9 +6,18 @@
 
 trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
 
+#global vars
 homedir=`dirname $0`
 homedir=`dirname $homedir`
+datadir=''
+trainset=''
+alpha=0.5
+beta=0.1
+num_iters=1000
+num_topics=100
+num_threads=1
 
+#helper funcs
 check_ret()
 {
 if [ "$?" -ne "0" ] ; then
@@ -21,19 +30,22 @@ fi
 help()
 {
 cat <<EOF
-lda-train commands: 
-  train-harp   <trainset>    
-  train-mallet <trainset>    
-  train-gibbs  <trainset>   
-  train-ylda  <trainset>    
+lda-train <-t|--trainer trainer> <-a|--alpha alpha> <-b|--beta beta> <-k|--topics num_topics> <-i|--iters num_iters> <-d|--dataset trainset> <-s|--threads num_threads>
 
 Include --help with any option for more information
 EOF
 }
 
+printParameters()
+{
+    echo 'trainer=', $trainer
+    echo 'trainset = ', $trainset
+    echo 'alpha=', $alpha, 'beta=', $beta
+    echo 'num_iters=', $num_iters, 'num_topics=', $num_topics
+}
 
 # dataset
-init()
+initTrainset()
 {
     if [ "$trainset" == "enwiki-100k" ] ; then
         # enwiki-100k
@@ -60,61 +72,133 @@ init()
     fi
 }
 
+parseArguments()
+{
+    echo "enter parseArguments : $1"
+    while [ "$1" != "" ]; do
+        echo "debug parser: $1"
+        case $1 in
+            -t | --trainer )
+                shift
+                trainer=$1
+                ;;
+            -a | --alpha )    
+                shift
+                alpha=$1
+                ;;
+            -b | --beta )    
+                shift
+                beta=$1
+                ;;
+
+            -i | --iters )    
+                shift
+                num_iters=$1
+                ;;
+
+            -t | --topics )    
+                shift
+                num_topics=$1
+                ;;
+            -d | --dataset )
+                shift
+                trainset=$1
+
+                initTrainset
+                ;;
+            -h | --help )           
+                help
+                exit
+                ;;
+        esac
+        shift
+    done
+}
+
+
 # start here
-
-CMD=$1
-shift
-trainset=$1
-shift
 savedir=`pwd`
+#echo 'total arguments = ', $#
+#echo $1
+#parseArguments("$*")
+#echo "enter parseArguments : $1"
+    while [ "$1" != "" ]; do
+        #echo "debug parser: $1"
+        case $1 in
+            -t | --trainer )
+                shift
+                trainer=$1
+                ;;
+            -a | --alpha )    
+                shift
+                alpha=$1
+                ;;
+            -b | --beta )    
+                shift
+                beta=$1
+                ;;
 
-case $CMD in
-    train-harp) 
-        init
-        # <harp model dir> 
-        modeldir=$1
-        savedir=`pwd`
-        cd $modeldir
+            -i | --iters )    
+                shift
+                num_iters=$1
+                ;;
 
-        cd $savedir
+            -k | --topics )    
+                shift
+                num_topics=$1
+                ;;
+            -d | --dataset )
+                shift
+                trainset=$1
+
+                initTrainset
+                ;;
+            -s | --threads )
+                shift
+                num_threads=$1
+                ;;   
+            -h | --help )           
+                help
+                exit
+                ;;
+        esac
+        shift
+    done
+#}
+#printParameters
+
+mkdir -p work
+cd work
+ 
+case $trainer in
+     harp) 
 
         ;;
 
-     train-mallet) 
-        init
-        mkdir -p work
-        cd work
-
-        num_topics=20
-        num_iters=1000
-        alphasum=0
+     mallet) 
         alphasum=`echo "$alpha*$num_topics" |bc`
 
-        cmd="$homedir/tool/mallet/bin/mallet train-topics --input $input $trainset --num-topics $num_topics --num-iterations $num_iters --inferencer-filename infer --evaluator-filename evaluator --alpha $alphasum --beta $beta --use-symmetric-alpha true"
+        cmd="$homedir/tool/mallet/bin/mallet train-topics --input $trainset --num-topics $num_topics --num-iterations $num_iters --inferencer-filename infer --evaluator-filename evaluator --alpha $alphasum --beta $beta --use-symmetric-alpha true --num-threads $num_threads"
         echo $cmd
         python $homedir/run/learn.py "$cmd"
 
-
         ;;
 
-    train-gibbs) 
-        init
-        # <gibbs model dir> 
-        modeldir=$1
-        savedir=`pwd`
-        cd $modeldir
-
-        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ gibbs $modeldir $trainset $testdoccnt $testwordcnt
+    gibbs) 
+        #$ lda -est [-alpha <double>] [-beta <double>] [-ntopics <int>] [-niters <int>] [-savestep <int>] [-twords <int>] -dfile <string>   
+        cmd="$homedir/tool/gibbslda/src/lda -dfile $trainset -ntopics $num_topics -niters $num_iters -alpha $alpha -beta $beta "
+        echo $cmd
+        python $homedir/run/learn.py "$cmd"
 
         ;;
 
     run) 
-        CLASS=$1
-        shift
-        python $CLASS $*
+        python $homedir/run/learn.py "$*"
+
         ;;
-    *) echo "Unrecognized command: $CMD"; help; exit 1;;
+    *) echo "Unrecognized command: $trainer"; help; exit 1;;
 esac
 
 cd $savedir
 echo 'End'
+
