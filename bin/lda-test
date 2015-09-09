@@ -52,6 +52,28 @@ init()
         testwordcnt=463468
         alpha=2.5
         beta=0.1
+     elif [ "$TESTSET" == "pubmed" ] ; then
+        # pubmed-test-200k
+        datadir=$homedir/data/pubmed
+        gibbsdict=$datadir/pubmed.mrlda.reid.txt.wordid
+        harpdict=$datadir/pubmed.mrlda.reid.txt.wordid
+        testset=$datadir/pubmed-test-200k.mallet.txt
+        testdict=$datadir/pubmed-test-200k.mallet.dict
+        testdoccnt=200000
+        testwordcnt=20372837
+        alpha=0.05
+        beta=0.01
+     elif [ "$TESTSET" == "pubmed-2" ] ; then
+        # pubmed-test-200k
+        datadir=$homedir/data/pubmed
+        gibbsdict=$datadir/pubmed.mrlda.reid.txt.wordid
+        harpdict=$datadir/pubmed.mrlda.reid.txt.wordid
+        testset=$datadir/pubmed-test-200k-2.mallet.txt
+        testdict=$datadir/pubmed-test-200k-2.mallet.dict
+        testdoccnt=200000
+        testwordcnt=20106255
+        alpha=0.05
+        beta=0.01
     else
         echo "testset '$TESTSET'=$TESTSET not found, quit..."
         help
