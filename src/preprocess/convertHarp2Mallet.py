@@ -51,7 +51,7 @@ def load_model(modelDir, beta):
                 # modeldata = modeldata[:,1:]
                 logger.info('load model from %s , modelmatrix as %s', 
                         f, modeldata.shape)
-                if model:
+                if model != None:
                     model = np.concatenate((model, modeldata), axis=0)
                 else:
                     model = modeldata
