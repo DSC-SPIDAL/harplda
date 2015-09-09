@@ -295,6 +295,7 @@ public class EvaluateTopics {
 					System.exit(1);
 				}				
 			}
+			evaluator.printmodel();
 			
 			if (evaluator == null){
 				System.out.println("Unable to initialize a evaluator, quit");
@@ -305,7 +306,6 @@ public class EvaluateTopics {
 				
 				evaluator.printTypeTopicCounts(new File (wordTopicCountsFile.value));
 			}
-			
 			
 			evaluator.setPrintWords(showWords.value);
 

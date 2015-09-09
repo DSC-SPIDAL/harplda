@@ -1,5 +1,6 @@
 #!/bin/bash
 
+trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
 
 homedir=`dirname $0`
 homedir=`dirname $homedir`
@@ -53,10 +54,10 @@ init()
         alpha=2.5
         beta=0.1
      elif [ "$TESTSET" == "pubmed" ] ; then
-        # pubmed-test-200k
+        # pubmed-test-200k, pubmed-2M as train set
         datadir=$homedir/data/pubmed
-        gibbsdict=$datadir/pubmed.mrlda.reid.txt.wordid
-        harpdict=$datadir/pubmed.mrlda.reid.txt.wordid
+        gibbsdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
+        harpdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
         testset=$datadir/pubmed-test-200k.mallet.txt
         testdict=$datadir/pubmed-test-200k.mallet.dict
         testdoccnt=200000
@@ -66,8 +67,8 @@ init()
      elif [ "$TESTSET" == "pubmed-2" ] ; then
         # pubmed-test-200k
         datadir=$homedir/data/pubmed
-        gibbsdict=$datadir/pubmed.mrlda.reid.txt.wordid
-        harpdict=$datadir/pubmed.mrlda.reid.txt.wordid
+        gibbsdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
+        harpdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
         testset=$datadir/pubmed-test-200k-2.mallet.txt
         testdict=$datadir/pubmed-test-200k-2.mallet.dict
         testdoccnt=200000

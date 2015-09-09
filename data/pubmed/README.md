@@ -50,8 +50,9 @@ lowest word freq = 1
 mv all.dict.data pubmed-test-200k.mallet.dict
 mv pubmed-test-200k.mrlda.txt.mallet pubmed-test-200k.mallet.txt
 
-# whole dataset wordids
-cp wordid.out pubmed.mrlda.reid.txt.wordid
+# the training dataset wordids
+python ~/hpda/lda-test/src/preprocess/dict2wordids.py pubmed-2M.mrlda.txt.dict pubmed-2M.mrlda.txt.wordid
+
 ```
 
 

@@ -693,6 +693,10 @@ public class MarginalProbEstimator implements Serializable {
     }
 
 	
+	public void printmodel(){
+        System.out.printf("alphasum=%f", alphaSum);
+    }
+
 	public void writemodel(){
 		// hack to save .modeldata 
 	   	try {
