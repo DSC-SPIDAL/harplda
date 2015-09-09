@@ -51,7 +51,7 @@ def load_model(modelDir, beta):
                 # modeldata = modeldata[:,1:]
                 logger.info('load model from %s , modelmatrix as %s', 
                         f, modeldata.shape)
-                if model != None:
+                if model:
                     model = np.concatenate((model, modeldata), axis=0)
                 else:
                     model = modeldata
@@ -99,7 +99,9 @@ def align_dict(model, malletDict, harpDict):
     K,V = model.shape
     new_model = np.zeros((len(malletmap),V))
     for k in range(len(malletmap)):
-        new_model[k] = model[harpmap[malletmap[k]]]
+        # test dataset dict may be different with the traning set
+        if malletmap[k] in harpmap:
+            new_model[k] = model[harpmap[malletmap[k]]]
 
     # debug
     # 3161    christ  27
