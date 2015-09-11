@@ -21,6 +21,7 @@
  *  Created on: 28-Dec-2010
  *      
  */
+#include <iostream>
 
 #include "Training_Execution_Strategy.h"
 #include "Context.h"
@@ -43,6 +44,8 @@ void Training_Execution_Strategy::execute() {
     int optimize_interval = context.get_int("optimizestats");
     int burnin = context.get_int("burnin");
     int chkpt_interval = context.get_int("chkptinterval");
+    
+    std::cout << ">>>>>>>>>>> chkptinterval: " << chkpt_interval <<"\n";
 
     //Check if checkpoint metadata is available
     std::string prefix = context.get_string("inputprefix");
@@ -82,12 +85,19 @@ void Training_Execution_Strategy::execute() {
         }
         _pipeline.clear();
         _pipeline.destroy();
-        if (iter % chkpt_interval == 0) {
-            LOG(WARNING) << ">>>>>>>>>>> Check Pointing at iteration: "
+        
+        std::cout << ">>>>>>>>>>> run at iteration: " << iter;
+        
+        if ((iter == 1) || (iter % chkpt_interval == 0)) {
+            LOG(WARNING) << ">>>>>>>>>>> Save model at iteration: "
                     << iter;
-            std::string chkpt_state((char*) &iter, sizeof(int));
-            _checkpointer.save_metadata(chkpt_state);
-            _checkpointer.checkpoint();
+            //std::string chkpt_state((char*) &iter, sizeof(int));
+            //_checkpointer.save_metadata(chkpt_state);
+            //_checkpointer.checkpoint();
+            // 09112015, add model dump code here
+            std::cout << ">>>>>>>>>>> Save model at iteration: " << iter;
+            _model.savemodel(iter);
+
         }
     }
     LOG(WARNING) << "Parallel training Pipeline done";

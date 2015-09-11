@@ -46,6 +46,7 @@ public:
 
     //!Serialize to disk
     virtual bool save() = 0;
+    virtual bool savemodel(int iter) = 0;
 
     //!Explain: word mixtures for the latent topics
     virtual void write_statistics(WordIndexDictionary&) = 0;

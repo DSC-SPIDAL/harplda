@@ -127,6 +127,17 @@ bool Unigram_Model::save() {
     return true;
 }
 
+// 09112015, add model dump code here
+bool Unigram_Model::savemodel(int iter) {
+    //save to txtmatrix format
+    stringstream ss;
+    ss << iter;
+    string fname = ss.str();
+    _ttc->savemodel(fname);
+    //_alpha.savemodel(iter);
+}
+
+
 void Unigram_Model::write_statistics(WordIndexDictionary& dict) {
     if (_top_words_empty)
         get_eval();

@@ -23,7 +23,7 @@
  */
 
 #include <algorithm>
-
+#include <fstream>
 #include "TypeTopicCounts.h"
 #include "DocumentReader.h"
 #include "DocumentWriter.h"
@@ -367,6 +367,34 @@ void TypeTopicCounts::dump(string fname) {
 
     doc.Clear();
 }
+
+// 09112015, add model dump code here
+void TypeTopicCounts::savemodel(string fname) {
+    std::ofstream mf, hf;
+    mf.open(fname.c_str(), std::ofstream::out);
+
+    for (word_t i = 0; i < num_words; i++) {
+        topicCounts* topCnts = wt[i];
+        mf << i << " 0 ";
+        for (topic_t j = 0; j < topCnts->length; j++) {
+            cnt_topic_t ct = topCnts->items[j];
+            mf << " " << ct.choose.top << ":" << ct.choose.cnt;
+        }
+        mf << "\n";
+    }
+
+    mf.close();
+
+    //write .hyper
+    hf.open((fname + ".hyper").c_str(), std::ofstream::out);
+    hf << "#alpha : 0.01" << "\n";
+    hf << "#beta : 0.01" << "\n";
+    hf << "#numTopics : " << num_topics << "\n";
+    hf << "#numTypes : " << num_words << "\n";
+    hf.close();
+}
+
+
 /****************************** Initialization Ends **********************************/
 
 /****************************** Getters **********************************************/

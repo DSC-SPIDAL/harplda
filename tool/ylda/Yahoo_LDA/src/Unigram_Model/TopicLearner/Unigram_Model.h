@@ -48,6 +48,7 @@ public:
     double get_eval();
 
     bool save();
+    bool savemodel(int iter);
 
     void write_statistics(WordIndexDictionary&);
 

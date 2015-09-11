@@ -100,6 +100,7 @@ public:
             int& incoming_words);
     void estimate_alphas(double* alphas, double& alpha_sum);
     void dump(string fname);
+    void savemodel(string fname);
     /************* Init Ends ********/
 
     /************* Getters   ********/
