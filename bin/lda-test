@@ -60,6 +60,7 @@ init()
         harpdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
         testset=$datadir/pubmed-test-200k.mallet.txt
         testdict=$datadir/pubmed-test-200k.mallet.dict
+        traindict=$datadir/pubmed-2M.mallet.dict
         testdoccnt=200000
         testwordcnt=20372837
         alpha=0.05
@@ -112,7 +113,7 @@ case $CMD in
 
         ;;
 
-     evaluate-mallet) 
+     evaluate-mallet-native) 
         init
         # <harp model dir>
         modeldir=$1
@@ -139,6 +140,52 @@ case $CMD in
 
 
         ;;
+
+     evaluate-mallet) 
+        init
+        # <harp model dir>
+        modeldir=$1
+        savedir=`pwd`
+        cd $modeldir
+
+        malletfiles=`ls *.mallet 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            modelfiles=`ls mallet* 2>>/dev/null`
+            if [ "$?" -ne "0" ] ; then
+                echo "model files with prefix=mallet not found, quit..."
+                exit -2
+            else
+                matfiles=`ls *.hyper 2>>/dev/null`
+                if [ "$?" -ne "0" ] ; then
+                    # convert modelfiles into mallet modeldata files
+                    for f in `ls mallet*`; do
+                        fname=`basename $f `.mat
+                        echo "save model to txtmatrix: $fname......"
+                        $homedir/tool/mallet/bin/mallet evaluate-topics --word-topic-counts-file $fname --modelfile $f --input $testset
+                    done
+                else
+                    echo '.hyper files exists, skip covert to txtmatrix '
+                fi
+
+                # convert txtmatrix file to mallet modeldata
+                for f in `ls *.hyper`; do
+                    fname=`basename $f .hyper`
+                    python $homedir/src/preprocess/convertTxt2Mallet.py $fname $testdict $traindict
+                done
+            fi
+        else
+            echo '.mallet file exists, skip convert to modeldata '
+        fi
+
+        malletfiles=`ls *.mallet 2>>/dev/null`
+        if [ "$?" -eq "0" ] ; then
+            cd $savedir
+            python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
+            #check_ret
+        fi
+
+        ;;
+
 
     evaluate-gibbs) 
         init

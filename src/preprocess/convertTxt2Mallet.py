@@ -200,8 +200,9 @@ if __name__ == '__main__':
 
     model = align_dict(model, malletDict, harpDict)
 
-    logger.info('saving to .mallet')
-    basename = os.path.splitext(modelfile)[0]
-    save_model_sorted(basename + '.mallet', model, alpha[0], beta)
+    savefile = modelfile + '.mallet'
+    logger.info('saving to %s', savefile)
+    #basename = os.path.splitext(modelfile)[0]
+    save_model_sorted(savefile, model, alpha[0], beta)
 
 
