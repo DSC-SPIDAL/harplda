@@ -121,7 +121,7 @@ case $CMD in
 
         malletfiles=`ls *.mallet 2>>/dev/null`
         if [ "$?" -ne "0" ] ; then
-            modelfiles=`ls model.* 2>>/dev/null`
+            modelfiles=`ls model* 2>>/dev/null`
             if [ "$?" -ne "0" ] ; then
                 echo "model. files not found, quit..."
                 exit -2

@@ -15,7 +15,7 @@ head -2500000 pubmed.mrlda.reid.txt >pubmed-2.5M.mrlda.txt
 for f in `ls $prefix*`; do echo $f && python ~/hpda/lda-test/src/preprocess/mrlda2ylda.py $f; done
 
 # ylda -> mallet
-for f in `ls $prefix*.ylda`; do echo $f && ~/hpda/lda-test/tool/mallet/bin/mallet import-file --input $f --output `basename $f .ylda`.mallet --keep-sequence; done
+for f in `ls $prefix*.ylda`; do echo $f && ~/hpda/lda-test/tool/mallet/bin/mallet import-file --input $f --output `basename $f .ylda`.mallet --keep-sequence --token-regex "[\p{L}\p{N}_]+|[\p{P}]+"; done
 
 #3. run experiments
 sh do_mallet.sh

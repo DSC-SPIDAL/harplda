@@ -239,6 +239,41 @@ public class EvaluateTopics {
 				! probabilityFile.value.equals("-")) {
 				outputStream = new PrintStream(probabilityFile.value);
 			}
+
+			// add a new load estimator method, from converted model data --modeldata
+			MarginalProbEstimator evaluator = null; 
+			if (evaluatorFilename.value != null) {
+				evaluator =	MarginalProbEstimator.read(new File(evaluatorFilename.value));
+			}
+			else if (modeldataFilename.value != null){
+				
+				evaluator = readdata(modeldataFilename.value); 
+			}	
+			else if (modelFilename.value != null){
+				ParallelTopicModel topicModel = null;
+				try {
+					topicModel = ParallelTopicModel.read(new File(modelFilename.value));
+					evaluator = topicModel.getProbEstimator();
+				} catch (Exception e) {
+					System.out.println("Unable to restore saved topic model " + 
+								   modelFilename.value + ": " + e);
+					System.exit(1);
+				}				
+			}
+			evaluator.printmodel();
+			
+			if (evaluator == null){
+				System.out.println("Unable to initialize a evaluator, quit");
+				System.exit(1);				
+			}
+			
+			if (wordTopicCountsFile.value != null){
+				
+				evaluator.printTypeTopicCounts(new File (wordTopicCountsFile.value));
+                System.exit(1);
+			}
+			
+			evaluator.setPrintWords(showWords.value);
 			
 			InstanceList instances = InstanceList.load (new File(inputFile.value));
 			
@@ -275,40 +310,6 @@ public class EvaluateTopics {
 			}
 
 			
-			// add a new load estimator method, from converted model data --modeldata
-			MarginalProbEstimator evaluator = null; 
-			if (evaluatorFilename.value != null) {
-				evaluator =	MarginalProbEstimator.read(new File(evaluatorFilename.value));
-			}
-			else if (modeldataFilename.value != null){
-				
-				evaluator = readdata(modeldataFilename.value); 
-			}	
-			else if (modelFilename.value != null){
-				ParallelTopicModel topicModel = null;
-				try {
-					topicModel = ParallelTopicModel.read(new File(modelFilename.value));
-					evaluator = topicModel.getProbEstimator();
-				} catch (Exception e) {
-					System.out.println("Unable to restore saved topic model " + 
-								   modelFilename.value + ": " + e);
-					System.exit(1);
-				}				
-			}
-			evaluator.printmodel();
-			
-			if (evaluator == null){
-				System.out.println("Unable to initialize a evaluator, quit");
-				System.exit(1);				
-			}
-			
-			if (wordTopicCountsFile.value != null){
-				
-				evaluator.printTypeTopicCounts(new File (wordTopicCountsFile.value));
-			}
-			
-			evaluator.setPrintWords(showWords.value);
-
 			outputStream.println(evaluator.evaluateLeftToRight(instances, numParticles.value, 
 															   usingResampling.value,
 															   docProbabilityStream));

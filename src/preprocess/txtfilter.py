@@ -16,9 +16,6 @@ Usage:
 """
 
 import sys, os, math,re
-import numpy as np
-from scipy import stats, linalg
-from scipy.stats import entropy
 import logging
 
 logger = logging.getLogger(__name__)

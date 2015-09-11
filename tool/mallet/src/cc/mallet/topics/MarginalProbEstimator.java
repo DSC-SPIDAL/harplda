@@ -694,7 +694,16 @@ public class MarginalProbEstimator implements Serializable {
 
 	
 	public void printmodel(){
-        System.out.printf("alphasum=%f", alphaSum);
+        System.out.printf("alphasum=%f\n", alphaSum);
+
+    	for (int w = 0; w<10; w++){
+    		System.out.printf("typeTopicCount[%d].length =%d\n", w, typeTopicCounts[w].length );
+        }
+
+    	for (int w = 0; w<10; w++){
+    		System.out.printf("tokensPerTopic[%d] = %d\n", w, tokensPerTopic[w]);
+        }
+
     }
 
 	public void writemodel(){
@@ -711,27 +720,45 @@ public class MarginalProbEstimator implements Serializable {
 
 			out2.writeDouble(alpha[0]);
 			out2.writeDouble(beta);
+//	    		for (int w = 0; w<numTypes; w++){
+//				topic = typeTopicCounts[w][0] & topicMask;
+//    			for (int k=0, j=0; k<numTopics; k++){
+//    				if (k < topic) {
+//    					count = 0;
+//    					out2.writeInt(count);
+//    				}
+//    				else{
+//    					count = typeTopicCounts[w][j] >> topicBits;
+//    					out2.writeInt(count);
+//    					j ++;
+//    					if (j < typeTopicCounts[w].length ){
+//							topic = typeTopicCounts[w][j] & topicMask;
+//    					}
+//    					else{
+//    						topic = numTopics;
+//    					}
+//    				}
+//    				
+//    			}
+//    		}
 			
     		int count, topic;    		
     		for (int w = 0; w<numTypes; w++){
-				topic = typeTopicCounts[w][0] & topicMask;
-    			for (int k=0, j=0; k<numTopics; k++){
-    				if (k < topic) {
-    					count = 0;
+    			for (int k=0; k<numTopics; k++){
+    				if (k < typeTopicCounts[w].length ){
+    				    count = typeTopicCounts[w][k] >> topicBits;
+				        topic = typeTopicCounts[w][k] & topicMask;
     					out2.writeInt(count);
+    					out2.writeInt(topic);
+                        if (count ==0){
+                            break;
+                        }
     				}
-    				else{
-    					count = typeTopicCounts[w][j] >> topicBits;
-    					out2.writeInt(count);
-    					j ++;
-    					if (j < typeTopicCounts[w].length ){
-							topic = typeTopicCounts[w][j] & topicMask;
-    					}
-    					else{
-    						topic = numTopics;
-    					}
-    				}
-    				
+                    else{
+    					out2.writeInt(0);
+    					out2.writeInt(0);
+                        break;
+                    }
     			}
     		}
 		} catch (Exception e) {
