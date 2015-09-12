@@ -146,6 +146,29 @@ void WordIndexDictionary::dump(string fname) {
     }
 }
 
+//09132015, save dict to text wordids format
+void WordIndexDictionary::savedict(string fname) {
+    ifstream fcheck(fname.c_str());
+    if (fcheck) {
+	    LOG(INFO) << "WordIndexDictionary::savedict, file already exists";
+        return;
+    }
+
+    ofstream df;
+    df.open(fname.c_str(), std::ofstream::out);
+
+    //hdr.set_num_words(get_num_words());
+    int i = 0;
+    for (wimap::iterator beg = word_ind_map.begin(); beg != word_ind_map.end(); beg++) {
+        //wipair.add_word((*beg).first);
+        int cur_id = (*beg).second;
+        df << cur_id << "\t" << (*beg).first << "\t" << frequencies[cur_id].second << "\n";
+
+    }
+    df.close();
+}
+
+
 int WordIndexDictionary::verify_header(DocumentReader& doc_rdr) {
     header* hdr = new header;
     doc_rdr.read(hdr);

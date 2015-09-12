@@ -53,6 +53,7 @@ public:
     void print();
     bool match_word_index();
     void dump(string fname);
+    void savedict(string fname);
     void initialize_from_dict(WordIndexDictionary* dict, bool sort = false);
     void initialize_from_dump(string fname, int num_words = INT_MAX, bool sort =
             false);

@@ -60,6 +60,11 @@ void Unigram_Model_Training_Builder::init_dict() {
     LOG(WARNING) << "Initializing Dictionary from " << dict_dump;
     _dict->initialize_from_dump(dict_dump);
     LOG(WARNING) << "Dictionary Initialized";
+
+    // 09132015, hack to save the dictionary into text wordids format
+    // id \t term \t freq
+    _dict->savedict("dict.wordids");
+
 }
 
 WordIndexDictionary& Unigram_Model_Training_Builder::get_dict() {
