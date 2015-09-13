@@ -45,7 +45,7 @@ void Training_Execution_Strategy::execute() {
     int burnin = context.get_int("burnin");
     int chkpt_interval = context.get_int("chkptinterval");
     
-    std::cout << ">>>>>>>>>>> chkptinterval: " << chkpt_interval <<"\n";
+    //std::cout << ">>>>>>>>>>> chkptinterval: " << chkpt_interval <<"\n";
 
     //Check if checkpoint metadata is available
     std::string prefix = context.get_string("inputprefix");
@@ -86,7 +86,7 @@ void Training_Execution_Strategy::execute() {
         _pipeline.clear();
         _pipeline.destroy();
         
-        std::cout << ">>>>>>>>>>> run at iteration: " << iter;
+        //std::cout << ">>>>>>>>>>> run at iteration: " << iter;
         
         if ((iter == 1) || (iter % chkpt_interval == 0)) {
             LOG(WARNING) << ">>>>>>>>>>> Save model at iteration: "
@@ -95,7 +95,8 @@ void Training_Execution_Strategy::execute() {
             //_checkpointer.save_metadata(chkpt_state);
             //_checkpointer.checkpoint();
             // 09112015, add model dump code here
-            std::cout << ">>>>>>>>>>> Save model at iteration: " << iter;
+            //std::cout << ">>>>>>>>>>> Save model at iteration: " << iter;
+            LOG(INFO) << ">>>>>>>>>>> Save model at iteration: " << iter;
             _model.savemodel(iter);
 
         }
