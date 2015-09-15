@@ -120,10 +120,11 @@ int main(int argc, char *argv[]) {
         ttc->initialize_from_string(word_id-from,counts);
     }
 
-    string ttc_dump = FLAGS_outputprefix+".ttc.dump";
+    string ttc_dump = FLAGS_outputprefix+".ttc.gdump";
     LOG(WARNING) << "Part-" << FLAGS_clientid << " of global Word-Topic counts table initialized";
     LOG(WARNING) << "Saving it to " << ttc_dump;
     ttc->dump(ttc_dump);
+    ttc->savemodel("global_model");
 
     delete ttc;
     delete global_dict;

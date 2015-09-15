@@ -98,6 +98,7 @@ int main(int argc, char *argv[]) {
             << "Dumping global dictionary for later use by learnTopics into "
             << dict_dump << endl;
     dict->dump(dict_dump);
+    dict->savedict("global-dict.wordids");
     LOG(WARNING) << "Finished dictionary dump" << endl;
 
     delete dict;

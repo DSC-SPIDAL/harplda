@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Load mallet word-topic-output matrix txt file , convert into mallet estimator input file
+Load word-topic-output matrix txt file , merge them into one global modeldata file.
 
 input:
     matrix file
@@ -25,7 +25,8 @@ output: binary format (java use bigendian)
     if two result comes from different word-id, they should be aligned by dictionary matching.
 
 Usage:
-    convertTxt2Mallet <txt model file> <mallet dict> <harp dict>
+    * merge the modeldata txt files from input dir
+    mergeTxtModeldata <input modeldata dir> <output dir> <global dict file>
 
 """
 
@@ -73,14 +74,7 @@ def load_model(txtmodel):
         linecnt = 0
         for line in matf:
             line = line.strip()
-
-            # word id should be first number in the begining,
-            # but it's always start from 0, to num_words for mallet's output
-            # and it's local number for ylda Merge_Topics_Counts output
-            # so, we just use lineno as the word id, which is always correct.
-            # word =  int(line[:line.find(' ')])
-            word = linecnt
-
+            word =  int(line[:line.find(' ')])
             line = line[line.find('  ') + 2:]
             tokens = line.split(' ')
             linecnt += 1
@@ -199,9 +193,15 @@ if __name__ == '__main__':
         print(globals()['__doc__'] % locals())
         sys.exit(1)
 
-    modelfile = sys.argv[1]
-    malletDict = sys.argv[2]
-    harpDict = sys.argv[3]
+    modelDir = sys.argv[1]
+    outputdir = sys.argv[2]
+    globalDict = sys.argv[3]
+
+    # walk through the model dir
+    for dirpath, dnames, fnames in os.walk(modelDir):
+        for f in fnames:
+ 
+    
 
     model, alpha, beta = load_model(modelfile)
 
