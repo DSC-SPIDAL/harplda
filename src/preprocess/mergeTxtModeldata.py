@@ -2,181 +2,87 @@
 # -*- coding: utf-8 -*-
 
 """
-Load word-topic-output matrix txt file , merge them into one global modeldata file.
+In distributed YLDA, each node output it's modeldata locally, which should merged togather into a global one.
+This tool load multiple word-topic-output matrix txt files , merge them into one global modeldata file.
 
 input:
-    matrix file
-    wordid  wordfreq    topic:count ....
-    type + " " + totalCount + " " + [" " + topic + ":" + count]*
+    node m directory:
+        matrix file
+            wordid  wordfreq    topic:count ....
+            type + " " + totalCount + " " + [" " + topic + ":" + count]*
 
-    matrix hyper file
-    #alpha :
-    #beta : 
-    #numTopics :
-    #numTypes : 
+        matrix hyper file
+            #alpha :
+            #beta : 
+            #numTopics :
+            #numTypes : 
 
-output: binary format (java use bigendian)
-    numTopics   int
-    numWords    int
-    alpha   double
-    beta    double
-    model Matrix[numWords][numTopics]   int
+        dict.wordids (local dictionary)
+            id \t term \t freq
 
-    if two result comes from different word-id, they should be aligned by dictionary matching.
+    global_dict.wordids (global dictionary)
+
+output:
+    global directory:
+        matrix file
+        matrix hyper file
 
 Usage:
     * merge the modeldata txt files from input dir
-    mergeTxtModeldata <input modeldata dir> <output dir> <global dict file>
+    mergeTxtModeldata <node dir> <global dir> <global dict file>
 
 """
 
 import sys, os, math,re
 import numpy as np
-from scipy import stats
-from scipy.stats import entropy
 import struct
 import logging
+from LDAModelData import LDAModelData
 
 logger = logging.getLogger(__name__)
 
-def load_model(txtmodel):
-    """
-    input:
-        modelfile
-
-    return:
-        model is a word-topic count matrix
-    """
-    model = None
+def merge_one_model(dirlist, modelfile, modeldict, globaldict, outputdir, fullload = False):
     
-    #load .hyper
-    alpha = []
-    beta = 0.
-    numTopics, numTypes = 0, 0
-    with open(txtmodel + '.hyper', 'r') as hyperf:
-        line = hyperf.readline().strip()
-#values = line[line.find(':') + 2:].split(' ')
-#        print values
-        alpha = [float(x) for x in line[line.find(':') + 2:].split(' ')]
-        line = hyperf.readline().strip()
-        beta = float(line[line.find(':') + 1:])
-        line = hyperf.readline().strip()
-        numTopics = int(line[line.find(':') + 1:])
-        line = hyperf.readline().strip()
-        numTypes = int(line[line.find(':') + 1:])
+    logger.info('merge_one_model for modelfile=%s, globaldir=%s, outputdir=%s', modelfile, globaldict, outputdir)
+    #load modles
 
-        logger.debug('load hyper as: numTopics=%d, numTypes=%d, alpha[0]=%f, beta=%f', numTopics, numTypes, alpha[0], beta)
+    models = []
+    for dir in dirlist:
+        model = LDAModelData()
+        model.load_from_txt(dir + '/' + modelfile, fullload=fullload)
+        model.align_dict(globaldict, dir + '/' + modeldict)
+        models.append(model)
 
-    #load model data
-    model = np.zeros((numTypes, numTopics))
-    logger.debug('loading model data....')
-    with open(txtmodel, 'r') as matf:
-        linecnt = 0
-        for line in matf:
-            line = line.strip()
-            word =  int(line[:line.find(' ')])
-            line = line[line.find('  ') + 2:]
-            tokens = line.split(' ')
-            linecnt += 1
-            for item in tokens:
-                #print 'item=', item
-                tp = item.split(':')
-                #print tp[0], tp[1]
-                model[word][int(tp[0])] = int(tp[1])
+    # run merge
+    num_words, num_topics = models[0].model.shape
+    for id in xrange(num_words):
+        if fullload:
+            nonzero = np.count_nonzero(models[0].model[id]) 
+        else:
+            nonzero = (models[0].model[id][0] != '')
+        if nonzero == 0:
+            # try to find a none zero row
+            found = False
+            for m in range(1, len(models)):
+                if fullload:
+                    nonzero = np.count_nonzero(models[m].model[id]) 
+                else:
+                    nonzero = (models[m].model[id][0] != '')
 
-    # verify data format
-    if linecnt != numTypes:
-        logger.error('txtmodel file format error, linecnt=%d, numTypes=%d', linecnt, numTypes)
-
-    # sort the matrix by the first column            
-    #model = model[model[:,0].argsort()]
-    #model = np.sort(model, axis=0)
-
-    #model = model[:, 1:]
-    logger.info('done, load model data as %s', model.shape)
-    return model, alpha, beta
-
-def align_dict(model, malletDict, harpDict):
-    """
-    Align word id between two model system
-
-    input:
-        malletDict  <id term>
-        harpDict    <id term freq>
-
-    output:
-        model       realigned
-
-    """
-    mallet = open(malletDict, 'r')
-    harp = open(harpDict, 'r')
-
-    # read in harpDict
-    logger.info('read mallet dict from %s', malletDict)
-    malletmap = dict()
-    for line in mallet:
-        tokens = line.strip().split('\t')
-        malletmap[int(tokens[0])] = tokens[1]
-    
-    harpmap = dict()
-    logger.info('read harp dict from %s', harpDict)
-    for line in harp:
-        tokens = line.strip().split('\t')
-        harpmap[tokens[1]] = int(tokens[0])
-    
-
-    K,V = model.shape
-    new_model = np.zeros((len(malletmap),V))
-    for k in range(len(malletmap)):
-        # test dataset dict may be different with the traning set
-        if malletmap[k] in harpmap:
-            new_model[k] = model[harpmap[malletmap[k]]]
-
-    # debug
-    # 3161    christ  27
-    #logger.debug('new: term = %s, id = 3137, topics count = %s', malletmap[3137], new_model[3137])
-    #logger.debug('old: term = christ, id = %d, topics count = %s', harpmap['christ'], model[harpmap['christ']])
-
-
-    logger.info('align model data as %s', new_model.shape)
-    return new_model
-
-def save_model(fname, model, alpha, beta):
-    with open(fname, 'wb') as f:
-        V, K = model.shape
-        f.write(struct.pack('>i', K))
-        f.write(struct.pack('>i', V))
-        f.write(struct.pack('>d', alpha))
-        f.write(struct.pack('>d', beta))
-
-        for w in range(V):
-            for k in range(K):
-                f.write(struct.pack('>i', model[w][k]))
-
-def save_model_sorted(fname, model, alpha, beta):
-    """
-    Save the topicCount[][] each line sorted by count descendently
-    """
-    with open(fname, 'wb') as f:
-        V, K = model.shape
-        f.write(struct.pack('>i', K))
-        f.write(struct.pack('>i', V))
-        f.write(struct.pack('>d', alpha))
-        f.write(struct.pack('>d', beta))
-
-        index = np.argsort(model)
-        for w in range(V):
-            for k in range(-1, -K-1, -1):
-                # sort in acscent order
-                col = index[w][k]
-                if (model[w][col] == 0):
-                    # a row end by (0,0) pair
-                    f.write(struct.pack('>i', 0))
-                    f.write(struct.pack('>i', 0))
+                if nonzero != 0:
+                    models[0].model[id] = models[m].model[id]
+                    found = True
                     break
+            if found == False:
+                logger.error('no model data for word id=%d', id)
+                #output current models
+                for m in range(len(models)):
+                    logger.error('%d model[%d]=%s', m , id, models[m].model[id])
+    
+                break
 
-                f.write(struct.pack('>i', model[w][col]))
-                f.write(struct.pack('>i', col))
+    # save model
+    models[0].save_to_txt(outputdir + '/' + modelfile)
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
@@ -197,19 +103,29 @@ if __name__ == '__main__':
     outputdir = sys.argv[2]
     globalDict = sys.argv[3]
 
-    # walk through the model dir
+    # walk through the model dir, get the first level dirs
+    dirlist = []
     for dirpath, dnames, fnames in os.walk(modelDir):
-        for f in fnames:
- 
+        dirlist = [modelDir + '/' + d for d in dnames]
+        break
+    logger.debug('found nodes: %s', dirlist)
+
+    # walk through each node dir, run merge
+    mfs = []
+    for dirpath, dnames, fnames in os.walk(dirlist[0]):
+        
+        #for fname in fnames:
+        #if fname.endwith('.hyper'):
+        #    mfs.append(fname)
+        mfs = [ os.path.splitext(f)[0] for f in fnames if f.endswith('.hyper')]
+        break
+
+    logger.debug('found model files: %s', mfs)
     
+    # run merge
+    for f in mfs:
+        merge_one_model(dirlist, f, 'dict.wordids', globalDict, outputdir)
 
-    model, alpha, beta = load_model(modelfile)
 
-    model = align_dict(model, malletDict, harpDict)
-
-    savefile = modelfile + '.mallet'
-    logger.info('saving to %s', savefile)
-    #basename = os.path.splitext(modelfile)[0]
-    save_model_sorted(savefile, model, alpha[0], beta)
 
 
