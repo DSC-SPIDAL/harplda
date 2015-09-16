@@ -55,12 +55,12 @@ if __name__ == '__main__':
         sys.exit(1)
 
     modelfile = sys.argv[1]
-    malletDict = sys.argv[2]
-    harpDict = sys.argv[3]
+    newdict = sys.argv[2]
+    traindict = sys.argv[3]
 
     model = LDAModelData()
     model.load_from_txt(modelfile)
-    model.align_dict(malletDict, harpDict)
+    model.align_dict(newdict, traindict)
 
     savefile = modelfile + '.mallet'
     logger.info('saving to %s', savefile)

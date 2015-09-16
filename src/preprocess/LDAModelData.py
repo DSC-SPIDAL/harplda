@@ -36,14 +36,9 @@ logger = logging.getLogger(__name__)
 
 
 class LDAModelData():
-    # model is:
-    model = None
-    alpha = []
-    beta = 0.
-    fullload = True
-
     def __init__(self):
         self.model = None
+        self.num_topics = 0
         self.alpha = []
         self.beta = 0.
         self.fullload = True
@@ -78,7 +73,7 @@ class LDAModelData():
             line = hyperf.readline().strip()
             numTypes = int(line[line.find(':') + 1:])
     
-            logger.debug('load hyper as: numTopics=%d, numTypes=%d, alpha[0]=%f, beta=%f', numTopics, numTypes, alpha[0], beta)
+            logger.debug('load hyper %s as: numTopics=%d, numTypes=%d, alpha[0]=%f, beta=%f', txtmodel, numTopics, numTypes, alpha[0], beta)
     
         #load model data
         if fullload:
@@ -86,12 +81,20 @@ class LDAModelData():
         else:
             # save the whole row string
             model = np.zeros((numTypes, 1), dtype=np.object)
-        logger.debug('loading model data....')
+        logger.debug('loading model data....,model.shape=%s', model.shape)
         with open(txtmodel, 'r') as matf:
             linecnt = 0
             for line in matf:
                 line = line.strip()
-                line = line[line.find('  ') + 2:]
+                idx = line.find('  ')
+                line = line[idx + 2:]
+
+                # hacks
+                #idx = line.find(' 0 ')
+                #line = line[idx + 3:]
+                if (idx <= 0):
+                    logger.error('txt model file format error')
+                    return
     
                 # word id should be first number in the begining,
                 # but it's always start from 0, to num_words for mallet's output
@@ -130,6 +133,7 @@ class LDAModelData():
         self.model = model
         self.alpha = alpha
         self.beta = beta
+        self.num_topics = numTopics
         self.fullload = fullload
 
         return model, alpha, beta
@@ -138,8 +142,10 @@ class LDAModelData():
         """
         Refer to :ylda/src/Unigram_Models/Topicsxxx/TypeTopicCounts.cpp:savemodel
         """
-        logger.info('save model to txt as ', txtmodel)
+        logger.info('save model to txt as %s', txtmodel)
         num_words, num_topics = self.model.shape
+        # if not fullload, num_topics is 1 always
+        num_topics = self.num_topics
         with open(txtmodel, 'w') as mf:
             for i in xrange(num_words):
                 prefix = str(i) + ' 0 '
@@ -153,7 +159,7 @@ class LDAModelData():
                     # a litter different to ylda model data, here content is not sorted
                     mf.write(prefix + content + '\n')
                 else:
-                    mf.write(prefix + str(self.model[i][0]) + '\n')
+                    mf.write(prefix + ' ' + str(self.model[i][0]) + '\n')
 
         with open(txtmodel+'.hyper', 'w') as hf:
             content = ','.join([str(alpha) for alpha in self.alpha])
@@ -197,10 +203,10 @@ class LDAModelData():
         else:
             new_model = np.zeros((len(newmap),V), dtype=np.object)
 
-        #for k in range(len(newmap)):
-        #    # test dataset dict may be different with the traning set
-        #    if newmap[k] in oldmap:
-        #        new_model[k] = self.model[oldmap[newmap[k]]]
+        for k in range(len(newmap)):
+            # test dataset dict may be different with the traning set
+            if newmap[k] in oldmap:
+                new_model[k] = self.model[oldmap[newmap[k]]]
     
         # debug
         # 3161    christ  27
@@ -208,9 +214,9 @@ class LDAModelData():
         #logger.debug('old: term = christ, id = %d, topics count = %s', oldmap['christ'], model[oldmap['christ']])
     
 
-        for w in range(5):
-            logger.debug('new model[%d]=%s', w, new_model[w])
-            logger.debug('old model[%d]=%s', w, self.model[w])
+        #for w in range(5):
+        #    logger.debug('new model[%d]=%s', w, new_model[w])
+        #    logger.debug('old model[%d]=%s', w, self.model[w])
     
         logger.info('align model data as %s', new_model.shape)
         self.model = new_model
@@ -219,6 +225,7 @@ class LDAModelData():
     def save_to_binary_full(self, fname):
         with open(fname, 'wb') as f:
             V, K = self.model.shape
+            K = self.num_topics
             f.write(struct.pack('>i', K))
             f.write(struct.pack('>i', V))
             f.write(struct.pack('>d', self.alpha[0]))
@@ -234,6 +241,10 @@ class LDAModelData():
         """
         with open(fname, 'wb') as f:
             V, K = self.model.shape
+            if K != self.num_topics:
+                logger.error(' model data(%d,%d) mismatch with .hyper(k=%d)', V,K, self.num_topics)
+                return
+
             f.write(struct.pack('>i', K))
             f.write(struct.pack('>i', V))
             f.write(struct.pack('>d', self.alpha[0]))

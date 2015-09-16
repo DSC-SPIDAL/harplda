@@ -54,23 +54,31 @@ def merge_one_model(dirlist, modelfile, modeldict, globaldict, outputdir, fulllo
         models.append(model)
 
     # run merge
+    logger.info('merge begins.................')
+
+    #logger.debug('nonzero cnt = %d', np.count_nonzero(models[0].model))
+    #models[0].save_to_txt('test/debug')
+
     num_words, num_topics = models[0].model.shape
     for id in xrange(num_words):
         if fullload:
             nonzero = np.count_nonzero(models[0].model[id]) 
         else:
-            nonzero = (models[0].model[id][0] != '')
+            nonzero = (models[0].model[id][0] != 0)
         if nonzero == 0:
+            #logger.debug('word %d missed', id)
             # try to find a none zero row
             found = False
             for m in range(1, len(models)):
                 if fullload:
                     nonzero = np.count_nonzero(models[m].model[id]) 
                 else:
-                    nonzero = (models[m].model[id][0] != '')
+                    nonzero = (models[m].model[id][0] != 0)
 
                 if nonzero != 0:
                     models[0].model[id] = models[m].model[id]
+                    #if id == 126589:
+                    #    logger.info('debug: found missed word %d at id=%d, =>%s', id, m, models[m].model[id])
                     found = True
                     break
             if found == False:
@@ -82,6 +90,7 @@ def merge_one_model(dirlist, modelfile, modeldict, globaldict, outputdir, fulllo
                 break
 
     # save model
+    models[0].alpha = [0.05]
     models[0].save_to_txt(outputdir + '/' + modelfile)
 
 if __name__ == '__main__':
@@ -108,6 +117,7 @@ if __name__ == '__main__':
     for dirpath, dnames, fnames in os.walk(modelDir):
         dirlist = [modelDir + '/' + d for d in dnames]
         break
+    dirlist = sorted(dirlist)
     logger.debug('found nodes: %s', dirlist)
 
     # walk through each node dir, run merge
@@ -125,6 +135,7 @@ if __name__ == '__main__':
     # run merge
     for f in mfs:
         merge_one_model(dirlist, f, 'dict.wordids', globalDict, outputdir)
+        #break
 
 
 

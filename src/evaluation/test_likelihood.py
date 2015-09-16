@@ -31,8 +31,12 @@ Usage:
 
 import sys,os,re
 import numpy as np
-import matplotlib.pyplot as plt
 import logging
+try:
+    import matplotlib.pyplot as plt
+    matplotlib_available = True
+except ImportError:
+    matplotlib_available = False
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +67,8 @@ def run_mallet_evaluator(mallet, model, data, trainer):
         ret = os.system(command)
         if ret:
             # something wrong
+            # remove the l_file
+            os.remove(l_file)
             return 0
 
     #calc the likelihood and perplexity 
@@ -129,7 +135,8 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer):
     for dirpath, dnames, fnames in os.walk(modelDir):
         for f in fnames:
             if f.endswith(ext):
-                m = re.search('.*[\.-]([0-9]*)' + ext, f)
+                #m = re.search('.*[\.-]([0-9]*)' + ext, f)
+                m = re.search('([0-9]*)' + ext, f)
                 if m:
                     iternum = int(m.group(1))
 
@@ -174,6 +181,10 @@ def update_likelihood(likelihoodfile, num_docs, num_words):
 
 
 def draw_likelihood(likelihoods, modelname, fig, show = False):
+    if not matplotlib_available:
+        logger.error('matplotlib not imported, bye....')
+        return
+
     logger.debug('plot the matrix')
 
     x = likelihoods[:,0]
@@ -194,6 +205,10 @@ def draw_convergence(fig, show = False):
     """
     Draw convergence graph, load likelihood data from .likelihood data
     """
+    if not matplotlib_available:
+        logger.error('matplotlib not imported, bye....')
+        return
+
     plt.title('Convergence of LDA Topic Model')
     plt.xlabel('Iteration Number')
     plt.ylabel('Perplexity')
@@ -260,7 +275,7 @@ if __name__ == "__main__":
 
     logger.info('test set %s has %d docs and %d words', data, num_docs, num_words)
 
-    if os.path.exists(modelname):
+    if os.path.isdir(modelname):
         # if input a directory name
         likelihoods = calc_dir(malletPath, modelname, data, num_docs, num_words,'.mallet', trainer)
 
@@ -268,6 +283,7 @@ if __name__ == "__main__":
         draw_likelihood(likelihoods, modelname, modelname + '.png', True)
 
     else:
+        logger.info('calc_file %s', modelname + '.mallet')
         calc_file(malletPath, modelname+'.mallet', data, num_docs, num_words, trainer)
     
 

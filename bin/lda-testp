@@ -1,9 +1,13 @@
 #!/bin/bash
 
 trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
-
 homedir=`dirname $0`
 homedir=`dirname $homedir`
+
+if [ ! -d $homedir/src ]; then
+    homedir=$_INSTDIR_
+fi
+#echo $homedir
 
 check_ret()
 {
@@ -85,6 +89,16 @@ init()
     fi
 }
 
+convert(){
+    #python $homedir/src/preprocess/convertTxt2Mallet.py $1 $testdict $traindict
+    python $_INSTDIR_/src/preprocess/convertTxt2Mallet.py $1 $2 $3
+}
+
+do_evaluate(){
+    #$modeldir $testset $testdoccnt $testwordcnt
+    python $_INSTDIR_/src/evaluation/test_likelihood.py $_INSTDIR_/tool/mallet/bin/ harp $1 $2 $3 $4
+}
+
 # evalutor
 eval_txtmodeldata()
 {
@@ -116,26 +130,47 @@ eval_txtmodeldata()
             echo '.hyper files exists, skip covert to txtmatrix '
         fi
 
-        # convert txtmatrix file to mallet modeldata
+        argfiles=""
+        #try parallel
         for f in `ls *.hyper`; do
             fname=`basename $f .hyper`
-            python $homedir/src/preprocess/convertTxt2Mallet.py $fname $testdict $traindict
+            argfiles=$argfiles" "$fname
         done
+
+        export -f convert
+ 
+        cmd="parallel --xapply --jobs 4 convert ::: $argfiles ::: $testdict ::: $traindict"
+        echo $cmd
+        `$cmd`
+
     else
         echo '.mallet file exists, skip convert to modeldata '
     fi
 
     malletfiles=`ls *.mallet 2>>/dev/null`
     if [ "$?" -eq "0" ] ; then
-        cd $savedir
-        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
+        #cd $savedir
+        #python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
         #check_ret
+
+        argfiles=""
+        #try parallel
+        for f in $malletfiles; do
+            fname=`basename $f .mallet`
+            argfiles=$argfiles" "$fname
+        done
+
+        export -f do_evaluate
+ 
+        cmd="parallel --xapply --jobs 8 do_evaluate ::: $argfiles ::: $testset ::: $testdoccnt ::: $testwordcnt"
+        echo $cmd
+        `$cmd`
     fi
 }
 
 
 # start here
-
+#export TESTSET='pubmed'
 CMD=$1
 shift
 
