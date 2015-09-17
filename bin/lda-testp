@@ -89,6 +89,23 @@ init()
     fi
 }
 
+#functions for parallel
+getArgfile() {
+    ext=$1
+    argfiles=""
+    #try parallel
+    for f in `ls *.$ext`; do
+        fname=`basename $f .$ext`
+        argfiles=$argfiles" "$fname
+    done
+    echo $argfiles
+}
+
+do_writetxtmodel(){
+    #echo "save model to txtmatrix: $fname......" 
+    $i_INSTDIR_/tool/mallet/bin/mallet evaluate-topics --word-topic-counts-file $1 --modelfile $2 --input $3
+}
+
 convert(){
     #python $homedir/src/preprocess/convertTxt2Mallet.py $1 $testdict $traindict
     python $_INSTDIR_/src/preprocess/convertTxt2Mallet.py $1 $2 $3
@@ -121,25 +138,39 @@ eval_txtmodeldata()
                 exit -2
             fi
  
+            
+            #for f in `ls mallet*`; do
+            #    fname=`basename $f `.mat
+            #    echo "save model to txtmatrix: $fname......"
+            #    $homedir/tool/mallet/bin/mallet evaluate-topics --word-topic-counts-file $fname --modelfile $f --input $testset
+            #done
+            txtfile=""
+            modelfiles=""
             for f in `ls mallet*`; do
-                fname=`basename $f `.mat
-                echo "save model to txtmatrix: $fname......"
-                $homedir/tool/mallet/bin/mallet evaluate-topics --word-topic-counts-file $fname --modelfile $f --input $testset
+                txtfile=$txtfile" "`basename $f `.mat
+                modelfiles=$modelfiles" "$f
             done
+
+            export -f do_writetxtmodel 
+ 
+            cmd="parallel --xapply --jobs 8 do_writetxtmodel ::: $txtfile ::: $modelfiles ::: $testset"
+            echo $cmd
+            `$cmd`
+
         else
             echo '.hyper files exists, skip covert to txtmatrix '
         fi
 
-        argfiles=""
-        #try parallel
-        for f in `ls *.hyper`; do
-            fname=`basename $f .hyper`
-            argfiles=$argfiles" "$fname
-        done
+        argfiles=$(getArgfile 'hyper')
+        ##try parallel
+        #for f in `ls *.hyper`; do
+        #    fname=`basename $f .hyper`
+        #    argfiles=$argfiles" "$fname
+        #done
 
         export -f convert
  
-        cmd="parallel --xapply --jobs 4 convert ::: $argfiles ::: $testdict ::: $traindict"
+        cmd="parallel --xapply --jobs 8 convert ::: $argfiles ::: $testdict ::: $traindict"
         echo $cmd
         `$cmd`
 
@@ -153,12 +184,12 @@ eval_txtmodeldata()
         #python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
         #check_ret
 
-        argfiles=""
-        #try parallel
-        for f in $malletfiles; do
-            fname=`basename $f .mallet`
-            argfiles=$argfiles" "$fname
-        done
+        argfiles=$(getArgfile 'mallet')
+        ##try parallel
+        #for f in $malletfiles; do
+        #    fname=`basename $f .mallet`
+        #    argfiles=$argfiles" "$fname
+        #done
 
         export -f do_evaluate
  
