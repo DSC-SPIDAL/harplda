@@ -1,0 +1,5 @@
+echo "run formatter on j-123ib"
+cd /mnt/vol1/pengb/hpda/test/ylda/work
+for f in `ls /mnt/vol1/pengb/hpda/test/ylda/enwiki-1M/j-123ib` ; do cat /mnt/vol1/pengb/hpda/test/ylda/enwiki-1M/j-123ib/$f >>input.ylda ; done
+cd /mnt/vol1/pengb/hpda/ylda && source /mnt/vol1/pengb/hpda/ylda/setLibVars.sh
+cd /mnt/vol1/pengb/hpda/test/ylda/work && cat input.ylda | /mnt/vol1/pengb/hpda/ylda/formatter
