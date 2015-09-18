@@ -103,17 +103,17 @@ getArgfile() {
 
 do_writetxtmodel(){
     #echo "save model to txtmatrix: $fname......" 
-    $i_INSTDIR_/tool/mallet/bin/mallet evaluate-topics --word-topic-counts-file $1 --modelfile $2 --input $3
+    $_INSTDIR_/tool/mallet/bin/mallet evaluate-topics --word-topic-counts-file $1 --modelfile $2 --input $3
 }
 
 convert(){
     #python $homedir/src/preprocess/convertTxt2Mallet.py $1 $testdict $traindict
-    python $_INSTDIR_/src/preprocess/convertTxt2Mallet.py $1 $2 $3
+    python -m preprocess.convertTxt2Mallet $1 $2 $3
 }
 
 do_evaluate(){
     #$modeldir $testset $testdoccnt $testwordcnt
-    python $_INSTDIR_/src/evaluation/test_likelihood.py $_INSTDIR_/tool/mallet/bin/ harp $1 $2 $3 $4
+    python -m evaluation.test_likelihood $_INSTDIR_/tool/mallet/bin/ harp $1 $2 $3 $4
 }
 
 # evalutor
@@ -147,7 +147,7 @@ eval_txtmodeldata()
             txtfile=""
             modelfiles=""
             for f in `ls mallet*`; do
-                txtfile=$txtfile" "`basename $f `.mat
+                txtfile=$txtfile" mat-"`basename $f `
                 modelfiles=$modelfiles" "$f
             done
 
@@ -155,7 +155,7 @@ eval_txtmodeldata()
  
             cmd="parallel --xapply --jobs 8 do_writetxtmodel ::: $txtfile ::: $modelfiles ::: $testset"
             echo $cmd
-            `$cmd`
+            $cmd
 
         else
             echo '.hyper files exists, skip covert to txtmatrix '
@@ -172,7 +172,7 @@ eval_txtmodeldata()
  
         cmd="parallel --xapply --jobs 8 convert ::: $argfiles ::: $testdict ::: $traindict"
         echo $cmd
-        `$cmd`
+        $cmd
 
     else
         echo '.mallet file exists, skip convert to modeldata '
@@ -195,7 +195,7 @@ eval_txtmodeldata()
  
         cmd="parallel --xapply --jobs 8 do_evaluate ::: $argfiles ::: $testset ::: $testdoccnt ::: $testwordcnt"
         echo $cmd
-        `$cmd`
+        $cmd
     fi
 }
 
