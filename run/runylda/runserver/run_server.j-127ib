@@ -1,3 +1,0 @@
-echo "run DM_Server on j-127ib"
-cd /mnt/vol1/pengb/hpda/ylda && source /mnt/vol1/pengb/hpda/ylda/setLibVars.sh
-cd /mnt/vol1/pengb/hpda/test/ylda/work && nohup /mnt/vol1/pengb/hpda/ylda/DM_Server 1 29 30 10.16.0.127:10000 --Ice.ThreadPool.Server.SizeMax=9 &
