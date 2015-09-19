@@ -72,6 +72,7 @@ cd global_dict
 sh ../scripts/build_gdict.sh ../conf/juliet.hostname
 
 cd modeldump
+cp ../runserver/server.list .
 sh ../scripts/make_modeldump.sh ../conf/juliet.hostname
 cpush * /mnt/vol1/pengb/hpda/test/bin
 cexec 'sh  "/mnt/vol1/pengb/hpda/test/bin/run_modeldump."$HOSTNAME'
