@@ -111,6 +111,12 @@ convert(){
     python -m preprocess.convertTxt2Mallet $1 $2 $3
 }
 
+do_convertHarp(){
+    #python $homedir/src/preprocess/convertHarp2Mallet.py $d $alpha $beta $testdict $harpdict
+    python -m preprocess.convertHarp2Mallet $1 $2 $3 $4 $5
+
+}
+
 do_evaluate(){
     #$modeldir $testset $testdoccnt $testwordcnt
     python -m evaluation.test_likelihood $_INSTDIR_/tool/mallet/bin/ harp $1 $2 $3 $4
@@ -196,6 +202,8 @@ eval_txtmodeldata()
         cmd="parallel --xapply --jobs 8 do_evaluate ::: $argfiles ::: $testset ::: $testdoccnt ::: $testwordcnt"
         echo $cmd
         $cmd
+
+
     fi
 }
 
@@ -223,7 +231,31 @@ case $CMD in
         modeldir=$1
         savedir=`pwd`
         cd $modeldir
-        for d in `ls`; do python $homedir/src/preprocess/convertHarp2Mallet.py $d $alpha $beta $testdict $harpdict; done
+
+        malletfiles=`ls *.mallet 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            argfiles=""
+            for d in `ls`; do
+                argfiles=$argfiles" "$d
+            done
+            export -f do_convertHarp
+
+            traindict=$harpdict
+            #do python $homedir/src/preprocess/convertHarp2Mallet.py $d $alpha $beta $testdict $harpdict; done
+            cmd="parallel --xapply --jobs 8 do_convertHarp ::: $argfiles ::: $alpha ::: $beta ::: $testdict ::: $traindict"
+            echo $cmd
+            $cmd
+
+        else
+            echo '.mallet file exists, skip convert to modeldata '
+        fi
+
+        argfiles=$(getArgfile 'mallet')
+        #python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
+        export -f do_evaluate
+        cmd="parallel --xapply --jobs 8 do_evaluate ::: $argfiles ::: $testset ::: $testdoccnt ::: $testwordcnt"
+        echo $cmd
+        $cmd
 
         cd $savedir
         python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
@@ -268,6 +300,9 @@ case $CMD in
         traindict=$malletdict
         eval_txtmodeldata
 
+        cd $savedir
+        # at last step, just collect the likelihood results files under the modeldir
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
        ;;
 
      evaluate-ylda) 
@@ -280,6 +315,9 @@ case $CMD in
         traindict=$2
         eval_txtmodeldata
 
+        cd $savedir
+        # at last step, just collect the likelihood results files under the modeldir
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
        ;;
 
     evaluate-gibbs) 
