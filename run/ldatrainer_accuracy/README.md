@@ -1,11 +1,28 @@
 LDATrainer Accuracy Experiments
 ================================
-
 Trainset: pubmed-2M  
 Testset : pubmed-200k  
 Trainer : mallet, ldartt, ylda  
 
-### mallet  
+### experiments result  
+working dir @morningstar:/home/pb/hpda/test/pubmed
+
+trainer-compare
+    ldartt,mallet, ylda
+trainer-var
+    same configuration, run multiple times, what's the variance?
+ldartt-configure
+    ldartt- four configurations: node, threads, parts
+ldartt-threads
+    different threads setting on each node: 16, 32, 64
+ldartt-parts
+    different parts setting: 0.5k, 1k, 5k, 10k, ...
+
+
+### scripts
+refer to scripts/ and scripts under each experiment directory
+
+* mallet  
 server: m4:/scratch/pengb/hpda/pubmed/mallet/pubmed2m-lh
 
 sh run_mallet.sh ../../pubmed-2M.mrlda.txt.mallet  
@@ -13,25 +30,16 @@ python learn.py " ~/hpda/lda-test/tool/mallet/bin/mallet train-topics --input $1
 
 ~/hpda/lda-test/bin/lda-test evaluate-mallet convert
 
-### ldartt  
+* ldartt  
 server: changping60:/mnt/disk1/pb/hpda/test/harplda/pubmed/ldartt
 
 ldartt-trainer.sh
 
 ldartt-eval.sh
 
-### ylda  
+* ylda  
 cluster: madrid:/N/u/pengb/hpda/test/ylda
 
-refer to $lda-test/run/ylda
+refer to $lda-test/run/runylda
 
-### experiments result  
-morningstar:/home/pb/hpda/test/pubmed
 
-#### exp-1
-ldartt,mallet, ylda
-
-#### exp-2
-ldartt- four configurations
-
-3. 
