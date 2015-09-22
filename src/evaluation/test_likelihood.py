@@ -136,7 +136,7 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer):
         for f in fnames:
             if f.endswith(ext):
                 #m = re.search('.*[\.-]([0-9]*)' + ext, f)
-                m = re.search('([0-9]*)' + ext, f)
+                m = re.search('([0-9]+)' + ext, f)
                 if m:
                     iternum = int(m.group(1))
 
