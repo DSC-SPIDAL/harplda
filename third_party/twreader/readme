@@ -1,0 +1,7 @@
+
+#如果只读取一个以天网格式保存网页的文件,输出数据保存在extractpages.txt中
+./twreader page.dat > extractpages.txt
+
+#如果要把CWT200g的数据从头到尾读一遍,输出数据保存在extractpages.txt中
+find ~/CWT200g/ -name 'page.dat' -printf "Reading %f\n" -exec ./twreader {} > extractpages.txt \;
+
