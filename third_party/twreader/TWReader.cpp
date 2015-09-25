@@ -131,18 +131,27 @@ const TWReader::T_PageRecord *TWReader::nextRecord() throw (TWReaderException)
 
         //cout << "reading content" << mPageRecord.length << "\n";
 
+        try {
+		    //! 开始读取网页内容.
+		    char *tBuffer = new char[mPageRecord.length+1];
+		    memset(tBuffer, 0, mPageRecord.length+1);
+		    mTWFileStream.read(tBuffer, mPageRecord.length);
 
-		//! 开始读取网页内容.
-		char *tBuffer = new char[mPageRecord.length+1];
-		memset(tBuffer, 0, mPageRecord.length+1);
-		mTWFileStream.read(tBuffer, mPageRecord.length);
+		    mPageRecord.body = tBuffer;
+		    Compress::unCompress(mPageRecord.body, mPageRecord.unzip_length, tBuffer, mPageRecord.length);
+		    delete tBuffer;
 
-		mPageRecord.body = tBuffer;
-		Compress::unCompress(mPageRecord.body, mPageRecord.unzip_length, tBuffer, mPageRecord.length);
-		delete tBuffer;
+		    //! 读出一条记录就跳出.
+		    break;
 
-		//! 读出一条记录就跳出.
-		break;
+	    } catch (CompressException &E) {
+	    	cerr << E.what() << endl;
+	    } catch (exception &E) {
+	    	cerr << E.what() << endl;
+	    } catch (...) {
+            cerr << "uncatched exception" << endl;
+        }
+        continue;
 	}
 
 	return mPageRecord.version.empty()?NULL:&mPageRecord;

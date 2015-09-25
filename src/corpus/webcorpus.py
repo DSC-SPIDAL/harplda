@@ -29,24 +29,58 @@ import lxml.html as lh
 import cPickle as pickle
 #from gensim import utils
 from utils import simple_preprocess
-
+import re
+import htmlentitydefs
 
 logger = logging.getLogger(__name__)
 
-class WebCorpus():
+
+####################
+def convertentity(m):
+    if m.group(1)=='#':
+        try:
+            return unichr(int(m.group(2)))
+        except ValueError:
+            return '&#%s;' % m.group(2)
+        try:
+            return htmlentitydefs.entitydefs[m.group(2)]
+        except KeyError:
+            return '&%s;' % m.group(2)
+
+class SimpleHtml():
+
     def __init__(self):
+        self.script_pattern = re.compile(r"(?is)<script[^>]*>(.*?)</script>")
+        self.tag_pattern = re.compile(r'<[^>]+>')
+        self.entity_pattern = re.compile(r'&(#?)(.+?);')
+
+    def clean(self, s):
+        html = self.script_pattern.sub('', s)
+        html = self.tag_pattern.sub('', html)
+
+        html = self.entity_pattern.sub(convertentity,html)
+        html.replace("&nbsp;", " ")
+        return html
+
+##################
+class WebCorpus():
+    def __init__(self, uselxml = False):
         self.wordmap = {}
         self.wordfreq = {}
         self.docs = []
+        self.simplehtml = SimpleHtml()
+        self.USE_LXML = uselxml
 
     def load(self, loadfile):
         logger.debug('load webcorpus from %s', loadfile)
 
         docf = open(loadfile, 'r')
         dictf = open(loadfile+'.dict', 'r')
-        self.docs = pickle.load(self.docf)
-        self.dicts = pickle.load(self.dictf)
+        freqf = open(loadfile+'.freq', 'r')
 
+        self.docs = pickle.load(docf)
+        self.wordmap = pickle.load(dictf)
+        self.wordfreq = pickle.load(freqf)
 
     def save(self, savefile):
         logger.debug('save webcorpus to %s', savefile)
@@ -86,17 +120,26 @@ class WebCorpus():
             freqf.write("%s\t%d\n"%( wordmap[id][0].encode('utf-8'), wordmap[id][1]))
 
     def add_page(self, id, content):
-        logger.debug('add_page %s', id)
+        logger.debug('add_page %s, %s', id, content[:10])
 
-        #text = lh.document_fromstring(content).get_root().text_content()
-        text = lh.document_fromstring(content).text_content()
+        try:
+            content = content.decode('utf-8','ignore')
 
-        # puncs remove?, call utils in gensim
-        tokens = simple_preprocess(text)
+            if self.USE_LXML:
+                #text = lh.document_fromstring(content).get_root().text_content()
+                text = lh.document_fromstring(content).text_content()
+            else:
+                text = self.simplehtml.clean(content)
 
-        # 
-        tokens = sorted(tokens)
+            # puncs remove?, call utils in gensim
+            tokens = simple_preprocess(text)
 
+            # 
+            tokens = sorted(tokens)
+        except UnicodeDecodeError:
+            logger.debug('exception UnicodeDecodeError')
+            return
+        
         ids = []
         wordcnt = len(self.wordmap)
         for token in tokens:
@@ -136,6 +179,17 @@ class WebCorpus():
         for id in xrange(len(wordmap)):
             self.wordmap[wordmap[id][0]] = id
 
+
+
+###################
+def dump(input):
+    webcorpus = WebCorpus()
+
+    webcorpus.load(input)
+
+    webcorpus.save_text(input)
+
+
 def merge_wordfreq(workdir, savefile):
     webcorpus = WebCorpus()
 
@@ -153,13 +207,19 @@ def make_webcorpus(input, output):
     """
     webcorpus = WebCorpus()
 
+    if os.path.exists(output):
+        logger.info('%s exists already, skip convert', output)
+        return webcorpus
+
     with open(input, 'r') as inputf:
         for line in inputf:
             pos = line.find('\t')
             if pos > 0:
                 id = line[:pos]
                 # search for the beginning of html code from "<" 
-                pos2 = line.find('<')
+                pos2 = line.find('<html')
+                if pos2 < 0:
+                    pos2 = line.find('<HTML')
                 if pos2 > 0:
                     content = line[pos2:]
                 else:
@@ -191,8 +251,11 @@ if __name__ == '__main__':
         #webcorpus.save_text(sys.argv[2] + '.mrlda')
     elif sys.argv[1] == '-mergefreq':
         webcorpus = merge_wordfreq(sys.argv[2], sys.argv[3])
+    elif sys.argv[1] == '-dump':
+        dump(sys.argv[2])
     else:
         logger.error(globals()['__doc__'] % locals())
+
 
 
 
