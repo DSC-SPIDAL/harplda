@@ -5,13 +5,17 @@ unset PYTHONPATH
 workdir=/scratch/pengb/hpda/test/clueweb
 outdir=$workdir/mrlda
 
-inputs=`find $workdir/data -name "*.input"`
+inputs=`find $1 -name "*.input"`
+dir=`basename $1`
+echo 'dir=', $dir
+
 mkdir -p $outdir
+mkdir -p $outdir/$dir
 
 outputs=""
 for f in $inputs; do
     basename=`basename $f .input`
-    outputs=$outputs" mrlda/"$basename".mrlda"
+    outputs=$outputs" mrlda/"$dir/$basename".mrlda"
 done
 
 do_convert(){
