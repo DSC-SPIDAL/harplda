@@ -18,7 +18,7 @@ input:
 analysis:
 
 Usage:
-    analysis_modeldata -txt|-harp <model file> 
+    analysis_modeldata -txt|-harp <model file> <dictfile> <sample>
 
 """
 
@@ -67,31 +67,80 @@ def load_harpmodel(modelDir):
 
     model = model[:, 1:]
     logger.info('load model data as %s', model.shape)
-    return model
+    
+    # get the word, topiccnt matrix
+    topiccnt = np.sum(model > 1, axis=1)
+
+    return topiccnt
+
+def load_txtmodel_full(modelfile):
+    model = LDAModelData()
+    model.load_from_txt(modelfile, fullload=True)
+    logger.info('load model data as %s', model.model.shape)
+
+    topiccnt = np.sum(model.model > 0, axis=1)
+    return topiccnt
+
 
 def load_txtmodel(modelfile):
     model = LDAModelData()
-    model.load_from_txt(modelfile)
+    model.load_from_txt(modelfile, fullload=False)
     logger.info('load model data as %s', model.model.shape)
-    return model.model
+
+    wordcnt = model.model.shape[0]
+    topiccnt = np.zeros((wordcnt))
+    for w in xrange(wordcnt):
+        topiccnt[w] = model.model[w][0].count(":")
+
+    return topiccnt
 
 def load_model(modelname, modeltype):
     """
     load model and return topiccnt vector
     """
     if modeltype == '-txt':
-        model = load_txtmodel(modelname)
+        #topiccnt = load_txtmodel_full(modelname)
+        topiccnt = load_txtmodel(modelname)
+        
     elif modeltype == '-harp':
-        model = load_harpmodel(modelname)
-
-    # get the word, topiccnt matrix
-    topiccnt = np.sum(model > 1, axis=1)
+        topiccnt = load_harpmodel(modelname)
+    
+    logger.debug('topiccnt is %s', topiccnt[:10])
 
     return topiccnt
 
+def align_model(topiccnt, dictfile):
+    """
+    align the model matrix by word freq
 
-def draw_cdf(topiccnt, fig):
+    id term freq
+    """
+    logger.info('read dict from %s', dictfile)
+    idlist = []
+    dictf = open(dictfile, 'r')
+    for line in dictf:
+        tokens = line.strip().split('\t')
+        idlist.append((int(tokens[0]), int(tokens[2])))
 
+    idlist = sorted(idlist, key= lambda x:x[1], reverse = True)
+    
+    logger.debug('sorted id list: %s', idlist[:10])
+
+    index = np.array([x[0] for x in idlist])
+    
+    logger.debug('topiccnt list: %s, %s', topiccnt[347], topiccnt[85])
+
+
+    topiccnt = topiccnt[index]
+    logger.debug('sorted topiccnt list: %s', topiccnt[:10])
+
+    return topiccnt
+
+def calc_cdf(topiccnt):
+    """
+    calc cdf
+    return rank, cdf
+    """
     vocabsize = topiccnt.shape[0]
     total = sum(topiccnt)
     cdf = np.zeros((vocabsize))
@@ -102,17 +151,23 @@ def draw_cdf(topiccnt, fig):
         cdf[w] = acc * 1.0 / total
         rank[w] = w
 
+    return rank, cdf
+
+def draw_cdf(topiccnt, fig):
+
+    rank,cdf = calc_cdf(topiccnt)
+
     # draw cdf curve
     #xp = np.linspace(0, vocabsize, 100)
     #logger.debug('xp.shape=%s, cdf.shaep=%s', xp.shape, cdf.shape)
-
-    plt.title('CDF Model Size of Word')
-    plt.xlabel('Word Rank')
-    plt.ylabel('Accumulate Percent of Model Size')
-    plt.plot(rank, cdf, '.')
-    plt.legend()
-    plt.savefig(fig)
-    plt.show()
+    if fig:
+        plt.title('CDF Model Size of Word')
+        plt.xlabel('Word Rank')
+        plt.ylabel('Accumulate Percent of Model Size')
+        plt.plot(rank, cdf, '.')
+        plt.legend()
+        plt.savefig(fig)
+        plt.show()
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
@@ -132,9 +187,28 @@ if __name__ == '__main__':
 
     modelType = sys.argv[1]
     modelDir = sys.argv[2]
+    dictfile = ''
+    sample = ''
+    if len(sys.argv) > 3:
+        dictfile = sys.argv[3]
+    if len(sys.argv) > 4:
+        sample = sys.argv[4]
+
 
     #1. load models
     model = load_model(modelDir,modelType)
 
-    #2. run sampling
-    draw_cdf(model, modelDir + '-cdf.png')
+    if dictfile:
+        model = align_model(model, dictfile)
+
+    if sample:
+        #get sample from cdf only
+        rank, cdf = calc_cdf(model)
+        w = int(sample)
+
+        cdffile= open('cdf-'+sample, 'a')
+        cdffile.write('%s %.2f\n'%(modelDir, cdf[w]))
+        cdffile.close()
+
+    else:
+        draw_cdf(model, modelDir + '-cdf.png')
