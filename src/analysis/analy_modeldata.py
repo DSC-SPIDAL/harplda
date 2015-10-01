@@ -24,12 +24,12 @@ Usage:
 
 import sys, os, math,re
 import numpy as np
-from scipy import stats
-from scipy.stats import entropy
-import matplotlib.pyplot as plt
-from matplotlib import cm
 import logging
 from preprocess.LDAModelData import LDAModelData
+try:
+    import matplotlib.pyplot as plt
+except:
+    import matplotlib
 
 logger = logging.getLogger(__name__)
 
@@ -207,7 +207,7 @@ if __name__ == '__main__':
         w = int(sample)
 
         cdffile= open('cdf-'+sample, 'a')
-        cdffile.write('%s %.2f\n'%(modelDir, cdf[w]))
+        cdffile.write('%s %.4f\n'%(modelDir, cdf[w]))
         cdffile.close()
 
     else:
