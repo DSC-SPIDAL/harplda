@@ -1,0 +1,3 @@
+title: shrink of model data size
+xlabel: iteration#
+ylabel: accumulate model data size@K

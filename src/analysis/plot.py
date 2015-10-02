@@ -47,11 +47,14 @@ def load_data(dir, pattern):
             for f in fnames:
                 if re.match(pattern,f):
 
-                    model = np.loadtxt(os.path.join(dirpath, f))
                     logger.info('load data from %s ', f)
+                    model = np.loadtxt(os.path.join(dirpath, f))
                     
                     # sort the matrix by the first column            
                     model = model[model[:,0].argsort()]
+
+                    logger.debug('model = %s', model)
+
                     datalist.append((f, model))
 
     logger.info('load %d data files', len(datalist))
@@ -86,7 +89,7 @@ def plot(datalist, config, fig):
         plt.ylabel(config['ylabel'])
 
         for data in datalist:
-            plt.plot(data[1][0], data[1][1], label=data[0])
+            plt.plot(data[1][:,0], data[1][:,1], label=data[0])
 
         plt.legend()
         plt.savefig(fig)
