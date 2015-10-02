@@ -43,17 +43,30 @@ def load_harpmodel(modelDir):
     return:
         model is a word-topic count matrix
     """
-    model = None
+    model = ''
 
     if os.path.isdir(modelDir):
         for dirpath, dnames, fnames in os.walk(modelDir):
             for f in fnames:
-                modeldata = np.loadtxt(os.path.join(dirpath, f))
+                # it's too slow to load full model data
+                # modeldata = np.loadtxt(os.path.join(dirpath, f))
+                mdata = []
+                harpf = open(os.path.join(dirpath, f), 'r')
+                for line in harpf:
+                    tokens = line.strip().split(' ')
+                    topiccnt = sum([1 for x in tokens[1:] if x!='0'])
+                    wordid = int(tokens[0])
+                    mdata.append([wordid,topiccnt])
+                harpf.close()
+
+                modeldata = np.array(mdata)
+                #logger.debug('load modeldata : %s', modeldata[:10])
+
                 # first column is wordid
                 # modeldata = modeldata[:,1:]
                 logger.info('load model from %s , modelmatrix as %s', 
                         f, modeldata.shape)
-                if model != None:
+                if model != '':
                     model = np.concatenate((model, modeldata), axis=0)
                 else:
                     model = modeldata
@@ -65,11 +78,13 @@ def load_harpmodel(modelDir):
     model = model[model[:,0].argsort()]
     #model = np.sort(model, axis=0)
 
-    model = model[:, 1:]
     logger.info('load model data as %s', model.shape)
+    #logger.debug('load model : %s', model[:10])
     
     # get the word, topiccnt matrix
-    topiccnt = np.sum(model > 1, axis=1)
+    #model = model[:, 1:]
+    #topiccnt = np.sum(model > 0, axis=1)
+    topiccnt = model[:,1]
 
     return topiccnt
 
@@ -198,7 +213,7 @@ if __name__ == '__main__':
     #1. load models
     model = load_model(modelDir,modelType)
 
-    if dictfile:
+    if dictfile!='na':
         model = align_model(model, dictfile)
 
     if sample:
