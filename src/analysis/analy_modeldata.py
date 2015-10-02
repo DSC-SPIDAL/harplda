@@ -218,12 +218,15 @@ if __name__ == '__main__':
 
     if sample:
         #get sample from cdf only
+        #sample as 100,1000,3000
         rank, cdf = calc_cdf(model)
-        w = int(sample)
-
-        cdffile= open('cdf-'+sample, 'a')
-        cdffile.write('%s %.4f\n'%(modelDir, cdf[w]))
-        cdffile.close()
+        sample = sample.split(',')
+        for rank in sample:
+            w = int(rank)
+            logger.debug('write result into K-%s : %f', rank, cdf[w])
+            cdffile= open('K-' + rank, 'a')
+            cdffile.write('%s %.4f\n'%(modelDir, cdf[w]))
+            cdffile.close()
 
     else:
         draw_cdf(model, modelDir + '-cdf.png')
