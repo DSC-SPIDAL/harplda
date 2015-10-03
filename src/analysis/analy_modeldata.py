@@ -221,12 +221,19 @@ if __name__ == '__main__':
         #sample as 100,1000,3000
         rank, cdf = calc_cdf(model)
         sample = sample.split(',')
-        for rank in sample:
-            w = int(rank)
-            logger.debug('write result into K-%s : %f', rank, cdf[w])
-            cdffile= open('K-' + rank, 'a')
+        for s in sample:
+            w = int(s)
+            logger.debug('write result into K-%s : %f', s, cdf[w])
+            cdffile= open('K-' + s, 'a')
             cdffile.write('%s %.4f\n'%(modelDir, cdf[w]))
             cdffile.close()
+
+        #save the rank,cdf
+        logger.debug('write rank,cdf into cdf-%s', modelDir)
+        rawf = open('cdf-' + modelDir , 'w') 
+        for id in xrange(rank.shape[0]):
+            rawf.write('%s %.8f\n'%(rank[id], cdf[w]))
+        rawf.close()
 
     else:
         draw_cdf(model, modelDir + '-cdf.png')
