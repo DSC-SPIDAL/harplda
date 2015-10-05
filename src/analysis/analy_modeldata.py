@@ -216,6 +216,15 @@ if __name__ == '__main__':
     if dictfile!='na':
         model = align_model(model, dictfile)
 
+    #save the topiccnt
+    topiccnt = model
+    logger.info('model size = %d', np.sum(topiccnt))
+    logger.debug('write topiccnt into topiccnt-%s', modelDir)
+    rawf = open('topiccnt-' + modelDir , 'w') 
+    for id in xrange(topiccnt.shape[0]):
+        rawf.write('%d %d\n'%(id, topiccnt[id]))
+    rawf.close()
+
     if sample:
         #get sample from cdf only
         #sample as 100,1000,3000
@@ -232,7 +241,7 @@ if __name__ == '__main__':
         logger.debug('write rank,cdf into cdf-%s', modelDir)
         rawf = open('cdf-' + modelDir , 'w') 
         for id in xrange(rank.shape[0]):
-            rawf.write('%s %.8f\n'%(rank[id], cdf[w]))
+            rawf.write('%s %.8f\n'%(rank[id], cdf[id]))
         rawf.close()
 
     else:

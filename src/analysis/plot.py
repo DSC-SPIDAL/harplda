@@ -57,6 +57,9 @@ def load_data(dir, pattern):
 
                     datalist.append((f, model))
 
+    # try to sort
+    datalist = sorted(datalist, key = lambda x :x[0])
+
     logger.info('load %d data files', len(datalist))
 
     return datalist
@@ -82,16 +85,45 @@ def load_config(configfile):
 
     return config
 
+def print_stat(y, name):
+    # basic statistics
+    mean = int(np.mean(y))
+    mod = np.sort(y)
+    #logger.debug('mod=%s...%s', mod[:10], mod[-10:])
+    mod = mod[y.shape[0]/2]
+    logger.info('%s : mean= %d, mod = %d', name, mean, mod)
+
 def plot(datalist, config, fig):
 
         plt.title(config['title'])
         plt.xlabel(config['xlabel'])
         plt.ylabel(config['ylabel'])
 
-        for data in datalist:
-            plt.plot(data[1][:,0], data[1][:,1], label=data[0])
+        ax = plt.subplot(111)
 
-        plt.legend()
+        for data in datalist:
+            x = data[1][:,0]
+            y = data[1][:,1]
+            if 'xlog' in config:
+                ax.set_xscale("log", nonposx='clip')
+
+            if 'ylog' in config:
+                ax.set_yscale("log", nonposy='clip')
+
+            #plt.plot(data[1][:,0], data[1][:,1], label=data[0])
+            plt.plot(x, y, label=data[0])
+
+            print_stat(y, data[0]+'@0')
+            print_stat(y[:3000], data[0] +'@3000')
+            print_stat(y[:10000:], data[0] + '@10000')
+
+
+        if 'loc' in config:
+            loc = int(config['loc'])
+        else:
+            loc = 1
+
+        plt.legend(loc = loc)
         plt.savefig(fig)
         plt.show()
 
