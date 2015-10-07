@@ -39,8 +39,9 @@ def convert_dict(wordmapfile, statdictfile, wordidsfile):
             term_cnt = int(line.strip())
             continue
         tokens = line.strip().split(' ')
-
-        wordids.write('%s\t%s\t%s\n'%(tokens[1], tokens[0], freqmap[tokens[0]]))
+        
+        if tokens[0] in freqmap:
+            wordids.write('%s\t%s\t%s\n'%(tokens[1], tokens[0], freqmap[tokens[0]]))
 
     wordids.close()
     wordmap.close()

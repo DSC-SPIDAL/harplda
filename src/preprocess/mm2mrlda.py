@@ -62,7 +62,10 @@ if __name__ == '__main__':
         tokens = line.strip().split(' ')
         docid = tokens[0]
         if idmap:
-            wordid = idmap[tokens[1]]
+            if tokens[1] in idmap:
+                wordid = idmap[tokens[1]]
+            else:
+                continue
         else:
             wordid = tokens[1]
 
