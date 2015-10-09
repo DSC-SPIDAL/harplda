@@ -10,6 +10,11 @@ mm format
 doccnt  wordcnt  positioncnt
 docid  wordid   freq
 
+################################################################
+!!!wordid, docid in mm format all start from 1, other than zero
+!!!but in wordids dictionary, and mrlda format, wordid start from 0
+################################################################
+
 mrlda low format
 docid  wordlist....
 
@@ -47,7 +52,7 @@ if __name__ == '__main__':
         # load dictionary
         for line in idmapf:
             tokens = line.strip().split('\t')
-            idmap[tokens[0]] = tokens[1]
+            idmap[int(tokens[0])] = tokens[1]
 
     mm = open(inp, 'r')
     mrlda = open(outp, 'w')
@@ -61,13 +66,16 @@ if __name__ == '__main__':
     for line in mm:
         tokens = line.strip().split(' ')
         docid = tokens[0]
+        #!!! mm wordid = dict wordid + 1
+        mmwordid = int(tokens[1]) - 1
+
         if idmap:
-            if tokens[1] in idmap:
-                wordid = idmap[tokens[1]]
+            if mmwordid in idmap:
+                wordid = idmap[mmwordid]
             else:
                 continue
         else:
-            wordid = tokens[1]
+            wordid = mmwordid
 
         freq = int(tokens[2])
 
