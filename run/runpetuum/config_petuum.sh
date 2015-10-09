@@ -30,11 +30,11 @@ if [ -z "${topics+xxx}" ]; then
 fi
 
 machfile=./mach.vm
-#rm $machfile
+rm $machfile
 id=1
 for host in ${hosts[*]}; do
     ip=`getent hosts $host | awk '{print $1}'`
-#    echo $ip >>$machfile
+    echo $ip >>$machfile
     
     if [ $id -eq '1' ]; then
         ((id++))
@@ -45,17 +45,15 @@ for host in ${hosts[*]}; do
 done
 
 # mach.vm should be distributed first
-#binsrc=/N/u/pengb/hpda/petuum/strads/apps/lda_release/bin/ldall
-#
-#cpush mach.vm `pwd`
-#cpush $binsrc `pwd`/bin
+binsrc=/N/u/pengb/hpda/petuum/strads/apps/lda_release/bin/ldall
+
+cpush mach.vm `pwd`
+cpush $binsrc `pwd`/bin
 
 
 #run the command
 cmd="mpirun -H $host_list ./bin/ldall --machfile $machfile -threads $threads -num_topic $topics  -num_iter $iter  -data_file $datadir/$datafile -logfile tmplog/1 -wtfile_pre tmplog/wt -dtfile_pre tmplog/dt"
 
 echo $cmd
-
-$cmd
 
 
