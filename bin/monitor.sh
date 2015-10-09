@@ -32,7 +32,11 @@ case $CMD in
     start)
         shift
         interface=$1
-        echo "start monitor on $interface"
+	if [ -z $interface ]; then
+		interface=eth0
+	fi		
+
+        echo "start monitor on interface=$interface"
         #as long as 100 hours?
         time=360000
         #save log to shm, no disk i/o involved
