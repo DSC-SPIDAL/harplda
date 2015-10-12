@@ -6,20 +6,24 @@ measure the performance of lda trainer
 analysis the log file
 
 input:
-    lda trainer's log file
+    lda trainer's log dir
+
 format:
     mallet  ^[0-9]+ms
     ylda    
-    harp    
+    harp   : Compute time: 88900, comm time: 18103
 
 
 Usage: 
-    analy_timelog <trainer> <logfile> <figname>
+    analy_timelog <trainer> <appdir> <figname>
 
 """
 
 import sys,os,re
 import numpy as np
+import matplotlib
+# Force matplotlib to not use any Xwindows backend.
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import logging
 
@@ -30,7 +34,7 @@ class LDATrainerLog():
     name =''
     pattern={
         "mallet":"^([0-9]+)ms",
-        "harp":"*Iter"
+        "harp":"Compute time: ([0-9]*), comm time: ([0-9]*)"
     }
 
     def __init__(self,name):
@@ -50,10 +54,93 @@ class LDATrainerLog():
         for line in logf:
             m = re.search(self.pattern[self.name], line)
             if m:
-                elapsed.append(int(m.group(1)))
+                elapsed.append( (int(m.group(1)), int(m.group(2))) )
     
         return elapsed
 
+    def load_applog(self, appdir, filename):
+        models = []
+        for dirpath, dnames, fnames in os.walk(appdir):
+            for f in fnames:
+                if f == filename:
+                    elapsed = self.load_timelog(os.path.join(dirpath, f))
+                    if len(elapsed) > 0:
+                        logger.info('load log from %s at %s', f, dirpath)
+                        models.append((dirpath, elapsed))
+
+        # (dirpath, [(compute time, comm time)])
+        iternum = len(models[0][1])
+        nodenum = len(models)
+        models =  sorted(models, key = lambda modeltp : modeltp[0])
+        logger.info('total %d iterations, %d nodes', iternum, nodenum)
+        
+        compute=[]
+        comm=[]
+        for idx in range(nodenum):
+            compute.append([x[0] for x in models[idx][1]])
+            comm.append([x[1] for x in models[idx][1]])
+
+        #logger.debug('computeMatrix: %s', compute[:3])
+
+        # id, compute time, comm time
+        computeMatrix = np.array(compute)
+        commMatrix = np.array(comm)
+
+        #output the matrix
+        np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
+        np.savetxt(appdir + ".commtime", commMatrix, fmt='%d')
+
+        #min, max, mean analysis
+        # mean/std of compute, comm restured
+        matrix = np.zeros((4, iternum))
+
+        statMatrix = np.zeros((4, iternum))
+        statMatrix[0] = np.min(computeMatrix, axis=0)
+        statMatrix[1] = np.max(computeMatrix, axis=0)
+        statMatrix[2] = np.mean(computeMatrix, axis=0)
+        statMatrix[3] = np.std(computeMatrix, axis=0)
+
+        matrix[0] = statMatrix[2]
+        matrix[1] = statMatrix[3]
+
+        np.savetxt(appdir + '.comput-stat', statMatrix,fmt='%.2f')
+
+        statMatrix[0] = np.min(commMatrix, axis=0)
+        statMatrix[1] = np.max(commMatrix, axis=0)
+        statMatrix[2] = np.mean(commMatrix, axis=0)
+        statMatrix[3] = np.std(commMatrix, axis=0)
+
+        matrix[2] = statMatrix[2]
+        matrix[3] = statMatrix[3]
+
+        np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
+
+        #logger.info('min = %s', np.min(computeMatrix, axis=0))
+        #logger.info('max = %s', np.max(computeMatrix, axis=0))
+        #logger.info('mean = %s', np.mean(computeMatrix, axis=0))
+        #logger.info('std = %s', np.std(computeMatrix, axis=0))
+
+        return matrix
+
+
+def draw_mvmatrix(mv_matrix, trainer, fig, show = False):
+    logger.info('draw the mean-var figure')
+
+    row , col = mv_matrix.shape
+    x = np.arange(1, col + 1 )
+
+    plt.title('Performance of LDA Trainers')
+    plt.xlabel('Iteration Number')
+    plt.ylabel('Elapsed Millis')
+
+    plt.errorbar(x, mv_matrix[0], mv_matrix[1] ,label=trainer + ' compute')
+    plt.errorbar(x, mv_matrix[2], mv_matrix[3] ,label=trainer + ' comm')
+
+    plt.legend()
+
+    plt.savefig(fig)
+    if show:
+        plt.show()
 
 def draw_time(elapsed, trainer, fig, show = False):
     logger.debug('plot the elapsed time fig')
@@ -67,36 +154,6 @@ def draw_time(elapsed, trainer, fig, show = False):
     plt.plot(x, y, 'c.-', label=trainer )
     plt.legend()
 
-    plt.savefig(fig)
-    if show:
-        plt.show()
-
-def draw_convergence(fig, show = False):
-    """
-    Draw convergence graph, load likelihood data from .likelihood data
-    """
-    plt.title('Convergence of LDA Topic Model')
-    plt.xlabel('Iteration Number')
-    plt.ylabel('Perplexity')
-
-    colors = ['b','c','r','g','y']
-    idx = 0
-
-    for dirpath, dnames, fnames in os.walk("."):
-        for f in fnames:
-            if f.find('.likelihood') > 0:
-                modelname =os.path.splitext(f)[0]
-                filename = os.path.join(dirpath, f)
-                logger.info('load likelihood data from %s', filename)
-                likelihoods = np.loadtxt(filename)
-
-                x = likelihoods[:,0]
-                y = likelihoods[:,1]
-                z = likelihoods[:,2]
-                plt.plot(x, z, colors[idx] + '.-', label=modelname )
-                idx += 1
-
-    plt.legend()
     plt.savefig(fig)
     if show:
         plt.show()
@@ -124,8 +181,12 @@ if __name__ == "__main__":
         figname = sys.argv[3]
 
     logAnalizer = LDATrainerLog(trainer)
-    
-    draw_time(logAnalizer.load_timelog(logfile), trainer, figname)
+
+    #draw_time(logAnalizer.load_timelog(logfile), trainer, figname)
+    mv_matrix = logAnalizer.load_applog(logfile, 'syslog')
+
+    draw_mvmatrix(mv_matrix, trainer, figname)
+
 
 
 
