@@ -5,6 +5,10 @@ Download the latest enwiki data, and build testset for current enwiki-1M dataset
 Current wordids file is enwiki-1M.dict.
 
 ```sh
+
+#the wordmap file from wordids
+awk '{printf("%s\t%s\n",$2,$3)}' ~/hpda/test/wikicorpus/dict/enwiki-1M.newmap.txt > enwiki-1M.dict
+
 cd enwiki/
 wget https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2
 python ~/hpda/lda-test/src/preprocess/make_wiki.py enwiki-latest-pages-articles.xml.bz2 latest
