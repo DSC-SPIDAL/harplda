@@ -260,21 +260,7 @@ public class EvaluateTopics {
 					System.exit(1);
 				}				
 			}
-			evaluator.printmodel();
-			
-			if (evaluator == null){
-				System.out.println("Unable to initialize a evaluator, quit");
-				System.exit(1);				
-			}
-			
-			if (wordTopicCountsFile.value != null){
-				
-				evaluator.printTypeTopicCounts(new File (wordTopicCountsFile.value));
-                System.exit(1);
-			}
-			
-			evaluator.setPrintWords(showWords.value);
-			
+		
 			InstanceList instances = InstanceList.load (new File(inputFile.value));
 			
 			// show the total tokens number
@@ -302,13 +288,25 @@ public class EvaluateTopics {
 					System.out.println("input total tokens: " + totalTokens);
 				}
 			
-			
-			
 			if (dumpAlphabet.value != null){
 				// 	show the Alphabet, the dictionary for wordid-feature
 				instances.dumpAlphabet(dumpAlphabet.value);
 			}
 
+			if (evaluator == null){
+				System.out.println("Unable to initialize a evaluator, quit");
+				System.exit(1);				
+			}
+
+			evaluator.printmodel();
+			
+			if (wordTopicCountsFile.value != null){
+				
+				evaluator.printTypeTopicCounts(new File (wordTopicCountsFile.value));
+                System.exit(1);
+			}
+			
+			evaluator.setPrintWords(showWords.value);
 			
 			outputStream.println(evaluator.evaluateLeftToRight(instances, numParticles.value, 
 															   usingResampling.value,
