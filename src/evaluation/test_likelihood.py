@@ -32,11 +32,10 @@ Usage:
 import sys,os,re
 import numpy as np
 import logging
-try:
-    import matplotlib.pyplot as plt
-    matplotlib_available = True
-except ImportError:
-    matplotlib_available = False
+import matplotlib
+# Force matplotlib to not use any Xwindows backend.
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +135,7 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer):
         for f in fnames:
             if f.endswith(ext):
                 #m = re.search('.*[\.-]([0-9]*)' + ext, f)
-                m = re.search('([0-9]+)' + ext, f)
+                m = re.search('([0-9]+).*' + ext, f)
                 if m:
                     iternum = int(m.group(1))
 
@@ -181,10 +180,6 @@ def update_likelihood(likelihoodfile, num_docs, num_words):
 
 
 def draw_likelihood(likelihoods, modelname, fig, show = False):
-    if not matplotlib_available:
-        logger.error('matplotlib not imported, bye....')
-        return
-
     logger.debug('plot the matrix')
 
     x = likelihoods[:,0]
@@ -205,10 +200,6 @@ def draw_convergence(fig, show = False):
     """
     Draw convergence graph, load likelihood data from .likelihood data
     """
-    if not matplotlib_available:
-        logger.error('matplotlib not imported, bye....')
-        return
-
     plt.title('Convergence of LDA Topic Model')
     plt.xlabel('Iteration Number')
     plt.ylabel('Perplexity')

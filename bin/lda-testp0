@@ -77,8 +77,8 @@ init()
         harpdict=$datadir/enwiki-1M-reid.train.dict
         yldadict=$datadir/enwiki-1M-noreid.train.dict
         #malletdict=$datadir/enwiki-1M-2M.mallet.dict
-        testset=$datadir/enwiki-1M-test100k.mallet.txt
-        testdict=$datadir/enwiki-1M-test100k.mallet.dict
+        testset=$datadir/enwiki-1M-test-100k.mallet.txt
+        testdict=$datadir/enwiki-1M-test-100k.mallet.dict
         testdoccnt=100000
         testwordcnt=18369267
         alpha=0.01
@@ -134,12 +134,12 @@ do_writetxtmodel(){
 
 convert(){
     #python $homedir/src/preprocess/convertTxt2Mallet.py $1 $testdict $traindict
-    python -m preprocess.convertTxt2Mallet $1 $2 $3 False
+    python -m preprocess.convertTxt2Mallet $1 $2 $3
 }
 
 do_convertHarp(){
-    #python $homedir/src/preprocess/convertHarp2Txt.py $d $alpha $beta $numTopics 0
-    python -m preprocess.convertHarp2Txt $1 $2 $3 $4 $5
+    #python $homedir/src/preprocess/convertHarp2Mallet.py $d $alpha $beta $testdict $harpdict
+    python -m preprocess.convertHarp2Mallet $1 $2 $3 $4 $5
 
 }
 
@@ -255,15 +255,10 @@ case $CMD in
         init
         # <harp model dir> 
         modeldir=$1
-        numTopics=$2
-        if [ -z $numTopics ]; then
-            echo 'numTopics not set, use 10k by default'
-            numTopics=10000
-        fi
         savedir=`pwd`
         cd $modeldir
 
-        hyperfiles=`ls *.hyper 2>>/dev/null`
+        malletfiles=`ls *.mallet 2>>/dev/null`
         if [ "$?" -ne "0" ] ; then
             argfiles=""
             for d in `ls`; do
@@ -272,24 +267,21 @@ case $CMD in
             export -f do_convertHarp
 
             traindict=$harpdict
-            #do python $homedir/src/preprocess/convertHarp2Txt.py $d $alpha $beta $numTopics 0; done
-            cmd="parallel --xapply --jobs 8 do_convertHarp ::: $argfiles ::: $alpha ::: $beta ::: $numTopics ::: 0"
+            #do python $homedir/src/preprocess/convertHarp2Mallet.py $d $alpha $beta $testdict $harpdict; done
+            cmd="parallel --xapply --jobs 8 do_convertHarp ::: $argfiles ::: $alpha ::: $beta ::: $testdict ::: $traindict"
             echo $cmd
             $cmd
 
         else
-            echo '.hyper file exists, skip convert to txt modeldata '
+            echo '.mallet file exists, skip convert to modeldata '
         fi
-        
-        hyperfiles=`ls *.hyper 2>>/dev/null`
-        if [ "$?" -ne "0" ] ; then
-            echo '.hyper file converted fail, quit...'
-            exit -1
-        fi
- 
-        traindict=$harpdict
-        # .hyper file exist
-        eval_txtmodeldata
+
+        argfiles=$(getArgfile 'mallet')
+        #python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
+        export -f do_evaluate
+        cmd="parallel --xapply --jobs 8 do_evaluate ::: $argfiles ::: $testset ::: $testdoccnt ::: $testwordcnt"
+        echo $cmd
+        $cmd
 
         cd $savedir
         python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
