@@ -58,7 +58,8 @@ for line in mrlda:
             tokens[-1] = tokens[-1].strip()
 
             for word in tokens:
-                output.write('%s '%wmap[word])
+                if word in wmap:
+                    output.write('%s '%wmap[word])
 
     else:
         logger.debug('doc_token=0, where docid=%s', docid)
