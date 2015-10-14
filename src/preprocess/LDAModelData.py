@@ -93,7 +93,7 @@ class LDAModelData():
                 #idx = line.find(' 0 ')
                 #line = line[idx + 3:]
                 if (idx <= 0):
-                    logger.error('txt model file format error')
+                    logger.error('txt model file format error, idx=%d', idx)
                     return
     
                 # word id should be first number in the begining,
@@ -128,7 +128,7 @@ class LDAModelData():
         #    logger.debug('new model[%d]=%s', w, model[w][0])
     
         #model = model[:, 1:]
-        logger.info('done, load model data as %s, alpha=%s, beta=%s', model.shape, alpha, beta)
+        logger.info('done, load model data as %s, alpha=%s, beta=%s', model.shape, alpha[:10], beta)
 
         self.model = model
         self.alpha = alpha
@@ -206,6 +206,11 @@ class LDAModelData():
         for k in range(len(newmap)):
             # test dataset dict may be different with the traning set
             if newmap[k] in oldmap:
+                #debug only
+                if oldmap[newmap[k]] >= self.model.shape[0]:
+                    logger.error('oldmap size mismatch with loaded model')
+                    continue
+
                 new_model[k] = self.model[oldmap[newmap[k]]]
     
         # debug
@@ -241,29 +246,70 @@ class LDAModelData():
         """
         with open(fname, 'wb') as f:
             V, K = self.model.shape
-            if K != self.num_topics:
-                logger.error(' model data(%d,%d) mismatch with .hyper(k=%d)', V,K, self.num_topics)
-                return
 
-            f.write(struct.pack('>i', K))
+            if self.fullload:
+                if K != self.num_topics:
+                    logger.error(' model data(%d,%d) mismatch with .hyper(k=%d)', V,K, self.num_topics)
+                    return
+            else:
+                if K != 1:
+                    logger.error(' non-fullload model data(%d,%d) mismatch .hyper(k=%d)', V,K, self.num_topics)
+                    return
+                
+
+            f.write(struct.pack('>i', self.num_topics))
             f.write(struct.pack('>i', V))
             f.write(struct.pack('>d', self.alpha[0]))
             f.write(struct.pack('>d', self.beta))
 
-            #todo, here is the only fullload mode save
-            index = np.argsort(self.model)
-            for w in range(V):
-                for k in range(-1, -K-1, -1):
-                    # sort in acscent order
-                    col = index[w][k]
-                    if (self.model[w][col] == 0):
-                        # a row end by (0,0) pair
-                        f.write(struct.pack('>i', 0))
-                        f.write(struct.pack('>i', 0))
-                        break
+            debuginfo=[]
+            if self.fullload:
+                #todo, here is the only fullload mode save
+                index = np.argsort(self.model)
+                for w in range(V):
+                    for k in range(-1, -K-1, -1):
+                        # sort in acscent order
+                        col = index[w][k]
+                        if (self.model[w][col] == 0):
+                            # a row end by (0,0) pair
+                            f.write(struct.pack('>i', 0))
+                            f.write(struct.pack('>i', 0))
+                            debuginfo.append("0:0")
+                            break
     
-                    f.write(struct.pack('>i', self.model[w][col]))
-                    f.write(struct.pack('>i', col))
+                        f.write(struct.pack('>i', self.model[w][col]))
+                        f.write(struct.pack('>i', col))
+
+                        if w == 0:
+                            debuginfo.append("%s:%s"%(self.model[w][col], col))
+
+                    # if w==0:
+                    #     logger.debug('w=0, model=%s', ' '.join(debuginfo))
+            else:
+                # line is wordid:cnt ...
+                for w in range(V):
+                    line = self.model[w][0]
+                    # logger.debug('line=%s',line)
+
+                    if line != 0:
+                        # non empty topic cnt pairs
+                        data = [tp.split(':') for tp in line.split(' ')]
+                        data = sorted(data, key=lambda x:int(x[1]), reverse=True)
+                        # logger.debug('data=%s', data)
+
+                        for k in data:
+                            f.write(struct.pack('>i', int(k[1])))
+                            f.write(struct.pack('>i', int(k[0])))
+                            if w == 0:
+                                debuginfo.append("%s:%s"%(k[1], k[0]))
+
+                    # a row end by (0,0) pair
+                    f.write(struct.pack('>i', 0))
+                    f.write(struct.pack('>i', 0))
+    
+                    #if w==0:
+                    #    logger.debug('w=0, model=%s', ' '.join(debuginfo))
+ 
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])

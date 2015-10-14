@@ -58,9 +58,18 @@ if __name__ == '__main__':
     newdict = sys.argv[2]
     traindict = sys.argv[3]
 
+    fullload = True
+    if len(sys.argv) > 4:
+        fullload = (sys.argv[4] != 'False')
+
     model = LDAModelData()
-    model.load_from_txt(modelfile)
+    model.load_from_txt(modelfile, fullload)
+
+    # logger.debug('model=%s', model.model)
+
     model.align_dict(newdict, traindict)
+    # logger.debug('model=%s', model.model)
+
 
     savefile = modelfile + '.mallet'
     logger.info('saving to %s', savefile)
