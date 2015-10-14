@@ -1,0 +1,19 @@
+#
+# cluster & experiment settings
+#
+
+# madrid cluster
+ylda=/scratch/pengb/ylda
+workroot=/scratch/pengb/hpda/test
+work=$workroot/work
+bindir=$workroot/bin
+cluster=madrid
+
+# pubmed-2M on madrid
+datadir=/scratch/pengb/hpda/test/pubmed2m/
+topics=1000
+iter=1000
+alpha=50
+beta=0.01
+threads=12
+

@@ -1,0 +1,20 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+ylda=/mnt/vol1/pengb/hpda/ylda
+workroot=/mnt/vol1/pengb/hpda/test/
+work=$workroot/ylda/work
+bindir=$workroot/bin
+cluster=juliet
+
+# enwiki-1M on juliet
+datadir=/mnt/vol1/pengb/hpda/test/ylda/enwiki-1M/
+topics=10000
+iter=200
+alpha=100
+beta=0.01
+threads=64
+
+

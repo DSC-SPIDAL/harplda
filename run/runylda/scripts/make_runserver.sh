@@ -31,7 +31,7 @@ for host in ${hosts[*]}; do
     hostip=${iplist[$server_index]}
 
     #cmd="cd $work && nohup $ylda/DM_Server $model $server_index $num_clients $hostip:$port --Ice.ThreadPool.Server.SizeMax=9 &"
-    cmd="cd $work && $ylda/DM_Server $model $server_index $num_clients $hostip:$port --Ice.ThreadPool.Server.SizeMax=$num_servers "
+    cmd="cd $work && $ylda/DM_Server $model $server_index $num_clients $hostip:$port --Ice.ThreadPool.Server.SizeMax=$num_servers &"
     echo $cmd >> run_server.$host
 
     if [ "$server_id" -ne "1" ] ; then
