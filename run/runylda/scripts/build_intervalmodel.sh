@@ -29,8 +29,10 @@ mkdir -p global
 cd local
 server_id=0
 for host in ${hosts[*]}; do
-    scp -r $host:$work _tmp.$server_id
-    mv _tmp.$server_id $host
+    # copy only the model files
+    mkdir -p $host
+    scp -r $host:$work/[0-9]* $host
+    scp -r $host:$work/dict.wordids $host
    ((server_id++))
 done
 cd ..

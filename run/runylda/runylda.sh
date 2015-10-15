@@ -78,6 +78,7 @@ cexec "cd $workroot && mv work work-$appname"
 ### 8. save the result
 mkdir -p result/$appname
 cp interval_model/global/* result/$appname
+cp global_dict/global-dict.wordis result/$appname
 echo "result model files are in result/$appname, enjoy~"
 
 

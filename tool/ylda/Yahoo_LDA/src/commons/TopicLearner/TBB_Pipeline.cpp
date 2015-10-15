@@ -31,11 +31,14 @@
 #include "Filter_Writer.h"
 #include "Filter_Tester.h"
 #include "Context.h"
+#include <iostream>
 
 TBB_Pipeline::TBB_Pipeline(Model_Refiner& refiner) :
     _refiner(refiner) {
     Context& context = Context::get_instance();
     int num_threads = context.get_int("samplerthreads");
+    std:cout << "init TBB pipeline with num_threads = " << num_threads;
+    //LOG(INFO) << "init TBB pipeline with num_threads = " << num_threads;
     _init.initialize(num_threads);
 }
 
