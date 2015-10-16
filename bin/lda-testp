@@ -36,6 +36,14 @@ EOF
 # dataset
 init()
 {
+
+    # init jobs threads parameter
+    if [ -z $jobsthreads ] ; then
+        $jobsthreads=8
+    fi
+    echo 'Init test on testset=$TESTSET, jobsthreads=$jobsthreads'
+
+    # init dataset
     if [ "$TESTSET" == "enwiki-100k" ] ; then
         # enwiki-100k
         datadir=$homedir/data/enwiki-100k
@@ -77,10 +85,10 @@ init()
         harpdict=$datadir/enwiki-1M-reid.train.dict
         yldadict=$datadir/enwiki-1M-noreid.train.dict
         #malletdict=$datadir/enwiki-1M-2M.mallet.dict
-        testset=$datadir/enwiki-1M-test100k.mallet.txt
-        testdict=$datadir/enwiki-1M-test100k.mallet.dict
-        testdoccnt=100000
-        testwordcnt=18369267
+        testset=$datadir/enwiki-1M-test200k.mallet.txt
+        testdict=$datadir/enwiki-1M-test200k.mallet.dict
+        testdoccnt=200000
+        testwordcnt=71060964
         alpha=0.01
         beta=0.01
      elif [ "$TESTSET" == "clueweb-1M" ] ; then
@@ -90,8 +98,8 @@ init()
         harpdict=$datadir/clueweb-1M-reid.train.dict
         yldadict=$datadir/clueweb-1M-noreid.train.dict
         #malletdict=$datadir/enwiki-1M-2M.mallet.dict
-        testset=$datadir/clueweb-1M-testset-200k.mallet.txt
-        testdict=$datadir/clueweb-1M-testset-200k.mallet.dict
+        testset=$datadir/clueweb-testset-200k.mallet.txt
+        testdict=$datadir/clueweb-testset-200k.mallet.dict
         testdoccnt=200000
         testwordcnt=44365916
         alpha=0.01
@@ -185,7 +193,7 @@ eval_txtmodeldata()
 
             export -f do_writetxtmodel 
  
-            cmd="parallel --xapply --jobs 8 do_writetxtmodel ::: $txtfile ::: $modelfiles ::: $testset"
+            cmd="parallel --xapply --jobs $jobsthreads do_writetxtmodel ::: $txtfile ::: $modelfiles ::: $testset"
             echo $cmd
             $cmd
 
@@ -202,7 +210,7 @@ eval_txtmodeldata()
 
         export -f convert
  
-        cmd="parallel --xapply --jobs 8 convert ::: $argfiles ::: $testdict ::: $traindict"
+        cmd="parallel --xapply --jobs $jobsthreads convert ::: $argfiles ::: $testdict ::: $traindict"
         echo $cmd
         $cmd
 
@@ -225,7 +233,7 @@ eval_txtmodeldata()
 
         export -f do_evaluate
  
-        cmd="parallel --xapply --jobs 8 do_evaluate ::: $argfiles ::: $testset ::: $testdoccnt ::: $testwordcnt"
+        cmd="parallel --xapply --jobs $jobsthreads do_evaluate ::: $argfiles ::: $testset ::: $testdoccnt ::: $testwordcnt"
         echo $cmd
         $cmd
 
@@ -273,7 +281,7 @@ case $CMD in
 
             traindict=$harpdict
             #do python $homedir/src/preprocess/convertHarp2Txt.py $d $alpha $beta $numTopics 0; done
-            cmd="parallel --xapply --jobs 8 do_convertHarp ::: $argfiles ::: $alpha ::: $beta ::: $numTopics ::: 0"
+            cmd="parallel --xapply --jobs $jobsthreads do_convertHarp ::: $argfiles ::: $alpha ::: $beta ::: $numTopics ::: 0"
             echo $cmd
             $cmd
 
