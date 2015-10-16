@@ -1,5 +1,24 @@
-Run YLDA on Madrid cluster
+Run YahooLDA
 ===========================
+
+
+1. modify the cluster_config file under scripts
+2. compile the latest code under tool/ylda, and install bins to $ylda directory
+
+Example on Madrid:
+
+```sh
+
+sh preparedata.sh scripts/cluster_config `pwd`/../ylda/pubmed2m/raw
+sh initylda.sh scripts/cluster_config
+sh runylda.sh scripts/cluster_config pubmed2m-001 100
+
+```
+
+the final model files are under result/pubmed2m-001.
+
+
+## Run YLDA on Madrid cluster
 
 cd ~/hpda/test/ylda
 
@@ -37,8 +56,8 @@ cd ~/hpda/test/ylda
     cexec 'sh /scratch/pengb/hpda/test/bin/run_lda.$HOSTNAME'
 
 
-Run YLDA on Julet cluster
-=============================
+## Run YLDA on Julet cluster
+
 working dir = ~/hpda/test/ylda
 
 ### 1. data

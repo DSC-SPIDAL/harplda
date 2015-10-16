@@ -34,6 +34,7 @@ mkdir -p runserver
 mkdir -p learner
 mkdir -p global_dict
 mkdir -p interval_model
+mkdir -p result
 
 #3. DM_Server
 echo "Start up the DM_Server......"
@@ -65,13 +66,23 @@ cd ..
 echo "Collect all intermediate model files..."
 cd interval_model
 sh ../scripts/build_intervalmodel.sh ../conf/$cluster.hostname
+cd ..
 
 echo "Stop DM_Servers ..."
 cexec sh $bindir/killapp.sh DM_Server
 
 ### 7. prepare for new experiments
-echo "Save work directory to work-$appname, bye"
+echo "Save work directory to work-$appname"
 cexec "cd $workroot && mv work work-$appname"
+
+### 8. save the result
+mkdir -p result/$appname
+cp interval_model/global/* result/$appname
+cp global_dict/global-dict.wordis result/$appname
+echo "result model files are in result/$appname, enjoy~"
+
+
+
 
 
 
