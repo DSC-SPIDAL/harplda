@@ -1,4 +1,6 @@
 #!/bin/sh
+trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
+
 if [ $# -eq "3" -o $# -eq "2" ]; then
     chkinterval=100
     if [ $# -eq "3" ]; then
@@ -36,17 +38,27 @@ mkdir -p global_dict
 mkdir -p interval_model
 mkdir -p result
 
+#2. Clean up
+echo "Clean up all DM_server and learners"
+cexec "killapp.sh DM_server 2>>/dev/null"
+cexec "killapp.sh learntopics 2>>/dev/null"
+
+
 #3. DM_Server
 echo "Start up the DM_Server......"
 cd runserver
 sh ../scripts/make_runserver.sh ../conf/$cluster.hostname ../conf/$cluster.ip
 cpush * $bindir
-cexec sh $bindir/killapp.sh DM_server
-cexec sh $bindir/run_server.'$HOSTNAME'
+cexec chmod +x $bindir/run_server.'$HOSTNAME'
+#cexec /sbin/start-stop-daemon --background --start --exec $bindir/run_server.'$HOSTNAME'
+echo "wait for DM_server startup......"
+cexec $bindir/run_server.'$HOSTNAME' &
+
+sleep 30
 cd ..
 
 #4. run learntopics
-echo "Start lad learners......"
+echo "Start lda learners......"
 cd learner/
 cp ../runserver/server.list .
 sh ../scripts/make_lda.sh ../conf/$cluster.hostname $chinterval
@@ -66,10 +78,15 @@ cd ..
 echo "Collect all intermediate model files..."
 cd interval_model
 sh ../scripts/build_intervalmodel.sh ../conf/$cluster.hostname
+# get logs
+cd global
+sh ../../scripts/build_logs.sh ../../conf/$cluster.hostname
+cd ..
+
 cd ..
 
 echo "Stop DM_Servers ..."
-cexec sh $bindir/killapp.sh DM_Server
+cexec killapp.sh DM_Server
 
 ### 7. prepare for new experiments
 echo "Save work directory to work-$appname"
@@ -78,7 +95,9 @@ cexec "cd $workroot && mv work work-$appname"
 ### 8. save the result
 mkdir -p result/$appname
 cp interval_model/global/* result/$appname
-cp global_dict/global-dict.wordis result/$appname
+cp global_dict/global-dict.wordids result/$appname
+
+
 echo "result model files are in result/$appname, enjoy~"
 
 

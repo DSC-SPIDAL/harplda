@@ -37,7 +37,7 @@ for host in ${hosts[*]}; do
     echo "echo \"run learntopics on $host\"" >  run_lda.$host
     echo "cd $ylda && source $ylda/setLibVars.sh" >> run_lda.$host
     #cmd="cd $work && $ylda/learntopics --topics=$topics --iter=$iter --servers=$server_list --alpha=$alpha --beta=$beta  --optimizestats=5000 --samplerthreads=$threads --chkptdir="/tmp" --chkptinterval=$chkinterval "
-    cmd="cd $work && $ylda/learntopics --topics=$topics --iter=$iter --servers=$server_list --alpha=$alpha --beta=$beta  --optimizestats=5000 --samplerthreads=$threads  --chkptdir=$work --chkptinterval=$chkinterval "
+    cmd="cd $work && export GLOG_log_dir=$work && $ylda/learntopics --topics=$topics --iter=$iter --servers=$server_list --alpha=$alpha --beta=$beta  --optimizestats=5000 --samplerthreads=$threads  --chkptdir=$work --chkptinterval=$chkinterval "
     echo $cmd >> run_lda.$host
     ((server_id++))
 done
