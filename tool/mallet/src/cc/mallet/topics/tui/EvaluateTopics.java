@@ -263,7 +263,7 @@ public class EvaluateTopics {
 				
 				evaluator = readdata(modeldataFilename.value); 
 			}	
-			else if (modelFilename.value != null){
+			/*else if (modelFilename.value != null){
 				ParallelTopicModel topicModel = null;
 				try {
 					topicModel = ParallelTopicModel.read(new File(modelFilename.value));
@@ -273,7 +273,7 @@ public class EvaluateTopics {
 								   modelFilename.value + ": " + e);
 					System.exit(1);
 				}				
-			}
+			}*/
 			
 			if (printModel.value != null){
 				evaluator.printmodel();

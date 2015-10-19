@@ -92,7 +92,7 @@ public class WeightedTopicModel implements Serializable {
 	protected int[] oneDocTopicCounts; // indexed by <document index, topic index>
 
 	// Statistics needed for sampling.
-	protected int[][] typeTopicCounts; // indexed by <feature index, topic index>
+	protected long[][] typeTopicCounts; // indexed by <feature index, topic index>
 	protected int[] tokensPerTopic; // indexed by <topic index>
 
 	// Weights on type-type interactions
@@ -145,7 +145,7 @@ public class WeightedTopicModel implements Serializable {
 		random = new Randoms(seed);
 	}
 	
-	public int[][] getTypeTopicCounts() { return typeTopicCounts; }
+	public long[][] getTypeTopicCounts() { return typeTopicCounts; }
 	public int[] getTopicTotals() { return tokensPerTopic; }
 
 	public void addInstances (InstanceList training) {
@@ -154,7 +154,7 @@ public class WeightedTopicModel implements Serializable {
 		numTypes = alphabet.size();
 		betaSum = beta * numTypes;
 		
-		typeTopicCounts = new int[numTypes][numTopics];
+		typeTopicCounts = new long[numTypes][numTopics];
 
 		typeTopicWeights = new double[numTypes][numTopics];
 		totalTopicWeights = new double[numTopics];
@@ -264,7 +264,7 @@ public class WeightedTopicModel implements Serializable {
 
 		int[] oneDocTopics = topicSequence.getFeatures();
 
-		int[] currentTypeTopicCounts;
+		long[] currentTypeTopicCounts;
 		double[] currentTypeTopicWeights;
 
 		int type, oldTopic, newTopic;
@@ -303,7 +303,7 @@ public class WeightedTopicModel implements Serializable {
 				assert(tokensPerTopic[oldTopic] >= 0);
 				currentTypeTopicCounts[oldTopic]--;
 
-				int typeCount, otherTypeCount;
+				long typeCount, otherTypeCount;
 				typeCount = currentTypeTopicCounts[oldTopic]; // already incremented
 				
 				for (int otherType: connectedTypes) {
@@ -367,7 +367,7 @@ public class WeightedTopicModel implements Serializable {
 
 			//System.out.println(newTopic + "\t" + alphabet.lookupObject(type));
 
-			int typeCount, otherTypeCount;
+			long typeCount, otherTypeCount;
 			typeCount = currentTypeTopicCounts[newTopic]; // already incremented
 
 			for (int otherType: connectedTypes) {
@@ -517,22 +517,22 @@ public class WeightedTopicModel implements Serializable {
 
 		int topicMask, topicBits;
 
-		if (Integer.bitCount(numTopics) == 1) {
+		if (Long.bitCount(numTopics) == 1) {
 			// exact power of 2
 			topicMask = numTopics - 1;
-			topicBits = Integer.bitCount(topicMask);
+			topicBits = Long.bitCount(topicMask);
 		}
 		else {
 			// otherwise add an extra bit
-			topicMask = Integer.highestOneBit(numTopics) * 2 - 1;
-			topicBits = Integer.bitCount(topicMask);
+			topicMask = (int)(Long.highestOneBit(numTopics) * 2 - 1);
+			topicBits = Long.bitCount(topicMask);
 		}
 
-		int[][] sparseTypeTopicCounts = new int[numTypes][];
+		long[][] sparseTypeTopicCounts = new long[numTypes][];
 
 		for (int type = 0; type < numTypes; type++) {
 			
-			int[] currentTypeTopicCounts = typeTopicCounts[type];
+			long[] currentTypeTopicCounts = typeTopicCounts[type];
 
 			// First figure out how many entries we have
 			int numNonZeros = 0;
@@ -543,13 +543,13 @@ public class WeightedTopicModel implements Serializable {
 			}
 
 			// Allocate the sparse array
-			int[] sparseCounts = new int[numNonZeros];
+			long[] sparseCounts = new long[numNonZeros];
 
 			// And fill it, keeping the array in descending order
 
 			for (int topic = 0; topic < numTopics; topic++) {
 				if (currentTypeTopicCounts[topic] > 0) {
-					int value = (currentTypeTopicCounts[topic] << topicBits) + topic;
+					long value = (currentTypeTopicCounts[topic] << topicBits) + topic;
 					int i = 0;
 					
 					// Move values along. Note that java arrays are 
@@ -559,7 +559,7 @@ public class WeightedTopicModel implements Serializable {
 					}
 					// We've now found where to insert, push along any other values
 					while (i < sparseCounts.length && value > sparseCounts[i]) {
-						int temp = sparseCounts[i];
+						long temp = sparseCounts[i];
 						sparseCounts[i] = value;
 						value = temp;
 						i++;
