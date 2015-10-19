@@ -67,7 +67,8 @@ if __name__ == '__main__':
 
     # logger.debug('model=%s', model.model)
 
-    model.align_dict(newdict, traindict)
+    # try calc likelihood on learned model directly
+    #model.align_dict(newdict, traindict)
     # logger.debug('model=%s', model.model)
 
 

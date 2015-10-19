@@ -38,10 +38,10 @@ init()
 {
 
     # init jobs threads parameter
-    if [ -z $jobsthreads ] ; then
-        $jobsthreads=8
+    if [ -z "${jobsthreads+xxx}" ] ; then
+        jobsthreads=8
     fi
-    echo 'Init test on testset=$TESTSET, jobsthreads=$jobsthreads'
+    echo "Init test on testset=$TESTSET, jobsthreads=$jobsthreads"
 
     # init dataset
     if [ "$TESTSET" == "enwiki-100k" ] ; then
