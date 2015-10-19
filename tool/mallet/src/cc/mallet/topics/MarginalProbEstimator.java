@@ -782,6 +782,15 @@ public class MarginalProbEstimator implements Serializable {
         return estimator;
     }
 
+    
+    public int totalTokensNum(){
+		int totalTokens = 0;
+		for (int topic=0; topic < numTopics; topic++) {
+			totalTokens += tokensPerTopic[ topic ];
+		}
+		return totalTokens;
+    }
+    
     public double modelLogLikelihood() {
 		double logLikelihood = 0.0;
 		int nonZeroTopics;
@@ -867,7 +876,10 @@ public class MarginalProbEstimator implements Serializable {
 			}
 		}
 	
+		int totalTokens = 0;
 		for (int topic=0; topic < numTopics; topic++) {
+			totalTokens += tokensPerTopic[ topic ];
+			
 			logLikelihood -= 
 				Dirichlet.logGammaStirling( (beta * numTypes) +
 											tokensPerTopic[ topic ] );

@@ -268,14 +268,23 @@ public class EvaluateTopics {
 			}
 			
 			if (printModel.value != null){
-				double modelLogLikelihood;
+				int totalTokens = evaluator.totalTokensNum();
+				
+				double modelLogLikelihood, perplexity;
 				modelLogLikelihood = evaluator.modelLogLikelihood();
-				System.out.printf("model logLikelihood=%e\n",modelLogLikelihood);
 				
 				//write to .dat file
 				outputStream = new PrintStream(modeldataFilename.value + "-mallet-lhood.dat");
 				outputStream.printf("%e\n", modelLogLikelihood);
 			
+				perplexity = Math.exp(-modelLogLikelihood/totalTokens);
+				
+				outputStream = new PrintStream(modeldataFilename.value + "-mallet-perplexity.dat");
+				outputStream.printf("%e\n", perplexity);
+				System.out.printf("totalTokens=%d, model logLikelihood=%e, perplexity=%e\n",
+						totalTokens, modelLogLikelihood,perplexity);
+				
+				
 				System.exit(1);
 			}
 
