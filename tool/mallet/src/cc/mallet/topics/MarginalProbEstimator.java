@@ -42,7 +42,7 @@ public class MarginalProbEstimator implements Serializable {
 	protected double smoothingOnlyMass = 0.0;
 	protected double[] cachedCoefficients;
 
-	protected int[][] typeTopicCounts; // indexed by <feature index, topic index>
+	protected long[][] typeTopicCounts; // indexed by <feature index, topic index>
 	protected int[] tokensPerTopic; // indexed by <topic index>
 
 	protected Randoms random;
@@ -52,20 +52,20 @@ public class MarginalProbEstimator implements Serializable {
 	public MarginalProbEstimator (int numTopics,
 								  double[] alpha, double alphaSum,
 								  double beta,
-								  int[][] typeTopicCounts, 
+								  long[][] typeTopicCounts, 
 								  int[] tokensPerTopic) {
 
 		this.numTopics = numTopics;
 
-		if (Integer.bitCount(numTopics) == 1) {
+		if (Long.bitCount(numTopics) == 1) {
 			// exact power of 2
 			topicMask = numTopics - 1;
-			topicBits = Integer.bitCount(topicMask);
+			topicBits = Long.bitCount(topicMask);
 		}
 		else {
 			// otherwise add an extra bit
-			topicMask = Integer.highestOneBit(numTopics) * 2 - 1;
-			topicBits = Integer.bitCount(topicMask);
+			topicMask = (int)Long.highestOneBit(numTopics) * 2 - 1;
+			topicBits = Long.bitCount(topicMask);
 		}
 
 		this.typeTopicCounts = typeTopicCounts;
@@ -97,7 +97,7 @@ public class MarginalProbEstimator implements Serializable {
 	}
 
 	public int[] getTokensPerTopic() { return tokensPerTopic; }
-	public int[][] getTypeTopicCounts() { return typeTopicCounts; }
+	public long[][] getTypeTopicCounts() { return typeTopicCounts; }
 	
 	public void setPrintWords(boolean shouldPrint) {
 		this.printWordProbabilities = shouldPrint;
@@ -134,15 +134,15 @@ public class MarginalProbEstimator implements Serializable {
 			//buffer.append(type + " " + alphabet.lookupObject(type));
 			//buffer.append(type + " ");
 
-			int[] topicCounts = typeTopicCounts[type];
+			long[] topicCounts = typeTopicCounts[type];
 			int totalCount = 0;
 
 			int index = 0;
 			while (index < topicCounts.length &&
 				   topicCounts[index] > 0) {
 
-				int topic = topicCounts[index] & topicMask;
-				int count = topicCounts[index] >> topicBits;
+				int topic = (int)topicCounts[index] & topicMask;
+				int count = (int)topicCounts[index] >> topicBits;
 				
 				totalCount += count;
 				buffer.append(" " + topic + ":" + count);
@@ -205,7 +205,7 @@ public class MarginalProbEstimator implements Serializable {
 		int[] oneDocTopics = new int[tokenSequence.getLength()];
 		double[] wordProbabilities = new double[tokenSequence.getLength()];
 
-		int[] currentTypeTopicCounts;
+		long[] currentTypeTopicCounts;
 		int type, oldTopic, newTopic;
 		double topicWeightsSum;
 		int docLength = tokenSequence.getLength();
@@ -323,8 +323,8 @@ public class MarginalProbEstimator implements Serializable {
 				
 					while (index < currentTypeTopicCounts.length && 
 						   currentTypeTopicCounts[index] > 0) {
-						currentTopic = currentTypeTopicCounts[index] & topicMask;
-						currentValue = currentTypeTopicCounts[index] >> topicBits;
+						currentTopic = (int)currentTypeTopicCounts[index] & topicMask;
+						currentValue = (int)currentTypeTopicCounts[index] >> topicBits;
 					
 						score = 
 							cachedCoefficients[currentTopic] * currentValue;
@@ -348,7 +348,7 @@ public class MarginalProbEstimator implements Serializable {
 							sample -= topicTermScores[i];
 						}
 					
-						newTopic = currentTypeTopicCounts[i] & topicMask;
+						newTopic = (int)currentTypeTopicCounts[i] & topicMask;
 					}
 					else {
 						sample -= topicTermMass;
@@ -463,8 +463,8 @@ public class MarginalProbEstimator implements Serializable {
 			
 			while (index < currentTypeTopicCounts.length && 
 				   currentTypeTopicCounts[index] > 0) {
-				currentTopic = currentTypeTopicCounts[index] & topicMask;
-				currentValue = currentTypeTopicCounts[index] >> topicBits;
+				currentTopic = (int)currentTypeTopicCounts[index] & topicMask;
+				currentValue = (int)currentTypeTopicCounts[index] >> topicBits;
 				
 				score = 
 					cachedCoefficients[currentTopic] * currentValue;
@@ -530,7 +530,7 @@ public class MarginalProbEstimator implements Serializable {
 					sample -= topicTermScores[i];
 				}
 					
-				newTopic = currentTypeTopicCounts[i] & topicMask;
+				newTopic = (int)currentTypeTopicCounts[i] & topicMask;
 			}
 			else {
 				sample -= topicTermMass;
@@ -683,7 +683,7 @@ public class MarginalProbEstimator implements Serializable {
         beta = in.readDouble();
         betaSum = in.readDouble();
 
-        typeTopicCounts = (int[][]) in.readObject();
+        typeTopicCounts = (long[][]) in.readObject();
         tokensPerTopic = (int[]) in.readObject();
 
         random = (Randoms) in.readObject();
@@ -746,8 +746,8 @@ public class MarginalProbEstimator implements Serializable {
     		for (int w = 0; w<numTypes; w++){
     			for (int k=0; k<numTopics; k++){
     				if (k < typeTopicCounts[w].length ){
-    				    count = typeTopicCounts[w][k] >> topicBits;
-				        topic = typeTopicCounts[w][k] & topicMask;
+    				    count = (int)typeTopicCounts[w][k] >> topicBits;
+				        topic = (int)typeTopicCounts[w][k] & topicMask;
     					out2.writeInt(count);
     					out2.writeInt(topic);
                         if (count ==0){
@@ -810,7 +810,7 @@ public class MarginalProbEstimator implements Serializable {
 
 		// Do the documents first
 
-		int[] topicCounts = new int[numTopics];
+		long[] topicCounts = new long[numTopics];
 		double[] topicLogGammas = new double[numTopics];
 		int[] docTopics;
 
@@ -857,8 +857,8 @@ public class MarginalProbEstimator implements Serializable {
 			int index = 0;
 			while (index < topicCounts.length &&
 				   topicCounts[index] > 0) {
-				int topic = topicCounts[index] & topicMask;
-				int count = topicCounts[index] >> topicBits;
+				int topic = (int)topicCounts[index] & topicMask;
+				int count = (int)topicCounts[index] >> topicBits;
 				
 				nonZeroTypeTopics++;
 				logLikelihood += Dirichlet.logGammaStirling(beta + count);
@@ -877,7 +877,7 @@ public class MarginalProbEstimator implements Serializable {
 		}
 	
 		for (int topic=0; topic < numTopics; topic++) {
-		
+			
 			logLikelihood -= 
 				Dirichlet.logGammaStirling( (beta * numTypes) +
 											tokensPerTopic[ topic ] );
@@ -915,7 +915,7 @@ public class MarginalProbEstimator implements Serializable {
     public double modelLogLikelihood_ylda() {
  		double logLikelihood = 0.0;
  		int nonZeroTopics =0;
- 		int[] topicCounts = new int[numTopics];
+ 		long[] topicCounts = new long[numTopics];
  		// Count the number of type-topic pairs that are not just (logGamma(beta) - logGamma(beta))
  		int nonZeroTypeTopics = 0;
  		int numTypes = typeTopicCounts.length;
@@ -928,8 +928,8 @@ public class MarginalProbEstimator implements Serializable {
  			int index = 0;
  			while (index < topicCounts.length &&
  				   topicCounts[index] > 0) {
- 				int topic = topicCounts[index] & topicMask;
- 				int count = topicCounts[index] >> topicBits;
+ 				int topic = (int)topicCounts[index] & topicMask;
+ 				int count = (int)topicCounts[index] >> topicBits;
  				
  				nonZeroTypeTopics++;
  				logLikelihood += Dirichlet.logGammaStirling(beta + count);

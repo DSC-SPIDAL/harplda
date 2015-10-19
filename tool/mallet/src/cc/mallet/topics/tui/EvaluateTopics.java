@@ -89,7 +89,7 @@ public class EvaluateTopics {
     	double alphaSum = 0;
     	double beta = 0;   // Prior on per-topic multinomial distribution over words
     	
-    	int[][] typeTopicCounts; // indexed by <feature index, topic index>
+    	long[][] typeTopicCounts; // indexed by <feature index, topic index>
     	int[] tokensPerTopic; // indexed by <topic index>    	
     	int topicMask;
     	int topicBits;
@@ -110,17 +110,17 @@ public class EvaluateTopics {
         	System.out.printf("numTopcis:%d\n", numTopics);
         	System.out.printf("numTypes: %d\n",numTypes);   		
         	
-    		if (Integer.bitCount(numTopics) == 1) {
+    	
+    		if (Long.bitCount(numTopics) == 1) {
     			// exact power of 2
     			topicMask = numTopics - 1;
-    			topicBits = Integer.bitCount(topicMask);
+    			topicBits = Long.bitCount(topicMask);
     		}
     		else {
     			// otherwise add an extra bit
-    			topicMask = Integer.highestOneBit(numTopics) * 2 - 1;
-    			topicBits = Integer.bitCount(topicMask);
-    		} 
-    		
+    			topicMask = (int)Long.highestOneBit(numTopics) * 2 - 1;
+    			topicBits = Long.bitCount(topicMask);
+    		}
     		
     		alpha = new double[numTopics];
     		alphaSum = in.readDouble();
@@ -131,7 +131,7 @@ public class EvaluateTopics {
     		beta = in.readDouble();
     	
     		
-    		typeTopicCounts = new int[numTypes][];
+    		typeTopicCounts = new long[numTypes][];
     		tokensPerTopic = new int[numTopics];
     		
     		//for (int type = 0; type < numTypes; type++) {
@@ -159,7 +159,7 @@ public class EvaluateTopics {
 	    				tokensPerTopic[topic[k]] += count[k];
 	    			}
 	    			
-	    			typeTopicCounts[w] = new int[nonzeroCnt];
+	    			typeTopicCounts[w] = new long[nonzeroCnt];
 	    			//update to sparse vector
 	    			for (int j=0; j<nonzeroCnt; j++){
 	    				typeTopicCounts[w][j] = (count[j] << topicBits) + topic[j];
@@ -177,7 +177,7 @@ public class EvaluateTopics {
 	    				}
 	    			}
 	    			
-	    			typeTopicCounts[w] = new int[nonzeroCnt];
+	    			typeTopicCounts[w] = new long[nonzeroCnt];
 	    			//update to sparse vector
 	    			for (int k=0, j=0; k<numTopics; k++){
 	    				if (count[k] > 0){
@@ -193,6 +193,14 @@ public class EvaluateTopics {
         	//debug only
         	System.out.printf("alpha: %f\n",alpha[0]);
         	System.out.printf("beta:%f\n",beta);
+        	
+        	for (int w = 0; w<10; w++){
+        		System.out.printf("typeTopicCount[%d].length =%d\n", w, typeTopicCounts[w].length );
+            }
+
+        	for (int w = 0; w<10; w++){
+        		System.out.printf("tokensPerTopic[%d] = %d\n", w, tokensPerTopic[w]);
+            }
         	
 /*    		for (int w = 0; w<numTypes; w++){
     			String show = "";
