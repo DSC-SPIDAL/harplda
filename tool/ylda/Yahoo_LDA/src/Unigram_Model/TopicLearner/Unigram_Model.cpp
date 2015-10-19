@@ -108,6 +108,13 @@ double Unigram_Model::get_eval() {
     avgLen /= num_words;
     LOG(WARNING) << "Average num of topics assigned per word = " << avgLen;
 
+    //debug 
+    _ttc->get_counts(0, &tc);
+    int length = tc.length;
+    LOG(INFO) << "n_t[0] = "<< n_t[0] << "tc[0].length=" << length 
+        << "num_topics=" << num_topics << " num_words=" << num_words 
+        << "beta_bar = " << beta_bar << " beta=" << beta;
+
     loglikelihood += non_zero_topics * log_gamma(beta_bar)
             - nonZeroTypeTopics * log_gamma(beta);
 
@@ -135,6 +142,13 @@ bool Unigram_Model::savemodel(int iter) {
     string fname = ss.str();
     _ttc->savemodel(fname);
     //_alpha.savemodel(iter);
+    
+    LOG(INFO) << "Save model at iteration: " << iter << " likelihood=" << get_eval();
+
+
+    //
+    //
+    //
 }
 
 
