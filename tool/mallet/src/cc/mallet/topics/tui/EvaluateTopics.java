@@ -7,8 +7,14 @@ import cc.mallet.topics.*;
 import java.io.*;
 
 public class EvaluateTopics {
+
+	static CommandOption.String printModel = new CommandOption.String(
+			EvaluateTopics.class, "printModel", "FILENAME", true, null,
+	         "Print the logLikelihood of the model only.  " +
+			 "By default this is null, indicating that work not in print mode.", null);
 	
-	static CommandOption.String dumpAlphabet = new CommandOption.String(EvaluateTopics.class, "dumpAlphabet", "FILENAME", true, null,
+	static CommandOption.String dumpAlphabet = new CommandOption.String(
+			EvaluateTopics.class, "dumpAlphabet", "FILENAME", true, null,
 	         "The filename in which to write the dictionary of the dataset.  " +
 			 "By default this is null, indicating that no file will be written.", null);	
 	
@@ -260,6 +266,19 @@ public class EvaluateTopics {
 					System.exit(1);
 				}				
 			}
+			
+			if (printModel.value != null){
+				double modelLogLikelihood;
+				modelLogLikelihood = evaluator.modelLogLikelihood();
+				System.out.printf("model logLikelihood=%e\n",modelLogLikelihood);
+				
+				//write to .dat file
+				outputStream = new PrintStream(modeldataFilename.value + "-mallet-lhood.dat");
+				outputStream.printf("%e\n", modelLogLikelihood);
+			
+				System.exit(1);
+			}
+
 		
 			InstanceList instances = InstanceList.load (new File(inputFile.value));
 			
@@ -299,6 +318,7 @@ public class EvaluateTopics {
 			}
 
 			evaluator.printmodel();
+			System.out.printf("model logLikelihood=%e",evaluator.modelLogLikelihood());
 			
 			if (wordTopicCountsFile.value != null){
 				

@@ -782,5 +782,123 @@ public class MarginalProbEstimator implements Serializable {
         return estimator;
     }
 
+    public double modelLogLikelihood() {
+		double logLikelihood = 0.0;
+		int nonZeroTopics;
 
+		// The likelihood of the model is a combination of a 
+		// Dirichlet-multinomial for the words in each topic
+		// and a Dirichlet-multinomial for the topics in each
+		// document.
+
+		// The likelihood function of a dirichlet multinomial is
+		//	 Gamma( sum_i alpha_i )	 prod_i Gamma( alpha_i + N_i )
+		//	prod_i Gamma( alpha_i )	  Gamma( sum_i (alpha_i + N_i) )
+
+		// So the log likelihood is 
+		//	logGamma ( sum_i alpha_i ) - logGamma ( sum_i (alpha_i + N_i) ) + 
+		//	 sum_i [ logGamma( alpha_i + N_i) - logGamma( alpha_i ) ]
+
+		// Do the documents first
+
+		int[] topicCounts = new int[numTopics];
+		double[] topicLogGammas = new double[numTopics];
+		int[] docTopics;
+
+		for (int topic=0; topic < numTopics; topic++) {
+			topicLogGammas[ topic ] = Dirichlet.logGammaStirling( alpha[topic] );
+		}
+	
+/*		for (int doc=0; doc < data.size(); doc++) {
+			LabelSequence topicSequence =	(LabelSequence) data.get(doc).topicSequence;
+
+			docTopics = topicSequence.getFeatures();
+
+			for (int token=0; token < docTopics.length; token++) {
+				topicCounts[ docTopics[token] ]++;
+			}
+
+			for (int topic=0; topic < numTopics; topic++) {
+				if (topicCounts[topic] > 0) {
+					logLikelihood += (Dirichlet.logGammaStirling(alpha[topic] + topicCounts[topic]) -
+									  topicLogGammas[ topic ]);
+				}
+			}
+
+			// subtract the (count + parameter) sum term
+			logLikelihood -= Dirichlet.logGammaStirling(alphaSum + docTopics.length);
+
+			Arrays.fill(topicCounts, 0);
+		}
+
+		// add the parameter sum term
+		logLikelihood += data.size() * Dirichlet.logGammaStirling(alphaSum);
+*/
+		// And the topics
+
+		// Count the number of type-topic pairs that are not just (logGamma(beta) - logGamma(beta))
+		int nonZeroTypeTopics = 0;
+		int numTypes = typeTopicCounts.length;
+
+		for (int type=0; type < numTypes; type++) {
+			// reuse this array as a pointer
+
+			topicCounts = typeTopicCounts[type];
+
+			int index = 0;
+			while (index < topicCounts.length &&
+				   topicCounts[index] > 0) {
+				int topic = topicCounts[index] & topicMask;
+				int count = topicCounts[index] >> topicBits;
+				
+				nonZeroTypeTopics++;
+				logLikelihood += Dirichlet.logGammaStirling(beta + count);
+
+				if (Double.isNaN(logLikelihood)) {
+					System.out.printf("NaN in log likelihood calculation");
+					return 0;
+				}
+				else if (Double.isInfinite(logLikelihood)) {
+					System.out.printf("infinite log likelihood");
+					return 0;
+				}
+
+				index++;
+			}
+		}
+	
+		for (int topic=0; topic < numTopics; topic++) {
+			logLikelihood -= 
+				Dirichlet.logGammaStirling( (beta * numTypes) +
+											tokensPerTopic[ topic ] );
+
+			if (Double.isNaN(logLikelihood)) {
+				System.out.printf("NaN after topic " + topic + " " + tokensPerTopic[ topic ]);
+				return 0;
+			}
+			else if (Double.isInfinite(logLikelihood)) {
+				System.out.printf("Infinite value after topic " + topic + " " + tokensPerTopic[ topic ]);
+				return 0;
+			}
+
+		}
+	
+		// logGamma(|V|*beta) for every topic
+		logLikelihood += 
+			Dirichlet.logGammaStirling(beta * numTypes) * numTopics;
+
+		// logGamma(beta) for all type/topic pairs with non-zero count
+		logLikelihood -=
+			Dirichlet.logGammaStirling(beta) * nonZeroTypeTopics;
+
+		if (Double.isNaN(logLikelihood)) {
+			System.out.printf("at the end");
+		}
+		else if (Double.isInfinite(logLikelihood)) {
+			System.out.printf("Infinite value beta " + beta + " * " + numTypes);
+			return 0;
+		}
+
+		return logLikelihood;
+	}
 }
