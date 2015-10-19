@@ -77,4 +77,5 @@ if __name__ == '__main__':
     #basename = os.path.splitext(modelfile)[0]
     model.save_to_binary(savefile)
 
+    model.print_model()
 

@@ -783,8 +783,8 @@ public class MarginalProbEstimator implements Serializable {
     }
 
     
-    public int totalTokensNum(){
-		int totalTokens = 0;
+    public long totalTokensNum(){
+		long totalTokens = 0;
 		for (int topic=0; topic < numTopics; topic++) {
 			totalTokens += tokensPerTopic[ topic ];
 		}
@@ -876,10 +876,8 @@ public class MarginalProbEstimator implements Serializable {
 			}
 		}
 	
-		int totalTokens = 0;
 		for (int topic=0; topic < numTopics; topic++) {
-			totalTokens += tokensPerTopic[ topic ];
-			
+		
 			logLikelihood -= 
 				Dirichlet.logGammaStirling( (beta * numTypes) +
 											tokensPerTopic[ topic ] );
@@ -913,4 +911,80 @@ public class MarginalProbEstimator implements Serializable {
 
 		return logLikelihood;
 	}
+
+    public double modelLogLikelihood_ylda() {
+ 		double logLikelihood = 0.0;
+ 		int nonZeroTopics =0;
+ 		int[] topicCounts = new int[numTopics];
+ 		// Count the number of type-topic pairs that are not just (logGamma(beta) - logGamma(beta))
+ 		int nonZeroTypeTopics = 0;
+ 		int numTypes = typeTopicCounts.length;
+
+ 		for (int type=0; type < numTypes; type++) {
+ 			// reuse this array as a pointer
+
+ 			topicCounts = typeTopicCounts[type];
+
+ 			int index = 0;
+ 			while (index < topicCounts.length &&
+ 				   topicCounts[index] > 0) {
+ 				int topic = topicCounts[index] & topicMask;
+ 				int count = topicCounts[index] >> topicBits;
+ 				
+ 				nonZeroTypeTopics++;
+ 				logLikelihood += Dirichlet.logGammaStirling(beta + count);
+
+ 				if (Double.isNaN(logLikelihood)) {
+ 					System.out.printf("NaN in log likelihood calculation");
+ 					return 0;
+ 				}
+ 				else if (Double.isInfinite(logLikelihood)) {
+ 					System.out.printf("infinite log likelihood");
+ 					return 0;
+ 				}
+
+ 				index++;
+ 			}
+ 		}
+ 	
+ 		for (int topic=0; topic < numTopics; topic++) {
+ 			if (tokensPerTopic[ topic] >0){
+ 				nonZeroTopics++;
+ 			}
+ 			
+ 			logLikelihood -= 
+ 				Dirichlet.logGammaStirling( (beta * numTypes) +
+ 											tokensPerTopic[ topic ] );
+
+ 			if (Double.isNaN(logLikelihood)) {
+ 				System.out.printf("NaN after topic " + topic + " " + tokensPerTopic[ topic ]);
+ 				return 0;
+ 			}
+ 			else if (Double.isInfinite(logLikelihood)) {
+ 				System.out.printf("Infinite value after topic " + topic + " " + tokensPerTopic[ topic ]);
+ 				return 0;
+ 			}
+
+ 		}
+ 	
+ 		// logGamma(|V|*beta) for every topic
+ 		logLikelihood += 
+ 			//Dirichlet.logGammaStirling(beta * numTypes) * numTopics;
+ 			Dirichlet.logGammaStirling(beta * numTypes) * nonZeroTopics;
+
+ 		// logGamma(beta) for all type/topic pairs with non-zero count
+ 		logLikelihood -=
+ 			Dirichlet.logGammaStirling(beta) * nonZeroTypeTopics;
+
+ 		if (Double.isNaN(logLikelihood)) {
+ 			System.out.printf("at the end");
+ 		}
+ 		else if (Double.isInfinite(logLikelihood)) {
+ 			System.out.printf("Infinite value beta " + beta + " * " + numTypes);
+ 			return 0;
+ 		}
+
+ 		return logLikelihood;
+ 	}
+
 }

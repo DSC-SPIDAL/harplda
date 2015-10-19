@@ -42,6 +42,13 @@ class LDAModelData():
         self.alpha = []
         self.beta = 0.
         self.fullload = True
+        self.tokensPerTopic = 0
+
+    def print_model(self):
+        logger.info('alpha_sum :%f', self.alpha[0]*self.num_topics)
+        logger.info('typeTopicCounts[0]=%s', self.model[0])
+        for i in range(10):
+            logger.info('tokensPerTopic[%d]=%d', i, self.tokensPerTopic[i])
 
     def load_from_txt(self, txtmodel, fullload = True):
         """
@@ -263,6 +270,9 @@ class LDAModelData():
             f.write(struct.pack('>d', self.beta))
 
             debuginfo=[]
+
+            self.tokensPerTopic = np.zeros((10,1))
+
             if self.fullload:
                 #todo, here is the only fullload mode save
                 index = np.argsort(self.model)
@@ -283,9 +293,14 @@ class LDAModelData():
                         if w == 0:
                             debuginfo.append("%s:%s"%(self.model[w][col], col))
 
+                        #debuf for tokensPerTopic
+                        if int(k[0]) < 10:
+                            self.tokensPerTopic[col] += self.model[w][col]
+
                     # if w==0:
                     #     logger.debug('w=0, model=%s', ' '.join(debuginfo))
             else:
+
                 # line is wordid:cnt ...
                 for w in range(V):
                     line = self.model[w][0]
@@ -302,6 +317,10 @@ class LDAModelData():
                             f.write(struct.pack('>i', int(k[0])))
                             if w == 0:
                                 debuginfo.append("%s:%s"%(k[1], k[0]))
+
+                            #debuf for tokensPerTopic
+                            if int(k[0]) < 10:
+                                self.tokensPerTopic[int(k[0])] += int(k[1])
 
                     # a row end by (0,0) pair
                     f.write(struct.pack('>i', 0))
