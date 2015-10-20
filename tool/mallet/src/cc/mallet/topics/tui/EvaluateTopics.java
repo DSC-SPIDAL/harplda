@@ -162,7 +162,7 @@ public class EvaluateTopics {
 	    			typeTopicCounts[w] = new long[nonzeroCnt];
 	    			//update to sparse vector
 	    			for (int j=0; j<nonzeroCnt; j++){
-	    				typeTopicCounts[w][j] = (count[j] << topicBits) + topic[j];
+	    				typeTopicCounts[w][j] = ((long)(count[j]) << topicBits) + topic[j];
 	    			}
 	    		}
     		}
@@ -181,7 +181,7 @@ public class EvaluateTopics {
 	    			//update to sparse vector
 	    			for (int k=0, j=0; k<numTopics; k++){
 	    				if (count[k] > 0){
-	    					typeTopicCounts[w][j] = (count[k] << topicBits) + k;
+	    					typeTopicCounts[w][j] = ((long)(count[k]) << topicBits) + k;
 	    					j ++;
 	    				}
 	    			}
@@ -221,7 +221,7 @@ public class EvaluateTopics {
 		}
     	
     	return estimator;
-		
+	
     }
     
 	public static void main (String[] args) {
