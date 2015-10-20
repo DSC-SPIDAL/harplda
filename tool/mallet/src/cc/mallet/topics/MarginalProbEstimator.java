@@ -694,7 +694,7 @@ public class MarginalProbEstimator implements Serializable {
 
 	
 	public void printmodel(){
-        System.out.printf("alphasum=%f, beta=%f\n", alphaSum, beta);
+        System.out.printf("alpha sum=%f, beta=%f\n", alphaSum,beta);
 
     	for (int w = 0; w<10; w++){
     		System.out.printf("typeTopicCount[%d].length =%d\n", w, typeTopicCounts[w].length );
@@ -919,6 +919,8 @@ public class MarginalProbEstimator implements Serializable {
  		// Count the number of type-topic pairs that are not just (logGamma(beta) - logGamma(beta))
  		int nonZeroTypeTopics = 0;
  		int numTypes = typeTopicCounts.length;
+ 		int maxTypeTopicCount =0, maxTokenPerTopic =0;
+ 		
 
  		for (int type=0; type < numTypes; type++) {
  			// reuse this array as a pointer
@@ -930,6 +932,10 @@ public class MarginalProbEstimator implements Serializable {
  				   topicCounts[index] > 0) {
  				int topic = (int)(topicCounts[index] & topicMask);
  				int count = (int)(topicCounts[index] >> topicBits);
+ 				
+ 				if (maxTypeTopicCount < count){
+ 					maxTypeTopicCount = count;
+ 				}
  				
  				nonZeroTypeTopics++;
  				logLikelihood += Dirichlet.logGammaStirling(beta + count);
@@ -950,6 +956,11 @@ public class MarginalProbEstimator implements Serializable {
  		for (int topic=0; topic < numTopics; topic++) {
  			if (tokensPerTopic[ topic] >0){
  				nonZeroTopics++;
+ 				
+ 				if (maxTokenPerTopic < tokensPerTopic[ topic]){
+ 					maxTokenPerTopic = tokensPerTopic[ topic];
+ 				}
+ 				
  			}
  			
  			logLikelihood -= 
@@ -983,7 +994,8 @@ public class MarginalProbEstimator implements Serializable {
  			System.out.printf("Infinite value beta " + beta + " * " + numTypes);
  			return 0;
  		}
-
+ 		
+ 		System.out.printf("maxTypeTopicCount=" + maxTypeTopicCount + " maxPerTopicCount=" + maxTokenPerTopic);
  		return logLikelihood;
  	}
 
