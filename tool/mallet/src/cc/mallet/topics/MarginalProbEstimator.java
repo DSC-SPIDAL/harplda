@@ -694,7 +694,7 @@ public class MarginalProbEstimator implements Serializable {
 
 	
 	public void printmodel(){
-        System.out.printf("alphasum=%f\n", alphaSum);
+        System.out.printf("alphasum=%f, beta=%f\n", alphaSum, beta);
 
     	for (int w = 0; w<10; w++){
     		System.out.printf("typeTopicCount[%d].length =%d\n", w, typeTopicCounts[w].length );

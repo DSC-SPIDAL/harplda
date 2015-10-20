@@ -29,6 +29,7 @@ if [ -z $work ] ; then
     echo 'workdir is null, quit...'
     exit -1
 fi
+echo "start job as $appname"
 echo "initialize the working directory"
 cexec "mkdir -p $work && cd $work && cp ../input/lda* ."
 
@@ -67,7 +68,7 @@ sh ../scripts/make_lda.sh ../conf/$cluster.hostname $chinterval
 cpush * $bindir
 
 date 
-cexec monitor.sh start ib0
+cexec monitor.sh start eth0
 cexec sh $bindir/run_lda.'$HOSTNAME'
 cexec monitor.sh stop $appname 
 date
