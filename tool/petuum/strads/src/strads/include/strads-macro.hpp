@@ -28,7 +28,7 @@
 #define MAX_ALIAS (64) 
 // max alias name length for user input data
 
-#define MAX_MACHINES (32)
+#define MAX_MACHINES (128)
 
 #define SCHEDULING_RANDOM_SEED (0x12000)
 

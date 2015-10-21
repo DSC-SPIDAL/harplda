@@ -2,16 +2,26 @@
 # -*- coding: utf-8 -*-
 
 """
-measure the performance of lda trainer
-analysis the log file
+Analysis the log file of lda trainers to measure the performance
 
 input:
     lda trainer's log dir
 
 format:
-    mallet  ^[0-9]+ms
-    ylda    
-    harp   : Compute time: 88900, comm time: 18103
+    mallet : ^[0-9]+ms  
+        pass
+        
+    ylda   : learntopics.INFO.$HOSTNAME, all nodes' log in one directory
+        $appname/interval_model/global/learntopics.INFO.$HOSTNAME
+         1 Log file created at: 2015/10/21 10:27:14
+         Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+         W1021 10:37:32.546551 15315 Training_Execution_Strategy.cpp:57] Starting Parallel training Pipeline
+         Iteration 1 done. Took 0.384061 mins
+         Synch pass 1 done. Took 231.369 seconds
+
+
+    harp   : hadoop user logs, syslog, each node has one directory
+        Compute time: 88900, comm time: 18103
 
 
 Usage: 
@@ -31,18 +41,27 @@ logger = logging.getLogger(__name__)
 
 
 class LDATrainerLog():
-    name =''
+    trainers=['mallet','harp','ylda']
     pattern={
         "mallet":"^([0-9]+)ms",
-        "harp":"Compute time: ([0-9]*), comm time: ([0-9]*)"
+        "harp":"Compute time: ([0-9]*), comm time: ([0-9]*)",
+        "ylda-compute":"Iteration ([0-9]*) done. Took ([0-9\.]*) mins",
+        "ylda-commu":"Synch pass ([0-9]*) done. Took ([0-9\.]*) seconds"
     }
 
     def __init__(self,name):
-        if name not in self.pattern:
+        if name not in self.trainers:
             raise NameError('no %s trainer support yet, quit.'%name)
         self.name = name
+        self.engine={
+            'harp':self.load_applog_harp,
+            'ylda':self.load_applog_ylda
+        }
 
-    def load_timelog(self, logfile):
+    def load_applog(self, logdir):
+        return self.engine[self.name](logdir)
+
+    def load_timelog_harp(self, logfile):
         """
         load elapsed millis of each iteration from logfile
     
@@ -55,10 +74,10 @@ class LDATrainerLog():
             m = re.search(self.pattern[self.name], line)
             if m:
                 elapsed.append( (int(m.group(1)), int(m.group(2))) )
-    
+            
         return elapsed
 
-    def load_applog(self, appdir, filename):
+    def load_applog_harp(self, appdir, filename='syslog'):
         models = []
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
@@ -122,6 +141,92 @@ class LDATrainerLog():
 
         return matrix
 
+    def load_timelog_ylda(self, logfile):
+        """
+        load elapsed millis of each iteration from logfile
+    
+        return:
+            nparray
+        """
+        logf = open(logfile,'r')
+        compute = []
+        commu = []
+        for line in logf:
+            m = re.search(self.pattern[self.name+'-compute'], line)
+            if m:
+                compute.append( (int(m.group(1)), int(float(m.group(2))*60*1000)) )
+
+            m = re.search(self.pattern[self.name+'-commu'], line)
+            if m:
+                commu.append( (int(m.group(1)), int(float(m.group(2))*1000)) )
+
+        return compute, commu
+
+    def load_applog_ylda(self, appdir, filename='learntopics.INFO'):
+        models = []
+        for dirpath, dnames, fnames in os.walk(appdir):
+            for f in fnames:
+                if f.startswith(filename):
+                    compute, commu = self.load_timelog_ylda(os.path.join(dirpath, f))
+                    if len(compute) > 0:
+                        logger.info('load log from %s at %s', f, dirpath)
+                        models.append((dirpath, compute, commu))
+
+        # (dirpath, [compute time], [comm time])
+        iternum = len(models[0][1])
+        nodenum = len(models)
+        models =  sorted(models, key = lambda modeltp : modeltp[0])
+        logger.info('total %d iterations, %d nodes', iternum, nodenum)
+        
+        compute=[]
+        comm=[]
+        for idx in range(nodenum):
+            compute.append([x[1] for x in models[idx][1]])
+            comm.append([x[1] for x in models[idx][2]])
+
+        #logger.debug('computeMatrix: %s', compute[:3])
+
+        # id, compute time, comm time, dtype=object for comm can be different length
+        computeMatrix = np.array(compute)
+        commMatrix = np.array(comm)
+
+        #output the matrix
+        np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
+        np.savetxt(appdir + ".commtime", commMatrix, fmt='%d')
+
+        #min, max, mean analysis
+        # mean/std of compute, comm restured
+        matrix = np.zeros((4, iternum))
+
+        statMatrix = np.zeros((4, iternum))
+        statMatrix[0] = np.min(computeMatrix, axis=0)
+        statMatrix[1] = np.max(computeMatrix, axis=0)
+        statMatrix[2] = np.mean(computeMatrix, axis=0)
+        statMatrix[3] = np.std(computeMatrix, axis=0)
+
+        matrix[0] = statMatrix[2]
+        matrix[1] = statMatrix[3]
+
+        np.savetxt(appdir + '.comput-stat', statMatrix,fmt='%.2f')
+
+        statMatrix[0] = np.min(commMatrix, axis=0)
+        statMatrix[1] = np.max(commMatrix, axis=0)
+        statMatrix[2] = np.mean(commMatrix, axis=0)
+        statMatrix[3] = np.std(commMatrix, axis=0)
+
+        matrix[2] = statMatrix[2]
+        matrix[3] = statMatrix[3]
+
+        np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
+
+        #logger.info('min = %s', np.min(computeMatrix, axis=0))
+        #logger.info('max = %s', np.max(computeMatrix, axis=0))
+        #logger.info('mean = %s', np.mean(computeMatrix, axis=0))
+        #logger.info('std = %s', np.std(computeMatrix, axis=0))
+
+        return matrix
+
+
 
 def draw_mvmatrix(mv_matrix, trainer, fig, show = False):
     logger.info('draw the mean-var figure')
@@ -175,7 +280,7 @@ if __name__ == "__main__":
 
     # check the path
     trainer = sys.argv[1]
-    logfile = sys.argv[2]
+    logdir = sys.argv[2]
     figname = 'runtime.png'
     if len(sys.argv) > 3:
         figname = sys.argv[3]
@@ -183,9 +288,9 @@ if __name__ == "__main__":
     logAnalizer = LDATrainerLog(trainer)
 
     #draw_time(logAnalizer.load_timelog(logfile), trainer, figname)
-    mv_matrix = logAnalizer.load_applog(logfile, 'syslog')
+    mv_matrix = logAnalizer.load_applog(logdir)
 
-    draw_mvmatrix(mv_matrix, trainer, figname)
+    #draw_mvmatrix(mv_matrix, trainer, figname)
 
 
 
