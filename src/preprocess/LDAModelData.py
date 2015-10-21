@@ -108,7 +108,9 @@ class LDAModelData():
                 # and it's local number for ylda Merge_Topics_Counts output
                 # so, we just use lineno as the word id, which is always correct.
                 # word =  int(line[:line.find(' ')])
-                word = linecnt
+                # word = linecnt
+                # refer to distMergeModel, need selected model file by subset of words
+                word =  int(line[:line.find(' ')])
     
                 if fullload:
                     # parse each cell
@@ -166,7 +168,11 @@ class LDAModelData():
                     # a litter different to ylda model data, here content is not sorted
                     mf.write(prefix + content + '\n')
                 else:
-                    mf.write(prefix + ' ' + str(self.model[i][0]) + '\n')
+                    #
+                    # write only nonezero lines
+                    #
+                    if self.model[i][0]!=0:
+                        mf.write(prefix + ' ' + str(self.model[i][0]) + '\n')
 
         with open(txtmodel+'.hyper', 'w') as hf:
             content = ','.join([str(alpha) for alpha in self.alpha])
@@ -175,28 +181,34 @@ class LDAModelData():
             hf.write("#numTopics : " + str(num_topics) +"\n")
             hf.write("#numTypes : " + str(num_words) + "\n")
 
-    def align_dict(self, newDict, oldDict):
+    def align_dict(self, newDict, oldDict, newdict_size = 1000000):
         """
         Align word id between two model system
     
         input:
-            newDict  <id term>
+            newDict  <id term>          ; if newDict=='', use 1-1 directy mapping
             oldDict    <id term freq>
     
+
         output:
             model       realigned
     
         """
-        new = open(newDict, 'r')
-        old = open(oldDict, 'r')
-    
-        # read in oldDict
-        logger.info('read new dict from %s', newDict)
         newmap = dict()
-        for line in new:
-            tokens = line.strip().split('\t')
-            newmap[int(tokens[0])] = tokens[1]
-        
+        if newDict!='':
+            new = open(newDict, 'r')
+    
+            # read in oldDict
+            logger.info('read new dict from %s', newDict)
+            for line in new:
+                tokens = line.strip().split('\t')
+                newmap[int(tokens[0])] = tokens[1]
+        else:
+            # build num_words mapping directly
+            for i in xrange(newdict_size):
+                newmap[i] = str(i)
+
+        old = open(oldDict, 'r')
         oldmap = dict()
         logger.info('read old dict from %s', oldDict)
         for line in old:
