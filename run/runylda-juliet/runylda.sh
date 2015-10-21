@@ -31,7 +31,7 @@ if [ -z $work ] ; then
 fi
 echo "start job as $appname"
 echo "initialize the working directory"
-cexec "mkdir -p $work && cd $work && cp ../input/lda* ."
+cexec "mkdir -p $work && cd $work && rm -f * && cp ../input/lda* ."
 
 rm -rf runserver learner global_dict interval_model 
 mkdir -p runserver
@@ -45,12 +45,12 @@ mkdir -p result
 echo "Clean up all DM_server and learners"
 cexec "killapp.sh DM_server 2>>/dev/null"
 cexec "killapp.sh learntopics 2>>/dev/null"
-
+cexec "cd $bindir && rm * 2>>/dev/null"
 
 #3. DM_Server
 echo "Start up the DM_Server......"
 cd runserver
-sh ../scripts/make_runserver.sh ../conf/$cluster.hostname ../conf/$cluster.ip
+sh ../scripts/make_runserver.sh ../conf/$cluster-server.hostname ../conf/$cluster-server.ip
 cpush * $bindir
 cexec chmod +x $bindir/run_server.'$HOSTNAME'
 #cexec /sbin/start-stop-daemon --background --start --exec $bindir/run_server.'$HOSTNAME'
@@ -68,7 +68,7 @@ sh ../scripts/make_lda.sh ../conf/$cluster.hostname $chinterval
 cpush * $bindir
 
 date 
-cexec monitor.sh start eth0
+cexec monitor.sh start ib0
 cexec sh $bindir/run_lda.'$HOSTNAME'
 cexec monitor.sh stop $appname 
 date
