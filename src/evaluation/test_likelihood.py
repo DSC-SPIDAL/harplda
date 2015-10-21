@@ -39,18 +39,27 @@ import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
-def run_mallet_evaluator(mallet, model, data, trainer):
+def run_mallet_evaluator(mallet, model, data, trainer, model_lhood = True):
     """
     Refer to mallet's manual
-    for 3rd party topic model trainer results:
-    run "mallet evaluate-topics --modeldata <model> --input data --output-prob probfile"
 
-    for mallet results:
-    run "mallet evaluate-topics --modelfile <model> --input data --output-prob probfile"
+    model_lhood: True
+        output model likelihood directly from the modedata
+        run "mallet evaluate-topics --printModel ok --modeldata <model> --input null"
+
+    model_lhood: False
+        for 3rd party topic model trainer results:
+        run "mallet evaluate-topics --modeldata <model> --input data --output-prob probfile"
+
+        for mallet results:
+        run "mallet evaluate-topics --modelfile <model> --input data --output-prob probfile"
 
     return:
         0  on error
         likelihood  log likelihood sum
+
+        write a result file as : xxx-mallet-lhood.dat
+        likelihood  perplexity  totalwordcnt
 
     """
     name = model
@@ -58,28 +67,36 @@ def run_mallet_evaluator(mallet, model, data, trainer):
     if os.path.exists(l_file):
         logger.info('%s exists, skip call mallet', l_file)
     else:
-        if trainer == 'mallet':
-            command = mallet + ' evaluate-topics --modelfile ' + model + ' --input ' + data +' --output-prob ' + l_file
+        if model_lhood:
+            command = mallet + ' evaluate-topics --modeldata ' + model + ' --input null --printModel ok'
         else:
-            command = mallet + ' evaluate-topics --modeldata ' + model + ' --input ' + data +' --output-prob ' + l_file
+            if trainer == 'mallet':
+                command = mallet + ' evaluate-topics --modelfile ' + model + ' --input ' + data +' --output-prob ' + l_file
+            else:
+                command = mallet + ' evaluate-topics --modeldata ' + model + ' --input ' + data +' --output-prob ' + l_file
         logger.info('call mallet evaluator: %s', command)
         ret = os.system(command)
         if ret:
             # something wrong
             # remove the l_file
             os.remove(l_file)
-            return 0
+            return 0, 0
 
     #calc the likelihood and perplexity 
-    l_sum = 0.
-    with open(l_file, 'r') as file:
-        for line in file:
-            l_sum+= float(line.rstrip())
+    #l_sum = 0.
+    #with open(l_file, 'r') as file:
+    #    for line in file:
+    #        l_sum+= float(line.rstrip())
 
-    return l_sum
+    result = np.loadtxt(l_file)
+
+    if model_lhood:    
+        return result[0], result[1]
+    else:
+        return result[0], 0
 
 
-def calc_file(malletPath, modelfile, data, doccnt, wordcnt, trainer):
+def calc_file(malletPath, modelfile, data, doccnt, wordcnt, trainer, model_lhood=True):
     """
     Calculate likelihood of one model output phi on testset
 
@@ -98,13 +115,15 @@ def calc_file(malletPath, modelfile, data, doccnt, wordcnt, trainer):
     if os.path.exists(mallet):
         if os.path.exists(modelfile):
             if os.path.exists(data):
-                likelihood = run_mallet_evaluator(mallet, modelfile, data, trainer)
+                likelihood,perplexity = run_mallet_evaluator(mallet, modelfile, data, trainer, model_lhood)
 
-                if likelihood != 0:
-                    perplexity = np.exp(- likelihood / wordcnt)
-                    logger.info('doccnt = %d, wordcnt = %d, likelihood = %f, perplexity = %f\n'%(doccnt, wordcnt, likelihood, perplexity))
-                else:
-                    logger.error('Error: run command failed')
+                if model_lhood == False:
+                    if likelihood != 0:
+                        perplexity = np.exp(- likelihood / wordcnt)
+                        logger.info('doccnt = %d, wordcnt = %d, likelihood = %f, perplexity = %f\n'%(doccnt, wordcnt, likelihood, perplexity))
+                    else:
+                        logger.error('Error: run command failed')
+
             else:
                 logger.error('Error: data file not exists!')
         else:
@@ -114,7 +133,7 @@ def calc_file(malletPath, modelfile, data, doccnt, wordcnt, trainer):
  
     return likelihood, perplexity
 
-def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer):
+def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer, model_lhood=True):
     """
     Calculate likelihood on models output of different iterations
 
@@ -152,7 +171,7 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer):
     likelihoods = np.zeros((len(models), 3))
 
     for idx in range( len(models) ):
-        likelihood, perplexity = calc_file(malletPath, models[idx][1] + ext, data, doccnt, wordcnt, trainer)
+        likelihood, perplexity = calc_file(malletPath, models[idx][1] + ext, data, doccnt, wordcnt, trainer, model_lhood=True)
 
         likelihoods[idx][0] = models[idx][0]
         likelihoods[idx][1] = likelihood
@@ -264,18 +283,22 @@ if __name__ == "__main__":
     num_docs = int(sys.argv[5])
     num_words = int(sys.argv[6])
 
+    model_lhood = True
+    if len(sys.argv) > 7:
+        model_lhood = ((sys.argv[7]).lower() == 'true')
+
     logger.info('test set %s has %d docs and %d words', data, num_docs, num_words)
 
     if os.path.isdir(modelname):
         # if input a directory name
-        likelihoods = calc_dir(malletPath, modelname, data, num_docs, num_words,'.mallet', trainer)
+        likelihoods = calc_dir(malletPath, modelname, data, num_docs, num_words,'.mallet', trainer, model_lhood)
 
         #draw it
         draw_likelihood(likelihoods, modelname, modelname + '.png', True)
 
     else:
         logger.info('calc_file %s', modelname + '.mallet')
-        calc_file(malletPath, modelname+'.mallet', data, num_docs, num_words, trainer)
+        calc_file(malletPath, modelname+'.mallet', data, num_docs, num_words, trainer, model_lhood)
     
 
 

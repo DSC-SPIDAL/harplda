@@ -99,7 +99,7 @@ public class EvaluateTopics {
     	
     	try {
     		DataInputStream in;
-			in = new DataInputStream(new FileInputStream(modeldataFileName));
+			in = new DataInputStream(new BufferedInputStream(new FileInputStream(modeldataFileName)));
 	
     		//numTopics
     		numTopics = in.readInt();
@@ -123,11 +123,16 @@ public class EvaluateTopics {
     		}
     		
     		alpha = new double[numTopics];
+
+            //debug only, fix alpha=0.01
     		alphaSum = in.readDouble();
     		for (int i=0; i< numTopics; i++){
     			alpha[i] = alphaSum;
+    			alpha[i] = 0.01;
     		}
     		alphaSum *= numTopics;
+    		alphaSum = 0.01 * numTopics;
+
     		beta = in.readDouble();
     	
     		
@@ -295,7 +300,7 @@ public class EvaluateTopics {
 						totalTokens, modelLogLikelihood_origin,modelLogLikelihood,perplexity);
 				
 				
-				System.exit(1);
+				System.exit(0);
 			}
 
 		
