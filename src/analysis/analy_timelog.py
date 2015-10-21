@@ -82,7 +82,7 @@ class LDATrainerLog():
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f == filename:
-                    elapsed = self.load_timelog(os.path.join(dirpath, f))
+                    elapsed = self.load_timelog_harp(os.path.join(dirpath, f))
                     if len(elapsed) > 0:
                         logger.info('load log from %s at %s', f, dirpath)
                         models.append((dirpath, elapsed))
@@ -172,23 +172,49 @@ class LDATrainerLog():
                         logger.info('load log from %s at %s', f, dirpath)
                         models.append((dirpath, compute, commu))
 
-        # (dirpath, [compute time], [comm time])
-        iternum = len(models[0][1])
+        # (dirpath, [(1,compute time),(2,)...], [(1,comm time),(2,)...])
         nodenum = len(models)
         models =  sorted(models, key = lambda modeltp : modeltp[0])
-        logger.info('total %d iterations, %d nodes', iternum, nodenum)
         
         compute=[]
         comm=[]
+        iternum = 0
         for idx in range(nodenum):
-            compute.append([x[1] for x in models[idx][1]])
-            comm.append([x[1] for x in models[idx][2]])
+            t = ([x[1] for x in models[idx][1]])
+            if len(t) > iternum:
+                iternum = len(t)
+            compute.append(t)
 
-        #logger.debug('computeMatrix: %s', compute[:3])
+            t =[x[1] for x in models[idx][2]]
+            if len(t) > iternum:
+                iternum = len(t)
+            comm.append(t)
 
+        #iternum = len(models[0][1])
+        logger.info('total %d iterations, %d nodes', iternum, nodenum)
+
+        logger.debug('computeMatrix: %s', compute[:3])
+        logger.debug('commuMatrix: %s', comm[:3])
+
+        #
         # id, compute time, comm time, dtype=object for comm can be different length
-        computeMatrix = np.array(compute)
-        commMatrix = np.array(comm)
+        # iternum maybe not the same
+        #
+        #computeMatrix = np.array(compute)
+        #commMatrix = np.array(comm)
+        computeMatrix = np.zeros((nodenum, iternum))
+        commMatrix = np.zeros((nodenum, iternum))
+
+        for idx in range(nodenum):
+            l = len(compute[idx])
+            np.copyto(computeMatrix[idx][:l], np.array(compute[idx]))
+            l = len(comm[idx])
+            np.copyto(commMatrix[idx][:l], np.array(comm[idx]))
+
+        logger.info('computeMatrix shape=%s, commMatrix shape=%s', computeMatrix.shape, commMatrix.shape)
+
+        logger.debug('computeMatrix[0,:]: %s', computeMatrix[0,:])
+        logger.debug('commuMatrix[0,:] %s', commMatrix[0,:])
 
         #output the matrix
         np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
@@ -290,7 +316,7 @@ if __name__ == "__main__":
     #draw_time(logAnalizer.load_timelog(logfile), trainer, figname)
     mv_matrix = logAnalizer.load_applog(logdir)
 
-    #draw_mvmatrix(mv_matrix, trainer, figname)
+    draw_mvmatrix(mv_matrix, trainer, figname)
 
 
 
