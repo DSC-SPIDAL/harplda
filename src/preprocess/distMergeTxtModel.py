@@ -82,6 +82,7 @@ def make_select_dicts(localdictdir, globaldict, outputdir):
     for dirpath, dnames, fnames in os.walk(localdictdir):
         dict_fs = [ f for f in fnames if f.startswith('dict.wordids')]
         break
+    dict_fs = sorted(dict_fs)
     logger.debug('found dict files under %s:%s', localdictdir, dict_fs)
 
     dict_maps = []

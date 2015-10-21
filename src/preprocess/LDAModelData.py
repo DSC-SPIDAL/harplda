@@ -93,6 +93,8 @@ class LDAModelData():
             linecnt = 0
             for line in matf:
                 line = line.strip()
+                word =  int(line[:line.find(' ')])
+
                 idx = line.find('  ')
                 line = line[idx + 2:]
 
@@ -110,7 +112,7 @@ class LDAModelData():
                 # word =  int(line[:line.find(' ')])
                 # word = linecnt
                 # refer to distMergeModel, need selected model file by subset of words
-                word =  int(line[:line.find(' ')])
+                # word =  int(line[:line.find(' ')]) ^^^up up up
     
                 if fullload:
                     # parse each cell
