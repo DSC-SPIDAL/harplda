@@ -50,8 +50,10 @@ class LDATrainerLog():
     trainers=['mallet','harp','ylda']
     pattern={
         "mallet":"^([0-9]+)ms",
+        "harp-clock":"(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)",
         "harp-compute":"Compute time: ([0-9]*), comm time: ([0-9]*)",
         "harp-iter":"Iteration [0-9]* took: ([0-9]*)",
+        "ylda-clock":"[IWEF](\d\d\d\d \d\d:\d\d:\d\d.[0-9]*)",
         "ylda-compute":"Iteration ([0-9]*) done. Took ([0-9\.]*) mins",
         "ylda-commu":"Synch pass ([0-9]*) done. Took ([0-9\.]*) seconds"
     }
@@ -76,6 +78,48 @@ class LDATrainerLog():
             nparray
         """
         logf = open(logfile,'r')
+
+        # get app starttime, iteration starttime, app endtime
+        # appstart: first line
+        # trainstart: "Starting Parallel training Pipeline"
+        # append:   "Model saved"
+        #
+        startline = logf.readline().strip()
+        string_date = startline[:len("2015-10-10 19:52:05,199")]
+        #logger.info('startline= %s', string_date)
+        app_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
+        train_starttime = app_starttime
+        app_endtime = app_starttime
+
+        for line in logf:
+            if line.find("nitialize Z took") > 0:
+                m = re.search(self.pattern[self.name+'-clock'], line)
+                if m:
+                    #logger.info('match at %s , string_date=%s', line, m.group(1))
+                    string_date = m.group(1)
+                    train_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
+
+            if line.find("Server ends") > 0:
+                m = re.search(self.pattern[self.name+'-clock'], line)
+                if m:
+                    #logger.info('match at %s , string_date=%s', line, m.group(1))
+                    string_date = m.group(1)
+                    app_endtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
+        
+        app_span = (app_endtime - app_starttime).total_seconds()
+        train_span = (app_endtime - train_starttime).total_seconds()
+        logger.info('runtime total=%d, train=%d', app_span, train_span)
+
+
+        #
+        # get time for each iterations
+        #
+        # elapsed: <compute time, commu time>
+        # itertime: <accumulate clocktime, one iteration time>
+        #       accumulate offset to the train_starttime
+        # 
+        logf.seek(0,0)
+
         elapsed=[]
         itertime=[]
         for line in logf:
@@ -85,39 +129,16 @@ class LDATrainerLog():
 
             m = re.search(self.pattern[self.name+'-iter'], line)
             if m:
-                itertime.append( int(m.group(1)) )
-
-        # get app starttime, iteration starttime, app endtime
-        # appstart: first line
-        # trainstart: "Starting Parallel training Pipeline"
-        # append:   "Model saved"
-        #
-        logf.seek(0,0)
-        startline = logf.readline().strip()
-        string_date = startline[:len("2015-10-10 19:52:05,199")]
-        #logger.info('startline= %s', string_date)
-        app_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
-        train_starttime = app_starttime
-        app_endtime = app_starttime
-
-        for line in logf:
-            if line.find("initialize Z took") > 0:
-                m = re.search("(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)", line)
-                if m:
+                # ok, let's get clock time
+                mx = re.search(self.pattern[self.name+'-clock'], line)
+                if mx:
                     #logger.info('match at %s , string_date=%s', line, m.group(1))
-                    string_date = m.group(1)
-                    train_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
+                    string_date = mx.group(1)
+                    iter_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
 
-            if line.find("Server ends") > 0:
-                m = re.search("(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)", line)
-                if m:
-                    #logger.info('match at %s , string_date=%s', line, m.group(1))
-                    string_date = m.group(1)
-                    app_endtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
-        
-        app_span = (app_endtime - app_starttime).total_seconds()
-        train_span = (app_endtime - train_starttime).total_seconds()
-        logger.info('runtime total=%d, train=%d', app_span, train_span)
+                iter_span = (iter_starttime - train_starttime).total_seconds()
+
+                itertime.append( (int(m.group(1)),iter_span) )
 
         return elapsed, app_span, train_span, itertime
 
@@ -140,6 +161,7 @@ class LDATrainerLog():
         compute=[]
         comm=[]
         itertime=[]
+        iter_t = []
         app_t = []
         train_t = []
  
@@ -148,7 +170,8 @@ class LDATrainerLog():
             comm.append([x[1] for x in models[idx][1]])
             app_t.append(models[idx][2])
             train_t.append(models[idx][3])
-            itertime.append(models[idx][4])
+            itertime.append([x[0] for x in models[idx][4]])
+            iter_t.append([x[1] for x in models[idx][4]])
 
         #logger.debug('computeMatrix: %s', compute[:3])
 
@@ -162,6 +185,10 @@ class LDATrainerLog():
         runtimeMatrix[0] = np.array(app_t)
         runtimeMatrix[1] = np.array(train_t)
         runtimeMatrix = np.transpose(runtimeMatrix)
+
+        # add iter_t matrix, (nodenum, iternum)
+        iter_tMatrix = np.array(iter_t)
+        runtimeMatrix = np.concatenate((runtimeMatrix, iter_tMatrix), axis=1)
 
         #output the matrix
         np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
@@ -208,7 +235,7 @@ class LDATrainerLog():
         np.savetxt(appdir + '.iter-stat', statMatrix,fmt='%.2f')
 
         # runtime stat
-        statMatrix = np.zeros((4, 2))
+        statMatrix = np.zeros((4, 2 + iternum))
         statMatrix[0] = np.min(runtimeMatrix, axis=0)
         statMatrix[1] = np.max(runtimeMatrix, axis=0)
         statMatrix[2] = np.mean(runtimeMatrix, axis=0)
@@ -231,23 +258,12 @@ class LDATrainerLog():
             nparray
         """
         logf = open(logfile,'r')
-        compute = []
-        commu = []
-        for line in logf:
-            m = re.search(self.pattern[self.name+'-compute'], line)
-            if m:
-                compute.append( (int(m.group(1)), int(float(m.group(2))*60*1000)) )
-
-            m = re.search(self.pattern[self.name+'-commu'], line)
-            if m:
-                commu.append( (int(m.group(1)), int(float(m.group(2))*1000)) )
 
         # get app starttime, iteration starttime, app endtime
         # appstart: first line
         # trainstart: "Starting Parallel training Pipeline"
         # append:   "Model saved"
         #
-        logf.seek(0,0)
         startline = logf.readline().strip()
         string_date = startline[len("Log file created at: "):]
         #logger.info('startline= %s', string_date)
@@ -274,17 +290,50 @@ class LDATrainerLog():
         train_span = (app_endtime - train_starttime).total_seconds()
         logger.info('runtime total=%d, train=%d', app_span, train_span)
 
-        return compute, commu, app_span, train_span
+        #
+        # get time for each iterations
+        #
+        # compute time
+        # commu time
+        # itertime: <accumulate clocktime, one iteration time>
+        #       accumulate offset to the train_starttime
+        # 
+ 
+        logf.seek(0,0)
+        compute = []
+        commu = []
+        itertime = []
+        for line in logf:
+            # compute
+            m = re.search(self.pattern[self.name+'-compute'], line)
+            if m:
+                compute.append( (int(m.group(1)), int(float(m.group(2))*60*1000)) )
+                # here , let's get the clock time
+                mx = re.search("[IWEF](\d\d\d\d \d\d:\d\d:\d\d.[0-9]*)", line)
+                if mx:
+                    #logger.info('match at %s , string_date=%s', line, m.group(1))
+                    string_date = '2015' + mx.group(1)
+                    iter_starttime = datetime.datetime.strptime(string_date, "%Y%m%d %H:%M:%S.%f")
+
+                iter_span = (iter_starttime - train_starttime).total_seconds()
+                itertime.append( iter_span )
+            
+            # commu
+            m = re.search(self.pattern[self.name+'-commu'], line)
+            if m:
+                commu.append( (int(m.group(1)), int(float(m.group(2))*1000)) )
+
+        return compute, commu, app_span, train_span, itertime
 
     def load_applog_ylda(self, appdir, filename='learntopics.INFO'):
         models = []
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f.startswith(filename):
-                    compute, commu, app_t, train_t = self.load_timelog_ylda(os.path.join(dirpath, f))
+                    compute, commu, app_t, train_t, iter_t = self.load_timelog_ylda(os.path.join(dirpath, f))
                     if len(compute) > 0:
                         logger.info('load log from %s at %s', f, dirpath)
-                        models.append((dirpath, compute, commu, app_t, train_t))
+                        models.append((dirpath, compute, commu, app_t, train_t, iter_t))
 
         # (dirpath, [(1,compute time),(2,)...], [(1,comm time),(2,)...])
         nodenum = len(models)
@@ -294,6 +343,7 @@ class LDATrainerLog():
         comm=[]
         app_t = []
         train_t = []
+        iter_t = []
         iternum = 0
         for idx in range(nodenum):
             t = ([x[1] for x in models[idx][1]])
@@ -308,12 +358,13 @@ class LDATrainerLog():
 
             app_t.append(models[idx][3])
             train_t.append(models[idx][4])
+            iter_t.append(models[idx][5])
 
         #iternum = len(models[0][1])
         logger.info('total %d iterations, %d nodes', iternum, nodenum)
 
-        logger.debug('computeMatrix: %s', compute[:3])
-        logger.debug('commuMatrix: %s', comm[:3])
+        #logger.debug('computeMatrix: %s', compute[:3])
+        #logger.debug('commuMatrix: %s', comm[:3])
 
         #
         # id, compute time, comm time, dtype=object for comm can be different length
@@ -323,12 +374,14 @@ class LDATrainerLog():
         #commMatrix = np.array(comm)
         computeMatrix = np.zeros((nodenum, iternum))
         commMatrix = np.zeros((nodenum, iternum))
+        #iterMatrix = np.zeros((nodenum, iternum))
         
         for idx in range(nodenum):
             l = len(compute[idx])
             np.copyto(computeMatrix[idx][:l], np.array(compute[idx]))
             l = len(comm[idx])
             np.copyto(commMatrix[idx][:l], np.array(comm[idx]))
+            # 
 
         logger.info('computeMatrix shape=%s, commMatrix shape=%s', computeMatrix.shape, commMatrix.shape)
 
@@ -340,6 +393,10 @@ class LDATrainerLog():
         runtimeMatrix[0] = np.array(app_t)
         runtimeMatrix[1] = np.array(train_t)
         runtimeMatrix = np.transpose(runtimeMatrix)
+
+        # add iter_t matrix, (nodenum, iternum)
+        iter_tMatrix = np.array(iter_t)
+        runtimeMatrix = np.concatenate((runtimeMatrix, iter_tMatrix), axis=1)
 
         #output the matrix
         np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
@@ -372,7 +429,7 @@ class LDATrainerLog():
         np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
 
         # runtime stat
-        statMatrix = np.zeros((4, 2))
+        statMatrix = np.zeros((4, 2 + iternum))
         statMatrix[0] = np.min(runtimeMatrix, axis=0)
         statMatrix[1] = np.max(runtimeMatrix, axis=0)
         statMatrix[2] = np.mean(runtimeMatrix, axis=0)

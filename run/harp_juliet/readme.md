@@ -5,7 +5,9 @@ harp experiments on juliet
 
 .computetime     ; computation time for each iteration
 .commtime        ; communication(synchronization) time for each iteration
-.runtime         ; running time, two columns: app and train
+.runtime         ; running time, 
+                   first two columns: app and train, 
+                   the left are iternum columns: clock_time on each iteration
 
 .xxx-stat        ; 4 rows statistics of above files, min, max, mean, std
 
