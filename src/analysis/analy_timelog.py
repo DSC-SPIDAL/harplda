@@ -316,7 +316,7 @@ if __name__ == "__main__":
     #draw_time(logAnalizer.load_timelog(logfile), trainer, figname)
     mv_matrix = logAnalizer.load_applog(logdir)
 
-    draw_mvmatrix(mv_matrix, trainer, figname)
+    draw_mvmatrix(mv_matrix, trainer, logdir+'.png')
 
 
 
