@@ -12,16 +12,21 @@ format:
         pass
         
     ylda   : learntopics.INFO.$HOSTNAME, all nodes' log in one directory
-        $appname/interval_model/global/learntopics.INFO.$HOSTNAME
-         1 Log file created at: 2015/10/21 10:27:14
-         Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-         W1021 10:37:32.546551 15315 Training_Execution_Strategy.cpp:57] Starting Parallel training Pipeline
-         Iteration 1 done. Took 0.384061 mins
-         Synch pass 1 done. Took 231.369 seconds
+           $appname/interval_model/global/learntopics.INFO.$HOSTNAME
+        app_start       Log file created at: 2015/10/21 10:27:14
+                        Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+        train_start     W1021 10:37:32.546551 15315 Training_Execution_Strategy.cpp:57] Starting Parallel training Pipeline
+        app_end         xxxxxxxxxxxxxxx Model saved
+        compute         Iteration 1 done. Took 0.384061 mins
+        communicate     Synch pass 1 done. Took 231.369 seconds
 
 
     harp   : hadoop user logs, syslog, each node has one directory
-        Compute time: 88900, comm time: 18103
+        app_start       2015-10-10 19:44:35,269 INFO [main] 
+        train_start     initialize Z took
+        app_end         Server ends
+        compute/comm    Compute time: 88900, comm time: 18103
+        iter            Iteration 2 took: 97087
 
 
 Usage: 
@@ -45,7 +50,8 @@ class LDATrainerLog():
     trainers=['mallet','harp','ylda']
     pattern={
         "mallet":"^([0-9]+)ms",
-        "harp":"Compute time: ([0-9]*), comm time: ([0-9]*)",
+        "harp-compute":"Compute time: ([0-9]*), comm time: ([0-9]*)",
+        "harp-iter":"Iteration [0-9]* took: ([0-9]*)",
         "ylda-compute":"Iteration ([0-9]*) done. Took ([0-9\.]*) mins",
         "ylda-commu":"Synch pass ([0-9]*) done. Took ([0-9\.]*) seconds"
     }
@@ -71,10 +77,15 @@ class LDATrainerLog():
         """
         logf = open(logfile,'r')
         elapsed=[]
+        itertime=[]
         for line in logf:
-            m = re.search(self.pattern[self.name], line)
+            m = re.search(self.pattern[self.name+'-compute'], line)
             if m:
                 elapsed.append( (int(m.group(1)), int(m.group(2))) )
+
+            m = re.search(self.pattern[self.name+'-iter'], line)
+            if m:
+                itertime.append( int(m.group(1)) )
 
         # get app starttime, iteration starttime, app endtime
         # appstart: first line
@@ -108,17 +119,17 @@ class LDATrainerLog():
         train_span = (app_endtime - train_starttime).total_seconds()
         logger.info('runtime total=%d, train=%d', app_span, train_span)
 
-        return elapsed, app_span, train_span
+        return elapsed, app_span, train_span, itertime
 
     def load_applog_harp(self, appdir, filename='syslog'):
         models = []
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f == filename:
-                    elapsed, app_t, train_t = self.load_timelog_harp(os.path.join(dirpath, f))
+                    elapsed, app_t, train_t, itertime = self.load_timelog_harp(os.path.join(dirpath, f))
                     if len(elapsed) > 0:
                         logger.info('load log from %s at %s', f, dirpath)
-                        models.append((dirpath, elapsed, app_t, train_t))
+                        models.append((dirpath, elapsed, app_t, train_t, itertime))
 
         # (dirpath, [(compute time, comm time)])
         iternum = len(models[0][1])
@@ -128,6 +139,7 @@ class LDATrainerLog():
         
         compute=[]
         comm=[]
+        itertime=[]
         app_t = []
         train_t = []
  
@@ -136,12 +148,14 @@ class LDATrainerLog():
             comm.append([x[1] for x in models[idx][1]])
             app_t.append(models[idx][2])
             train_t.append(models[idx][3])
+            itertime.append(models[idx][4])
 
         #logger.debug('computeMatrix: %s', compute[:3])
 
         # id, compute time, comm time
         computeMatrix = np.array(compute)
         commMatrix = np.array(comm)
+        iterMatrix = np.array(itertime)
 
         # run time: col1:app_time, col2:train_time
         runtimeMatrix = np.zeros((2,nodenum))
@@ -153,11 +167,13 @@ class LDATrainerLog():
         np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
         np.savetxt(appdir + ".commtime", commMatrix, fmt='%d')
         np.savetxt(appdir + ".runtime", runtimeMatrix, fmt='%d')
+        np.savetxt(appdir + ".itertime", iterMatrix, fmt='%d')
 
         #min, max, mean analysis
-        # mean/std of compute, comm restured
-        matrix = np.zeros((4, iternum))
+        # mean/std of compute, comm, iter restured
+        matrix = np.zeros((6, iternum))
 
+        # compute time
         statMatrix = np.zeros((4, iternum))
         statMatrix[0] = np.min(computeMatrix, axis=0)
         statMatrix[1] = np.max(computeMatrix, axis=0)
@@ -169,6 +185,7 @@ class LDATrainerLog():
 
         np.savetxt(appdir + '.comput-stat', statMatrix,fmt='%.2f')
 
+        # comm time
         statMatrix[0] = np.min(commMatrix, axis=0)
         statMatrix[1] = np.max(commMatrix, axis=0)
         statMatrix[2] = np.mean(commMatrix, axis=0)
@@ -178,6 +195,17 @@ class LDATrainerLog():
         matrix[3] = statMatrix[3]
 
         np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
+
+        # itertime
+        statMatrix[0] = np.min(iterMatrix, axis=0)
+        statMatrix[1] = np.max(iterMatrix, axis=0)
+        statMatrix[2] = np.mean(iterMatrix, axis=0)
+        statMatrix[3] = np.std(iterMatrix, axis=0)
+
+        matrix[4] = statMatrix[2]
+        matrix[5] = statMatrix[3]
+
+        np.savetxt(appdir + '.iter-stat', statMatrix,fmt='%.2f')
 
         # runtime stat
         statMatrix = np.zeros((4, 2))
