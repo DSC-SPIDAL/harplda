@@ -75,18 +75,50 @@ class LDATrainerLog():
             m = re.search(self.pattern[self.name], line)
             if m:
                 elapsed.append( (int(m.group(1)), int(m.group(2))) )
-            
-        return elapsed
+
+        # get app starttime, iteration starttime, app endtime
+        # appstart: first line
+        # trainstart: "Starting Parallel training Pipeline"
+        # append:   "Model saved"
+        #
+        logf.seek(0,0)
+        startline = logf.readline().strip()
+        string_date = startline[:len("2015-10-10 19:52:05,199")]
+        #logger.info('startline= %s', string_date)
+        app_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
+        train_starttime = app_starttime
+        app_endtime = app_starttime
+
+        for line in logf:
+            if line.find("initialize Z took") > 0:
+                m = re.search("(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)", line)
+                if m:
+                    #logger.info('match at %s , string_date=%s', line, m.group(1))
+                    string_date = m.group(1)
+                    train_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
+
+            if line.find("Server ends") > 0:
+                m = re.search("(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)", line)
+                if m:
+                    #logger.info('match at %s , string_date=%s', line, m.group(1))
+                    string_date = m.group(1)
+                    app_endtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
+        
+        app_span = (app_endtime - app_starttime).total_seconds()
+        train_span = (app_endtime - train_starttime).total_seconds()
+        logger.info('runtime total=%d, train=%d', app_span, train_span)
+
+        return elapsed, app_span, train_span
 
     def load_applog_harp(self, appdir, filename='syslog'):
         models = []
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f == filename:
-                    elapsed = self.load_timelog_harp(os.path.join(dirpath, f))
+                    elapsed, app_t, train_t = self.load_timelog_harp(os.path.join(dirpath, f))
                     if len(elapsed) > 0:
                         logger.info('load log from %s at %s', f, dirpath)
-                        models.append((dirpath, elapsed))
+                        models.append((dirpath, elapsed, app_t, train_t))
 
         # (dirpath, [(compute time, comm time)])
         iternum = len(models[0][1])
@@ -96,9 +128,14 @@ class LDATrainerLog():
         
         compute=[]
         comm=[]
+        app_t = []
+        train_t = []
+ 
         for idx in range(nodenum):
             compute.append([x[0] for x in models[idx][1]])
             comm.append([x[1] for x in models[idx][1]])
+            app_t.append(models[idx][2])
+            train_t.append(models[idx][3])
 
         #logger.debug('computeMatrix: %s', compute[:3])
 
@@ -106,9 +143,16 @@ class LDATrainerLog():
         computeMatrix = np.array(compute)
         commMatrix = np.array(comm)
 
+        # run time: col1:app_time, col2:train_time
+        runtimeMatrix = np.zeros((2,nodenum))
+        runtimeMatrix[0] = np.array(app_t)
+        runtimeMatrix[1] = np.array(train_t)
+        runtimeMatrix = np.transpose(runtimeMatrix)
+
         #output the matrix
         np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
         np.savetxt(appdir + ".commtime", commMatrix, fmt='%d')
+        np.savetxt(appdir + ".runtime", runtimeMatrix, fmt='%d')
 
         #min, max, mean analysis
         # mean/std of compute, comm restured
@@ -134,6 +178,15 @@ class LDATrainerLog():
         matrix[3] = statMatrix[3]
 
         np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
+
+        # runtime stat
+        statMatrix = np.zeros((4, 2))
+        statMatrix[0] = np.min(runtimeMatrix, axis=0)
+        statMatrix[1] = np.max(runtimeMatrix, axis=0)
+        statMatrix[2] = np.mean(runtimeMatrix, axis=0)
+        statMatrix[3] = np.std(runtimeMatrix, axis=0)
+
+        np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
 
         #logger.info('min = %s', np.min(computeMatrix, axis=0))
         #logger.info('max = %s', np.max(computeMatrix, axis=0))
