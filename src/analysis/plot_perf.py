@@ -154,6 +154,8 @@ class PlotEngine():
         self.init_subplot(1,1)
         self.set_subplot(1,1)
 
+        self.colors=['m', 'r','b','g','c','k','y']
+
     def init_data(self, datadir, perfname):
         """
         perfdata is PerfData object
@@ -195,6 +197,16 @@ class PlotEngine():
     def savefig(self, figname):
         plt.savefig(figname)
 
+
+    def autolabel(self, rects):
+        # attach some text labels
+        for rect in rects:
+            height = rect.get_height()
+            self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%d'%int(height),
+                ha='center', va='bottom')
+
+
+    ######################3
     def plot(self, plotname, fig, conf):
         if plotname in self.ploters:
             return self.ploters[plotname](fig, conf)
@@ -239,25 +251,28 @@ class PlotEngine():
         ind = np.array([0,0.3])
         width = 0.05       # the width of the bars
 
-        colors=['r','b','y','c']
-
         #fig, ax = plt.subplots()
 
         grp_size = len(overall_time)/2
+        rects = []
         for idx in range(grp_size):
             logger.info('val=%d, label=%s', overall_time[idx][0], overall_time[idx][1])
             grp_data = ( overall_time[idx][0], overall_time[idx+grp_size][0] )
             logger.info('val = %s, label=%s', grp_data, overall_time[idx][1])
             # ax.bar(ind + width*idx, overall_time[idx][0], width, label = overall_time[idx][1])
-            self.curax.bar(ind + width*idx, grp_data, width, color=colors[idx], label = overall_time[idx][1])
+            rects.append(self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx], label = overall_time[idx][1]))
 
-        self.curax.set_ylabel('runtime (ms)')
+        self.curax.set_ylabel('runtime (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
             self.curax.set_title('Overall Performance of LDA Trainers')
         self.curax.set_xticks(ind+width)
         self.curax.set_xticklabels( ('ib', 'eth') )
+
+
+        for rect in rects:
+            self.autolabel(rect)
 
         #ax.set_ylim(0, overall_time[0][0] * 2)
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
@@ -318,7 +333,6 @@ class PlotEngine():
                         self.perfdata[runtime_name][2,2:] + offset,
                         self.perfdata[lh_name][:,1], label))
 
-        colors=['r','b','m','g','c','k','y']
 
         #fig, ax = plt.subplots()
 
@@ -337,7 +351,7 @@ class PlotEngine():
                 x = accuracy[idx][1][x_int - 1 ]
                 self.curax.set_ylabel('runtime (s)')
 
-            self.curax.plot(x, accuracy[idx][2], colors[idx]+'.-', label = accuracy[idx][3])
+            self.curax.plot(x, accuracy[idx][2], self.colors[idx]+'.-', label = accuracy[idx][3])
 
         #self.curax.set_ylabel('Model Perplexity')
         self.curax.set_ylabel('Model Likelihood')

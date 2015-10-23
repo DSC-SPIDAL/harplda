@@ -138,8 +138,8 @@ if __name__ == "__main__":
     logging.root.setLevel(level=logging.DEBUG)
     logger.info("running %s" % ' '.join(sys.argv))
 
-#draw_single()
-#   draw_all()
+    draw_single()
+    draw_all()
 
     draw_enwiki_overall()
 
