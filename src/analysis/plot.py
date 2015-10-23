@@ -5,17 +5,24 @@
 A general plot tool.
 
 input:
-    datafile:
-        x y
+    datafiles:  filename as label
+        format1:
+            x y
+
+        format2:  one line
+            y0 y1 y2 .....
 
     configure file:
         title:
         xlabel:
         ylabel:
+        xlog: true
+        ylog: true
+        loc: 0/1...
         ...
 
 Usage:
-    plot <config> <figfile> <datafiles...>
+    plot <config> <figfile> <dirname> <filename pattern>
 
 """
 
@@ -49,11 +56,12 @@ def load_data(dir, pattern):
 
                     logger.info('load data from %s ', f)
                     model = np.loadtxt(os.path.join(dirpath, f))
-                    
-                    # sort the matrix by the first column            
-                    model = model[model[:,0].argsort()]
+                    logger.info('model shape as :%s, size=%d', model.shape, len(model.shape))
+                    if len(model.shape) > 1:
+                        # sort the matrix by the first column            
+                        model = model[model[:,0].argsort()]
 
-                    logger.debug('model = %s', model)
+                    #logger.debug('model = %s', model)
 
                     datalist.append((f, model))
 
@@ -102,8 +110,16 @@ def plot(datalist, config, fig):
         ax = plt.subplot(111)
 
         for data in datalist:
-            x = data[1][:,0]
-            y = data[1][:,1]
+
+            # data has two format
+            if len(data[1].shape) == 1:
+                # one line format
+                y = data[1]
+                x = np.arange(y.shape[0])
+            else:
+                x = data[1][:,0]
+                y = data[1][:,1]
+
             if 'xlog' in config:
                 ax.set_xscale("log", nonposx='clip')
 
@@ -113,9 +129,9 @@ def plot(datalist, config, fig):
             #plt.plot(data[1][:,0], data[1][:,1], label=data[0])
             plt.plot(x, y, label=data[0])
 
-            print_stat(y, data[0]+'@0')
-            print_stat(y[:3000], data[0] +'@3000')
-            print_stat(y[:10000:], data[0] + '@10000')
+            #print_stat(y, data[0]+'@0')
+            #print_stat(y[:3000], data[0] +'@3000')
+            #print_stat(y[:10000:], data[0] + '@10000')
 
 
         if 'loc' in config:
@@ -146,10 +162,10 @@ if __name__ == '__main__':
     configfile = sys.argv[1]
     figfile = sys.argv[2]
     dirname = sys.argv[3]
-    datafile = sys.argv[4]
+    filepattern = sys.argv[4]
 
     config = load_config(configfile)
 
-    model = load_data(dirname, datafile)
+    model = load_data(dirname, filepattern)
 
     plot(model, config, figfile)
