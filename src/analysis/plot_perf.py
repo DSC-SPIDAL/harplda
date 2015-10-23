@@ -92,6 +92,7 @@ class PerfData():
                 #basename = os.path.splitext(f)[0]
                 if f in namelist:
                     if not f in self.data:
+                        logger.debug('load data from %s', f)
                         matrix = np.loadtxt(dirpath + '/' + f)
                         self.data[f] = matrix
 
@@ -143,7 +144,9 @@ class PlotEngine():
     def __init__(self):
         self.ploters = {
             "overall_runtime":self.plot_overall_app,
-            "overall_traintime":self.plot_overall_train
+            "overall_traintime":self.plot_overall_train,
+            "accuracy_iter":self.plot_accuracy_iter,
+            "accuracy_runtime":self.plot_accuracy_runtime,
         }
 
         # init default subplot
@@ -166,7 +169,7 @@ class PlotEngine():
         #f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
         self.fig, self.ax = plt.subplots(*args)
         logger.info('init_subplots as %s, axarr shape=%s', args, self.ax)
-        self.fig.set_size_inches(9.25*1.5, 5.25*1.5)
+        #self.fig.set_size_inches(9.25*1.5, 5.25*1.5)
 
         x = args[0]
         y = args[1]
@@ -261,6 +264,90 @@ class PlotEngine():
             plt.savefig(figname)
 
         #plt.show()
+
+
+    #
+    # accuracy plots
+    #
+    def plot_accuracy_iter(self, figname, conf):
+        return self.plot_accuracy(0, figname, conf)
+
+    def plot_accuracy_runtime(self, figname, conf):
+        return self.plot_accuracy(1, figname, conf)
+
+    def plot_accuracy(self, plottype, figname, conf):
+        """
+        get accuracy from .likelihood, and itertime from .runtime[3:]
+
+        plottype:
+            0   accuracy .vs. iternum
+            1   accuracy .vs. traintime
+        """
+        dataflist = []
+        for name,label in self.perfname:
+            fname = name + '.likelihood'
+            dataflist.append(fname)
+            fname = name + '.runtime-stat'
+            dataflist.append(fname)
+
+        self.perfdata.load(dataflist)
+
+        accuracy = []
+        for name,label in self.perfname:
+            lh_name = name + '.likelihood'
+            runtime_name = name + '.runtime-stat'
+            #
+            # get (iternum, runttime-mean, perplexity, label)
+            # 
+            logger.debug('runtime_name=%s', runtime_name)
+            accuracy.append((self.perfdata[lh_name][:,0], 
+                        self.perfdata[runtime_name][2,2:],
+                        self.perfdata[lh_name][:,1], label))
+
+        colors=['r','b','y','c']
+
+        #fig, ax = plt.subplots()
+
+        #grp_size = len(accuracy)/2
+        # data is two group, one in ib, other in eth
+        colors = ['b','c','r','g','y']
+
+        grp_size = len(accuracy)
+        for idx in range(grp_size):
+            if plottype == 0:
+                x = accuracy[idx][0]
+                self.curax.set_ylabel('iteration number')
+            else:
+                x = accuracy[idx][0]
+                #convert iternum to runtime
+                x_int = x.astype(int)
+                x = accuracy[idx][1][x_int - 1 ]
+                self.curax.set_ylabel('runtime (s)')
+
+            self.curax.plot(x, accuracy[idx][2], colors[idx]+'.-', label = accuracy[idx][3])
+
+        #self.curax.set_ylabel('Model Perplexity')
+        self.curax.set_ylabel('Model Likelihood')
+        if plottype == 0:
+            self.curax.set_xlabel('Iteration Number')
+        else:
+            self.curax.set_xlabel('Training Time')
+
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('LDA Trainer Accuracy')
+        #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        self.curax.legend(loc = 0)
+        
+        if figname:
+            #plt.savefig('full-'+figname)
+            #self.curax.set_ylim(0, 350)
+            #plt.savefig('tail-'+figname)
+            plt.savefig(figname)
+
+        #plt.show()
+
 
 if __name__ == "__main__":
     program = os.path.basename(sys.argv[0])
