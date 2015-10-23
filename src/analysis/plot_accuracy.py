@@ -65,20 +65,7 @@ def draw_single():
   
     call_plot('accuracy_runtime', 'data','accuracy_eth.enwiki','accuracy_runtime_eth.enwiki.png',"LDA Trainers Accuracy on enwiki Dataset,Ethernet")
 
-
-
-if __name__ == "__main__":
-    program = os.path.basename(sys.argv[0])
-    logger = logging.getLogger(program)
-
-    # logging configure
-    import logging.config
-    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-    logging.root.setLevel(level=logging.DEBUG)
-    logger.info("running %s" % ' '.join(sys.argv))
-
-    draw_single()
-
+def draw_all():
     # output (2,2) subplots
     ploter.init_subplot(2,2)
     ploter.fig.suptitle("LDA Trainers Accuracy")
@@ -113,4 +100,46 @@ if __name__ == "__main__":
     ploter.fig.subplots_adjust(hspace=0.4)
     ploter.savefig('accuracy_enwiki.png')
 
+def draw_enwiki_overall():
+    # output (2,2) subplots
+    ploter.init_subplot(1,2)
+    ploter.fig.suptitle("LDA Trainers Accuracy")
+    ploter.fig.set_size_inches(9.25*1.5, 5.25*1.5)
+
+    ploter.set_subplot(1,1)
+    call_plot('accuracy_overalltime', 'data', 'accuracy_ib.clueweb', '', "Clueweb Dataset, 16Gbps Infiniband")
+    ploter.set_subplot(1,2)
+    call_plot('accuracy_overalltime', 'data', 'accuracy_eth.clueweb', '', "Clueweb Dataset, 1Gpbs Ethernet")
+    
+    ploter.fig.subplots_adjust(hspace=0.4)
+    ploter.savefig('accuracy_clueweb_excutiontime.png')
+    
+    # enwiki
+    ploter.init_subplot(1,2)
+    ploter.fig.suptitle("LDA Trainers Accuracy")
+    ploter.fig.set_size_inches(9.25*1.5, 5.25*1.5)
+ 
+    ploter.set_subplot(1,1)
+    call_plot('accuracy_overalltime', 'data','accuracy_ib.enwiki','',"Enwiki Dataset, 16Gbps Infiniband")
+    ploter.set_subplot(1,2)
+    call_plot('accuracy_overalltime', 'data','accuracy_eth.enwiki','',"Enwiki Dataset, 1Gbps Ethernet")
+
+    ploter.fig.subplots_adjust(hspace=0.4)
+    ploter.savefig('accuracy_enwiki_excutiontime.png')
+
+
+if __name__ == "__main__":
+    program = os.path.basename(sys.argv[0])
+    logger = logging.getLogger(program)
+
+    # logging configure
+    import logging.config
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+    logging.root.setLevel(level=logging.DEBUG)
+    logger.info("running %s" % ' '.join(sys.argv))
+
+#draw_single()
+#   draw_all()
+
+    draw_enwiki_overall()
 

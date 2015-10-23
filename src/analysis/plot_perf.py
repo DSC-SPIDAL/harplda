@@ -147,6 +147,7 @@ class PlotEngine():
             "overall_traintime":self.plot_overall_train,
             "accuracy_iter":self.plot_accuracy_iter,
             "accuracy_runtime":self.plot_accuracy_runtime,
+            "accuracy_overalltime":self.plot_accuracy_overalltime,
         }
 
         # init default subplot
@@ -175,7 +176,7 @@ class PlotEngine():
         y = args[1]
         if x == 1 and y == 1:
             self.axtype = 1
-        elif y == 0:
+        elif x == 1 or y == 1:
             self.axtype = 2
         else:
             self.axtype = 3
@@ -184,6 +185,7 @@ class PlotEngine():
         if self.axtype == 1:
             self.curax = self.ax
         elif self.axtype == 2:
+            x = max(x, y)
             self.curax = self.ax[x-1]
         else:
             self.curax = self.ax[x-1,y-1]
@@ -275,6 +277,10 @@ class PlotEngine():
     def plot_accuracy_runtime(self, figname, conf):
         return self.plot_accuracy(1, figname, conf)
 
+    def plot_accuracy_overalltime(self, figname, conf):
+        return self.plot_accuracy(2, figname, conf)
+
+
     def plot_accuracy(self, plottype, figname, conf):
         """
         get accuracy from .likelihood, and itertime from .runtime[3:]
@@ -282,6 +288,7 @@ class PlotEngine():
         plottype:
             0   accuracy .vs. iternum
             1   accuracy .vs. traintime
+            2   accuracy .vs. excution time
         """
         dataflist = []
         for name,label in self.perfname:
@@ -299,18 +306,24 @@ class PlotEngine():
             #
             # get (iternum, runttime-mean, perplexity, label)
             # 
+            #
             logger.debug('runtime_name=%s', runtime_name)
+            # start overhead = apptime - traintime 
+            if plottype == 2:
+                # use overall time
+                offset = self.perfdata[runtime_name][2,0] - self.perfdata[runtime_name][2,1] 
+            else:
+                offset = 0
             accuracy.append((self.perfdata[lh_name][:,0], 
-                        self.perfdata[runtime_name][2,2:],
+                        self.perfdata[runtime_name][2,2:] + offset,
                         self.perfdata[lh_name][:,1], label))
 
-        colors=['r','b','y','c']
+        colors=['r','b','m','g','c','k','y']
 
         #fig, ax = plt.subplots()
 
         #grp_size = len(accuracy)/2
         # data is two group, one in ib, other in eth
-        colors = ['b','c','r','g','y']
 
         grp_size = len(accuracy)
         for idx in range(grp_size):
@@ -330,8 +343,11 @@ class PlotEngine():
         self.curax.set_ylabel('Model Likelihood')
         if plottype == 0:
             self.curax.set_xlabel('Iteration Number')
-        else:
-            self.curax.set_xlabel('Training Time')
+        elif plottype == 1:
+            self.curax.set_xlabel('Training Time (s)')
+        elif plottype == 2:
+            self.curax.set_xlabel('Excution Time (s)')
+
 
         if 'title' in conf:
             self.curax.set_title(conf['title'])
