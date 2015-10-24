@@ -15,6 +15,6 @@ topics=10000
 iter=200
 alpha=100
 beta=0.01
-threads=40
+threads=64
 
 

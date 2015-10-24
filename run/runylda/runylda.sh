@@ -28,7 +28,9 @@ fi
 cd scripts && rm -f cluster_config && ln -s cluster_config.$datasetname.$clustername cluster_config && cd ..
 
 . $cluster_config
-if [ $cluster -ne $clustername ] ; then
+
+echo "load $cluster_config ..., ok, cluster=$cluster"
+if [ "$cluster" != "$clustername" ] ; then
     echo '$cluster name mismatch, quit ...'
     exit -2
 fi
@@ -49,6 +51,7 @@ if [ ! -f $cluster.ip ] ; then
     echo 'make $cluster.ip in conf fail, quit...'
     exit -1
 fi
+cd ..
 
 #1. clean $workdir
 if [ -z $work ] ; then
