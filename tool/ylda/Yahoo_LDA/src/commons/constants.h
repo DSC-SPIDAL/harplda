@@ -81,7 +81,9 @@ static const uint16_t RNG_MASK = (1 << 5) - 1;
 
 //Max allowed memory size. If you try allocating
 //more than this we will abort
-static const uint64_t MAX_MEMORY_USAGE = ((uint64_t) 1) << 34;
+//static const uint64_t MAX_MEMORY_USAGE = ((uint64_t) 1) << 34;
+// set this to 100GB
+static const uint64_t MAX_MEMORY_USAGE = ((uint64_t) 100 * 1024 * 1024 *1024);
 
 //If you try allocating more than this much memory,
 //you will be warned that there might be something
@@ -109,7 +111,9 @@ static const time_t LOCK_EXPIRY_TIME = 10; //in secs
 static const uint16_t REACQUIRE_BUFFER = 2;
 
 //List of stop words. These will be ignored in the input
-static const std::string stopwords[] = { "a", "able", "about", "above",
+static const std::string stopwords[] = { "the" };
+
+static const std::string stopwords_save[] = { "a", "able", "about", "above",
         "according", "accordingly", "across", "actually", "after",
         "afterwards", "again", "against", "all", "allow", "allows", "almost",
         "alone", "along", "already", "also", "although", "always", "am",

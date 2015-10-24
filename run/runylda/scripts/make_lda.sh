@@ -8,7 +8,7 @@ if [ $# -eq "1" -o $# -eq "2" ]; then
     echo "get server host from $1"
     hosts=(`cat $1`)
 
-    chkinterval=100
+    chkinterval=10
     
     if [ $# -eq "2" ]; then
         chkinterval=$2

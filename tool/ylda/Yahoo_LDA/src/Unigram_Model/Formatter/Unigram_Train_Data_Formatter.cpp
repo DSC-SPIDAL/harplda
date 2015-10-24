@@ -34,7 +34,8 @@ Unigram_Train_Data_Formatter::Unigram_Train_Data_Formatter() {
     using namespace boost;
     //Read the stop words into a set
     stringstream ss;
-    for (int i = 0; i < NUM_STP_WRDS; i++) {
+    //for (int i = 0; i < NUM_STP_WRDS; i++) {
+    for (int i = 0; i < 1; i++) {
         ss << stopwords[i] << " : ";
         _stopWords.insert(stopwords[i]);
     }
@@ -79,7 +80,7 @@ void Unigram_Train_Data_Formatter::format() {
             _doc_writer->write(wdoc);
         }
     }
-    LOG(INFO) << "Found " << st_wrd_cnt << " stop words" << endl;
+    LOG(WARNING) << "Found " << st_wrd_cnt << " stop words" << endl;
 }
 
 int Unigram_Train_Data_Formatter::read_from_inp(LDA::unigram_document& wdoc,
@@ -131,10 +132,10 @@ int Unigram_Train_Data_Formatter::read_from_inp(LDA::unigram_document& wdoc,
             continue;
         }
         //Skip stop words
-        if (_stopWords.count(word) > 0) {
-            ++st_wrd_cnt;
-            continue;
-        }
+        //if (_stopWords.count(word) > 0) {
+        //    ++st_wrd_cnt;
+        //    continue;
+        //}
 
         //Insert into dictionary if needed
         //Else check if it exists in the supplied one

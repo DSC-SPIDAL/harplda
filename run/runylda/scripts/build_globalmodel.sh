@@ -8,13 +8,16 @@
 homedir=`dirname $0`
 . $homedir/cluster_config
 
+hostname="$homedir/../conf/$cluster.hostname"
+hosts=(`cat $homedir/../conf/$cluster.hostname`)
+echo "get server host from $hostname"
+
 if [ $# -eq "2" ]; then
-    echo "get server host from $1"
-    hosts=(`cat $1`)
+    reverse_order=$1
     appname=$2
 else
     echo "Collect all nodes' interval models, merge them for convergence analysis"
-    echo "usage: build_globalmodel.sh <slave file> <appname>"
+    echo "usage: build_globalmodel.sh <reverse_oder> <appname>"
     exit 
 fi
 
@@ -47,7 +50,13 @@ done
 cd ..
 
 # run merge
-python ~/hpda/lda-test/src/preprocess/distMergeTxtModel.py -mergedict localdicts selectdicts global-dict.wordids
+
+if [ -f $homedir/../result/$appname/global-dict.wordids ]; then
+    python ~/hpda/lda-test/src/preprocess/distMergeTxtModel.py -mergedict localdicts selectdicts $homedir/../result/$appname/global-dict.wordids $reverse_order
+else
+    echo "global-dict.wordids not found at $homedir/../result/$appname/, quit..."
+    exit -1
+fi
 
 #
 # step.2 send select dicts back
@@ -59,7 +68,8 @@ for host in ${hosts[*]}; do
 done
 cd ..
 
-
+# remove select dir first
+cexec "cd $workroot && rm -rf select"
 cexec "cd $workroot && mkdir -p select && python /N/u/pengb/hpda/lda-test/src/preprocess/distMergeTxtModel.py -extract work-$appname select work-$appname/dict.wordids."'$HOSTNAME'
 
 

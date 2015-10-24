@@ -17,11 +17,13 @@ for host in ${hosts[*]}; do
     echo "echo \"run formatter on $host\"" >  run_formatter.$host
     cmd="cd $work"
     echo $cmd >> run_formatter.$host
-    cmd="for f in \`ls "$datadir$host"\` ;  do cat "$datadir$host"/\$f >>input.ylda ; done "
+    cmd="for f in \`ls "$datadir$host"\` ;  do cat "$datadir$host"/\$f >>input.mrlda ; done "
+    echo $cmd >>  run_formatter.$host
+    cmd="python ~/hpda/lda-test/src/preprocess/mrlda2ylda.py input.mrlda"
     echo $cmd >>  run_formatter.$host
 
     echo "cd $ylda && source $ylda/setLibVars.sh" >> run_formatter.$host
-    cmd="cd $work && cat input.ylda | $ylda/formatter"
+    cmd="cd $work && cat input.mrlda.ylda | $ylda/formatter"
     echo $cmd >> run_formatter.$host
     ((server_id++))
 done

@@ -23,7 +23,7 @@ echo "cp $installfiles $ylda"
 cp $installfiles $ylda
 
 # cpush if you need
-echo "cd $ylda && cpush $installfiles `pwd`"
+echo "cd $ylda && cpush $installfiles $ylda"
 
 echo 'bye~'
 

@@ -31,12 +31,20 @@ server_id=0
 for host in ${hosts[*]}; do
     # copy only the model files
     mkdir -p $host
-    scp -r $host:$work/[0-9]* $host
+    #scp -r $host:$work/[0-9]* $host
     scp -r $host:$work/dict.wordids $host
    ((server_id++))
+
+    #
+    # model file are too large, use just first 3
+    #
+    if [ $server_id -eq 3 ]; then
+        break
+    fi
+
 done
 cd ..
 
 # run merge
-python ~/hpda/lda-test/src/preprocess/mergeTxtModeldata.py local global ../global_dict/global-dict.wordids
+#python ~/hpda/lda-test/src/preprocess/mergeTxtModeldata.py local global ../global_dict/global-dict.wordids
 

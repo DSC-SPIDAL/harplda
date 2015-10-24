@@ -75,7 +75,9 @@ if __name__ == '__main__':
     savefile = modelfile + '.mallet'
     logger.info('saving to %s', savefile)
     #basename = os.path.splitext(modelfile)[0]
-    model.save_to_binary(savefile)
+
+    totalTokens = model.save_to_binary(savefile)
+    logger.info('total tokens count=%d', totalTokens)
 
     model.print_model()
 

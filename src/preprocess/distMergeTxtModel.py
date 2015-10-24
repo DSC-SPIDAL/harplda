@@ -68,7 +68,7 @@ def load_dict_seq(dfile):
     return oldmap
 
 
-def make_select_dicts(localdictdir, globaldict, outputdir):
+def make_select_dicts(localdictdir, globaldict, outputdir, reverse_order):
     """
     input:
         local dict dir:
@@ -82,8 +82,12 @@ def make_select_dicts(localdictdir, globaldict, outputdir):
     for dirpath, dnames, fnames in os.walk(localdictdir):
         dict_fs = [ f for f in fnames if f.startswith('dict.wordids')]
         break
-    dict_fs = sorted(dict_fs)
-    logger.debug('found dict files under %s:%s', localdictdir, dict_fs)
+
+    #
+    # here the sequence of models are determined by sort()
+    #
+    dict_fs = sorted(dict_fs, reverse = reverse_order)
+    logger.debug('found dict files under %s:%s, reverse=%s', localdictdir, dict_fs, reverse_order)
 
     dict_maps = []
     output_fs = []
@@ -221,8 +225,11 @@ if __name__ == '__main__':
         localdir = sys.argv[2]
         outputdir = sys.argv[3]
         globalDict = sys.argv[4]
+        reverse_order = False
+        if len(sys.argv) > 5:
+            reverse_order = (sys.argv[5].lower() == 'true')
 
-        make_select_dicts(localdir, globalDict, outputdir)
+        make_select_dicts(localdir, globalDict, outputdir, reverse_order)
 
     elif cmd == '-extract':
         localdir = sys.argv[2]

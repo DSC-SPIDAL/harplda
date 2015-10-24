@@ -35,4 +35,5 @@ cexec sh  $bindir/run_formatter.'$HOSTNAME'
 cd ..
 
 #3. save to input
+cexec "cd $work/.. && rm -rf input"
 cexec "cd $work/.. && mv work input"

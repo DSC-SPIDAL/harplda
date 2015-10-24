@@ -36,6 +36,7 @@
 #include "Formatter/Unigram_Test_Data_Formatter.h"
 #include "Context.h"
 #include "TopicLearner/Model.h"
+#include "commons/constants.h"
 
 using namespace std;
 
@@ -48,10 +49,14 @@ Data_Formatter* get_data_formatter() {
     string dumpfile = context.get_string("dumpfile");
     switch (model) {
     case Model::UNIGRAM:
-        if (google::GetCommandLineFlagInfoOrDie("dumpfile").is_default)
+        if (google::GetCommandLineFlagInfoOrDie("dumpfile").is_default){
+            LOG(WARNING) << " Unigram_Train_Data_Formatter";
             return new Unigram_Train_Data_Formatter();
-        else
+        }
+        else{
+            LOG(INFO) << " Unigram_Test_Data_Formatter";
             return new Unigram_Test_Data_Formatter();
+        }
         break;
 
     default:
@@ -158,6 +163,7 @@ int main(int argc, char *argv[]) {
     LOG(WARNING) << "Total number of unique words found: " << num_words;
     LOG(WARNING) << "Total num of docs found: " << formatter->get_num_docs();
     LOG(WARNING) << "Total num of tokens found: " << formatter->get_total_num_words();
+    LOG(WARNING) << "Stopwords have been reset." << NUM_STP_WRDS;
 
     release_data_formatter(formatter);
 }

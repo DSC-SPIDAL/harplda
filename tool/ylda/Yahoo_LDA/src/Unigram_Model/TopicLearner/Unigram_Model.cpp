@@ -142,13 +142,7 @@ bool Unigram_Model::savemodel(int iter) {
     string fname = ss.str();
     _ttc->savemodel(fname);
     //_alpha.savemodel(iter);
-    
-    LOG(INFO) << "Save model at iteration: " << iter << " likelihood=" << get_eval();
-
-
-    //
-    //
-    //
+    LOG(INFO) << "Save model at iteration: " << iter << " likelihood = " << get_eval();
 }
 
 
