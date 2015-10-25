@@ -1,0 +1,1 @@
+mpirun -H m2,m4,m5,m6,m7,m8,m3,m3 --bind-to none ./bin/ldall --machfile ./mach.vm -threads 12 -num_topic 100 -num_iter 1000 -data_file /scratch/pengb/hpda/test/pubmed2m//pubmed.ylda -logfile tmplog/1 -wtfile_pre tmplog/wt -dtfile_pre tmplog/dt

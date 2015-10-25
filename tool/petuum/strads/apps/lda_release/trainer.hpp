@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
-const double ALPHA = 0.1;
-const double BETA  = 0.1;
+const double ALPHA = 0.01;
+const double BETA  = 0.01;
 const int EVAL_ITER = 100;
 
 #define MAX_THREADS (256)

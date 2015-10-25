@@ -3,21 +3,15 @@
 homedir=`dirname $0`
 . $homedir/cluster_config
 
+hosts=(`cat slaves`)
 
-if [ $# -eq "1" -o $# -eq "2" ]; then
-    echo "get server host from $1"
-    hosts=(`cat $1`)
-
-    chkinterval=100
-    
-    if [ $# -eq "2" ]; then
-        chkinterval=$2
-    fi
-else
-    echo "usage: run_petuum.sh <slave file> <chkinterval>"
-    exit 
-fi
-
+#if [ $# -eq "1" -o $# -eq "2" ]; then
+#    echo "get server host from $1"
+#    hosts=(`cat $1`)
+#else
+#    echo "usage: run_petuum.sh <slave file> <chkinterval>"
+#    exit 
+#fi
 
 #topics=10000
 #iter=200
@@ -30,7 +24,7 @@ if [ -z "${topics+xxx}" ]; then
 fi
 
 machfile=./mach.vm
-rm $machfile
+rm -f $machfile
 id=1
 for host in ${hosts[*]}; do
     ip=`getent hosts $host | awk '{print $1}'`
@@ -45,15 +39,21 @@ for host in ${hosts[*]}; do
 done
 
 # mach.vm should be distributed first
-binsrc=/N/u/pengb/hpda/petuum/strads/apps/lda_release/bin/ldall
+#binsrc=/N/u/pengb/hpda/petuum/strads/apps/lda_release/bin/ldall
 
-cpush mach.vm `pwd`
-cpush $binsrc `pwd`/bin
+
+cexec mkdir -p $work
+cexec mkdir -p $work/bin
+cexec mkdir -p $work/tmplog
+cpush mach.vm $work
+echo $ldall
+cpush $ldall $work/bin/
 
 
 #run the command
-cmd="mpirun -H $host_list ./bin/ldall --machfile $machfile -threads $threads -num_topic $topics  -num_iter $iter  -data_file $datadir/$datafile -logfile tmplog/1 -wtfile_pre tmplog/wt -dtfile_pre tmplog/dt"
+cmd="mpirun -H $host_list --bind-to none ./bin/ldall --machfile $machfile -threads $threads -num_topic $topics  -num_iter $iter  -data_file $datadir/$datafile -logfile tmplog/1 -wtfile_pre tmplog/wt -dtfile_pre tmplog/dt"
 
+echo $cmd >run.cmd
 echo $cmd
 
 

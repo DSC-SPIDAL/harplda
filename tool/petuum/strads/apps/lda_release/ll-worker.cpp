@@ -1,6 +1,6 @@
 #include "ll-worker.hpp"
 
-void dump_parameters(sharedctx *ctx, vector<wtopic> &wtable, int mywords, vector<int> &mybucket, std::unique_ptr<Trainer> &trainer);
+void dump_parameters(sharedctx *ctx, vector<wtopic> &wtable, int mywords, vector<int> &mybucket, std::unique_ptr<Trainer> &trainer,int iter);
 
 wpacket *packet_alloc(int topicsize){
   int bytes = sizeof(wpacket) + topicsize*sizeof(int)*2;
@@ -497,8 +497,13 @@ void *worker_mach(void *arg){
 	       ctx->rank, docll, moll1, moll2, nzwtg,
 	       per1, per2, per3, per4);
     delete buffstring;
+
+    //save model file every 10 iters
+    if (iter == 0 || (iter+1) % 10 ==0){
+        dump_parameters(ctx, wtable, mywords, mybucket, trainer,iter+1);
+    }
+
   }
-  dump_parameters(ctx, wtable, mywords, mybucket, trainer);
   strads_msg(ERR, "[worker %d] terminate job \n", ctx->rank);
   LOG(INFO) << "[worker " << ctx->rank << "] terminate job" << std::endl;
   return NULL;
@@ -833,21 +838,25 @@ void circulate_calculation_mt(sharedctx *ctx, vector<wtopic> &wtable, int myword
   return;
 }
 
-void dump_parameters(sharedctx *ctx, vector<wtopic> &wtable, int mywords, vector<int> &mybucket, std::unique_ptr<Trainer> &trainer){
+void dump_parameters(sharedctx *ctx, vector<wtopic> &wtable, int mywords, vector<int> &mybucket, std::unique_ptr<Trainer> &trainer, int iter){
   // word-id, topic-id cnt, topic-id cnt, 
   if(FLAGS_wtfile_pre.size() != 0){    
     char *fn = (char *)calloc(sizeof(char), 100);
-    sprintf(fn, "./%s-mach-%d", FLAGS_wtfile_pre.c_str(), ctx->rank);
+    //sprintf(fn, "./%s-mach-%d", FLAGS_wtfile_pre.c_str(), ctx->rank);
+    sprintf(fn, "./tmplog/%d.%d", iter, ctx->rank);
     strads_msg(OUT, "[worker %d] word topic save file from mach :  %s \n", ctx->rank, fn); 
     FILE *fp = fopen(fn, "wt");
     assert(fp);
+
+    // add by pb. write in txtModelFile format  "wordid dump  topic:cnt..."
+
     for(int i=0; i < mywords; i++){  
       int widx = mybucket[i];
       wtopic &entry = wtable[widx]; //    wtable[widx];
       unsigned long size = entry.topic.size();
-      fprintf(fp, "%d", widx);
+      fprintf(fp, "%d 0 ", widx);
       for(unsigned long i=0; i < size; i++){
-	fprintf(fp, ",%d %d", entry.topic[i], entry.cnt[i]); 
+	fprintf(fp, " %d:%d", entry.topic[i], entry.cnt[i]); 
       }
       fprintf(fp, "\n"); 
     }
@@ -856,24 +865,24 @@ void dump_parameters(sharedctx *ctx, vector<wtopic> &wtable, int mywords, vector
     LOG(INFO) << "Specify wtfile_pre flag for word topic table saving" << std::endl;
   }
   // doc-id, topic-id cnt, topic-id cnt, 
-  if(FLAGS_dtfile_pre.size() != 0){    
-    char *fn = (char *)calloc(sizeof(char), 100);
-    sprintf(fn, "./%s-mach-%d", FLAGS_dtfile_pre.c_str(), ctx->rank);
-    strads_msg(OUT, "[worker %d] document topic save file:  %s \n", ctx->rank, fn); 
-    FILE *fp = fopen(fn, "wt");
-    assert(fp);   
-    for(unsigned long docid = 0; docid < trainer->stat_.size(); docid++){     
-      const auto &doc = trainer->stat_[docid];
-
-      assert(doc.item_.size() != 0);
-      fprintf(fp, "%ld", (docid*ctx->m_worker_machines + ctx->rank));
-      for (const auto& pair : doc.item_) {
-	fprintf(fp, ",%d %d", pair.top_, pair.cnt_); 
-      }
-      fprintf(fp, "\n"); 
-    }
-    fclose(fp);
-  }else{
-    LOG(INFO) << "Specify dtfile_pre flag for document topic table saving" << std::endl;
-  }
+//  if(FLAGS_dtfile_pre.size() != 0){    
+//    char *fn = (char *)calloc(sizeof(char), 100);
+//    sprintf(fn, "./%s-mach-%d", FLAGS_dtfile_pre.c_str(), ctx->rank);
+//    strads_msg(OUT, "[worker %d] document topic save file:  %s \n", ctx->rank, fn); 
+//    FILE *fp = fopen(fn, "wt");
+//    assert(fp);   
+//    for(unsigned long docid = 0; docid < trainer->stat_.size(); docid++){     
+//      const auto &doc = trainer->stat_[docid];
+//
+//      assert(doc.item_.size() != 0);
+//      fprintf(fp, "%ld", (docid*ctx->m_worker_machines + ctx->rank));
+//      for (const auto& pair : doc.item_) {
+//	fprintf(fp, ",%d %d", pair.top_, pair.cnt_); 
+//      }
+//      fprintf(fp, "\n"); 
+//    }
+//    fclose(fp);
+//  }else{
+//    LOG(INFO) << "Specify dtfile_pre flag for document topic table saving" << std::endl;
+//  }
 }
