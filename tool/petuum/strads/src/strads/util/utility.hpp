@@ -34,7 +34,7 @@
 #define DBG  2
 #define ERR  3
 #define OUT  4
-#define MSGLEVEL OUT
+#define MSGLEVEL INF
 #define strads_msg(level, fmt, args...) if(level >= MSGLEVEL)fprintf(stderr, fmt, ##args)
 
 uint64_t timenow(void);

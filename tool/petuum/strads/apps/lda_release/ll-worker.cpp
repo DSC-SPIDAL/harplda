@@ -777,7 +777,7 @@ void circulate_calculation_mt(sharedctx *ctx, vector<wtopic> &wtable, int myword
 	  }
 	}       
 	assert(found); // if not found ,,, fatal error        
-	strads_msg(INF, "[worker %d] I got widx (%d) circulated \n", ctx->rank, widx); 
+	//strads_msg(INF, "[worker %d] I got widx (%d) circulated \n", ctx->rank, widx); 
 	auto &entry = wtable[widx];
 	assert(entry.topic.size() == 0);
 	assert(entry.cnt.size() == 0);
