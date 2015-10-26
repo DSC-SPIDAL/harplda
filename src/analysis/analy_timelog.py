@@ -27,7 +27,11 @@ format:
         app_end         Server ends
         compute/comm    Compute time: 88900, comm time: 18103
         iter            Iteration 2 took: 97087
-
+    
+    petuum : petuum logs
+        ### iteration, docll, moll,  docll+moll, time per iter, total elapsed time
+        0  -8.768292e+09  -1.122321e+10  -1.999150e+10  28.347012 28.347012 
+        
 
 Usage: 
     analy_timelog <trainer> <appdir> <figname>
@@ -47,7 +51,7 @@ logger = logging.getLogger(__name__)
 
 
 class LDATrainerLog():
-    trainers=['mallet','harp','ylda']
+    trainers=['mallet','harp','ylda','petuum']
     pattern={
         "mallet":"^([0-9]+)ms",
         "harp-clock":"(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)",
@@ -64,11 +68,63 @@ class LDATrainerLog():
         self.name = name
         self.engine={
             'harp':self.load_applog_harp,
-            'ylda':self.load_applog_ylda
+            'ylda':self.load_applog_ylda,
+            'petuum':self.load_applog_petuum
         }
 
     def load_applog(self, logdir):
         return self.engine[self.name](logdir)
+
+    def load_applog_petuum(self, appdir, filename='.log'):
+        for dirpath, dnames, fnames in os.walk(appdir):
+            for f in fnames:
+                if f.endswith(filename):
+                    rawdata = np.loadtxt(os.path.join(dirpath, f))
+                    break
+
+        iternum, cols = rawdata.shape
+
+        #min, max, mean analysis
+        # mean/std of compute, comm, iter restured
+        matrix = np.zeros((6, iternum))
+
+        # compute time, rawdata[:,4]
+        statMatrix = np.zeros((4, iternum))
+        statMatrix[0] = rawdata[:,4]
+        statMatrix[1] = rawdata[:,4]
+        statMatrix[2] = rawdata[:,4]
+        #statMatrix[3] = np.zeros((1,iternum))
+
+        matrix[0] = statMatrix[2]
+        matrix[1] = statMatrix[3]
+
+        np.savetxt(appdir + '.comput-stat', statMatrix,fmt='%.2f')
+
+        # runtime stat
+        statMatrix = np.zeros((4, 2 + iternum))
+        
+        np.copyto(statMatrix[0,2:] , rawdata[:,5])
+        statMatrix[0,1] = np.max(rawdata[:,5])
+        statMatrix[0,0] = statMatrix[0,1] + 120
+
+        statMatrix[1] = statMatrix[0]
+        statMatrix[2] = statMatrix[0]
+        np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
+
+        # likelihood
+        lhiters = [1]
+        lhiters.extend([x for x in range(10,210,10)])
+        lhood= [rawdata[0,2]]
+        lhood.extend([rawdata[iter-1,2] for iter in range(10,210,10)])
+        lhMatrix = np.zeros((21, 3))
+        lhMatrix[:,0] = np.array(lhiters)
+        lhMatrix[:,1] = np.array(lhood)
+        lhMatrix[:,2] = np.array(lhood)
+
+        np.savetxt(appdir + '.likelihood', lhMatrix,fmt='%e')
+
+        return matrix
+
 
     def load_timelog_harp(self, logfile):
         """
@@ -392,9 +448,16 @@ class LDATrainerLog():
         runtimeMatrix = np.zeros((2,nodenum))
         runtimeMatrix[0] = np.array(app_t)
         runtimeMatrix[1] = np.array(train_t)
+        # they maybe different length
+        #np.copyto(runtimeMatrix[0] ,np.array(app_t))
+        #np.copyto(runtimeMatrix[1] ,np.array(train_t))
+    
         runtimeMatrix = np.transpose(runtimeMatrix)
 
         # add iter_t matrix, (nodenum, iternum)
+        #iter_tMatrix = np.array(iter_t)
+        #iter_tMatrix = np.zeros((nodenum, iternum))
+        #np.copyto(iter_tMatrix , np.array(iter_t))
         iter_tMatrix = np.array(iter_t)
         runtimeMatrix = np.concatenate((runtimeMatrix, iter_tMatrix), axis=1)
 
@@ -429,11 +492,17 @@ class LDATrainerLog():
         np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
 
         # runtime stat
-        statMatrix = np.zeros((4, 2 + iternum))
+        K,V = runtimeMatrix.shape
+        statMatrix = np.zeros((4, V))
         statMatrix[0] = np.min(runtimeMatrix, axis=0)
         statMatrix[1] = np.max(runtimeMatrix, axis=0)
         statMatrix[2] = np.mean(runtimeMatrix, axis=0)
         statMatrix[3] = np.std(runtimeMatrix, axis=0)
+        #np.copyTo(statMatrix[0] , np.min(runtimeMatrix, axis=0))
+        #np.copyTo(statMatrix[1] , np.max(runtimeMatrix, axis=0))
+        #np.copyTo(statMatrix[2] , np.mean(runtimeMatrix, axis=0))
+        #np.copyTo(statMatrix[3] , np.std(runtimeMatrix, axis=0))
+
 
         np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
 

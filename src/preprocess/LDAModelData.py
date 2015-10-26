@@ -89,7 +89,7 @@ class LDAModelData():
             # save the whole row string
             model = np.zeros((numTypes, 1), dtype=np.object)
         logger.debug('loading model data....,model.shape=%s', model.shape)
-        with open(txtmodel, 'r') as matf:
+        with open(txtmodel, 'r', 1024*1024) as matf:
             linecnt = 0
             for line in matf:
                 line = line.strip()
@@ -271,7 +271,7 @@ class LDAModelData():
         """
         totalTokensCount = 0
 
-        with open(fname, 'wb') as f:
+        with open(fname, 'wb', 1024*1024) as f:
             V, K = self.model.shape
 
             if self.fullload:
