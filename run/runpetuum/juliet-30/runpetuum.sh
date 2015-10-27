@@ -109,7 +109,7 @@ date
 cexec monitor.sh start $network_interface
 
 echo $cmd
-$cmd 1>>$appname.info.log 2>>$appname.err.log
+$cmd 2>&1 | tee $appname.info.log
 #$cmd
 
 cexec monitor.sh stop $appname 

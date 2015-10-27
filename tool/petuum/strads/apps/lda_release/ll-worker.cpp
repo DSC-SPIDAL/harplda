@@ -581,7 +581,7 @@ void *one_func(void *arg){
   vector<wtopic> *pwtable = marg->wt;
   vector<wtopic> &wtable = *pwtable;
   unique_ptr<Trainer> &trainer = *((unique_ptr<Trainer> *)marg->tr);
-  strads_msg(INF, "Hello\n");
+  //strads_msg(INF, "Hello\n");
   int mthid = ctx->get_thid();
   while(1){
     void *recvcmd = ctx->get_entry_inq_blocking();
@@ -793,8 +793,8 @@ void circulate_calculation_mt(sharedctx *ctx, vector<wtopic> &wtable, int myword
 	free(pkt);
 	free(job);
 
-	if(recvmsg % 10000 == 0)
-	  strads_msg(INF, "\t\t[worker %d] progress: got (%d) message I generated \n", ctx->rank, recvmsg);
+	//if(recvmsg % 10000 == 0)
+	//  strads_msg(INF, "\t\t[worker %d] progress: got (%d) message I generated \n", ctx->rank, recvmsg);
 	if(recvmsg == mywords){
 	  assert(doneflag == false);
 	  strads_msg(INF, "\t\t[worker %d]COGRAGT done (%d) message stat send( %lf KB) recv( %lf KB) procedjob(%ld) wtnzcnt(%ld)\n", 

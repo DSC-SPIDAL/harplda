@@ -91,8 +91,8 @@ class LDAModelData():
         logger.debug('loading model data....,model.shape=%s', model.shape)
         with open(txtmodel, 'r', 1024*1024) as matf:
             linecnt = 0
-            for line in matf:
-                line = line.strip()
+            for line0 in matf:
+                line = line0.strip()
                 word =  int(line[:line.find(' ')])
 
                 idx = line.find('  ')
@@ -102,7 +102,7 @@ class LDAModelData():
                 #idx = line.find(' 0 ')
                 #line = line[idx + 3:]
                 if (idx <= 0):
-                    logger.error('txt model file format error, idx=%d', idx)
+                    logger.error('txt model file format error, idx=%d, line=%s', idx, line0)
                     return
     
                 # word id should be first number in the begining,

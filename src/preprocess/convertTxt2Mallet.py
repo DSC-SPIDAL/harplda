@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     fullload = True
     if len(sys.argv) > 4:
-        fullload = (sys.argv[4] != 'False')
+        fullload = (sys.argv[4].lower() != 'false')
 
     model = LDAModelData()
     model.load_from_txt(modelfile, fullload)
