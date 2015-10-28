@@ -108,7 +108,7 @@ void Trainer2::TrainOneWord(int widx, wtopic &wordtopic, int threadid) {
   clock_gettime(CLOCK_MONOTONIC, &ts2);
 
   //computetime_[threadid] += difftime(ts2, ts1);
-  computetime_[threadid] += ts2.tv_nsec - ts1.tv_nsec;
+  computetime_[threadid] += ts2.tv_sec - ts1.tv_sec;
 }
 
 void Trainer2::PartialTablebuild(std::vector<int> &mybucket, std::vector<wtopic> &wtable) {

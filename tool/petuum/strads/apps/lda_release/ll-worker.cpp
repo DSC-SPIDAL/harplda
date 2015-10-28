@@ -455,7 +455,11 @@ void *worker_mach(void *arg){
   for(int iter=0; iter < FLAGS_num_iter; iter++){ 
     long start = timenow();
 
-    memset(trainer->computetime_, 0,  sizeof(int)* FLAGS_threads);   
+    //memset(trainer->computetime_, 0,  sizeof(int)* FLAGS_threads);   
+
+    for(int i=0; i< FLAGS_threads; i++){
+        trainer->computetime_[i] = 0;
+    }
 
     circulate_calculation_mt(ctx, wtable,  mywords, mybucket, trainer, childs);
 
