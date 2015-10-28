@@ -454,7 +454,23 @@ void *worker_mach(void *arg){
   // start learning 
   for(int iter=0; iter < FLAGS_num_iter; iter++){ 
     long start = timenow();
+
+    memset(trainer->computetime_, 0,  sizeof(int)* FLAGS_threads);   
+
     circulate_calculation_mt(ctx, wtable,  mywords, mybucket, trainer, childs);
+
+    long  _computetime_min = 999999, _computetime_max = 0;
+    for(int i=0; i< FLAGS_threads; i++){
+
+        if (trainer->computetime_[i] >_computetime_max)
+            _computetime_max = trainer->computetime_[i];
+
+        if (trainer->computetime_[i] <_computetime_min)
+            _computetime_min = trainer->computetime_[i];
+    }
+
+    strads_msg(INF, "\t\t[worker %d] my local compute time: min %ld(s), max %ld(s)\n", ctx->rank, _computetime_min, _computetime_max); 
+
     long end1 = timenow();
     // recalc my local summary again 
     // send it back to the coordinator to regenrate global summary gain and get the global summary from the coordinator 

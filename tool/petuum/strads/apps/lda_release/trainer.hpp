@@ -5,6 +5,7 @@
 #include "ldall.hpp"
 #include <string>
 #include <vector>
+#include <time.h>
 
 const double ALPHA = 0.01;
 const double BETA  = 0.01;
@@ -64,6 +65,7 @@ public:
 
   int *topicarray_[MAX_THREADS]; // temporary working space in sampling  
   int *cntarray_[MAX_THREADS];   // temporary working space in sampling
+  long computetime_[MAX_THREADS];  // computation time accumulator
 };
 
 class Trainer2 : public Trainer { // sample-by-word

@@ -75,6 +75,9 @@ void Trainer::RandomInit(int threads) {
   for(int i=0; i<threads; i++){
     topicarray_[i] = (int *)calloc(sizeof(int), num_topic_); 
     cntarray_[i] = (int *)calloc(sizeof(int), num_topic_);
+
+    //computetime_[i] = (int *)calloc(sizeof(int), num_topic_);
+    //memset(computetime_[i], 0,  sizeof(int)*num_topic_);   
   }
 }
 
@@ -95,8 +98,17 @@ void Trainer2::getmylocalsummary() {
 }
 
 void Trainer2::TrainOneWord(int widx, wtopic &wordtopic, int threadid) {
+  
+  struct timespec ts1, ts2;
+  clock_gettime(CLOCK_MONOTONIC, &ts1);
+
   auto &data = data_[widx];
   TrainOneData_dist_mt(data, widx, wordtopic, threadid);
+
+  clock_gettime(CLOCK_MONOTONIC, &ts2);
+
+  //computetime_[threadid] += difftime(ts2, ts1);
+  computetime_[threadid] += ts2.tv_nsec - ts1.tv_nsec;
 }
 
 void Trainer2::PartialTablebuild(std::vector<int> &mybucket, std::vector<wtopic> &wtable) {
