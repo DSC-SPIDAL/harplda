@@ -112,11 +112,13 @@ class LDATrainerLog():
         np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
 
         # likelihood
+        maxiternum = iternum - 2
         lhiters = [1]
-        lhiters.extend([x for x in range(10,210,10)])
+        lhiters.extend([x for x in range(10, maxiternum+1,10)])
         lhood= [rawdata[0,2]]
-        lhood.extend([rawdata[iter-1,2] for iter in range(10,210,10)])
-        lhMatrix = np.zeros((21, 3))
+        lhood.extend([rawdata[iter-1,2] for iter in range(10,maxiternum+1,10)])
+        lhood_row = len(lhood)
+        lhMatrix = np.zeros((lhood_row, 3))
         lhMatrix[:,0] = np.array(lhiters)
         lhMatrix[:,1] = np.array(lhood)
         lhMatrix[:,2] = np.array(lhood)

@@ -120,6 +120,19 @@ init()
         testwordcnt=20106255
         alpha=0.05
         beta=0.01
+     elif [ "$TESTSET" == "pubmed-1M" ] ; then
+        # pubmed-test-200k, pubmed-2M as train set
+        datadir=$homedir/data/enwiki
+        #gibbsdict=$datadir/enwiki-1M-2M.mrlda.reid.txt.wordid
+        harpdict=$datadir/enwiki-1M-reid.train.dict
+        yldadict=$datadir/enwiki-1M-noreid.train.dict
+        #malletdict=$datadir/enwiki-1M-2M.mallet.dict
+        testset=$datadir/enwiki-1M-test200k.mallet.txt
+        testdict=$datadir/enwiki-1M-test200k.mallet.dict
+        testdoccnt=200000
+        testwordcnt=71060964
+        alpha=0.01
+        beta=0.01
     else
         echo "testset '$TESTSET'=$TESTSET not found, quit..."
         help

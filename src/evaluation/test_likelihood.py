@@ -125,7 +125,7 @@ def calc_file(malletPath, modelfile, data, doccnt, wordcnt, trainer, model_lhood
                         logger.error('Error: run command failed')
 
             else:
-                logger.error('Error: data file not exists!')
+                logger.error('Error: data file %s not exists!', data)
         else:
             logger.error('Error: model file not found at %s.',modelfile)
     else:
@@ -167,7 +167,7 @@ def calc_dir(malletPath, modelDir, data, doccnt, wordcnt, ext, trainer, model_lh
         logger.error('ERROR: load too few model files')
         return None
 
-    logger.debug('models iternum as %s', [s[0] for s in models])
+    logger.debug('models iternum as %s, name=%s', [s[0] for s in models], models[0][1])
     likelihoods = np.zeros((len(models), 3))
 
     for idx in range( len(models) ):

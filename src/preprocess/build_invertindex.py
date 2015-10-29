@@ -79,5 +79,7 @@ if __name__ == '__main__':
 
     input = sys.argv[1]
     output = sys.argv[2]
+#    format = sys.argv[3]
+    format = 'ylda'
     
-    build_inv(input, output)
+    build_inv(input, output, format)

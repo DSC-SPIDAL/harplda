@@ -59,11 +59,15 @@ if __name__ == '__main__':
     traindict = sys.argv[3]
 
     fullload = True
+    build_wordid = True
     if len(sys.argv) > 4:
         fullload = (sys.argv[4].lower() != 'false')
+    if len(sys.argv) > 5:
+        build_wordid = (sys.argv[5].lower() != 'false')
+
 
     model = LDAModelData()
-    model.load_from_txt(modelfile, fullload)
+    model.load_from_txt(modelfile, fullload, build_wordid)
 
     # logger.debug('model=%s', model.model)
 

@@ -50,7 +50,7 @@ class LDAModelData():
         for i in range(10):
             logger.info('tokensPerTopic[%d]=%d', i, self.tokensPerTopic[i])
 
-    def load_from_txt(self, txtmodel, fullload = True):
+    def load_from_txt(self, txtmodel, fullload = True, rebuild_wordid = False):
         """
         input:
             model data in txt format
@@ -58,7 +58,10 @@ class LDAModelData():
             fullload: 
                 True when load each cell of the model matrix
                 False, only load id, and row data string,it'll be much faster
-    
+
+            rebuild_wordid:
+                True rebuild wordid by linecnt
+                False   use wordid in text content
         return:
             model is a word-topic count matrix
         """
@@ -88,12 +91,15 @@ class LDAModelData():
         else:
             # save the whole row string
             model = np.zeros((numTypes, 1), dtype=np.object)
-        logger.debug('loading model data....,model.shape=%s', model.shape)
+        logger.debug('loading model data....,model.shape=%s, build_wordid=%s', model.shape, rebuild_wordid)
         with open(txtmodel, 'r', 1024*1024) as matf:
             linecnt = 0
             for line0 in matf:
                 line = line0.strip()
-                word =  int(line[:line.find(' ')])
+                if rebuild_wordid:
+                    word = linecnt
+                else:
+                    word =  int(line[:line.find(' ')])
 
                 idx = line.find('  ')
                 line = line[idx + 2:]
@@ -372,9 +378,13 @@ if __name__ == '__main__':
     modelfile = sys.argv[1]
     malletDict = sys.argv[2]
     harpDict = sys.argv[3]
+    fullload = False
+    build_wordid = True
+    if len(sys.argv) >= 6:
+        build_wordid = (sys.argv[5].lower() == 'true')
 
     model = LDAModelData()
-    model.load_from_txt(modelfile)
+    model.load_from_txt(modelfile, fullload, build_wordid)
     model.align_dict(malletDict, harpDict)
     logger.info('model is: %s, alpha=%s, beta=%s', model.model.shape, model.alpha, model.beta)
 
