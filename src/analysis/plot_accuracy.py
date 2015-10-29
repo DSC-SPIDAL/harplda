@@ -11,7 +11,7 @@ import datetime
 import numpy as np
 import matplotlib
 # Force matplotlib to not use any Xwindows backend.
-#matplotlib.use('Agg')
+matplotlib.use('Svg')
 import matplotlib.pyplot as plt
 import logging
 from analysis.plot_perf import PerfName, PlotEngine
@@ -98,7 +98,7 @@ def draw_all():
     call_plot('accuracy_runtime', 'data','accuracy_eth.enwiki','',"Enwiki Dataset, 1Gbps Ethernet")
 
     ploter.fig.subplots_adjust(hspace=0.4)
-    ploter.savefig('accuracy_enwiki.png')
+    ploter.savefig('accuracy_enwiki.svg')
 
 def draw_enwiki_overall():
     # output (2,2) subplots
@@ -112,7 +112,7 @@ def draw_enwiki_overall():
     call_plot('accuracy_overalltime', 'data', 'accuracy_eth.clueweb', '', "Clueweb Dataset, 1Gpbs Ethernet")
     
     ploter.fig.subplots_adjust(hspace=0.4)
-    ploter.savefig('accuracy_clueweb_excutiontime.png')
+    ploter.savefig('accuracy_clueweb_excutiontime.svg')
     
     # enwiki
     ploter.init_subplot(1,2)
@@ -125,7 +125,52 @@ def draw_enwiki_overall():
     call_plot('accuracy_overalltime', 'data','accuracy_eth.enwiki','',"Enwiki Dataset, 1Gbps Ethernet")
 
     ploter.fig.subplots_adjust(hspace=0.4)
-    ploter.savefig('accuracy_enwiki_excutiontime.png')
+    ploter.savefig('accuracy_enwiki_excutiontime.svg')
+
+def draw_overall_30():
+    # output (2,2) subplots
+    ploter.init_subplot(1,2)
+    ploter.fig.suptitle("LDA Trainers Accuracy")
+    ploter.fig.set_size_inches(9.25*1.5, 5.25*1.5)
+
+    ploter.set_subplot(1,1)
+    call_plot('accuracy_overalltime', 'data', 'accuracy_30_ib.clueweb', '', "Clueweb Dataset, 16Gbps Infiniband")
+    ploter.set_subplot(1,2)
+#call_plot('accuracy_overalltime', 'data', 'accuracy_30_eth.clueweb', '', "Clueweb Dataset, 1Gpbs Ethernet")
+    call_plot('accuracy_overalltime', 'data', 'accuracy_30_ib.clueweb', '', "Clueweb Dataset, 1Gpbs Ethernet")
+    
+    ploter.fig.subplots_adjust(hspace=0.4)
+    ploter.savefig('accuracy_30_clueweb_excutiontime.png')
+    
+    # enwiki
+    ploter.init_subplot(1,2)
+    ploter.fig.suptitle("LDA Trainers Accuracy")
+    ploter.fig.set_size_inches(9.25*1.5, 5.25*1.5)
+ 
+    ploter.set_subplot(1,1)
+    call_plot('accuracy_overalltime', 'data','accuracy_30_ib.enwiki','',"Enwiki Dataset, 16Gbps Infiniband")
+    ploter.set_subplot(1,2)
+#call_plot('accuracy_overalltime', 'data','accuracy_30_eth.enwiki','',"Enwiki Dataset, 1Gbps Ethernet")
+    call_plot('accuracy_overalltime', 'data','accuracy_30_ib.enwiki','',"Enwiki Dataset, 1Gbps Ethernet")
+
+    ploter.fig.subplots_adjust(hspace=0.4)
+    ploter.savefig('accuracy_30_enwiki_excutiontime.png')
+
+def draw_30_enwiki_all():
+    # output (2,2) subplots
+    ploter.init_subplot(2,1)
+    ploter.fig.suptitle("LDA Trainers Accuracy")
+    ploter.fig.set_size_inches(9.25*1.5, 5.25*1.5)
+
+
+    ploter.set_subplot(1,1)
+    call_plot('accuracy_iter', 'data','accuracy_30_ib.enwiki','',"Enwiki Dataset, 16Gbps Infiniband")
+    ploter.set_subplot(2,1)
+    call_plot('accuracy_runtime', 'data','accuracy_30_ib.enwiki','',"Enwiki Dataset, 16Gbps Infiniband")
+
+    ploter.fig.subplots_adjust(hspace=0.4)
+    ploter.savefig('accuracy_enwiki_30.png')
+
 
 
 if __name__ == "__main__":
@@ -138,8 +183,10 @@ if __name__ == "__main__":
     logging.root.setLevel(level=logging.DEBUG)
     logger.info("running %s" % ' '.join(sys.argv))
 
-    draw_single()
-    draw_all()
-
+#    draw_single()
+#    draw_all()
     draw_enwiki_overall()
 
+#    draw_overall_30()
+
+#    draw_30_enwiki_all()
