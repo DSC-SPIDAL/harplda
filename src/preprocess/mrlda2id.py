@@ -89,23 +89,56 @@ def donew(mrlda, wordmap, output):
                         cnt +=1
                     else:
                         output.write(' %s'%wmap[word])
-                else:
-                    logger.debug('word in text, but not in new map, word=%s', word)
+                #else:
+                #    logger.debug('word in text, but not in new map, word=%s', word)
             output.write('\n')
 
         else:
             logger.debug('tokens=0, where linecnt=%d, line=%s', linecnt, line)
-            return
 
         linecnt += 1
     logger.info('%s lines processed!', linecnt)
+
+def donewX(mrlda, wordmap, output):
+    term_cnt = 0
+    wmap = dict()
+    for line in wordmap:
+        if term_cnt == 0:
+            #term_cnt = int(line.strip())
+            #line.strip()
+            term_cnt += 1
+            continue
+        tokens = line.strip().split(' ')
+        wmap[tokens[0]] = tokens[1]
+        term_cnt += 1
+    
+    logger.info('%d words loaded into wordmap', term_cnt-1)
+
+
+    linecnt = 0
+    for line in mrlda:
+        tp = line.strip().split('\t')
+        if len(tp) > 1:
+            docid = tp[0]
+            tokens = tp[1].split(' ')
+        
+            words = [word for word in tokens if word in wmap]
+            wordstr = ' '.join(words)
+            output.write('%s\t%s\n'%(docid,wordstr[1:]))
+
+        else:
+            logger.debug('tokens=0, where linecnt=%d, line=%s', linecnt, line)
+
+        linecnt += 1
+    logger.info('%s lines processed!', linecnt)
+
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
     logger = logging.getLogger(program)
 
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-    logging.root.setLevel(level=logging.INFO)
+    logging.root.setLevel(level=logging.DEBUG)
     logger.info("running %s" % ' '.join(sys.argv))
 
     # check and process input arguments

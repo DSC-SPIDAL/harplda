@@ -15,7 +15,7 @@ output:
 
 usage:
     * make corpus, output .mrlda and .wordids
-    txtcorpus -make <dir> <output_prefix>
+    txtcorpus -make <dir> <output_prefix> <bigram>
 
 """
 
@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 ##################
 VOCABSIZE=8000000
 class TxtCorpus():
-    def __init__(self, uselxml = False):
+    def __init__(self, uselxml = False, bigram = False):
         # term, id
         self.wordmap = {}
         # term, freq
@@ -41,6 +41,8 @@ class TxtCorpus():
         #self.wordfreq =  dict.fromkeys(xrange(VOCABSIZE))
         # id, wordlist
         self.docs = []
+        self.bigram = bigram
+        logger.info('init TxtCorpus use bigram=%s', self.bigram)
 
     def save(self, savefile):
         logger.debug('save txtcorpus to text file %s', savefile)
@@ -81,8 +83,13 @@ class TxtCorpus():
             # puncs remove?, call utils in gensim
             tokens = simple_preprocess(content)
 
-            # 
-            tokens = sorted(tokens)
+            # if bigram
+            if self.bigram:
+                grams = [ tokens[i]+'_'+tokens[i+1] for i in xrange(len(tokens)-1)]
+            else:
+                grams = tokens
+
+            tokens = sorted(grams)
         except UnicodeDecodeError:
             logger.debug('exception UnicodeDecodeError')
             return
@@ -101,10 +108,10 @@ class TxtCorpus():
 
         self.docs.append((id, ids))
 
-def make_txtcorpus(inputdir, output):
+def make_txtcorpus(inputdir, output, bigram):
     """
     """
-    txtcorpus = TxtCorpus()
+    txtcorpus = TxtCorpus(bigram=bigram)
 
     if os.path.exists(output):
         logger.info('%s exists already, skip convert', output)
@@ -137,7 +144,8 @@ if __name__ == '__main__':
     logger.info("running %s" % ' '.join(sys.argv))
 
     if sys.argv[1] == '-make':
-        txtcorpus = make_txtcorpus(sys.argv[2], sys.argv[3])
+        bigram = (sys.argv[4].lower() == 'true')
+        txtcorpus = make_txtcorpus(sys.argv[2], sys.argv[3], bigram)
         #webcorpus.save_text(sys.argv[2] + '.mrlda')
     else:
         logger.error(globals()['__doc__'] % locals())
