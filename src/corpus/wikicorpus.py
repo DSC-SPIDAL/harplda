@@ -1,13 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+#
 """
-TxtCorpus, make corpus from txt documents
-  http://www.gutenberg.org/wiki/Gutenberg:The_CD_and_DVD_Project
-  http://web.eecs.umich.edu/~lahiri/gutenberg_dataset.html
+Dump wikicorpus
 
 input:
-    txt files
+    enwiki dump file
 
 output:
     mrlda format <docid, wordid....>
@@ -15,23 +13,27 @@ output:
 
 usage:
     * make corpus, output .mrlda and .wordids
-    txtcorpus -make <dir> <output_prefix> <bigram>
+    wikicorpus -make <dumpfile> <output_prefix> <bigram>
+
+
 
 """
 
-import sys
-import os
+
 import logging
-#from gensim import utils
-from utils import simple_preprocess
-import re
+import os.path
+import sys
 
-logger = logging.getLogger(__name__)
+from gensim.corpora import Dictionary, HashDictionary, MmCorpus, WikiCorpus
+from gensim.models import TfidfModel
 
 
-##################
-VOCABSIZE=8000000
-class TxtCorpus():
+# Wiki is first scanned for all distinct word types (~7M). The types that
+# appear in more than 10% of articles are removed and from the rest, the
+# DEFAULT_DICT_SIZE most frequent types are kept.
+DEFAULT_DICT_SIZE = 100000
+
+class MyWikiCorpus():
     def __init__(self, uselxml = False, bigram = False):
         # term, id
         self.wordmap = {}
@@ -63,7 +65,8 @@ class TxtCorpus():
             wordmap = [(word, self.wordmap[word]) for word in self.wordmap]
             wordmap = sorted(wordmap, key = lambda s: s[1])
             for id in xrange(len(wordmap)):
-                dictf.write("%d\t%s\n"%(wordmap[id][1], wordmap[id][0].encode('utf-8')))
+                #dictf.write("%d\t%s\n"%(wordmap[id][1], wordmap[id][0].encode('utf-8','ignore')))
+                dictf.write("%d\t%s\n"%(wordmap[id][1], wordmap[id][0]))
 
         if self.wordfreq:
             freqf = open(savefile+'.txt.freq', 'w')
@@ -71,29 +74,28 @@ class TxtCorpus():
             wordmap = [(word, self.wordfreq[word]) for word in self.wordfreq]
             wordmap = sorted(wordmap, key = lambda s: s[1], reverse=True)
             for id in xrange(len(wordmap)):
-                freqf.write("%s\t%d\n"%( wordmap[id][0].encode('utf-8','ignore'), wordmap[id][1]))
+                # freqf.write("%s\t%d\n"%( wordmap[id][0].encode('utf-8','ignore'), wordmap[id][1]))
+                freqf.write("%s\t%d\n"%( wordmap[id][0], wordmap[id][1]))
                 #freqf.write("%s\t%d\n"%( wordmap[id][0].encode('utf-8'), wordmap[id][1]))
 
-    def add_page(self, id, content):
-        logger.debug('add_page %s, %s', id, content[:10])
+    def add_page(self, id, tokens):
+        logger.debug('add_page %s, %s', id, tokens[:10])
 
-        try:
-            content = content.decode('utf-8','ignore')
+        # if bigram
+        if self.bigram:
+            grams = [ tokens[i]+'_'+tokens[i+1] for i in xrange(len(tokens)-1)]
+        else:
+            grams = tokens
 
-            # puncs remove?, call utils in gensim
-            tokens = simple_preprocess(content)
+        tokens = sorted(grams)
+    
 
-            # if bigram
-            if self.bigram:
-                grams = [ tokens[i]+'_'+tokens[i+1] for i in xrange(len(tokens)-1)]
-            else:
-                grams = tokens
+        #try:
+        #    content = ' '.join(tokens).decode('utf-8','ignore')
+        #except UnicodeDecodeError:
+        #    logger.debug('exception UnicodeDecodeError')
+        #    return -1
 
-            tokens = sorted(grams)
-        except UnicodeDecodeError:
-            logger.debug('exception UnicodeDecodeError')
-            return -1
-        
         ids = []
         wordcnt = len(self.wordmap)
         for token in tokens:
@@ -109,34 +111,31 @@ class TxtCorpus():
         self.docs.append((id, ids))
         return 0
 
-def make_txtcorpus(inputdir, output, bigram):
+def make_wikicorpus(input, output, bigram):
     """
     """
-    txtcorpus = TxtCorpus(bigram=bigram)
+    wikicorpus = MyWikiCorpus(bigram=bigram)
 
     if os.path.exists(output):
         logger.info('%s exists already, skip convert', output)
-        return txtcorpus
+        return wikicorpus
     
+    wiki = WikiCorpus(input) # takes about 9h on a macbook pro, for 3.5m articles (june 2011)
     id = 0
-    for dirpath, dnames, fnames in os.walk(inputdir):
-        for f in fnames:
-            input = os.path.join(dirpath, f)
-            with open(input, 'r') as inputf:
-                content = inputf.read()
-                ret = txtcorpus.add_page(id, content)
-                if ret == 0:
-                    id += 1
+    for tokens in wiki.get_texts():
+        ret = wikicorpus.add_page(id, tokens)
+        if ret == 0:
+            id += 1
 
-    txtcorpus.save(output)
-    return txtcorpus
+    wikicorpus.save(output)
+    return wikicorpus
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
     logger = logging.getLogger(program)
 
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-    logging.root.setLevel(level=logging.DEBUG)
+    logging.root.setLevel(level=logging.INFO)
 
     # check and process input arguments
     if len(sys.argv) < 3:
@@ -146,14 +145,8 @@ if __name__ == '__main__':
 
     if sys.argv[1] == '-make':
         bigram = (sys.argv[4].lower() == 'true')
-        txtcorpus = make_txtcorpus(sys.argv[2], sys.argv[3], bigram)
+        wikicorpus = make_wikicorpus(sys.argv[2], sys.argv[3], bigram)
         #webcorpus.save_text(sys.argv[2] + '.mrlda')
     else:
         logger.error(globals()['__doc__'] % locals())
-
-
-
-
-
-
 
