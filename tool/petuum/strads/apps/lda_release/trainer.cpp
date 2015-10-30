@@ -160,14 +160,18 @@ void Trainer2::ReadPartitionData(std::string data_file) {
   char *line = NULL;
   size_t num_byte;
   size_t num_token = 0;
-  FILE *data_fp = fopen(data_file.c_str(), "r");
+//  FILE *data_fp = fopen(data_file.c_str(), "r");
+  char fname[256];
+  sprintf(fname, "%s.%d", data_file.c_str(), threadid);
+  FILE *data_fp = fopen(fname, "r");
+
   CHECK_NOTNULL(data_fp);
   int linecnt = 0;
   while (getline(&line, &num_byte, data_fp) != -1) {
-    if(linecnt% workers_ != threadid){
-      linecnt++;
-      continue;
-    }
+//    if(linecnt% workers_ != threadid){
+//      linecnt++;
+//      continue;
+//    }
     linecnt++;
     Data doc;
     char *ptr = line;
@@ -200,6 +204,7 @@ void Trainer2::ReadPartitionData(std::string data_file) {
   num_token_ = num_token;
   vocnt_ = data_.size();
 
+  LOG(INFO) << "fname: " << fname;
   LOG(INFO) << "num doc (train): " << stat_.size();
   LOG(INFO) << "num doc (eval): " << eval_.size();
   LOG(INFO) << "num word (total): " << data_.size(); 

@@ -1,8 +1,21 @@
 #!/bin/sh
 
-if [ $# -ne "2" ] ; then
-    echo "Usage: diffdir <srcdir> <dstdir>"
-    exit 0
-fi
+help(){
+    echo "Usage: diffdir <-diff|-cp|-rcp> <srcdir> <dstdir>"
+}
 
-diff -rq $1 $2 |grep diff | awk '{print "cp ",$2,$4}'
+case $1 in
+    -diff)
+        shift
+        diff -rq $1 $2 |grep diff | awk '{print "diff ",$2,$4}'
+        ;;
+    -cp)
+        shift
+        diff -rq $1 $2 |grep diff | awk '{print "cp ",$2,$4}'
+        ;;
+    -rcp)
+        shift
+        diff -rq $1 $2 |grep diff | awk '{print "cp ",$4,$2}'
+        ;;
+    *) echo "Unrecognized command: $CMD"; help; exit 1;;
+esac
