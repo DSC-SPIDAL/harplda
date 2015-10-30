@@ -117,13 +117,17 @@ class PerfName():
     def __init__(self, namefile):
         """
         read from namefile
+        format:
+        datafile    label   groupname
+
         """
         perfname = []
 
         with open(namefile, 'r') as nf:
             for line in nf:
                 tokens = line.strip().split('\t')
-                perfname.append((tokens[0], tokens[1]))
+                #perfname.append((tokens[0], tokens[1]))
+                perfname.append(tokens)
 
         self.perfname = perfname
         self._pos = -1
@@ -228,17 +232,24 @@ class PlotEngine():
             1   traintime
         """
         dataflist = []
-        for name,label in self.perfname:
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
             fname = name + '.runtime-stat'
             dataflist.append(fname)
 
         self.perfdata.load(dataflist)
 
         overall_time = []
-        for name,label in self.perfname:
+
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            gname = tp[2]
+ 
             fname = name + '.runtime-stat'
             # get max apptime
-            overall_time.append((self.perfdata[fname][1,plottype], label))
+            overall_time.append((self.perfdata[fname][1,plottype], label, gname))
     
         #
         # data is two group, one in ib, other in eth
@@ -253,7 +264,15 @@ class PlotEngine():
 
         #fig, ax = plt.subplots()
 
-        grp_size = len(overall_time)/2
+        # perf configure file format
+        # datafile  label   groupname
+        #grp_size = len(overall_time)/2
+        groupname = []
+        for id in range(len(overall_time)):
+            if not overall_time[id][2] in groupname:
+                groupname.append( overall_time[id][2] )
+
+        grp_size = len(groupname)
         rects = []
         for idx in range(grp_size):
             logger.info('val=%d, label=%s', overall_time[idx][0], overall_time[idx][1])
@@ -268,7 +287,8 @@ class PlotEngine():
         else:
             self.curax.set_title('Overall Performance of LDA Trainers')
         self.curax.set_xticks(ind+width)
-        self.curax.set_xticklabels( ('ib', 'eth') )
+        #self.curax.set_xticklabels( ('ib', 'eth') )
+        self.curax.set_xticklabels( groupname )
 
 
         for rect in rects:
@@ -306,7 +326,10 @@ class PlotEngine():
             2   accuracy .vs. excution time
         """
         dataflist = []
-        for name,label in self.perfname:
+        #for name,label in self.perfname:
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
             fname = name + '.likelihood'
             dataflist.append(fname)
             fname = name + '.runtime-stat'
@@ -315,7 +338,10 @@ class PlotEngine():
         self.perfdata.load(dataflist)
 
         accuracy = []
-        for name,label in self.perfname:
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+ 
             lh_name = name + '.likelihood'
             runtime_name = name + '.runtime-stat'
             #

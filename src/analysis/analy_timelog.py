@@ -43,7 +43,7 @@ import datetime
 import numpy as np
 import matplotlib
 # Force matplotlib to not use any Xwindows backend.
-matplotlib.use('Agg')
+matplotlib.use('Svg')
 import matplotlib.pyplot as plt
 import logging
 
