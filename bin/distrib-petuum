@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# To distribute files under input directory to the same dir in the server list
+# ip/hostname each line in server list file
+#
+# Usage:
+#   distrib <source dir> <dest dir> <server list file>
+#
+
+trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
+
+help(){
+    echo "Usage: distrib "
+    echo "  -make <source file> <server list file>"
+    echo "  -copy <source file> <destdir> <server list file>"
+    echo
+}
+
+CMD=$1
+shift
+case $CMD in
+    -make)
+        srcdir=$1
+        slaves=$2
+        target=(`cat $slaves`)
+        
+        #mkdir output buffer dir
+        hostcnt=${#target[*]}
+        echo "Server cnt=", ${#target[*]}
+        
+        #start distribute
+        python ~/hpda/lda-test/src/preprocess/split.py $1 $hostcnt x
+        echo "Bye"
+
+    ;;
+
+    -dryrun)
+        srcfile=$1
+        destdir=$2
+        slaves=$3
+        target=(`cat $slaves`)
+        ##cexec mkdir -p $destdir
+        serverid=0
+        for s in ${target[*]}; do
+            echo "dryrun copy file $srcfile.$serverid to $s:$destdir"
+            echo "ssh $s mkdir -p $destdir"
+            echo "scp -r $srcfile.$serverid $s:$destdir"
+            ((serverid++))
+        done
+
+        echo "Bye"
+    ;;
+
+    -copy)
+        srcfile=$1
+        destdir=$2
+        slaves=$3
+        target=(`cat $slaves`)
+        ##cexec mkdir -p $destdir
+        serverid=0
+        for s in ${target[*]}; do
+            echo "copy file $srcfile.$serverid to $s:$destdir"
+            ssh $s mkdir -p $destdir
+            scp -r $srcfile.$serverid $s:$destdir
+            ((serverid++))
+        done
+
+        echo "Bye"
+    ;;
+
+    *) echo "Unrecognized command: $CMD"; help; exit 1;;
+esac
