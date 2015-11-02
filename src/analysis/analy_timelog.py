@@ -27,8 +27,17 @@ format:
         app_end         Server ends
         compute/comm    Compute time: 88900, comm time: 18103
         iter            Iteration 2 took: 97087
-    
-    petuum : petuum logs
+        
+    petuum: 
+        app_start       I1030 23:35:09.708537 95305 sysparam.hpp:71]  node file  :
+        app_init        1030 23:35:27.519075 226328 ll-coordinator.cpp:185] [coordinator] start initialization ...
+        train_start     I1030 23:42:20.588816 226328 ll-coordinator.cpp:262] [coordinator] start iteration
+        app_end         I1031 01:36:17.615155 34238 ll-worker.cpp:528] [worker 20] terminate job
+        compute         compute time: min 37(s), max 52(s)
+        iter            I1030 23:44:14.509174 226328 ll-coordinator.cpp:336] iteration0  loglikelihood -2.27239e+11  time 113.29  elapsed time 113.29
+
+    petuum_run : petuum logs
+
         ### iteration, docll, moll,  docll+moll, time per iter, total elapsed time
         0  -8.768292e+09  -1.122321e+10  -1.999150e+10  28.347012 28.347012 
         
@@ -51,7 +60,7 @@ logger = logging.getLogger(__name__)
 
 
 class LDATrainerLog():
-    trainers=['mallet','harp','ylda','petuum']
+    trainers=['mallet','harp','ylda','petuum','petuum-run']
     pattern={
         "mallet":"^([0-9]+)ms",
         "harp-clock":"(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)",
@@ -69,13 +78,15 @@ class LDATrainerLog():
         self.engine={
             'harp':self.load_applog_harp,
             'ylda':self.load_applog_ylda,
-            'petuum':self.load_applog_petuum
+            'petuum':self.load_applog_petuum,
+            'petuum-run':self.load_applog_petuumrun
         }
 
     def load_applog(self, logdir):
         return self.engine[self.name](logdir)
 
-    def load_applog_petuum(self, appdir, filename='.log'):
+    ##############################################################    
+    def load_applog_petuumrun(self, appdir, filename='.log'):
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f.endswith(filename):
@@ -126,8 +137,176 @@ class LDATrainerLog():
         np.savetxt(appdir + '.likelihood', lhMatrix,fmt='%e')
 
         return matrix
+    
+    ##################################################################
+    def load_timelog_petuum(self, logfile):
+        """
+        load elapsed millis of each iteration from logfile
+    
+        return:
+            nparray
+        """
+        logf = open(logfile,'r')
+
+        # get app starttime, iteration starttime, app endtime
+        # appstart: first line
+        # trainstart: "Starting Parallel training Pipeline"
+        # append:   "Model saved"
+        #
+        for startline in logf:
+            if startline.find('node file  :') > 0:
+                break
+
+        if not startline:
+            logger.error('start point not found, quit...')
+            return None
+
+        string_date = '2015-01-01 ' + startline.split(' ')[1]
+        #logger.info('startline= %s', string_date)
+        app_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S.%f")
+
+        # start init
+        for startline in logf:
+            if startline.find('start initialization') > 0:
+                break
+
+        if not startline:
+            logger.error('initialize start point not found, quit...')
+            return None
+
+        string_date = '2015-01-01 ' + startline.split(' ')[1]
+        #logger.info('startline= %s', string_date)
+        init_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S.%f")
 
 
+        # start iteration
+        for startline in logf:
+            if startline.find('start iteration') > 0:
+                break
+
+        if not startline:
+            logger.error('iteration start point not found, quit...')
+            return None
+
+        string_date = '2015-01-01 ' + startline.split(' ')[1]
+        #logger.info('startline= %s', string_date)
+        train_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S.%f")
+
+        #
+        train_starttime = app_starttime
+        app_endtime = app_starttime
+
+        # computation time and iter time
+        itertime = []
+        computetime=[]
+        for line in logf:
+
+            if line.find("compute time:") > 0:
+                m = re.search("min ([0-9]*)\(s\), max ([0-9]*)", line)
+                if m:
+                    #max_computetime = max(max_computetime, int(m.group(2)))
+                    computetime.append(int(m.group(2)))
+
+            if re.search("iteration[0-9]*  loglikelihood",line):
+                m = re.search("  time ([0-9\.]*)  elapsed time ([0-9\.]*)", line)
+                if m:
+                    #logger.info('match at %s , string_date=%s', line, m.group(1))
+                    # computetime, iter time, elapse time
+                    #min, max, mean, std
+                    _compute = np.array(computetime)
+                    _min = np.min(_compute)
+                    _max = np.max(_compute)
+                    _mean = np.mean(_compute)
+                    _std = np.std(_compute)
+
+                    itertime.append( (_min, _max, _mean, _std, float(m.group(1)), float(m.group(2))) )
+                    #mx_computetime = 0
+                    computetime = []
+
+
+            if re.search("I.*terminate job",line):
+                string_date = '2015-01-01 ' + line.split(' ')[1]
+                #logger.info('startline= %s', string_date)
+                app_endtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S.%f")
+                break
+
+        # end
+        app_span = (app_endtime - app_starttime).total_seconds()
+        if app_span < 0:
+            app_span += 3600*24
+        train_span = (app_endtime - train_starttime).total_seconds()
+        if train_span < 0:
+            train_span += 3600*24
+
+        init_span =  (train_starttime - init_starttime).total_seconds()
+        if init_span < 0:
+            init_span += 3600*24
+
+        logger.info('runtime total=%d, train=%d, init=%d', app_span, train_span, init_span)
+
+        return app_span, train_span, init_span, itertime
+
+
+    def load_applog_petuum(self, appdir, filepattern='petuum.*log'):
+        models = []
+        for dirpath, dnames, fnames in os.walk(appdir):
+            for f in fnames:
+                if re.search(filepattern, f):
+                    # itertime <computetime min, max, mean, std, iter time, elapse time>
+                    app_t, train_t, init_t, itertime = self.load_timelog_petuum(os.path.join(dirpath, f))
+                    if len(itertime) > 0:
+                        logger.info('load log from %s at %s', f, dirpath)
+                        break
+
+        # (dirpath, [(compute time, comm time)])
+        iternum = len(itertime)
+        logger.info('total %d iterations', iternum)
+        
+        #min, max, mean analysis
+        # mean/std of compute, comm, iter restured
+        matrix = np.zeros((6, iternum))
+
+        # compute time, rawdata[:,4]
+        statMatrix = np.zeros((4, iternum))
+        statMatrix[0] = np.array([x[0] for x in itertime])
+        statMatrix[1] = np.array([x[1] for x in itertime])
+        statMatrix[2] = np.array([x[2] for x in itertime])
+        statMatrix[3] = np.array([x[3] for x in itertime])
+
+        matrix[0] = statMatrix[2]
+        matrix[1] = statMatrix[3]
+
+        np.savetxt(appdir + '.comput-stat', statMatrix,fmt='%.2f')
+
+
+        # itertime
+        statMatrix = np.zeros((4, iternum))
+        iterArray = np.array([x[4] for x in itertime])
+
+        statMatrix[0] = iterArray
+        statMatrix[1] = iterArray
+        statMatrix[2] = iterArray
+
+        matrix[4] = statMatrix[2]
+        matrix[5] = statMatrix[3]
+
+        np.savetxt(appdir + '.iter-stat', statMatrix,fmt='%.2f')
+
+        # runtime stat
+        statMatrix = np.zeros((4, 2 + iternum))
+        runtimeArray =  np.array([x[5] for x in itertime])
+        
+        np.copyto(statMatrix[0,2:] , runtimeArray)
+        statMatrix[0,1] = train_t
+        statMatrix[0,0] = app_t
+
+        statMatrix[1] = statMatrix[0]
+        statMatrix[2] = statMatrix[0]
+        np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
+
+        return matrix
+
+    #######################################################################
     def load_timelog_harp(self, logfile):
         """
         load elapsed millis of each iteration from logfile
