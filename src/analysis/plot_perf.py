@@ -19,13 +19,17 @@ input:
 plotname:
     * overall_runtime    ;overall runtime
     * training_runtime   ;training runtime
-    * accuracy_time     ;perplexity .vs. clock time
+    * accuracy_runtime     ;perplexity .vs. clock time
     * accuracy_iter     ;perlexity .cs. iternumber
+    * overhead          ;overhead=itertime-computetime, overhead comparision between two result
 
 
 Usage: 
+    * draw figures on plotname
     plot_perf <plot name> <datadir> <name file> <fig name> <title>
-
+    
+    * make namefile
+    plot_perf namefile <workfile> <namefile> <features>
 
 """
 
@@ -99,7 +103,7 @@ class PerfData():
         #check all files ready?
         for name in namelist:
             if name not in self.data:
-                logger.error('%s not found under %s, quit...', name, datadir)
+                logger.error('%s not found under %s, quit...', name, self.datadir)
                 sys.exit(-1)
 
     def __getitem__(self, name):
@@ -114,7 +118,7 @@ class PerfName():
     [(fname, label)]
 
     """
-    def __init__(self, namefile):
+    def __init__(self, namefile = ''):
         """
         read from namefile
         format:
@@ -123,14 +127,77 @@ class PerfName():
         """
         perfname = []
 
-        with open(namefile, 'r') as nf:
-            for line in nf:
-                tokens = line.strip().split('\t')
-                #perfname.append((tokens[0], tokens[1]))
-                perfname.append(tokens)
+        if namefile:
+            with open(namefile, 'r') as nf:
+                content = nf.read()
+                deli = '\t'
+                if not content.find(deli) > 0:
+                    deli = ' '
+                nf.seek(0,0)
+
+                for line in nf:
+                    tokens = line.strip().split(deli)
+                    #perfname.append((tokens[0], tokens[1]))
+                    perfname.append(tokens)
 
         self.perfname = perfname
+        self.worklist = None
         self._pos = -1
+
+    def load_worklist(self, workfile):
+        """
+        workfile is a text file of features meta data for experiments
+        format:
+        name    trainer cluster dataset network sampler iternum
+
+        """
+        worklist = np.loadtxt(workfile, dtype=np.object)
+        row, col = worklist.shape
+        if col != 7:
+            logger.error('worklist file format error, assert(col==7), fiel=%s, col=%s', workfile, col)
+            return 
+        
+        logger.info('worklist file =%s, row =%s, col= %s', workfile, row, col)
+        self.worklist = worklist
+
+    def make_namefile(self, namefile, features):
+        """
+        search names by features, and output to namefile
+        features is a tuple:
+            (cluster, dataset, network, sampler)
+            value 0 means *
+
+        return: matched <name, trainer> pairs
+        """
+        if self.worklist == None:
+            return 
+    
+        logger.info('start make namefile from features=%s', features)
+        row, col = self.worklist.shape
+        result = []
+        for idx in range(row):
+            if features[0] != '0' and features[0] != self.worklist[idx][2]:
+                continue
+
+            if features[1] != '0' and features[1] != self.worklist[idx][3]:
+                continue
+
+            if features[2] != '0' and features[2] != self.worklist[idx][4]:
+               continue
+
+            if features[3] != '0' and features[3] != self.worklist[idx][5]:
+               continue
+
+            #ok, match one
+            result.append((self.worklist[idx][0], self.worklist[idx][1]))
+
+        logger.info('%d match records found', len(result))
+        # save result
+        if len(result) > 0:
+            with open(namefile, 'w') as nf:
+                for tp in result:
+                    nf.write("%s %s\n"%(tp[0],tp[1]))
+
 
     def __iter__(self):
         return self
@@ -152,6 +219,7 @@ class PlotEngine():
             "accuracy_iter":self.plot_accuracy_iter,
             "accuracy_runtime":self.plot_accuracy_runtime,
             "accuracy_overalltime":self.plot_accuracy_overalltime,
+            "overhead":self.plot_overhead
         }
 
         # init default subplot
@@ -404,6 +472,117 @@ class PlotEngine():
 
         #plt.show()
 
+    def plot_overhead(self, figname, conf):
+        """
+        get overhead value from .iter-stat and .comput-stat
+        """
+        dataflist = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            dataflist.append(name + '.iter-stat')
+            dataflist.append(name + '.comput-stat')
+
+        self.perfdata.load(dataflist)
+
+        iter_time = []
+        compute_time = []
+
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            gname = tp[2]
+ 
+            fname = name + '.iter-stat'
+            # get max apptime
+            iter_time.append((self.perfdata[fname], label, gname))
+            fname = name + '.comput-stat'
+            # get max apptime
+            compute_time.append((self.perfdata[fname], label, gname))
+    
+        #
+        # data is in groups
+        #
+        
+
+        # draw a bar stacked
+        #ind = np.arange(N)  # the x locations for the groups
+        #ind = np.array([0,0.3])
+        #width = 0.05       # the width of the bars
+
+        #fig, ax = plt.subplots()
+
+        # perf configure file format
+        # datafile  label   groupname
+        #grp_size = len(overall_time)/2
+        groupname = []
+        for id in range(len(iter_time)):
+            if not iter_time[id][2] in groupname:
+                groupname.append( iter_time[id][2] )
+
+        grp_size = len(groupname)
+        rects = []
+
+        N = compute_time[0][0][2][:10].shape[0]
+        logger.info('N=%s', N)
+        ind = np.arange(N)
+        width = 0.5       # the width of the bars
+
+        for idx in range(grp_size):
+
+            #grp_data = ( compute_time[idx][0], compute_time[idx+grp_size][0] )
+            grp_data = compute_time[idx][0][2]
+            grp_data_err = compute_time[idx][0][3]
+            grp_data = grp_data[:10]
+            grp_data_err = grp_data_err[:10]
+            logger.info('grp_data = %s', grp_data)
+
+            if idx==0:
+                grp_data = grp_data / 1000
+                grp_data_err = grp_data_err / 1000
+
+            p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
+
+            grp_data2 = iter_time[idx][0][2] - compute_time[idx][0][2]
+            grp_data2_err = iter_time[idx][0][3] - compute_time[idx][0][3]
+            grp_data2 = grp_data2[:10]
+            grp_data2_err = grp_data2_err[:10]
+            if idx==0:
+                grp_data2 = grp_data2 / 1000
+                grp_data2_err = grp_data2_err / 1000
+
+
+            p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-overhead')
+
+            rects.append(p1)
+            rects.append(p2)
+
+            #logger.info('val = %s, label=%s', grp_data, compute_time[idx][1])
+            # ax.bar(ind + width*idx, compute_time[idx][0], width, label = compute_time[idx][1])
+            #rects.append(self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx], label = compute_time[idx][1]))
+
+        self.curax.set_ylabel('elapsed time (s)')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('Overhead of LDA Trainers')
+        self.curax.set_xticks(ind+width)
+        #self.curax.set_xticklabels( ('ib', 'eth') )
+        #self.curax.set_xticklabels( groupname )
+        self.curax.set_xlabel('iteration')
+
+
+        for rect in rects:
+            self.autolabel(rect)
+
+        #ax.set_ylim(0, overall_time[0][0] * 2)
+        #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        self.curax.legend(loc = 0)
+        if figname:
+            plt.savefig(figname)
+
+        #plt.show()
+
 
 if __name__ == "__main__":
     program = os.path.basename(sys.argv[0])
@@ -422,18 +601,42 @@ if __name__ == "__main__":
 
     # check the path
     plotname = sys.argv[1]
-    datadir = sys.argv[2]
-    namefile = sys.argv[3]
-    figname = sys.argv[4]
+    
+    if plotname == 'namefile':
+        #make_namefile(sys.argv)
+        workfile = sys.argv[2]
+        namefile = sys.argv[3]
+        features=[0,0,0,0]
+        if len(sys.argv) > 4:
+            cluster = sys.argv[4]
+            features[0] = cluster
+        if len(sys.argv) > 5:
+            dataset = sys.argv[5]
+            features[1] = dataset
+        if len(sys.argv) > 6:
+            network = sys.argv[6]
+            features[2] = network
+        if len(sys.argv) > 7:
+            sampler = sys.argv[7]
+            features[3] = sampler
 
-    #conffile = sys.argv[4]
-    #conf = PlotConf(conffile).config
-    conf = {}
-    if len(sys.argv) > 5:
-        conf['title'] = sys.argv[5]
+        perfname = PerfName()
+        perfname.load_worklist(workfile)
+        perfname.make_namefile(namefile, features)
 
-    ploter = PlotEngine()
-    perfname = PerfName(namefile)
-    ploter.init_data(datadir, perfname)
-    ploter.plot(plotname, figname, conf)
+    else:
+        datadir = sys.argv[2]
+        namefile = sys.argv[3]
+        figname = sys.argv[4]
+
+        #conffile = sys.argv[4]
+        #conf = PlotConf(conffile).config
+        conf = {}
+        if len(sys.argv) > 5:
+            conf['title'] = sys.argv[5]
+
+        ploter = PlotEngine()
+        perfname = PerfName(namefile)
+        ploter.init_data(datadir, perfname)
+        ploter.plot(plotname, figname, conf)
 
