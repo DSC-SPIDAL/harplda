@@ -193,8 +193,8 @@ class LDATrainerLog():
         train_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S.%f")
 
         #
-        train_starttime = app_starttime
-        app_endtime = app_starttime
+        #train_starttime = app_starttime
+        #app_endtime = app_starttime
 
         # computation time and iter time
         itertime = []
@@ -223,14 +223,18 @@ class LDATrainerLog():
                     #mx_computetime = 0
                     computetime = []
 
+                    string_date = '2015-01-01 ' + line.split(' ')[1]
+                    app_endtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S.%f")
 
             if re.search("I.*terminate job",line):
                 string_date = '2015-01-01 ' + line.split(' ')[1]
                 #logger.info('startline= %s', string_date)
                 app_endtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S.%f")
-                break
+                #break
 
         # end
+        logger.info('app_starttime=%s, init_starttime=%s, train_starttime=%s, app_endtime=%s',
+                app_starttime, init_starttime, train_starttime, app_endtime)
         app_span = (app_endtime - app_starttime).total_seconds()
         if app_span < 0:
             app_span += 3600*24
@@ -247,64 +251,57 @@ class LDATrainerLog():
         return app_span, train_span, init_span, itertime
 
 
-    def load_applog_petuum(self, appdir, filepattern='petuum.*log'):
-        models = []
+    def load_applog_petuum(self, appdir, filepattern='.info.log'):
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if re.search(filepattern, f):
-                    # itertime <computetime min, max, mean, std, iter time, elapse time>
-                    app_t, train_t, init_t, itertime = self.load_timelog_petuum(os.path.join(dirpath, f))
+                    logger.info('load log from %s at %s', f, dirpath)
+                    try:
+                        # itertime <computetime min, max, mean, std, iter time, elapse time>
+                        app_t, train_t, init_t, itertime = self.load_timelog_petuum(os.path.join(dirpath, f))
+                    except:
+                        logger.error('failed...\n')
+                        itertime = []
                     if len(itertime) > 0:
-                        logger.info('load log from %s at %s', f, dirpath)
-                        break
+                        #break
+                        output_name = f[:f.find(filepattern)]
 
-        # (dirpath, [(compute time, comm time)])
-        iternum = len(itertime)
-        logger.info('total %d iterations', iternum)
-        
-        #min, max, mean analysis
-        # mean/std of compute, comm, iter restured
-        matrix = np.zeros((6, iternum))
+                        # (dirpath, [(compute time, comm time)])
+                        iternum = len(itertime)
+                        logger.info('total %d iterations', iternum)
+                        # compute time, rawdata[:,4]
+                        statMatrix = np.zeros((4, iternum))
+                        statMatrix[0] = np.array([x[0] for x in itertime])
+                        statMatrix[1] = np.array([x[1] for x in itertime])
+                        statMatrix[2] = np.array([x[2] for x in itertime])
+                        statMatrix[3] = np.array([x[3] for x in itertime])
 
-        # compute time, rawdata[:,4]
-        statMatrix = np.zeros((4, iternum))
-        statMatrix[0] = np.array([x[0] for x in itertime])
-        statMatrix[1] = np.array([x[1] for x in itertime])
-        statMatrix[2] = np.array([x[2] for x in itertime])
-        statMatrix[3] = np.array([x[3] for x in itertime])
+                        np.savetxt(output_name + '.comput-stat', statMatrix,fmt='%.2f')
 
-        matrix[0] = statMatrix[2]
-        matrix[1] = statMatrix[3]
+                        # itertime
+                        statMatrix = np.zeros((4, iternum))
+                        iterArray = np.array([x[4] for x in itertime])
 
-        np.savetxt(appdir + '.comput-stat', statMatrix,fmt='%.2f')
+                        statMatrix[0] = iterArray
+                        statMatrix[1] = iterArray
+                        statMatrix[2] = iterArray
 
+                        np.savetxt(output_name + '.iter-stat', statMatrix,fmt='%.2f')
 
-        # itertime
-        statMatrix = np.zeros((4, iternum))
-        iterArray = np.array([x[4] for x in itertime])
+                        # runtime stat
+                        statMatrix = np.zeros((4, 2 + iternum))
+                        runtimeArray =  np.array([x[5] for x in itertime])
 
-        statMatrix[0] = iterArray
-        statMatrix[1] = iterArray
-        statMatrix[2] = iterArray
+                        np.copyto(statMatrix[0,2:] , runtimeArray)
+                        statMatrix[0,1] = train_t
+                        #statMatrix[0,0] = app_t
+                        statMatrix[0,0] = train_t + init_t
 
-        matrix[4] = statMatrix[2]
-        matrix[5] = statMatrix[3]
+                        statMatrix[1] = statMatrix[0]
+                        statMatrix[2] = statMatrix[0]
+                        np.savetxt(output_name + '.runtime-stat', statMatrix,fmt='%.2f')
 
-        np.savetxt(appdir + '.iter-stat', statMatrix,fmt='%.2f')
-
-        # runtime stat
-        statMatrix = np.zeros((4, 2 + iternum))
-        runtimeArray =  np.array([x[5] for x in itertime])
-        
-        np.copyto(statMatrix[0,2:] , runtimeArray)
-        statMatrix[0,1] = train_t
-        statMatrix[0,0] = app_t
-
-        statMatrix[1] = statMatrix[0]
-        statMatrix[2] = statMatrix[0]
-        np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
-
-        return matrix
+        return None
 
     #######################################################################
     def load_timelog_harp(self, logfile):
@@ -751,7 +748,7 @@ if __name__ == "__main__":
     #draw_time(logAnalizer.load_timelog(logfile), trainer, figname)
     mv_matrix = logAnalizer.load_applog(logdir)
 
-    draw_mvmatrix(mv_matrix, trainer, logdir+'.png')
+    #draw_mvmatrix(mv_matrix, trainer, logdir+'.png')
 
 
 
