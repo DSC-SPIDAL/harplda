@@ -1,0 +1,21 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+workroot=/tmp/fg474/petuum-100/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=juliet-100
+ldall=/N/u/pengb/hpda/petuum/strads/apps/lda_release/bin/ldall
+# enwiki-1M on juliet
+#datadir=/opt/hadoop-2.6.0/data/clueweb-100/
+datadir=/tmp/fg474/petuum-data/enwiki-bigram-100/
+datafile=enwiki-bigram.ylda
+topics=500
+iter=100
+alpha=100
+beta=0.01
+threads=40
+
+

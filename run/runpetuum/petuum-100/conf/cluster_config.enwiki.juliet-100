@@ -1,0 +1,22 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+workroot=/tmp/fg474/petuum-100/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=juliet-100
+ldall=/N/u/pengb/hpda/petuum/strads/apps/lda_release/bin/ldall
+
+# enwiki-1M on juliet
+#datadir=/opt/hadoop-2.6.0/data/enwiki-100/
+datadir=/tmp/fg474/petuum-data/enwiki-100/
+datafile=enwiki.ylda
+topics=10000
+iter=200
+alpha=100
+beta=0.01
+threads=40
+
+
