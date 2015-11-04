@@ -87,11 +87,16 @@ class LDATrainerLog():
 
     ##############################################################    
     def load_applog_petuumrun(self, appdir, filename='.log'):
+        rawdata = None
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f.endswith(filename):
                     rawdata = np.loadtxt(os.path.join(dirpath, f))
                     break
+
+        if rawdata is None:
+            logger.error('%s/%s load data failed', dirpath, f)
+            return None
 
         iternum, cols = rawdata.shape
 
@@ -123,7 +128,8 @@ class LDATrainerLog():
         np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
 
         # likelihood
-        maxiternum = iternum - 2
+        #maxiternum = iternum - 2
+        maxiternum = iternum 
         lhiters = [1]
         lhiters.extend([x for x in range(10, maxiternum+1,10)])
         lhood= [rawdata[0,2]]
@@ -267,20 +273,21 @@ class LDATrainerLog():
                         output_name = f[:f.find(filepattern)]
 
                         # (dirpath, [(compute time, comm time)])
+                        # petuum use (s), harp use (ms)
                         iternum = len(itertime)
                         logger.info('total %d iterations', iternum)
                         # compute time, rawdata[:,4]
                         statMatrix = np.zeros((4, iternum))
-                        statMatrix[0] = np.array([x[0] for x in itertime])
-                        statMatrix[1] = np.array([x[1] for x in itertime])
-                        statMatrix[2] = np.array([x[2] for x in itertime])
-                        statMatrix[3] = np.array([x[3] for x in itertime])
+                        statMatrix[0] = np.array([x[0]*1000 for x in itertime])
+                        statMatrix[1] = np.array([x[1]*1000 for x in itertime])
+                        statMatrix[2] = np.array([x[2]*1000 for x in itertime])
+                        statMatrix[3] = np.array([x[3]*1000 for x in itertime])
 
                         np.savetxt(output_name + '.comput-stat', statMatrix,fmt='%.2f')
 
                         # itertime
                         statMatrix = np.zeros((4, iternum))
-                        iterArray = np.array([x[4] for x in itertime])
+                        iterArray = np.array([x[4]*1000 for x in itertime])
 
                         statMatrix[0] = iterArray
                         statMatrix[1] = iterArray
