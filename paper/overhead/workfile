@@ -1,0 +1,114 @@
+name	trainer	cluster	dataset	network	sampler	iternum
+
+lda11	ldartt	30	enwiki	ib	doc	200
+
+lda12	ldalgs-opt	30	enwiki	ib	doc	200
+
+lda13	ldalgs	30	enwiki	ib	doc	200
+
+lda21	ldartt	30	clueweb	ib	doc	200
+
+lda22	ldalgs-opt	30	clueweb	ib	doc	200
+
+lda23	ldalgs	30	clueweb	ib	doc	200
+
+lda311	ldartt	100	enwiki	eth	doc	200
+
+lda312	ldalgs	100	enwiki	eth	doc	200
+
+lda313	ldalgs-opt	100	enwiki	eth	doc	200
+
+lda321	ldartt	100	enwiki	ib	doc	200
+
+lda322	ldalgs	100	enwiki	ib	doc	200
+
+lda323	ldalgs-opt	100	enwiki	ib	doc	200
+
+lda411	ldartt	100	clueweb	eth	doc	200
+
+lda412	ldalgs-opt	100	clueweb	eth	doc	200
+
+lda413	ldalgs	100	clueweb	eth	doc	200
+
+lda4211	ldartt	100	clueweb	ib	doc	200
+
+lda422	ldalgs	100	clueweb	ib	doc	200
+
+lda423	ldalgs-opt	100	clueweb	ib	doc	200
+
+ldartt2241	ldartt	100	gutenberg	ib	doc	100
+
+ldartt2242	ldartt	100	gutenberg	ib	doc	100
+
+ldarttws2111	ldartt	100	enwiki	eth	word	200
+
+ldarttws2121	ldartt	100	clueweb	eth	word	200
+
+ldarttws2214	ldartt	100	enwiki	ib	word	200
+
+ldarttws2224	ldartt	100	clueweb	ib	word	200
+
+ldarttws2231	ldartt	100	enwiki-bigram	ib	word	100
+
+ldarttws2241	ldartt	100	gutenberg	ib	word	100
+
+ldarttws2242	ldartt	100	gutenberg	ib	word	100
+
+petuum-juliet-100-clueweb-eth0-101	petuum	100	clueweb	eth	word	200
+
+petuum-juliet-100-clueweb-eth0-102	petuum	100	clueweb	eth	word	200
+
+petuum-juliet-100-clueweb-ib0-101	petuum	100	clueweb	ib	word	200
+
+petuum-juliet-100-clueweb-ib0-103	petuum	100	clueweb	ib	word	200
+
+petuum-juliet-100-clueweb-ib0-301	petuum	100	clueweb	ib	word	200
+
+petuum-juliet-100-enwiki-bigram-ib0-500-1	petuum	100	enwiki-bigram	ib	word	60
+
+petuum-juliet-100-enwiki-bigram-ib0-500-2	petuum	100	enwiki-bigram	ib	word	70
+
+petuum-juliet-100-enwiki-eth0-101	petuum	100	enwiki	eth	word	200
+
+petuum-juliet-100-enwiki-eth0-103	petuum	100	enwiki	eth	word	200
+
+petuum-juliet-100-enwiki-ib0-102	petuum	100	enwiki	ib	word	200
+
+petuum-juliet-100-enwiki-ib0-103	petuum	100	enwiki	ib	word	200
+
+petuum-juliet-100-enwiki-ib0-301	petuum	100	enwiki	ib	word	200
+
+petuum-juliet-100-gutenberg-ib0-002	petuum	100	gutenberg	ib	word	60
+
+petuum-juliet-100-gutenberg-ib0-10k-1	petuum	100	gutenberg	ib	word	100
+
+petuum-juliet-30-clueweb-eth0-004-computetime	petuum	30	clueweb	eth	word	200
+
+petuum-juliet-30-clueweb-ib0-002	petuum	30	clueweb	ib	word	600
+
+petuum-juliet-30-clueweb-ib0-004-computetime	petuum	30	clueweb	ib	word	200
+
+petuum-juliet-30-enwiki-eth0-001-computetime	petuum	30	enwiki	eth	word	600
+
+petuum-juliet-30-enwiki-eth0-004	petuum	30	enwiki	eth	word	600
+
+petuum-juliet-30-enwiki-ib0-001-computetime	petuum	30	enwiki	ib	word	600
+
+ylda-clueweb-juliet-100-eth0.101	ylda	100	clueweb	eth	doc	200
+
+ylda-clueweb-juliet-100-ib0.101	ylda	100	clueweb	ib	doc	200
+
+ylda-clueweb-juliet-30-eth0.001	ylda	30	clueweb	eth	doc	200
+
+ylda-clueweb-juliet-30-ib0.001	ylda	30	clueweb	ib	doc	200
+
+ylda-enwiki-juliet-100-eth0.101	ylda	100	enwiki	eth	doc	200
+
+ylda-enwiki-juliet-100-ib0.101	ylda	100	enwiki	ib	doc	200
+
+ylda-enwiki-juliet-100-ib0.102	ylda	100	enwiki	ib	doc	200
+
+ylda-enwiki-juliet-30-eth0.001	ylda	30	enwiki	eth	doc	140
+
+ylda-enwiki-juliet-30-ib0.001	ylda	30	enwiki	ib	doc	200
+
