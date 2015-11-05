@@ -30,8 +30,8 @@ Usage:
     * draw figures on plotname
     plot_perf <plot name> <datadir> <name file> <fig name> <title>
     
-    * make namefile
-    plot_perf namefile <workfile> <namefile> <features>
+    * make namefile by features(0 means *)
+    plot_perf namefile <workfile> <cluster> <dataset> <network> <sampler>
 
 """
 
