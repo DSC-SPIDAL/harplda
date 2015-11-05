@@ -19,7 +19,8 @@ input:
 plotname:
     * overall_runtime    ;overall runtime
     * training_runtime   ;training runtime
-    * accuracy_runtime     ;perplexity .vs. clock time
+    * accuracy_overalltime     ;perplexity .vs. clock app time
+    * accuracy_runtime     ;perplexity .vs. clock training time
     * accuracy_iter     ;perlexity .cs. iternumber
     * overhead          ;overhead=itertime-computetime, overhead comparision between two result
     * comm_breakdown    ; time breakdown on communication and commputation time
@@ -271,14 +272,36 @@ class PlotEngine():
     def savefig(self, figname):
         plt.savefig(figname)
 
-
     def autolabel(self, rects):
-        # attach some text labels
+        """
+        input:
+            bar
+        """
         for rect in rects:
             height = rect.get_height()
             self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%d'%int(height),
-                ha='center', va='bottom')
+                        ha='center', va='bottom')
 
+    def autolabel_stack(self, rects):
+        """
+        input:
+            (bar1, bar2)
+        """
+        old_height = []
+        for rect in rects[0]:
+            height = rect.get_height()
+            self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%d'%int(height),
+                        ha='center', va='bottom')
+            old_height.append(height)
+
+        # stack the next one
+        idx = 0
+        for rect in rects[1]:
+            height2 = rect.get_height()
+            self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*(old_height[idx]+height2), '%d'%int(height2),
+                        ha='center', va='bottom')
+            idx += 1
+ 
 
     ######################3
     def plot(self, plotname, fig, conf):
@@ -493,14 +516,15 @@ class PlotEngine():
         for tp in self.perfname:
             name = tp[0]
             label = tp[1]
-            gname = tp[2]
+            #gname = tp[2]
+            gname = tp[1]
  
             fname = name + '.iter-stat'
             # get max apptime
-            iter_time.append((self.perfdata[fname], label, gname))
+            iter_time.append((self.perfdata[fname]/1000, label, gname))
             fname = name + '.comput-stat'
             # get max apptime
-            compute_time.append((self.perfdata[fname], label, gname))
+            compute_time.append((self.perfdata[fname]/1000, label, gname))
     
         #
         # data is in groups
@@ -528,7 +552,8 @@ class PlotEngine():
         N = compute_time[0][0][2][:10].shape[0]
         logger.info('N=%s', N)
         ind = np.arange(N)
-        width = 0.5       # the width of the bars
+        #width = 0.5       # the width of the bars
+        width = 1. / grp_size - 0.05
 
         for idx in range(grp_size):
 
@@ -548,8 +573,7 @@ class PlotEngine():
 
             p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-overhead')
 
-            rects.append(p1)
-            rects.append(p2)
+            rects.append((p1,p2))
 
             #logger.info('val = %s, label=%s', grp_data, compute_time[idx][1])
             # ax.bar(ind + width*idx, compute_time[idx][0], width, label = compute_time[idx][1])
@@ -561,13 +585,14 @@ class PlotEngine():
         else:
             self.curax.set_title('Overhead of LDA Trainers')
         self.curax.set_xticks(ind+width)
+        self.curax.set_xticklabels([x+1 for x in range(N)])
         #self.curax.set_xticklabels( ('ib', 'eth') )
         #self.curax.set_xticklabels( groupname )
         self.curax.set_xlabel('iteration')
 
 
         for rect in rects:
-            self.autolabel(rect)
+            self.autolabel_stack(rect)
 
         #ax.set_ylim(0, overall_time[0][0] * 2)
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
@@ -623,7 +648,8 @@ class PlotEngine():
         N = compute_time[0][0][2][:10].shape[0]
         logger.info('N=%s', N)
         ind = np.arange(N)
-        width = 0.45       # the width of the bars
+        #width = 0.45       # the width of the bars
+        width = 1. / grp_size - 0.05
 
         for idx in range(grp_size):
 
@@ -644,8 +670,7 @@ class PlotEngine():
 
             p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-comm')
 
-            rects.append(p1)
-            rects.append(p2)
+            rects.append((p1,p2))
 
             #logger.info('val = %s, label=%s', grp_data, compute_time[idx][1])
             # ax.bar(ind + width*idx, compute_time[idx][0], width, label = compute_time[idx][1])
@@ -663,8 +688,8 @@ class PlotEngine():
         self.curax.set_xlabel('iteration')
 
 
-        #for rect in rects:
-        #    self.autolabel(rect)
+        for rect in rects:
+            self.autolabel_stack(rect)
 
         #ax.set_ylim(0, overall_time[0][0] * 2)
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
