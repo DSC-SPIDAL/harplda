@@ -24,6 +24,7 @@ plotname:
     * accuracy_iter     ;perlexity .cs. iternumber
     * overhead          ;overhead=itertime-computetime, overhead comparision between two result
     * comm_breakdown    ; time breakdown on communication and commputation time
+    * network,freemem, cpu            ; system monitor logs, network in/out, memory, cpu utilization
 
 
 Usage: 
@@ -212,6 +213,28 @@ class PerfName():
         else:
             return self.perfname[self._pos]
 
+
+class DataSampler():
+    """
+    sample from np.array data
+    """
+    def __init__(self):
+        pass
+
+    def sample_max(self, vector, span):
+        """
+        sample the point with max value from vector every span data points
+        """
+        cnt = vector.shape[0]
+        logger.debug('sample_max on vector cnt =%d, span=%d,shape=%s', cnt, span, vector.shape)
+
+        new_vec = np.zeros((cnt/span))
+        idmax = cnt/span * span
+        for idx in range(0, idmax , span):
+            new_vec[idx/span] = np.max(vector[idx:idx+span])
+
+        return new_vec
+
 class PlotEngine():
 
     def __init__(self):
@@ -222,14 +245,18 @@ class PlotEngine():
             "accuracy_runtime":self.plot_accuracy_runtime,
             "accuracy_overalltime":self.plot_accuracy_overalltime,
             "overhead":self.plot_overhead,
-            "comm_breakdown":self.plot_comm_breakdown
+            "comm_breakdown":self.plot_comm_breakdown,
+            "network":self.plot_network,
+            "freemem":self.plot_freemem,
+            "cpu":self.plot_cpu
         }
 
         # init default subplot
         self.init_subplot(1,1)
         self.set_subplot(1,1)
 
-        self.colors=['m', 'r','b','g','c','k','y']
+        self.colors_orig=['m', 'r','b','g','c','k','y','m', 'r','b','g','c','k','y']
+        self.colors=[(name, hex) for name, hex in matplotlib.colors.cnames.iteritems()]
 
     def init_data(self, datadir, perfname):
         """
@@ -470,7 +497,8 @@ class PlotEngine():
                 x = accuracy[idx][1][x_int - 1 ]
                 self.curax.set_ylabel('runtime (s)')
 
-            self.curax.plot(x, accuracy[idx][2], self.colors[idx]+'.-', label = accuracy[idx][3])
+            self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+            #self.curax.plot(x, accuracy[idx][2], self.colors[idx], label = accuracy[idx][3])
 
         #self.curax.set_ylabel('Model Perplexity')
         self.curax.set_ylabel('Model Likelihood')
@@ -695,6 +723,115 @@ class PlotEngine():
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
         self.curax.legend(loc = 0)
         if figname:
+            plt.savefig(figname)
+
+        #plt.show()
+
+    ######################################################
+    def plot_network(self, figname, conf):
+        return self.plot_system(0, figname, conf)
+    def plot_freemem(self, figname, conf):
+        return self.plot_system(1, figname, conf)
+    def plot_cpu(self, figname, conf):
+        return self.plot_system(2, figname, conf)
+
+    def plot_system(self, plottype, figname, conf):
+        """
+        get system perf data from monitor stat files
+        
+        plottype:
+            0   ; network
+            1   ; freemem
+            2   ; cpu
+
+        """
+        stat_name=['rx_ok','tx_ok','freemem','us','sy']
+        dataflist = []
+        #for name,label in self.perfname:
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            for sname in stat_name:
+                fname = name + '.' + sname + '-stat'
+                dataflist.append(fname)
+
+        self.perfdata.load(dataflist)
+
+        # use max value
+        data = {}
+        labels = []
+        for sname in stat_name:
+            data[sname] = []
+
+        for tp in self.perfname:
+            name = tp[0]
+            labels.append(tp[1])
+            for sname in stat_name:
+                fname = name + '.' + sname + '-stat'
+                data[sname].append(self.perfdata[fname][1,:])
+ 
+        #begin to plot
+        sampler = DataSampler()
+        sample_span = 50
+
+        grp_size = len(labels)
+        for idx in range(grp_size):
+            if plottype == 0:
+                # draw network in/out
+                y_in = data['rx_ok'][idx]
+                y_out = -1 * data['tx_ok'][idx]
+                
+                y_in = sampler.sample_max(y_in,  sample_span)
+                y_out = sampler.sample_max(y_out,  sample_span)
+
+                x = np.arange(y_in.shape[0]) *  sample_span
+
+                self.curax.plot(x, y_in, self.colors_orig[idx*2]+'.-', label = labels[idx]+'-in')
+                self.curax.plot(x, y_out, self.colors_orig[idx*2 +1]+'.-', label = labels[idx]+'-out')
+            elif plottype ==1:
+                # draw freememe
+                y = data['freemem'][idx]
+
+                y = sampler.sample_max(y,  sample_span)
+                x = np.arange(y.shape[0]) *  sample_span
+
+
+                self.curax.plot(x, y, self.colors_orig[idx]+'.-', label = labels[idx])
+            else:
+                #draw cpu
+                y_us = data['us'][idx]
+                y_sy = data['sy'][idx]
+
+
+                y_us = sampler.sample_max(y_us,  sample_span)
+                y_sy = sampler.sample_max(y_sy,  sample_span)
+                x = np.arange(y_us.shape[0]) *  sample_span
+
+
+                self.curax.plot(x, y_us, self.colors_orig[idx*2]+'.-', label = labels[idx]+'-us')
+                self.curax.plot(x, y_sy, self.colors_orig[idx*2 +1]+'.-', label = labels[idx]+'-sy')
+
+        #
+        self.curax.set_xlabel('time (s)')
+        if plottype == 0:
+            self.curax.set_ylabel('Networking In/Out (MB/s)')
+        elif plottype == 1:
+            self.curax.set_ylabel('Free Memeory (MB)')
+        elif plottype == 2:
+            self.curax.set_ylabel('CPU Utilization')
+
+
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('System Performance')
+        #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        self.curax.legend(loc = 0)
+        
+        if figname:
+            #plt.savefig('full-'+figname)
+            #self.curax.set_ylim(0, 350)
+            #plt.savefig('tail-'+figname)
             plt.savefig(figname)
 
         #plt.show()
