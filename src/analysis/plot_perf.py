@@ -757,7 +757,6 @@ class PlotEngine():
 
         self.perfdata.load(dataflist)
 
-        # use max value
         data = {}
         labels = []
         for sname in stat_name:
@@ -768,7 +767,12 @@ class PlotEngine():
             labels.append(tp[1])
             for sname in stat_name:
                 fname = name + '.' + sname + '-stat'
-                data[sname].append(self.perfdata[fname][1,:])
+                if sname =='freemem':
+                    # use min value
+                    data[sname].append(self.perfdata[fname][0,:])
+                else:
+                    # use max value
+                    data[sname].append(self.perfdata[fname][1,:])
  
         #begin to plot
         sampler = DataSampler()
@@ -779,10 +783,11 @@ class PlotEngine():
             if plottype == 0:
                 # draw network in/out
                 y_in = data['rx_ok'][idx]
-                y_out = -1 * data['tx_ok'][idx]
+                y_out = data['tx_ok'][idx]
                 
                 y_in = sampler.sample_max(y_in,  sample_span)
                 y_out = sampler.sample_max(y_out,  sample_span)
+                y_out = -1 * y_out
 
                 x = np.arange(y_in.shape[0]) *  sample_span
 
@@ -816,7 +821,7 @@ class PlotEngine():
         if plottype == 0:
             self.curax.set_ylabel('Networking In/Out (MB/s)')
         elif plottype == 1:
-            self.curax.set_ylabel('Free Memeory (MB)')
+            self.curax.set_ylabel('Free Memeory (GB)')
         elif plottype == 2:
             self.curax.set_ylabel('CPU Utilization')
 
