@@ -51,6 +51,9 @@ class MonitorLog():
     def load_log(self, logdir):
         netstat = self.load_netstat_log(logdir)
         vmstat = self.load_vmstat_log(logdir)
+        
+        if netstat is None or vmstat is None:
+            return
 
         #combine the data
         #appname , nodeid, rx_ok, tx_ok, us, cs, id, wa
@@ -156,7 +159,7 @@ class MonitorLog():
                         netstat.append((appname, nodeid, rx_ok, tx_ok, mtu))
 
         if not netstat:
-            logger.error('%s/%s load data failed', dirpath, f)
+            logger.error('%s load data failed', dirpath)
             return None
 
         # sort by nodeid
@@ -202,7 +205,8 @@ class MonitorLog():
                             # last timestamp EDT, EST, etc
                             if line.endswith('T\n'):
                                 items = line.split()
-                                free_mem.append(long(items[3]))
+                                # freemem =  free + buff +cache
+                                free_mem.append( long(items[3])+long(items[4])+long(items[5]) )
                                 _us.append(long(items[12]))
                                 _sy.append(long(items[13]))
                                 _idle.append(long(items[14]))
@@ -213,7 +217,7 @@ class MonitorLog():
                         vmstat.append((appname, nodeid, free_mem, _us, _sy, _idle, _wa))
 
         if not vmstat:
-            logger.error('%s/%s load data failed', dirpath, f)
+            logger.error('%s load data failed', dirpath)
             return None
 
         # sort by nodeid
