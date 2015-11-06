@@ -138,7 +138,8 @@ class MonitorLog():
                     appname = m.group(1)
                     nodeid = m.group(2)
                     
-                    logger.info('load log from %s, appname=%s, nodeid=%s', dirpath+'/'+f, appname, nodeid)
+                    #logger.info('load log from %s, appname=%s, nodeid=%s', dirpath+'/'+f, appname, nodeid)
+
 
                     #load data
                     with open(dirpath + '/' + f, 'r') as logf:
@@ -161,7 +162,7 @@ class MonitorLog():
         # sort by nodeid
         nodenum = len(netstat)
         netstat =  sorted(netstat, key = lambda modeltp : modeltp[1])
-        logger.info('total %d nodes', nodenum)
+        logger.info('appname = %s, total %d nodes', appname, nodenum)
 
         logger.debug('netstat data = %s', netstat[0][2][:10])
  
@@ -188,7 +189,7 @@ class MonitorLog():
                     appname = m.group(1)
                     nodeid = m.group(2)
 
-                    logger.info('load log from %s, appname=%s, nodeid=%s', dirpath+'/'+f, appname, nodeid)
+                    #logger.info('load log from %s, appname=%s, nodeid=%s', dirpath+'/'+f, appname, nodeid)
                     #load data
                     with open(dirpath + '/' + f, 'r') as logf:
                         free_mem = []
@@ -198,7 +199,8 @@ class MonitorLog():
                         _wa = []
 
                         for line in logf:
-                            if line.endswith('EDT\n'):
+                            # last timestamp EDT, EST, etc
+                            if line.endswith('T\n'):
                                 items = line.split()
                                 free_mem.append(long(items[3]))
                                 _us.append(long(items[12]))
@@ -217,7 +219,7 @@ class MonitorLog():
         # sort by nodeid
         nodenum = len(vmstat)
         vmstat =  sorted(vmstat, key = lambda modeltp : modeltp[1])
-        logger.info('total %d nodes', nodenum)
+        logger.info('appname=%s, total %d nodes', appname, nodenum)
  
         logger.debug('vmstat data = %s', vmstat[0][2][:10])
 
