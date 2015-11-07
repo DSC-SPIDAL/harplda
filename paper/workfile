@@ -23,9 +23,9 @@ ldarttws2111	ldartt	100	enwiki	eth	word	200
 ldarttws2121	ldartt	100	clueweb	eth	word	200
 ldarttws2214	ldartt	100	enwiki	ib	word	200
 ldarttws2224	ldartt	100	clueweb	ib	word	200
-ldarttws2231	ldartt	100	enwiki-bigram	ib	word	100
-ldarttws2241	ldartt	100	gutenberg	ib	word	100
-ldarttws2242	ldartt	100	gutenberg	ib	word	100
+ldarttws2231	ldartt	100	enwiki-bigram	eth	word	100
+ldarttws2241	ldartt	100	gutenberg	eth	word	100
+ldarttws2242	ldartt	100	gutenberg	eth	word	100
 petuum-juliet-100-clueweb-eth0-101	petuum	100	clueweb	eth	word	200
 petuum-juliet-100-clueweb-eth0-102	petuum	100	clueweb	eth	word	200
 petuum-juliet-100-clueweb-ib0-101	petuum	100	clueweb	ib	word	200
@@ -55,3 +55,13 @@ ylda-enwiki-juliet-100-ib0.101	ylda	100	enwiki	ib	doc	200
 ylda-enwiki-juliet-100-ib0.102	ylda	100	enwiki	ib	doc	200
 ylda-enwiki-juliet-30-eth0.001	ylda	30	enwiki	eth	doc	140
 ylda-enwiki-juliet-30-ib0.001	ylda	30	enwiki	ib	doc	200
+ldalgs2221	ldalgs-2	100	clueweb	ib	doc	200
+ldarttws2232	ldartt	100	enwiki-bigram	ib	word	100
+ldarttws2243	ldartt	100	gutenberg	ib	word	100
+ldartt2243	ldartt	100	gutenberg	ib	doc	100
+ldalgs2222	ldalgs-4	100	clueweb	ib	doc	200
+ldarttws2216	ldartt-local	100	enwiki	ib	word	200
+ldarttws2225	ldartt-local	100	clueweb	ib	word	200
+ldalgs2223	ldalgs-4-deep	100	clueweb	ib	doc	200
+ldarttws2226	ldartt	100	clueweb	ib	word	200
+ldarttws2217	ldartt	100	enwiki	ib	word	200
