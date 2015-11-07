@@ -629,9 +629,10 @@ class PlotEngine():
                 grp_data2_err = iter_time[idx][0][3]
  
                 #sample every 10 points
-                x = ind[0:-1:10]
+                ind = np.arange(grp_data.shape[0])
                 grp_data = grp_data[0:-1:10]
                 grp_data2 = grp_data2[0:-1:10]
+                x = ind[0:-1:10]
                 logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
 
                 #p1 = self.curax.errorbar(ind, grp_data, color=self.colors[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
@@ -646,9 +647,12 @@ class PlotEngine():
                 x_int = x.astype(int)
                 x = execution_time[idx][0][x_int]
                 
+                point_cnt = x.shape[0]
+
                 #draw
-                p1 = self.curax.plot(x, grp_data, self.colors_orig[idx], label = compute_time[idx][1] +'-compute')
-                p2= self.curax.plot(x, grp_data2, self.colors_orig[idx]+'--', label = compute_time[idx][1] +'-iter')
+                p1 = self.curax.plot(x, grp_data[:point_cnt], self.colors_orig[idx], label = compute_time[idx][1] +'-compute')
+                p2= self.curax.plot(x, grp_data2[:point_cnt], self.colors_orig[idx]+'--', label = compute_time[idx][1] +'-iter')
+
 
                 #self.curax.set_xticks(x)
                 #self.curax.set_xticklabels([x+1 for x in range(N)])
@@ -729,7 +733,7 @@ class PlotEngine():
             dataflist.append(name + '.comput-stat')
             dataflist.append(name + '.runtime-stat')
 
-        self.perfdata.load(dataflist)
+        self.perfdata.load(dataflist,False)
 
         comm_time = []
         compute_time = []
@@ -740,17 +744,19 @@ class PlotEngine():
             label = tp[1]
             gname = tp[1]
  
-            fname = name + '.comm-stat'
-            # get max apptime
-            comm_time.append((self.perfdata[fname]/1000, label, gname))
-            fname = name + '.comput-stat'
-            # get max apptime
-            compute_time.append((self.perfdata[fname]/1000, label, gname))
-
+            fname1 = name + '.comm-stat'
+            fname2 = name + '.comput-stat'
             fname3 = name + '.runtime-stat'
-            # get execution time
-            offset = self.perfdata[fname3][2,0] - self.perfdata[fname3][2,1] 
-            execution_time.append((self.perfdata[fname3][2,2:] + offset, label, gname))
+            if self.perfdata[fname1] is None or self.perfdata[fname2] is None:
+                continue
+            else:
+ 
+                comm_time.append((self.perfdata[fname1]/1000, label, gname))
+                compute_time.append((self.perfdata[fname2]/1000, label, gname))
+
+                # get execution time
+                offset = self.perfdata[fname3][2,0] - self.perfdata[fname3][2,1] 
+                execution_time.append((self.perfdata[fname3][2,2:] + offset, label, gname))
 
  
         #
@@ -877,7 +883,7 @@ class PlotEngine():
                 fname = name + '.' + sname + '-stat'
                 dataflist.append(fname)
 
-        self.perfdata.load(dataflist)
+        self.perfdata.load(dataflist, False)
 
         data = {}
         labels = []
@@ -886,16 +892,22 @@ class PlotEngine():
 
         for tp in self.perfname:
             name = tp[0]
-            labels.append(tp[1])
+            load_fail = False
             for sname in stat_name:
                 fname = name + '.' + sname + '-stat'
+                if self.perfdata[fname] is None:
+                    load_fail = True
+                    break
+                
                 if sname =='freemem':
                     # use min value
                     data[sname].append(self.perfdata[fname][0,:])
                 else:
                     # use max value
                     data[sname].append(self.perfdata[fname][1,:])
- 
+
+            if not load_fail:
+                labels.append(tp[1])
         #begin to plot
         sampler = DataSampler()
         sample_span = 50
