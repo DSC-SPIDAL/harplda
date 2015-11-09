@@ -253,6 +253,9 @@ class PlotEngine():
             "comm_breakdown":self.plot_comm_breakdown_top,
             "comm_breakdown_end":self.plot_comm_breakdown_end,
             "comm_breakdown_all":self.plot_comm_breakdown_all,
+            "iter_trend":self.plot_iter_trend_top,
+            "iter_trend_end":self.plot_iter_trend_end,
+            "iter_trend_all":self.plot_iter_trend_all,
             "network":self.plot_network,
             "freemem":self.plot_freemem,
             "cpu":self.plot_cpu
@@ -266,7 +269,9 @@ class PlotEngine():
         #self.colors=[(name, hex) for name, hex in matplotlib.colors.cnames.iteritems()]
         #self.colors=[hex for name, hex in matplotlib.colors.cnames.iteritems()]
         self.colors = self.colors_orig
-
+        self.colors_stackbar=['r','y','b','g', 'm','c','y','k','r','y','b','g','m','c','y','k']
+        self.linestyle=['-','--','-.',':']
+        self.marker=['.','o','^','s','*','3']
 
 
     def init_data(self, datadir, perfname):
@@ -309,7 +314,8 @@ class PlotEngine():
 
     def savefig(self, figname):
         # plt.savefig(figname, dpi=300)
-        plt.savefig(figname)
+        self.fig.tight_layout()
+        self.fig.savefig(figname)
 
     def autolabel(self, rects):
         """
@@ -428,7 +434,7 @@ class PlotEngine():
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
         self.curax.legend(loc = 4)
         if figname:
-            plt.savefig(figname)
+            self.savefig(figname)
 
         #plt.show()
 
@@ -499,16 +505,14 @@ class PlotEngine():
         for idx in range(grp_size):
             if plottype == 0:
                 x = accuracy[idx][0]
-                self.curax.set_ylabel('iteration number')
+                #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
             else:
                 x = accuracy[idx][0]
                 #convert iternum to runtime
                 x_int = x.astype(int)
                 x = accuracy[idx][1][x_int - 1 ]
-                self.curax.set_ylabel('runtime (s)')
-
-            self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
-            #self.curax.plot(x, accuracy[idx][2], self.colors[idx], label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
 
         #self.curax.set_ylabel('Model Perplexity')
         self.curax.set_ylabel('Model Likelihood')
@@ -531,7 +535,7 @@ class PlotEngine():
             #plt.savefig('full-'+figname)
             #self.curax.set_ylim(0, 350)
             #plt.savefig('tail-'+figname)
-            plt.savefig(figname)
+            self.savefig(figname)
 
         #plt.show()
 
@@ -677,9 +681,9 @@ class PlotEngine():
                     grp_data2 = grp_data2[-10:]
                     grp_data2_err = grp_data2_err[-10:]
 
-                p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
+                p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors_stackbar[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
 
-                p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-overhead')
+                p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors_stackbar[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-overhead')
 
                 rects.append((p1,p2))
 
@@ -692,7 +696,7 @@ class PlotEngine():
                 self.curax.set_xlabel('Iteration')
 
         # all plots goes here
-        self.curax.set_ylabel('Execution Time/Iteration (s)')
+        self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -705,7 +709,7 @@ class PlotEngine():
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
         self.curax.legend(loc = 0)
         if figname:
-            plt.savefig(figname)
+            self.savefig(figname)
 
         #plt.show()
     
@@ -719,6 +723,7 @@ class PlotEngine():
     def plot_comm_breakdown_all(self, figname, conf):
         return self.plot_comm_breakdown(2, figname, conf)
 
+
     def plot_comm_breakdown(self, plottype, figname, conf):
         """
         get comm and compute value from .comm-stat and .comput-stat
@@ -726,6 +731,7 @@ class PlotEngine():
             0   ; top
             1   ; end
             2   ; all
+            3   ; no breakdown iteration time only
         """
         dataflist = []
         for tp in self.perfname:
@@ -825,8 +831,8 @@ class PlotEngine():
                     grp_data2 = grp_data2[-10:]
                     grp_data2_err = grp_data2_err[-10:]
 
-                p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
-                p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-comm')
+                p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors_stackbar[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
+                p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors_stackbar[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-comm')
 
                 rects.append((p1,p2))
 
@@ -840,7 +846,7 @@ class PlotEngine():
 
 
         # all plots goes here
-        self.curax.set_ylabel('Execution Time/Iteration (s)')
+        self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -853,9 +859,159 @@ class PlotEngine():
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
         self.curax.legend(loc = 0)
         if figname:
-            plt.savefig(figname)
+            self.savefig(figname)
 
         #plt.show()
+
+    ################################
+    def plot_iter_trend_top(self, figname, conf):
+        return self.plot_iter_trend(0, figname, conf)
+
+    def plot_iter_trend_end(self, figname, conf):
+        return self.plot_iter_trend(1, figname, conf)
+
+    def plot_iter_trend_all(self, figname, conf):
+        return self.plot_iter_trend(2, figname, conf)
+
+    def plot_iter_trend(self, plottype, figname, conf):
+        """
+        get iter value from .iter-stat
+        plottype:
+            0   ; top
+            1   ; end
+            2   ; all
+        """
+        dataflist = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            dataflist.append(name + '.iter-stat')
+            dataflist.append(name + '.runtime-stat')
+
+        self.perfdata.load(dataflist,False)
+
+        iter_time = []
+        execution_time = []
+
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            gname = tp[1]
+ 
+            fname1 = name + '.iter-stat'
+            fname3 = name + '.runtime-stat'
+            if self.perfdata[fname1] is None :
+                continue
+            else:
+ 
+                iter_time.append((self.perfdata[fname1]/1000, label, gname))
+
+                # get execution time
+                offset = self.perfdata[fname3][2,0] - self.perfdata[fname3][2,1] 
+                execution_time.append((self.perfdata[fname3][2,2:] + offset, label, gname))
+
+ 
+        #
+        # data is in groups
+        #
+        
+        #code mofidy based on comm_breakdown
+        comm_time = iter_time
+        compute_time = iter_time
+
+        # draw a bar stacked
+        groupname = []
+        for id in range(len(comm_time)):
+            if not comm_time[id][2] in groupname:
+                groupname.append( comm_time[id][2] )
+
+        grp_size = len(groupname)
+        rects = []
+
+        iternum = compute_time[0][0][2].shape[0]
+        if plottype == 2:
+            N = compute_time[0][0][2].shape[0]
+        else:
+            N = compute_time[0][0][2][:10].shape[0]
+        logger.info('N=%s', N)
+        ind = np.arange(N)
+        #width = 0.45       # the width of the bars
+        width = 1. / grp_size - 0.05
+
+        for idx in range(grp_size):
+            if plottype == 2:
+                # get mean , std
+                grp_data = compute_time[idx][0][2]
+                grp_data_err = compute_time[idx][0][3]
+                grp_data2 = comm_time[idx][0][2]
+                grp_data2_err = comm_time[idx][0][3]
+
+                #sample every 10 points
+                x = ind[0:-1:10]
+                grp_data = grp_data[0:-1:10]
+                grp_data2 = grp_data2[0:-1:10]
+                logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
+                x_int = x.astype(int)
+                x = execution_time[idx][0][x_int]
+                
+                #draw
+                p1 = self.curax.plot(x, grp_data, self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-iter')
+                #p2 = self.curax.plot(x, grp_data2, self.colors_orig[idx]+'.--', label = comm_time[idx][1] +'-comm')
+
+                self.curax.set_xlabel('Execution Time (s)')
+
+            else:
+                # get mean , std
+                grp_data = compute_time[idx][0][2]
+                grp_data_err = compute_time[idx][0][3]
+                grp_data2 = comm_time[idx][0][2]
+                grp_data2_err = comm_time[idx][0][3]
+ 
+                if plottype  == 0:
+                    grp_data = grp_data[:10]
+                    grp_data_err = grp_data_err[:10]
+                    grp_data2 = grp_data2[:10]
+                    grp_data2_err = grp_data2_err[:10]
+                else:
+                    grp_data = grp_data[-10:]
+                    grp_data_err = grp_data_err[-10:]
+                    grp_data2 = grp_data2[-10:]
+                    grp_data2_err = grp_data2_err[-10:]
+
+                #p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors_stackbar[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
+                #p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors_stackbar[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-comm')
+
+                #rects.append((p1,p2))
+                p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors_stackbar[idx], yerr= grp_data_err, label = compute_time[idx][1] +'-iter')
+                rects.append(p1)
+
+                self.curax.set_xticks(ind+width)
+                if plottype == 0:
+                    self.curax.set_xticklabels([x+1 for x in range(N)])
+                else:
+                    self.curax.set_xticklabels([ iternum -N + x +1 for x in range(N)])
+
+                self.curax.set_xlabel('Iteration')
+
+
+        # all plots goes here
+        self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('Communication and Computation time breakdown of LDA Trainers')
+
+        for rect in rects:
+            self.autolabel_stack(rect)
+
+        #ax.set_ylim(0, overall_time[0][0] * 2)
+        #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        self.curax.legend(loc = 0)
+        if figname:
+            self.savefig(figname)
+
+        #plt.show()
+
 
     ######################################################
     def plot_network(self, figname, conf):
@@ -973,7 +1129,7 @@ class PlotEngine():
             #plt.savefig('full-'+figname)
             #self.curax.set_ylim(0, 350)
             #plt.savefig('tail-'+figname)
-            plt.savefig(figname)
+            self.savefig(figname)
 
         #plt.show()
 

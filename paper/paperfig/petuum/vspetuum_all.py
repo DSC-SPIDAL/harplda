@@ -31,39 +31,41 @@ def call_plot(plotname, datadir, namefile, figname, title):
 
 
 def draw_all():
-    # output (2,2) subplots
-    ploter.init_subplot(2,3)
-    #ploter.fig.suptitle("LDA Trainers by Local-Global Sync")
+    ploter.init_subplot(1,2)
     width = 8.5
-    ploter.fig.set_size_inches(width, width/(4./3 * 3./2))
+    ploter.fig.set_size_inches(width, width/(4./3 * 1./2))
 
     matplotlib.rcParams.update({'text.fontsize': 5})
     matplotlib.rcParams.update({'legend.fontsize': 6})
 
     ploter.set_subplot(1,1)
     call_plot('accuracy_overalltime', '../../data', 'all.100-clueweb-ib', '','') 
- 
     ploter.set_subplot(1,2)
-    #call_plot('comm_breakdown', '../../data', 'all.100-clueweb-ib', '', '')
-    call_plot('comm_breakdown_all', '../../data', 'all.100-clueweb-ib', '', '')
-
+    call_plot('overhead', '../../data', 'all.100-clueweb-ib', '', '')
     ploter.set_subplot(1,3)
-    call_plot('overall_runtime', '../../data', 'opt.100-clueweb-eth-ib', '', '')
+    call_plot('overhead_all', '../../data', 'all.100-clueweb-ib', '', '')
 
     ploter.set_subplot(2,1)
-    call_plot('accuracy_overalltime', '../../data', 'all.100-enwiki-ib', '','') 
- 
+    call_plot('accuracy_overalltime', '../../data', 'all.100-enwiki-bigram-ib', '','') 
     ploter.set_subplot(2,2)
-    call_plot('comm_breakdown_all', '../../data', 'all.100-enwiki-ib', '', '')
-
+    call_plot('overhead', '../../data', 'all.100-enwiki-bigram-ib', '', '')
     ploter.set_subplot(2,3)
-    call_plot('overall_runtime', '../../data', 'opt.100-enwiki-eth-ib', '', '')
+    call_plot('overhead_all', '../../data', 'all.100-enwiki-bigram-ib', '', '')
+
+    ploter.set_subplot(3,1)
+    call_plot('accuracy_overalltime', '../../data', 'all.100-gutenberg-ib', '','') 
+    ploter.set_subplot(3,2)
+    call_plot('overhead', '../../data', 'all.100-gutenberg-ib', '', '')
+    ploter.set_subplot(3,3)
+    call_plot('overhead_all', '../../data', 'all.100-gutenberg-ib', '', '')
+
+
 
     ploter.fig.subplots_adjust(hspace=0.4)
     ploter.fig.subplots_adjust(wspace=0.4)
 
     ploter.fig.tight_layout()
-    ploter.savefig('vsylda_all.pdf')
+    ploter.savefig('vspetuum_all.pdf')
 
 def draw_single():
     params ={\
@@ -100,33 +102,49 @@ def draw_single():
     
     plt.rcParams.update(params)
 
-
-
-
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    call_plot('accuracy_overalltime', '../../data', 'all.100-clueweb-ib', 'ylda-1-1.pdf','') 
+    #matplotlib.rcParams.update({'font.weight': 'bold'})
+    #matplotlib.rcParams.update({'figure.figsize': (4,3)})
+    #matplotlib.rcParams.update({'text.fontsize': 5})
+    #matplotlib.rcParams.update({'legend.fontsize': 6})
 
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
-    call_plot('iter_trend_all', '../../data', 'all.100-clueweb-ib', 'ylda-1-2.pdf', '')
+    call_plot('accuracy_overalltime', '../../data', 'all.100-clueweb-ib', 'petuum-1-1.pdf','') 
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
-
-    call_plot('overall_runtime', '../../data', 'opt.100-clueweb-eth-ib', 'ylda-1-3.pdf', '')
+    call_plot('overhead', '../../data', 'all.100-clueweb-ib', 'petuum-1-2.pdf', '')
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
-
-    call_plot('accuracy_overalltime', '../../data', 'all.100-enwiki-ib', 'ylda-2-1.pdf','') 
+    call_plot('overhead_end', '../../data', 'all.100-clueweb-ib', 'petuum-1-3.pdf', '')
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
+    call_plot('overhead_all', '../../data', 'all.100-clueweb-ib', 'petuum-1-4.pdf', '')
 
-    call_plot('iter_trend_all', '../../data', 'all.100-enwiki-ib', 'ylda-2-2.pdf', '')
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
+    call_plot('accuracy_overalltime', '../../data', 'all.100-enwiki-bigram-ib', 'petuum-2-1.pdf','') 
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    call_plot('overhead', '../../data', 'all.100-enwiki-bigram-ib', 'petuum-2-2.pdf', '')
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    call_plot('overhead_end', '../../data', 'all.100-enwiki-bigram-ib', 'petuum-2-3.pdf', '')
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    call_plot('overhead_all', '../../data', 'all.100-enwiki-bigram-ib', 'petuum-2-4.pdf', '')
 
-    call_plot('overall_runtime', '../../data', 'opt.100-enwiki-eth-ib', 'ylda-2-3.pdf', '')
-
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    call_plot('accuracy_overalltime', '../../data', 'all.100-gutenberg-ib', 'petuum-3-1.pdf','') 
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    call_plot('overhead', '../../data', 'all.100-gutenberg-ib', 'petuum-3-2.pdf', '')
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    call_plot('overhead_end', '../../data', 'all.100-gutenberg-ib', 'petuum-3-3.pdf', '')
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    call_plot('overhead_all', '../../data', 'all.100-gutenberg-ib', 'petuum-3-4.pdf', '')
 
 if __name__ == "__main__":
     program = os.path.basename(sys.argv[0])
@@ -138,6 +156,5 @@ if __name__ == "__main__":
     logging.root.setLevel(level=logging.DEBUG)
     logger.info("running %s" % ' '.join(sys.argv))
 
-#draw_all()
     draw_single()
 
