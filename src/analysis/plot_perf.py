@@ -262,9 +262,12 @@ class PlotEngine():
         self.init_subplot(1,1)
         self.set_subplot(1,1)
 
-        self.colors_orig=['m', 'r','b','g','c','k','y','m', 'r','b','g','c','k','y']
+        self.colors_orig=['r','b','m', 'g','c','y','k','r','b','m','g','c','y','k']
         #self.colors=[(name, hex) for name, hex in matplotlib.colors.cnames.iteritems()]
-        self.colors=[hex for name, hex in matplotlib.colors.cnames.iteritems()]
+        #self.colors=[hex for name, hex in matplotlib.colors.cnames.iteritems()]
+        self.colors = self.colors_orig
+
+
 
     def init_data(self, datadir, perfname):
         """
@@ -305,6 +308,7 @@ class PlotEngine():
         logger.info('set_subplot curax = %s', self.curax)
 
     def savefig(self, figname):
+        # plt.savefig(figname, dpi=300)
         plt.savefig(figname)
 
     def autolabel(self, rects):
@@ -385,12 +389,6 @@ class PlotEngine():
         
 
         # draw a bar charta
-        N = 2
-        #ind = np.arange(N)  # the x locations for the groups
-        ind = np.array([0,0.3])
-        width = 0.05       # the width of the bars
-
-        #fig, ax = plt.subplots()
 
         # perf configure file format
         # datafile  label   groupname
@@ -402,6 +400,10 @@ class PlotEngine():
 
         grp_size = len(groupname)
         rects = []
+        N = len(overall_time) / len(groupname)
+        ind = np.arange(N) + 0.10
+        width = 1. / grp_size - 0.20
+
         for idx in range(grp_size):
             logger.info('val=%d, label=%s', overall_time[idx][0], overall_time[idx][1])
             grp_data = ( overall_time[idx][0], overall_time[idx+grp_size][0] )
@@ -409,7 +411,7 @@ class PlotEngine():
             # ax.bar(ind + width*idx, overall_time[idx][0], width, label = overall_time[idx][1])
             rects.append(self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx], label = overall_time[idx][1]))
 
-        self.curax.set_ylabel('runtime (s)')
+        self.curax.set_ylabel('Overall Execution Time (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -650,13 +652,13 @@ class PlotEngine():
                 point_cnt = x.shape[0]
 
                 #draw
-                p1 = self.curax.plot(x, grp_data[:point_cnt], self.colors_orig[idx], label = compute_time[idx][1] +'-compute')
-                p2= self.curax.plot(x, grp_data2[:point_cnt], self.colors_orig[idx]+'--', label = compute_time[idx][1] +'-iter')
+                p1 = self.curax.plot(x, grp_data[:point_cnt], self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-compute')
+                p2= self.curax.plot(x, grp_data2[:point_cnt], self.colors_orig[idx]+'.--', label = compute_time[idx][1] +'-iter')
 
 
                 #self.curax.set_xticks(x)
                 #self.curax.set_xticklabels([x+1 for x in range(N)])
-                self.curax.set_xlabel('execution time (s)')
+                self.curax.set_xlabel('Execution Time (s)')
 
             else:
                 grp_data = compute_time[idx][0][2]
@@ -687,10 +689,10 @@ class PlotEngine():
                 else:
                     self.curax.set_xticklabels([ iternum -N + x +1 for x in range(N)])
 
-                self.curax.set_xlabel('iteration')
+                self.curax.set_xlabel('Iteration')
 
         # all plots goes here
-        self.curax.set_ylabel('elapsed time (s)')
+        self.curax.set_ylabel('Execution Time/Iteration (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -800,10 +802,10 @@ class PlotEngine():
                 x = execution_time[idx][0][x_int]
                 
                 #draw
-                p1 = self.curax.plot(x, grp_data, self.colors_orig[idx], label = compute_time[idx][1] +'-compute')
-                p2 = self.curax.plot(x, grp_data2, self.colors_orig[idx]+'--', label = comm_time[idx][1] +'-comm')
+                p1 = self.curax.plot(x, grp_data, self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-compute')
+                p2 = self.curax.plot(x, grp_data2, self.colors_orig[idx]+'.--', label = comm_time[idx][1] +'-comm')
 
-                self.curax.set_xlabel('execution time (s)')
+                self.curax.set_xlabel('Execution Time (s)')
 
             else:
                 # get mean , std
@@ -834,11 +836,11 @@ class PlotEngine():
                 else:
                     self.curax.set_xticklabels([ iternum -N + x +1 for x in range(N)])
 
-                self.curax.set_xlabel('iteration')
+                self.curax.set_xlabel('Iteration')
 
 
         # all plots goes here
-        self.curax.set_ylabel('elapsed time (s)')
+        self.curax.set_ylabel('Execution Time/Iteration (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:

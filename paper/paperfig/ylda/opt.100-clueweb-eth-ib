@@ -1,0 +1,4 @@
+lda412 ldalgs-opt 1Gbps-Ethernet
+lda413 ldalgs 1Gbps-Ethernet
+lda422 ldalgs-opt 56Gbps-Infiniband
+lda423 ldalgs 56Gbps-Infiniband
