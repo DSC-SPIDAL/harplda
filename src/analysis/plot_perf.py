@@ -22,9 +22,12 @@ plotname:
     * accuracy_overalltime     ;perplexity .vs. clock app time
     * accuracy_runtime     ;perplexity .vs. clock training time
     * accuracy_iter     ;perlexity .cs. iternumber
-    * overhead          ;overhead=itertime-computetime, overhead comparision between two result
-    * comm_breakdown    ; time breakdown on communication and commputation time
+    * overhead          ;(,_end,_all) overhead=itertime-computetime, overhead comparision between two result
+    * comm_breakdown    ;(,_end,_all) time breakdown on communication and commputation time
+    * iter              ;(,_end,_all) iter time 
     * network,freemem, cpu            ; system monitor logs, network in/out, memory, cpu utilization
+    * model_zipf, _split;model size analysis, zipf and model split 
+
 
 
 Usage: 
@@ -258,7 +261,9 @@ class PlotEngine():
             "iter_trend_all":self.plot_iter_trend_all,
             "network":self.plot_network,
             "freemem":self.plot_freemem,
-            "cpu":self.plot_cpu
+            "cpu":self.plot_cpu,
+            "model_zipf":self.plot_model_zipf,
+            "model_split":self.plot_model_split
         }
 
         # init default subplot
@@ -1133,6 +1138,131 @@ class PlotEngine():
 
         #plt.show()
 
+    ######################################3
+    def plot_model_zipf(self, figname, conf):
+        """
+        refer to zipf.py
+
+        """
+        dataflist = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            dataflist.append(name)
+
+        self.perfdata.load(dataflist)
+
+        split_data = []
+
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            gname = tp[1]
+            
+            # rank, freq
+            split_data.append((self.perfdata[name], label, gname))
+
+        # plot in logx
+        for idx in range(len(split_data)):
+            rank = split_data[idx][0][:,0]
+            freq = split_data[idx][0][:,1]
+
+            # sample data from the 1M dict
+            rank = np.hstack((rank[:3000], rank[3000:30000:500], rank[30000:-1:5000]))
+            freq = np.hstack((freq[:3000], freq[3000:30000:500], freq[30000:-1:5000]))
+ 
+            #
+            # draw2() in zipf.py
+            #
+            lfreq = np.log10(np.array(freq))
+            lrank = np.log10(np.array(rank))
+            logger.debug('freq=%s, log(freq)=%s', freq[:10], lfreq[:10])
+
+            # fit the zipf law curve?
+            z = np.polyfit(lrank, lfreq, 1)
+            p = np.poly1d(z)
+            logger.info('polyfit all, z = %s, ratio=%f', z, z[0]/z[1])
+
+            idx2=np.where(lrank<np.log10(3000))
+            z2 = np.polyfit(lrank[idx2], lfreq[idx2], 1)
+            p2 = np.poly1d(z2)
+            logger.info('polyfit 3..8, z = %s, ratio=%f', z2, z2[0]/z2[1])
+
+            xp = np.linspace(0, lrank[-1], 100)
+            self.curax.set_xscale("log", nonposx='clip')
+            self.curax.set_yscale("log", nonposx='clip')
+
+            self.curax.plot(rank, freq, self.colors_orig[idx]+'.', label = split_data[idx][1])
+            label=r'$y=10^{%.1f}x^{%.1f}$'%(z2[1], z2[0])
+            self.curax.plot(10**xp, 10**p2(xp),'--', label=label)
+            label=r'$y=10^{%.1f}x^{%.1f}$'%(z[1], z[0])
+            #self.curax.plot(10**xp, 10**p(xp), '-',label=label)
+ 
+            self.curax.set_xlabel('Word Rank')
+
+
+        # all plots goes here
+        self.curax.set_ylabel('Word Frequency')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('Zipf Distribution')
+
+        #for rect in rects:
+        #    self.autolabel_stack(rect)
+
+        #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        self.curax.legend(loc = 1)
+        if figname:
+            self.savefig(figname)
+
+    def plot_model_split(self, figname, conf):
+        dataflist = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            dataflist.append(name)
+
+        self.perfdata.load(dataflist)
+
+        split_data = []
+
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            gname = tp[1]
+            
+            # split number, docno, vocabsize,  wordcnt
+            split_data.append((self.perfdata[name], label, gname))
+
+        # plot in logx
+        for idx in range(len(split_data)):
+            x = split_data[idx][0][:,0]
+            y = split_data[idx][0][:,2] *1.0/ split_data[idx][0][0,2]
+            
+            #draw
+
+            self.curax.set_ylim(0, 1.2)
+            self.curax.set_xscale("log", nonposx='clip')
+            p1 = self.curax.plot(x, y, self.colors_orig[idx]+'o-', label = split_data[idx][1])
+
+            self.curax.set_xlabel('Document Collection Partition Number')
+
+
+        # all plots goes here
+        self.curax.set_ylabel('Vocabulary Size of Partition (\%)')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('Vocabulary Size Nonlinear Decrease Over Doc Partition')
+
+        #for rect in rects:
+        #    self.autolabel_stack(rect)
+
+        #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        self.curax.legend(loc = 0)
+        if figname:
+            self.savefig(figname)
 
 if __name__ == "__main__":
     program = os.path.basename(sys.argv[0])
