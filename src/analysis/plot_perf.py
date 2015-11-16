@@ -256,6 +256,7 @@ class PlotEngine():
             "comm_breakdown":self.plot_comm_breakdown_top,
             "comm_breakdown_end":self.plot_comm_breakdown_end,
             "comm_breakdown_all":self.plot_comm_breakdown_all,
+            "comm_iter":self.plot_comm_iter,
             "iter_trend":self.plot_iter_trend_top,
             "iter_trend_end":self.plot_iter_trend_end,
             "iter_trend_all":self.plot_iter_trend_all,
@@ -620,7 +621,15 @@ class PlotEngine():
         grp_size = len(groupname)
         rects = []
 
-        iternum = compute_time[0][0][2].shape[0]
+        #iternum = compute_time[0][0][2].shape[0]
+        # iternum may be different, e.g. enwiki-bigram petuum always fail in the middle iteration
+        iternum = 999999
+        for idx in range(grp_size):
+            _iternum = compute_time[idx][0][2].shape[0]
+            if _iternum < iternum:
+                iternum = _iternum
+        logger.info('shortest iternum = %s', iternum)
+
         if plottype == 2:
             N = compute_time[0][0][2].shape[0]
         else:
@@ -681,10 +690,16 @@ class PlotEngine():
                     grp_data2 = grp_data2[:10]
                     grp_data2_err = grp_data2_err[:10]
                 else:
-                    grp_data = grp_data[-10:]
-                    grp_data_err = grp_data_err[-10:]
-                    grp_data2 = grp_data2[-10:]
-                    grp_data2_err = grp_data2_err[-10:]
+                    # get the last 10 points
+                    #grp_data = grp_data[-10:]
+                    #grp_data_err = grp_data_err[-10:]
+                    #grp_data2 = grp_data2[-10:]
+                    #grp_data2_err = grp_data2_err[-10:]
+
+                    grp_data = grp_data[iternum-10:iternum]
+                    grp_data_err = grp_data_err[iternum-10:iternum]
+                    grp_data2 = grp_data2[iternum-10:iternum]
+                    grp_data2_err = grp_data2_err[iternum-10:iternum]
 
                 p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors_stackbar[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
 
@@ -728,6 +743,8 @@ class PlotEngine():
     def plot_comm_breakdown_all(self, figname, conf):
         return self.plot_comm_breakdown(2, figname, conf)
 
+    def plot_comm_iter(self, figname, conf):
+        return self.plot_comm_breakdown(3, figname, conf)
 
     def plot_comm_breakdown(self, plottype, figname, conf):
         """
@@ -786,8 +803,16 @@ class PlotEngine():
         grp_size = len(groupname)
         rects = []
 
-        iternum = compute_time[0][0][2].shape[0]
-        if plottype == 2:
+        #iternum = compute_time[0][0][2].shape[0]
+        # iternum may be different, e.g. enwiki-bigram petuum always fail in the middle iteration
+        iternum = 999999
+        for idx in range(grp_size):
+            _iternum = compute_time[idx][0][2].shape[0]
+            if _iternum < iternum:
+                iternum = _iternum
+        logger.info('shortest iternum = %s', iternum)
+
+        if plottype >= 2:
             N = compute_time[0][0][2].shape[0]
         else:
             N = compute_time[0][0][2][:10].shape[0]
@@ -813,10 +838,39 @@ class PlotEngine():
                 x = execution_time[idx][0][x_int]
                 
                 #draw
-                p1 = self.curax.plot(x, grp_data, self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-compute')
-                p2 = self.curax.plot(x, grp_data2, self.colors_orig[idx]+'.--', label = comm_time[idx][1] +'-comm')
+                #p1 = self.curax.plot(x, grp_data, self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-compute')
+                #p2 = self.curax.plot(x, grp_data2, self.colors_orig[idx]+'.--', label = comm_time[idx][1] +'-comm')
+                p2 = self.curax.plot(x, grp_data2, self.colors_orig[idx]+'.-', label = comm_time[idx][1] +'-comm')
 
                 self.curax.set_xlabel('Execution Time (s)')
+
+            elif plottype == 3:
+                # comm-iter
+                # sync pass number can be less than computation iteration number, as in ylda
+                # find the shortest sync pass num
+
+
+
+                # get mean , std
+                grp_data = compute_time[idx][0][2]
+                grp_data_err = compute_time[idx][0][3]
+
+                # min > 0 is the true pass number
+                true_pass = comm_time[idx][0][0] > 0
+                grp_data2 = comm_time[idx][0][2][true_pass]
+                grp_data2_err = comm_time[idx][0][3][true_pass]
+
+                #sample every 10 points
+                _ind = np.arange(grp_data2.shape[0])
+                x = _ind[0:-1:10]
+                #grp_data = grp_data[0:-1:10]
+                grp_data2 = grp_data2[0:-1:10]
+                
+                logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
+                #draw
+                p2 = self.curax.plot(x + 1 , grp_data2, self.colors_orig[idx]+'.-', label = comm_time[idx][1] +'-comm')
+
+                self.curax.set_xlabel('Num. of Synchronization Passes')
 
             else:
                 # get mean , std
@@ -851,7 +905,11 @@ class PlotEngine():
 
 
         # all plots goes here
-        self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
+        if plottype == 3:
+            self.curax.set_ylabel('ExecutionTime Per SyncPass (s)')
+        else:
+            self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
+
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -933,7 +991,15 @@ class PlotEngine():
         grp_size = len(groupname)
         rects = []
 
-        iternum = compute_time[0][0][2].shape[0]
+
+        # iternum may be different, e.g. enwiki-bigram petuum always fail in the middle iteration
+        iternum = 999999
+        for idx in range(grp_size):
+            _iternum = compute_time[idx][0][2].shape[0]
+            if _iternum < iternum:
+                iternum = _iternum
+        logger.info('shortest iternum = %s', iternum)
+
         if plottype == 2:
             N = compute_time[0][0][2].shape[0]
         else:
@@ -978,10 +1044,16 @@ class PlotEngine():
                     grp_data2 = grp_data2[:10]
                     grp_data2_err = grp_data2_err[:10]
                 else:
-                    grp_data = grp_data[-10:]
-                    grp_data_err = grp_data_err[-10:]
-                    grp_data2 = grp_data2[-10:]
-                    grp_data2_err = grp_data2_err[-10:]
+                    # get the last 10 points
+                    #grp_data = grp_data[-10:]
+                    #grp_data_err = grp_data_err[-10:]
+                    #grp_data2 = grp_data2[-10:]
+                    #grp_data2_err = grp_data2_err[-10:]
+
+                    grp_data = grp_data[iternum-10:iternum]
+                    grp_data_err = grp_data_err[iternum-10:iternum]
+                    grp_data2 = grp_data2[iternum-10:iternum]
+                    grp_data2_err = grp_data2_err[iternum-10:iternum]
 
                 #p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors_stackbar[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
                 #p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors_stackbar[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-comm')

@@ -32,6 +32,7 @@ def call_plot(plotname, datadir, namefile, figname, title):
     ploter.plot(plotname, figname, conf)
 
 
+
 def draw_init():
     params ={\
         'backend': 'GTKAgg',
@@ -67,18 +68,24 @@ def draw_init():
     
     plt.rcParams.update(params)
 
-def draw_modelsplit():
+def draw_update():
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    ploter.curax.grid(gridFlag)
+    call_plot('comm_iter', '../../../data', 'ylda-all.100-clueweb-ib', 'ylda-comm-1-3.pdf', '')
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    ploter.curax.grid(gridFlag)
+    call_plot('comm_iter', '../../../data', 'ylda-all.100-clueweb-eth', 'ylda-comm-1-4.pdf', '')
 
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
     ploter.curax.grid(gridFlag)
-    call_plot('model_split', '.', 'modelsplit.name', 'model-split.pdf','') 
-
-def draw_modelzipf():
+    call_plot('comm_iter', '../../../data', 'ylda-all.100-enwiki-ib', 'ylda-comm-2-3.pdf', '')
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
     ploter.curax.grid(gridFlag)
-    call_plot('model_zipf', '.', 'modelzipf.name', 'model-zipf.pdf','') 
+    call_plot('comm_iter', '../../../data', 'ylda-all.100-enwiki-eth', 'ylda-comm-2-4.pdf', '')
 
 
 if __name__ == "__main__":
@@ -92,6 +99,8 @@ if __name__ == "__main__":
     logger.info("running %s" % ' '.join(sys.argv))
 
     draw_init()
-    draw_modelsplit()
-    draw_modelzipf()
+#    draw_ylda()
+#    draw_petuum()
+    draw_update()
+#    draw_iteracc()
 
