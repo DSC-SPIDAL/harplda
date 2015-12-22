@@ -56,11 +56,58 @@ class NetflixDataset():
          
         self.tar = tarfile.open(datadir + '/training_set.tar')
 
+        self.testf = open(datadir + '/qualifying.txt')
+        self.judgef = open(datadir + '/judging.txt')
+
+    def convert_test(self, mmfile):
+        """
+        convert test file to mm format
+        """
+        targetfile = mmfile + '.mm'
+        if os.path.exists(targetfile):
+            logger.info('%s file exist already, skip overwriting', targetfile)
+            return
+
+        mmf = open(mmfile + '.mm', 'w', 1024*1024)
+
+        testset = []
+        for line in self.testf:
+            if line.find(':') > 0:
+                movieid = line.split(':')[0]
+            else:
+                items = line.split(',')
+                userid = items[0]
+
+                testset.append((userid, movieid))
+
+        idx = 0
+        for line in self.judgef:
+            if line.find(':') > 0:
+                movieid = line.split(':')[0]
+            else:
+                items = line.split(',')
+                val  = items[0]
+
+                mmf.write('%s %s %s\n'%(testset[idx][0], testset[idx][1], val))
+                idx += 1
+
+        mmf.close()
+
+        statusf = open(mmfile + '.status', 'w')
+        statusf.write('%d\n'%(len(testset)))
+        statusf.close()
+
+
     def convert(self, mmfile):
         """
         convert to mm format
 
         """
+        targetfile = mmfile + '.mm'
+        if os.path.exists(targetfile):
+            logger.info('%s file exist already, skip overwriting', targetfile)
+            return
+
         mmf = open(mmfile + '.mm', 'w', 1024*1024)
 
         for tar_info in self.tar:
@@ -132,4 +179,5 @@ if __name__ == '__main__':
     netflix = NetflixDataset(datadir)
     netflix.convert(mmfile)
     logger.info('%s', netflix)
+    netflix.convert_test(mmfile + '-test')
 
