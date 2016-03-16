@@ -404,12 +404,14 @@ def load_lowfile(lowfile):
     collection.save(lowfile)
     return collection
 
-def split_collection(collection, splitCnt, splitType):
+def split_collection(collection, splitCnt, splitType, save = False):
     print('begin to split into %d parts\n'%(splitCnt))
     splits_col = collection.split(splitCnt, splitType)
     
     for split in splits_col:
-        split.save()
+        # save large split spend lots of time
+        if save:
+            split.save()
         logger.info("%s"%split)
         print(split)
 

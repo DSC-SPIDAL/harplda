@@ -1,0 +1,408 @@
+#!/bin/bash
+
+trap "echo 'signal.....quit'; exit" SIGHUP SIGINT SIGTERM
+homedir=`dirname $0`
+homedir=`dirname $homedir`
+
+if [ ! -d $homedir/src ]; then
+    homedir=$_INSTDIR_
+fi
+#echo $homedir
+
+check_ret()
+{
+if [ "$?" -ne "0" ] ; then
+    echo "run command error, quit...."
+    exit -2
+fi
+}
+
+
+help()
+{
+cat <<EOF
+lda-test commands: 
+  set-testset     <ap-sample | enwiki-100k | pubmed > setup the testset 
+  evaluate-harp   <modeldir>    load the model from harp lda trainer and test likelihood on held-out testset
+  evaluate-ylda   <modeldir> <traindict>   load the model from ylda lda trainer and test likelihood on held-out testset
+  evaluate-mallet <modeldir>    load the model from mallet lda trainer and test likelihood on held-out testset
+  evaluate-gibbs  <modeldir>    load the model from gibbs lda trainer and test likelihood on held-out testset
+
+Include --help with any option for more information
+EOF
+}
+
+
+# dataset
+init()
+{
+
+    # init jobs threads parameter
+    if [ -z "${jobsthreads+xxx}" ] ; then
+        jobsthreads=8
+    fi
+    echo "Init test on testset=$TESTSET, jobsthreads=$jobsthreads"
+
+    # init dataset
+    if [ "$TESTSET" == "enwiki-100k" ] ; then
+        # enwiki-100k
+        datadir=$homedir/data/enwiki-100k
+        gibbsdict=$datadir/enwiki-100k-gibbs.wordids
+        harpdict=$datadir/enwiki-100k-reid.wordids
+        testset=$datadir/test100k.mallet
+        testdict=$datadir/test100k.mallet.dict
+        testdoccnt=100000
+        testwordcnt=32733688
+        alpha=0.5
+        beta=0.1
+    elif [ "$TESTSET" == "ap-sample" ] ; then
+        # ap-sample
+        datadir=$homedir/data/ap-sample-mallet
+        gibbsdict=$datadir/ap-sample.mallet.wordids
+        harpdict=$datadir/ap-sample.mallet.wordids
+        testset=$datadir/ap-sample.mallet.input
+        testdict=$datadir/ap-sample.mallet.dict
+        testdoccnt=2278
+        testwordcnt=463468
+        alpha=2.5
+        beta=0.1
+     elif [ "$TESTSET" == "pubmed" ] ; then
+        # pubmed-test-200k, pubmed-2M as train set
+        datadir=$homedir/data/pubmed
+        gibbsdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
+        harpdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
+        malletdict=$datadir/pubmed-2M.mallet.dict
+        testset=$datadir/pubmed-test-200k.mallet.txt
+        testdict=$datadir/pubmed-test-200k.mallet.dict
+        testdoccnt=200000
+        testwordcnt=20372837
+        alpha=0.05
+        beta=0.01
+     elif [ "$TESTSET" == "enwiki-1M" ] ; then
+        # pubmed-test-200k, pubmed-2M as train set
+        datadir=$homedir/data/enwiki
+        #gibbsdict=$datadir/enwiki-1M-2M.mrlda.reid.txt.wordid
+        harpdict=$datadir/enwiki-1M-reid.train.dict
+        yldadict=$datadir/enwiki-1M-noreid.train.dict
+        #malletdict=$datadir/enwiki-1M-2M.mallet.dict
+        testset=$datadir/enwiki-1M-test200k.mallet.txt
+        testdict=$datadir/enwiki-1M-test200k.mallet.dict
+        testdoccnt=200000
+        testwordcnt=71060964
+        alpha=0.01
+        beta=0.01
+     elif [ "$TESTSET" == "clueweb-1M" ] ; then
+        # pubmed-test-200k, pubmed-2M as train set
+        datadir=$homedir/data/clueweb
+        #gibbsdict=$datadir/enwiki-1M-2M.mrlda.reid.txt.wordid
+        harpdict=$datadir/clueweb-1M-reid.train.dict
+        yldadict=$datadir/clueweb-1M-noreid.train.dict
+        #malletdict=$datadir/enwiki-1M-2M.mallet.dict
+        testset=$datadir/clueweb-testset-200k.mallet.txt
+        testdict=$datadir/clueweb-testset-200k.mallet.dict
+        testdoccnt=200000
+        testwordcnt=44365916
+        alpha=0.01
+        beta=0.01
+     elif [ "$TESTSET" == "pubmed-2" ] ; then
+        # pubmed-test-200k
+        datadir=$homedir/data/pubmed
+        gibbsdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
+        harpdict=$datadir/pubmed-2M.mrlda.reid.txt.wordid
+        malletdict=$datadir/pubmed-2M.mallet.dict
+        testset=$datadir/pubmed-test-200k-2.mallet.txt
+        testdict=$datadir/pubmed-test-200k-2.mallet.dict
+        testdoccnt=200000
+        testwordcnt=20106255
+        alpha=0.05
+        beta=0.01
+    else
+        echo "testset '$TESTSET'=$TESTSET not found, quit..."
+        help
+        exit -2
+    fi
+}
+
+#functions for parallel
+getArgfile() {
+    ext=$1
+    argfiles=""
+    #try parallel
+    for f in `ls *.$ext`; do
+        fname=`basename $f .$ext`
+        argfiles=$argfiles" "$fname
+    done
+    echo $argfiles
+}
+
+do_writetxtmodel(){
+    #echo "save model to txtmatrix: $fname......" 
+    $_INSTDIR_/tool/mallet/bin/mallet evaluate-topics --word-topic-counts-file $1 --modelfile $2 --input $3
+}
+
+convert(){
+    #python $homedir/src/preprocess/convertTxt2Mallet.py $1 $testdict $traindict
+    python -m preprocess.convertTxt2Mallet $1 $2 $3 False
+}
+
+do_convertHarp(){
+    #python $homedir/src/preprocess/convertHarp2Txt.py $d $alpha $beta $numTopics 0
+    python -m preprocess.convertHarp2Txt $1 $2 $3 $4 $5
+
+}
+
+do_evaluate(){
+    #$modeldir $testset $testdoccnt $testwordcnt
+    python -m evaluation.test_likelihood $_INSTDIR_/tool/mallet/bin/ harp $1 $2 $3 $4
+}
+
+# evalutor
+eval_txtmodeldata()
+{
+    # need $trainset to be set before call
+    if [ -z $traindict ] ; then
+        echo 'traindict unknow, quit...'
+        return
+    fi
+
+    # 1. check .mallet modeldata files
+    malletfiles=`ls *.xxxmallet 2>>/dev/null`
+    if [ "$?" -ne "0" ] ; then
+        # .mallet modeldata not found, then try to create them
+        matfiles=`ls *.hyper 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            # 2. .hyper not exist, try to convert modelfiles into mallet modeldata files
+            modelfiles=`ls mallet* 2>>/dev/null`
+            if [ "$?" -ne "0" ] ; then
+                echo "model files with prefix=mallet not found, quit..."
+                exit -2
+            fi
+ 
+            
+            #for f in `ls mallet*`; do
+            #    fname=`basename $f `.mat
+            #    echo "save model to txtmatrix: $fname......"
+            #    $homedir/tool/mallet/bin/mallet evaluate-topics --word-topic-counts-file $fname --modelfile $f --input $testset
+            #done
+            txtfile=""
+            modelfiles=""
+            for f in `ls mallet*`; do
+                txtfile=$txtfile" mat-"`basename $f `
+                modelfiles=$modelfiles" "$f
+            done
+
+            export -f do_writetxtmodel 
+ 
+            cmd="parallel --xapply --jobs $jobsthreads do_writetxtmodel ::: $txtfile ::: $modelfiles ::: $testset"
+            echo $cmd
+            $cmd
+
+        else
+            echo '.hyper files exists, skip covert to txtmatrix '
+        fi
+
+        argfiles=$(getArgfile 'hyper')
+        ##try parallel
+        #for f in `ls *.hyper`; do
+        #    fname=`basename $f .hyper`
+        #    argfiles=$argfiles" "$fname
+        #done
+
+        export -f convert
+ 
+        cmd="parallel --xapply --jobs $jobsthreads convert ::: $argfiles ::: $testdict ::: $traindict"
+        echo $cmd
+        $cmd
+
+    else
+        echo '.mallet file exists, skip convert to modeldata '
+    fi
+
+    malletfiles=`ls *.xxxmallet 2>>/dev/null`
+    if [ "$?" -eq "0" ] ; then
+        #cd $savedir
+        #python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
+        #check_ret
+
+        argfiles=$(getArgfile 'mallet')
+        ##try parallel
+        #for f in $malletfiles; do
+        #    fname=`basename $f .mallet`
+        #    argfiles=$argfiles" "$fname
+        #done
+
+        export -f do_evaluate
+ 
+        cmd="parallel --xapply --jobs $jobsthreads do_evaluate ::: $argfiles ::: $testset ::: $testdoccnt ::: $testwordcnt"
+        echo $cmd
+        $cmd
+
+
+    fi
+}
+
+
+# start here
+#export TESTSET='pubmed'
+CMD=$1
+shift
+
+CLASS=
+
+case $CMD in
+    set-testset)
+        export TESTSET=$1
+        echo "sorry, you have to do it yourself by type this command in shell: "
+        echo 
+        echo "export TESTSET=$1"
+        echo 
+        exit 0
+        ;;
+
+    evaluate-harp) 
+        init
+        # <harp model dir> 
+        modeldir=$1
+        numTopics=$2
+        if [ -z $numTopics ]; then
+            echo 'numTopics not set, use 10k by default'
+            numTopics=10000
+        fi
+        savedir=`pwd`
+        cd $modeldir
+
+        hyperfiles=`ls *.xxxhyper 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            argfiles=""
+            for d in `ls`; do
+                argfiles=$argfiles" "$d
+            done
+            export -f do_convertHarp
+
+            traindict=$harpdict
+            #do python $homedir/src/preprocess/convertHarp2Txt.py $d $alpha $beta $numTopics 0; done
+            cmd="parallel --xapply --jobs $jobsthreads do_convertHarp ::: $argfiles ::: $alpha ::: $beta ::: $numTopics ::: 0"
+            echo $cmd
+            $cmd
+
+        else
+            echo '.hyper file exists, skip convert to txt modeldata '
+        fi
+        
+        hyperfiles=`ls *.hyper 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            echo '.hyper file converted fail, quit...'
+            exit -1
+        fi
+ 
+        traindict=$harpdict
+        # .hyper file exist
+        eval_txtmodeldata
+
+        cd $savedir
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
+
+        ;;
+
+     evaluate-mallet-native) 
+        init
+        # <harp model dir>
+        modeldir=$1
+        savedir=`pwd`
+        cd $modeldir
+
+        malletfiles=`ls *.mallet 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            modelfiles=`ls model* 2>>/dev/null`
+            if [ "$?" -ne "0" ] ; then
+                echo "model. files not found, quit..."
+                exit -2
+            else
+                for f in $modelfiles; do mv $f $f.mallet; done
+            fi
+        fi
+
+        malletfiles=`ls *.mallet 2>>/dev/null`
+        if [ "$?" -eq "0" ] ; then
+            cd $savedir
+            python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ mallet $modeldir $testset $testdoccnt $testwordcnt
+            #check_ret
+        fi
+
+
+        ;;
+
+     evaluate-mallet) 
+        init
+        # <harp model dir>
+        modeldir=$1
+        savedir=`pwd`
+        cd $modeldir
+        
+        traindict=$malletdict
+        eval_txtmodeldata
+
+        cd $savedir
+        # at last step, just collect the likelihood results files under the modeldir
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
+       ;;
+
+     evaluate-ylda) 
+        init
+        # <harp model dir>
+        modeldir=$1
+        savedir=`pwd`
+        cd $modeldir
+        
+        traindict=$2
+        eval_txtmodeldata
+
+        cd $savedir
+        # at last step, just collect the likelihood results files under the modeldir
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ harp $modeldir $testset $testdoccnt $testwordcnt
+       ;;
+
+    evaluate-gibbs) 
+        init
+        # <gibbs model dir> 
+        modeldir=$1
+        savedir=`pwd`
+        cd $modeldir
+
+        phifiles=`ls *.phi 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            echo ".phi files not found at $modeldir, quit...."
+            exit 2
+        fi
+
+        betafiles=`ls *.beta 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            for f in $phifiles; do python $homedir/src/preprocess/convertGibbsPhiToBeta.py $f `basename $f .phi`.beta; done
+        fi
+
+
+        betafiles=`ls *.beta 2>>/dev/null`
+        harpfiles=`ls *.harp 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            for f in $betafiles; do python $homedir/src/preprocess/convertBeta2Harp.py $f $gibbsdict $beta; done
+        fi
+
+        harpfiles=`ls *.harp 2>>/dev/null`
+        malletfiles=`ls *.mallet 2>>/dev/null`
+        if [ "$?" -ne "0" ] ; then
+            for f in $harpfiles; do python $homedir/src/preprocess/convertHarp2Mallet.py $f $alpha $beta $testdict $gibbsdict; done
+        fi
+
+        cd $savedir
+        python $homedir/src/evaluation/test_likelihood.py $homedir/tool/mallet/bin/ gibbs $modeldir $testset $testdoccnt $testwordcnt
+
+        ;;
+
+    run) 
+        CLASS=$1
+        shift
+        python $CLASS $*
+        ;;
+    *) echo "Unrecognized command: $CMD"; help; exit 1;;
+esac
+

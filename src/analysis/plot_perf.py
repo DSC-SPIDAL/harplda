@@ -147,6 +147,8 @@ class PerfName():
                 for line in nf:
                     tokens = line.strip().split(deli)
                     #perfname.append((tokens[0], tokens[1]))
+                    if tokens[0][0] == '#':
+                        continue
                     perfname.append(tokens)
 
         self.perfname = perfname
@@ -248,6 +250,7 @@ class PlotEngine():
             "overall_runtime":self.plot_overall_app,
             "overall_traintime":self.plot_overall_train,
             "accuracy_iter":self.plot_accuracy_iter,
+            "accuracy_itertime":self.plot_accuracy_itertime,
             "accuracy_runtime":self.plot_accuracy_runtime,
             "accuracy_overalltime":self.plot_accuracy_overalltime,
             "overhead":self.plot_overhead_top,
@@ -457,6 +460,10 @@ class PlotEngine():
     def plot_accuracy_overalltime(self, figname, conf):
         return self.plot_accuracy(2, figname, conf)
 
+    def plot_accuracy_itertime(self, figname, conf):
+        return self.plot_accuracy(3, figname, conf)
+
+
 
     def plot_accuracy(self, plottype, figname, conf):
         """
@@ -466,6 +473,10 @@ class PlotEngine():
             0   accuracy .vs. iternum
             1   accuracy .vs. traintime
             2   accuracy .vs. execution time
+<<<<<<< HEAD
+            3   accuracy .vs. itertime
+=======
+>>>>>>> 68d95e4deaa172c4117c4b9093d8289b4a97f166
         """
         dataflist = []
         #for name,label in self.perfname:
@@ -475,6 +486,8 @@ class PlotEngine():
             fname = name + '.likelihood'
             dataflist.append(fname)
             fname = name + '.runtime-stat'
+            dataflist.append(fname)
+            fname = name + '.iter-stat'
             dataflist.append(fname)
 
         self.perfdata.load(dataflist)
@@ -486,6 +499,7 @@ class PlotEngine():
  
             lh_name = name + '.likelihood'
             runtime_name = name + '.runtime-stat'
+            itertime_name = name + '.iter-stat'
             #
             # get (iternum, runttime-mean, perplexity, label)
             # 
@@ -497,10 +511,12 @@ class PlotEngine():
                 offset = self.perfdata[runtime_name][2,0] - self.perfdata[runtime_name][2,1] 
             else:
                 offset = 0
+
+            itertimeMat = np.cumsum(self.perfdata[itertime_name][2,:]) / 1000.
+
             accuracy.append((self.perfdata[lh_name][:,0], 
                         self.perfdata[runtime_name][2,2:] + offset,
-                        self.perfdata[lh_name][:,1], label))
-
+                        self.perfdata[lh_name][:,1], label, itertimeMat))
 
         #fig, ax = plt.subplots()
 
@@ -513,6 +529,15 @@ class PlotEngine():
                 x = accuracy[idx][0]
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
                 self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+<<<<<<< HEAD
+            elif plottype ==3:
+                x = accuracy[idx][0]
+                #convert iternum to runtime
+                x_int = x.astype(int)
+                x = accuracy[idx][4][x_int - 1 ]
+                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+=======
+>>>>>>> 68d95e4deaa172c4117c4b9093d8289b4a97f166
             else:
                 x = accuracy[idx][0]
                 #convert iternum to runtime
@@ -528,6 +553,11 @@ class PlotEngine():
             self.curax.set_xlabel('Training Time (s)')
         elif plottype == 2:
             self.curax.set_xlabel('Execution Time (s)')
+<<<<<<< HEAD
+        elif plottype ==3:
+            self.curax.set_xlabel('Iteration Time (s)')
+=======
+>>>>>>> 68d95e4deaa172c4117c4b9093d8289b4a97f166
 
 
         if 'title' in conf:
@@ -654,6 +684,7 @@ class PlotEngine():
                 grp_data2 = grp_data2[0:-1:10]
                 x = ind[0:-1:10]
                 logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
+<<<<<<< HEAD
 
                 #p1 = self.curax.errorbar(ind, grp_data, color=self.colors[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
 
@@ -662,6 +693,16 @@ class PlotEngine():
 
                 #p2 = self.curax.plot(x, grp_data2, color=self.colors[idx*2+1], label = compute_time[idx][1]+'-overhead')
 
+=======
+
+                #p1 = self.curax.errorbar(ind, grp_data, color=self.colors[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
+
+                #p2 = self.curax.errorbar(ind, grp_data2, color=self.colors[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-overhead')
+#                p1 = self.curax.plot(x, grp_data, color=self.colors[idx*2], label = compute_time[idx][1] +'-compute')
+
+                #p2 = self.curax.plot(x, grp_data2, color=self.colors[idx*2+1], label = compute_time[idx][1]+'-overhead')
+
+>>>>>>> 68d95e4deaa172c4117c4b9093d8289b4a97f166
                 # draw by iteration or execution time
                 #self.curax.set_xlabel('iteration')
                 x_int = x.astype(int)
@@ -672,6 +713,7 @@ class PlotEngine():
                 #draw
                 p1 = self.curax.plot(x, grp_data[:point_cnt], self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-compute')
                 p2= self.curax.plot(x, grp_data2[:point_cnt], self.colors_orig[idx]+'.--', label = compute_time[idx][1] +'-iter')
+<<<<<<< HEAD
 
 
                 #self.curax.set_xticks(x)
@@ -713,6 +755,49 @@ class PlotEngine():
                 else:
                     self.curax.set_xticklabels([ iternum -N + x +1 for x in range(N)])
 
+=======
+
+
+                #self.curax.set_xticks(x)
+                #self.curax.set_xticklabels([x+1 for x in range(N)])
+                self.curax.set_xlabel('Execution Time (s)')
+
+            else:
+                grp_data = compute_time[idx][0][2]
+                grp_data_err = compute_time[idx][0][3]
+                grp_data2 = iter_time[idx][0][2] - compute_time[idx][0][2]
+                grp_data2_err = iter_time[idx][0][3] - compute_time[idx][0][3]
+            
+                if plottype  == 0:
+                    grp_data = grp_data[:10]
+                    grp_data_err = grp_data_err[:10]
+                    grp_data2 = grp_data2[:10]
+                    grp_data2_err = grp_data2_err[:10]
+                else:
+                    # get the last 10 points
+                    #grp_data = grp_data[-10:]
+                    #grp_data_err = grp_data_err[-10:]
+                    #grp_data2 = grp_data2[-10:]
+                    #grp_data2_err = grp_data2_err[-10:]
+
+                    grp_data = grp_data[iternum-10:iternum]
+                    grp_data_err = grp_data_err[iternum-10:iternum]
+                    grp_data2 = grp_data2[iternum-10:iternum]
+                    grp_data2_err = grp_data2_err[iternum-10:iternum]
+
+                p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors_stackbar[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
+
+                p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors_stackbar[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-overhead')
+
+                rects.append((p1,p2))
+
+                self.curax.set_xticks(ind+width)
+                if plottype == 0:
+                    self.curax.set_xticklabels([x+1 for x in range(N)])
+                else:
+                    self.curax.set_xticklabels([ iternum -N + x +1 for x in range(N)])
+
+>>>>>>> 68d95e4deaa172c4117c4b9093d8289b4a97f166
                 self.curax.set_xlabel('Iteration')
 
         # all plots goes here
@@ -739,10 +824,17 @@ class PlotEngine():
 
     def plot_comm_breakdown_end(self, figname, conf):
         return self.plot_comm_breakdown(1, figname, conf)
+<<<<<<< HEAD
 
     def plot_comm_breakdown_all(self, figname, conf):
         return self.plot_comm_breakdown(2, figname, conf)
 
+=======
+
+    def plot_comm_breakdown_all(self, figname, conf):
+        return self.plot_comm_breakdown(2, figname, conf)
+
+>>>>>>> 68d95e4deaa172c4117c4b9093d8289b4a97f166
     def plot_comm_iter(self, figname, conf):
         return self.plot_comm_breakdown(3, figname, conf)
 
@@ -841,6 +933,7 @@ class PlotEngine():
                 #p1 = self.curax.plot(x, grp_data, self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-compute')
                 #p2 = self.curax.plot(x, grp_data2, self.colors_orig[idx]+'.--', label = comm_time[idx][1] +'-comm')
                 p2 = self.curax.plot(x, grp_data2, self.colors_orig[idx]+'.-', label = comm_time[idx][1] +'-comm')
+<<<<<<< HEAD
 
                 self.curax.set_xlabel('Execution Time (s)')
 
@@ -901,6 +994,68 @@ class PlotEngine():
                 else:
                     self.curax.set_xticklabels([ iternum -N + x +1 for x in range(N)])
 
+=======
+
+                self.curax.set_xlabel('Execution Time (s)')
+
+            elif plottype == 3:
+                # comm-iter
+                # sync pass number can be less than computation iteration number, as in ylda
+                # find the shortest sync pass num
+
+
+
+                # get mean , std
+                grp_data = compute_time[idx][0][2]
+                grp_data_err = compute_time[idx][0][3]
+
+                # min > 0 is the true pass number
+                true_pass = comm_time[idx][0][0] > 0
+                grp_data2 = comm_time[idx][0][2][true_pass]
+                grp_data2_err = comm_time[idx][0][3][true_pass]
+
+                #sample every 10 points
+                _ind = np.arange(grp_data2.shape[0])
+                x = _ind[0:-1:10]
+                #grp_data = grp_data[0:-1:10]
+                grp_data2 = grp_data2[0:-1:10]
+                
+                logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
+                #draw
+                p2 = self.curax.plot(x + 1 , grp_data2, self.colors_orig[idx]+'.-', label = comm_time[idx][1] +'-comm')
+
+                self.curax.set_xlabel('Num. of Synchronization Passes')
+
+            else:
+                # get mean , std
+                grp_data = compute_time[idx][0][2]
+                grp_data_err = compute_time[idx][0][3]
+                grp_data2 = comm_time[idx][0][2]
+                grp_data2_err = comm_time[idx][0][3]
+ 
+                if plottype  == 0:
+                    grp_data = grp_data[:10]
+                    grp_data_err = grp_data_err[:10]
+                    grp_data2 = grp_data2[:10]
+                    grp_data2_err = grp_data2_err[:10]
+                else:
+                    grp_data = grp_data[-10:]
+                    grp_data_err = grp_data_err[-10:]
+                    grp_data2 = grp_data2[-10:]
+                    grp_data2_err = grp_data2_err[-10:]
+
+                p1 = self.curax.bar(ind + width*idx, grp_data, width, color=self.colors_stackbar[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
+                p2 = self.curax.bar(ind + width*idx, grp_data2, width, bottom = grp_data, color=self.colors_stackbar[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-comm')
+
+                rects.append((p1,p2))
+
+                self.curax.set_xticks(ind+width)
+                if plottype == 0:
+                    self.curax.set_xticklabels([x+1 for x in range(N)])
+                else:
+                    self.curax.set_xticklabels([ iternum -N + x +1 for x in range(N)])
+
+>>>>>>> 68d95e4deaa172c4117c4b9093d8289b4a97f166
                 self.curax.set_xlabel('Iteration')
 
 
@@ -1023,7 +1178,15 @@ class PlotEngine():
                 grp_data2 = grp_data2[0:-1:10]
                 logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
                 x_int = x.astype(int)
+<<<<<<< HEAD
+                
+                if grp_data.shape[0] < x.shape[0]:
+                    x = execution_time[idx][0][x_int[:grp_data.shape[0]]]
+                else:
+                    x = execution_time[idx][0][x_int]
+=======
                 x = execution_time[idx][0][x_int]
+>>>>>>> 68d95e4deaa172c4117c4b9093d8289b4a97f166
                 
                 #draw
                 p1 = self.curax.plot(x, grp_data, self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-iter')

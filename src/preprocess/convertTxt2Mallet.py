@@ -64,7 +64,12 @@ if __name__ == '__main__':
         fullload = (sys.argv[4].lower() != 'false')
     if len(sys.argv) > 5:
         build_wordid = (sys.argv[5].lower() != 'false')
-
+    
+    # add output file overwrite check
+    savefile = modelfile + '.mallet'
+    if os.path.exists(savefile):
+        logger.info('%s exists already, quit..', savefile)
+        sys.exit(2)
 
     model = LDAModelData()
     model.load_from_txt(modelfile, fullload, build_wordid)
@@ -76,7 +81,6 @@ if __name__ == '__main__':
     # logger.debug('model=%s', model.model)
 
 
-    savefile = modelfile + '.mallet'
     logger.info('saving to %s', savefile)
     #basename = os.path.splitext(modelfile)[0]
 

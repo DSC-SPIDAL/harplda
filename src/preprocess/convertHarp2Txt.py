@@ -46,16 +46,32 @@ def load_model(modelDir):
         model is a word-topic count matrix
     """
     mdata = []
+    format_ver=0    #0, old, 1, new
     if os.path.isdir(modelDir):
         for dirpath, dnames, fnames in os.walk(modelDir):
             for f in fnames:
                 #modeldata = np.loadtxt(os.path.join(dirpath, f))
                 #new version harp model is : type  wordid:cnt ...
                 harpf = open(os.path.join(dirpath, f), 'r')
-                for line in harpf:
-                    tokens = line.strip().split('  ')
-                    wordid = int(tokens[0])
-                    mdata.append((wordid,tokens[1]))
+
+                #check version
+                line = harpf.readline()
+                if line.find('  ') <= 0:
+                    format_ver = 1
+
+                harpf.seek(0,0)
+                if format_ver ==0:
+                    for line in harpf:
+                        tokens = line.strip().split('  ')
+                        wordid = int(tokens[0])
+                        mdata.append((wordid,tokens[1]))
+                else:
+                    for line in harpf:
+                        line = line.strip()
+                        firstsp = line.find(' ')
+                        wordid = int(line[:firstsp])
+                        mdata.append((wordid,line[firstsp+1:]))
+
                 harpf.close()
 
                 # first column is wordid
@@ -91,11 +107,17 @@ if __name__ == '__main__':
     numTypes = int(sys.argv[5])
 
     if os.path.isdir(modelDir):
+        #add output file overwrite check
+        basename = os.path.basename(modelDir) + '.harp'
+        
+        if os.path.exists(basename + '.hyper'):
+            logger.info('%s exists already, quit..', basename + '.hyper')
+            sys.exit(2)
+
         model = load_model(modelDir)
 
         numTypes = len(model)
         #save to .hyper
-        basename = os.path.basename(modelDir) + '.harp'
         with open(basename + '.hyper', 'w') as hyperf:
             hyperf.write("#alpha : %f\n"%alpha)
             hyperf.write("#beta : %f\n"%beta)

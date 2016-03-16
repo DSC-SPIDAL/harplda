@@ -64,6 +64,8 @@ class LDATrainerLog():
     pattern={
         "mallet":"^([0-9]+)ms",
         "harp-clock":"(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)",
+        "harp-newformat":"Iteration ([0-9]*): ([0-9]*), compute time: ([0-9]*), comm time: ([0-9]*)",
+        "harp-numTokens":"numTokens: ([0-9]*), schedule: [0-9]*",
         "harp-compute":"Compute time: ([0-9]*), comm time: ([0-9]*)",
         "harp-iter":"Iteration [0-9]* took: ([0-9]*)",
         "ylda-clock":"[IWEF](\d\d\d\d \d\d:\d\d:\d\d.[0-9]*)",
@@ -333,7 +335,7 @@ class LDATrainerLog():
         app_endtime = app_starttime
 
         for line in logf:
-            if line.find("nitialize Z took") > 0:
+            if line.find("nitialize Z took") > 0 or line.find('nit Z took') > 0:
                 m = re.search(self.pattern[self.name+'-clock'], line)
                 if m:
                     #logger.info('match at %s , string_date=%s', line, m.group(1))
@@ -347,8 +349,15 @@ class LDATrainerLog():
                     string_date = m.group(1)
                     app_endtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
         
-        app_span = (app_endtime - app_starttime).total_seconds()
-        train_span = (app_endtime - train_starttime).total_seconds()
+        #
+        # there is summer time, app_endtime < app_starttime
+        #
+        if app_endtime < app_starttime:
+            app_span = (app_endtime - app_starttime).total_seconds() +  3600
+            train_span = (app_endtime - train_starttime).total_seconds() + 3600
+        else:
+            app_span = (app_endtime - app_starttime).total_seconds()
+            train_span = (app_endtime - train_starttime).total_seconds()
         logger.info('runtime total=%d, train=%d', app_span, train_span)
 
 
@@ -363,7 +372,32 @@ class LDATrainerLog():
 
         elapsed=[]
         itertime=[]
+        tokencnt=[]
+        last_iterspan = 0
         for line in logf:
+            #new format first
+            m = re.search(self.pattern[self.name+'-newformat'], line)
+            if m:
+                elapsed.append( (int(m.group(3)), int(m.group(4))) )
+
+                mx = re.search(self.pattern[self.name+'-clock'], line)
+                if mx:
+                    #logger.info('match at %s , string_date=%s', line, m.group(1))
+                    string_date = mx.group(1)
+                    iter_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
+
+                iter_span = (iter_starttime - train_starttime).total_seconds()
+
+                itertime.append( (int(m.group(2)),iter_span) )
+                
+                # check the numToken
+                mx = re.search(self.pattern[self.name+'-numTokens'], line)
+                if mx:
+                    tokencnt.append(int(m.group(1)))
+
+                continue
+
+            # old format
             m = re.search(self.pattern[self.name+'-compute'], line)
             if m:
                 elapsed.append( (int(m.group(1)), int(m.group(2))) )
@@ -378,20 +412,23 @@ class LDATrainerLog():
                     iter_starttime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
 
                 iter_span = (iter_starttime - train_starttime).total_seconds()
+                if iter_span < last_iterspan:
+                    iter_span += 3600
+                last_iterspan = iter_span
 
                 itertime.append( (int(m.group(1)),iter_span) )
 
-        return elapsed, app_span, train_span, itertime
+        return elapsed, app_span, train_span, itertime, tokencnt
 
     def load_applog_harp(self, appdir, filename='syslog'):
         models = []
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f == filename:
-                    elapsed, app_t, train_t, itertime = self.load_timelog_harp(os.path.join(dirpath, f))
+                    elapsed, app_t, train_t, itertime, tokencnt = self.load_timelog_harp(os.path.join(dirpath, f))
                     if len(elapsed) > 0:
                         logger.info('load log from %s at %s', f, dirpath)
-                        models.append((dirpath, elapsed, app_t, train_t, itertime))
+                        models.append((dirpath, elapsed, app_t, train_t, itertime, tokencnt))
 
         # (dirpath, [(compute time, comm time)])
         iternum = len(models[0][1])
@@ -429,6 +466,7 @@ class LDATrainerLog():
 
         # add iter_t matrix, (nodenum, iternum)
         iter_tMatrix = np.array(iter_t)
+        logger.info('iter shape=%s, runtime shape=%s', iter_tMatrix.shape, runtimeMatrix.shape)
         runtimeMatrix = np.concatenate((runtimeMatrix, iter_tMatrix), axis=1)
 
         #output the matrix
