@@ -23,7 +23,7 @@ STRADS_CXXFLAGS = -g \
 
 # comment out if not planning to use petuum stats
 STRADS_CXXFLAGS += -DSTRADS_STATS
-STRADS_INCFLAGS = -I$(STRADS_SRC) -I$(STRADS_THIRD_PARTY_INCLUDE) -I/usr/include/mpi 
+STRADS_INCFLAGS = -I$(STRADS_SRC) -I$(STRADS_THIRD_PARTY_INCLUDE) -I/N/u/pengb/share/include/openmpi 
 STRADS_LDFLAGS = -Wl,-rpath,$(STRADS_THIRD_PARTY_LIB) \
           -L$(STRADS_THIRD_PARTY_LIB) \
           -pthread -lrt -lnsl \
@@ -31,7 +31,7 @@ STRADS_LDFLAGS = -Wl,-rpath,$(STRADS_THIRD_PARTY_LIB) \
           -lglog \
           -lgflags \
           -ltcmalloc \
-	  -L/usr/lib/openmpi/lib -lmpi_cxx -lmpi -lopen-rte -lopen-pal\
+	  -L/N/u/pengb/share/lib -lmpi_cxx -lmpi -lopen-rte -lopen-pal\
           -lconfig++\
           -lprotobuf 
 
