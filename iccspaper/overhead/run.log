@@ -1,0 +1,30 @@
+ python ~/hpda/lda-test/src/analysis/plot_perf.py namefile workfile bigram 100 enwiki-bigram 0 0
+ 2060  cat bigram 
+ 2061  python ~/hpda/lda-test/src/analysis/plot_perf.py overhead data bigram bigram
+ 2062  python ~/hpda/lda-test/src/analysis/plot_perf.py overhead data bigram bigram title
+ 2063  vi bigram 
+ 2064  python ~/hpda/lda-test/src/analysis/plot_perf.py overhead data bigram bigram title
+ 2065  ls -ltr
+ 2066  python ~/hpda/lda-test/src/analysis/plot_perf.py overhead data bigram bigram title
+ 2067  python ~/hpda/lda-test/src/analysis/plot_perf.py overhead data bigram bigram ''
+ 2068  ls -l
+ 2069  cp bigram overhead.bigram
+ 2070  python ~/hpda/lda-test/src/analysis/plot_overhead.py 
+ 2071  source ~/hpda/lda-test/bin/init_env.sh 
+ 2072  python ~/hpda/lda-test/src/analysis/plot_overhead.py 
+ 2073  history
+ 2074  python ~/hpda/lda-test/src/analysis/plot_perf.py namefile workfile gutenberg 100 gutenberg 0 0
+ 2075  python ~/hpda/lda-test/src/analysis/plot_perf.py namefile workfile clueweb_ib 100 clueweb ib 0
+ 2076  vi gutenberg 
+ 2077  ls -l
+ 2078  cp gutenberg overhead.gutenberg
+ 2079  python ~/hpda/lda-test/src/analysis/plot_overhead.py 
+ 2080  ls -ltr
+ 2081  vi clueweb_ib 
+ 2082  mv clueweb_ib clueweb.ib.word 
+ 2083  vi clueweb.ib.doc 
+ 2084  python ~/hpda/lda-test/src/analysis/plot_overhead.py 
+ 2085  ls
+ 2086  python ~/hpda/lda-test/src/analysis/plot_overhead.py 
+ 2087  vi clueweb.ib.doc 
+ 2088  python ~/hpda/lda-test/src/analysis/plot_overhead.py 

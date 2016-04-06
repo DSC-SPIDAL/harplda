@@ -1309,7 +1309,8 @@ class PlotEngine():
         #    self.autolabel_stack(rect)
 
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 1)
+        #self.curax.legend(loc = 1)
+        self.curax.legend(loc = 0)
         if figname:
             self.savefig(figname)
 

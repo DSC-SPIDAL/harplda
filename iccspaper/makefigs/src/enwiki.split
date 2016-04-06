@@ -1,0 +1,11 @@
+1     Collection doc_no:3775554, vocabulary size:1000000, wordcnt:1107903672
+2     Collection doc_no:1887777, vocabulary size:999478, wordcnt:553668798
+4     Collection doc_no:943888, vocabulary size:980722, wordcnt:277162349
+8     Collection doc_no:471940, vocabulary size:900486, wordcnt:138927886
+16     Collection doc_no:235951, vocabulary size:756757, wordcnt:69347860
+32     Collection doc_no:118626, vocabulary size:588066, wordcnt:34897994
+64     Collection doc_no:60164, vocabulary size:433010, wordcnt:17500032
+128     Collection doc_no:30079, vocabulary size:305185, wordcnt:8825740
+256     Collection doc_no:15021, vocabulary size:211782, wordcnt:4445614
+512     Collection doc_no:7528, vocabulary size:142749, wordcnt:2181512
+1024     Collection doc_no:3764, vocabulary size:95413, wordcnt:1131392
