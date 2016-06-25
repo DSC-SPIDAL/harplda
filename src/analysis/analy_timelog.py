@@ -555,16 +555,27 @@ class LDATrainerLog():
                 m = re.search("[IWEF](\d\d\d\d \d\d:\d\d:\d\d.[0-9]*)", line)
                 if m:
                     #logger.info('match at %s , string_date=%s', line, m.group(1))
-                    string_date = '2015' + m.group(1)
+                    string_date = '2016' + m.group(1)
                     train_starttime = datetime.datetime.strptime(string_date, "%Y%m%d %H:%M:%S.%f")
 
-            if line.find("Model saved") > 0:
+            elif line.find("Model saved") > 0:
                 m = re.search("[IWEF](\d\d\d\d \d\d:\d\d:\d\d.[0-9]*)", line)
                 if m:
                     #logger.info('match at %s , string_date=%s', line, m.group(1))
-                    string_date = '2015' + m.group(1)
+                    string_date = '2016' + m.group(1)
                     app_endtime = datetime.datetime.strptime(string_date, "%Y%m%d %H:%M:%S.%f")
-        
+            
+            #save the last timestamp in the case of abnormal quit of program, endtime not exist
+            else:
+                mx = re.search("[IWEF](\d\d\d\d \d\d:\d\d:\d\d.[0-9]*)", line)
+                if mx:
+                    #logger.info('match at %s , string_date=%s', line, m.group(1))
+                    string_date = '2016' + mx.group(1)
+                    logtime = datetime.datetime.strptime(string_date, "%Y%m%d %H:%M:%S.%f")
+
+        if app_endtime == app_starttime:
+            app_endtime = logtime
+
         app_span = (app_endtime - app_starttime).total_seconds()
         train_span = (app_endtime - train_starttime).total_seconds()
         logger.info('runtime total=%d, train=%d', app_span, train_span)
@@ -591,11 +602,11 @@ class LDATrainerLog():
                 mx = re.search("[IWEF](\d\d\d\d \d\d:\d\d:\d\d.[0-9]*)", line)
                 if mx:
                     #logger.info('match at %s , string_date=%s', line, m.group(1))
-                    string_date = '2015' + mx.group(1)
+                    string_date = '2016' + mx.group(1)
                     iter_starttime = datetime.datetime.strptime(string_date, "%Y%m%d %H:%M:%S.%f")
 
                 iter_span = (iter_starttime - train_starttime).total_seconds()
-                itertime.append( iter_span )
+                itertime.append( iter_span)
             
             # commu
             m = re.search(self.pattern[self.name+'-commu'], line)
@@ -653,7 +664,7 @@ class LDATrainerLog():
         #commMatrix = np.array(comm)
         computeMatrix = np.zeros((nodenum, iternum))
         commMatrix = np.zeros((nodenum, iternum))
-        #iterMatrix = np.zeros((nodenum, iternum))
+        iterMatrix = np.zeros((nodenum, iternum))
         
         for idx in range(nodenum):
             l = len(compute[idx])
@@ -661,6 +672,8 @@ class LDATrainerLog():
             l = len(comm[idx])
             np.copyto(commMatrix[idx][:l], np.array(comm[idx]))
             # 
+            l = len(iter_t[idx])
+            np.copyto(iterMatrix[idx][:l], np.array(iter_t[idx]))
 
         logger.info('computeMatrix shape=%s, commMatrix shape=%s', computeMatrix.shape, commMatrix.shape)
 
@@ -681,13 +694,17 @@ class LDATrainerLog():
         #iter_tMatrix = np.array(iter_t)
         #iter_tMatrix = np.zeros((nodenum, iternum))
         #np.copyto(iter_tMatrix , np.array(iter_t))
-        iter_tMatrix = np.array(iter_t)
-        runtimeMatrix = np.concatenate((runtimeMatrix, iter_tMatrix), axis=1)
+        #iter_tMatrix = np.array(iter_t)
+        logger.debug('iter_tMatrix shape=%s,runtimeMatrix.shape=%s', iterMatrix.shape, runtimeMatrix.shape)
+        logger.debug('iter_Matrix = %s', iterMatrix)
+        #runtimeMatrix = np.concatenate((runtimeMatrix, iter_tMatrix), axis=1)
+        runtimeMatrix = np.concatenate((runtimeMatrix, iterMatrix), axis=1)
 
         #output the matrix
         np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
         np.savetxt(appdir + ".commtime", commMatrix, fmt='%d')
         np.savetxt(appdir + ".runtime", runtimeMatrix, fmt='%d')
+        np.savetxt(appdir + ".itertime", iterMatrix, fmt='%d')
 
         #min, max, mean analysis
         # mean/std of compute, comm restured
@@ -714,6 +731,14 @@ class LDATrainerLog():
 
         np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
 
+        # itertime
+        statMatrix[0] = np.min(iterMatrix, axis=0)
+        statMatrix[1] = np.max(iterMatrix, axis=0)
+        statMatrix[2] = np.mean(iterMatrix, axis=0)
+        statMatrix[3] = np.std(iterMatrix, axis=0)
+
+        np.savetxt(appdir + '.iter-stat', statMatrix*1000,fmt='%.2f')
+ 
         # runtime stat
         K,V = runtimeMatrix.shape
         statMatrix = np.zeros((4, V))
