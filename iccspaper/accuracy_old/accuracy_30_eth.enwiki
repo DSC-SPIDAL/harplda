@@ -1,0 +1,33 @@
+lda11	ldartt	enwiki-30-ib
+lda12	ldalgs-opt	enwiki-30-ib
+lda13	ldalgs	enwiki-30-ib
+lda21	ldartt	clueweb-30-ib
+lda22	ldalgs-opt	clueweb-30-ib
+lda23	ldalgs	clueweb-30-ib
+lda311	ldartt	enwiki-eth
+lda312	ldalgs	enwiki-eth
+lda313	ldalgs-opt	enwiki-eth
+lda321	ldartt	enwiki-ib
+lda322	ldalgs	enwiki-ib
+lda323	ldalgs-opt	enwiki-ib
+lda411	ldartt	clueweb-eth
+lda412	ldalgs-opt	clueweb-eth
+lda413	ldalgs	clueweb-eth
+lda421	
+lda4211	ldartt	clueweb-ib
+lda422	ldalgs	clueweb-ib
+lda423	ldalgs-opt	clueweb-ib
+petumm-enwiki-juliet-30-ib0	petuum
+ylda-clueweb-100-1	ylda	
+ylda-clueweb-100-2	ylda
+ylda-clueweb-100-3	ylda
+ylda-clueweb-100eth-1	ylda
+ylda-clueweb-100eth-2	ylda
+ylda-clueweb-juliet-30-ib0.001	ylda
+ylda-enwiki-100-001	ylda
+ylda-enwiki-100-003	ylda
+ylda-enwiki-100eth-1	ylda
+ylda-enwiki-100eth-2	ylda
+ylda-enwiki-100eth-3	ylda
+ylda-enwiki-30eth-001	ylda
+ylda-enwiki-juliet-30-ib0.001	ylda
