@@ -206,14 +206,17 @@ class LDATrainerLog():
 
         # computation time and iter time
         itertime = []
+        itertimeFull = []
         computetime=[]
+        
         for line in logf:
 
             if line.find("compute time:") > 0:
-                m = re.search("min ([0-9]*)\(s\), max ([0-9]*)", line)
+                m = re.search("\[worker ([0-9]*)\].* min ([0-9]*)\(s\), max ([0-9]*)", line)
                 if m:
                     #max_computetime = max(max_computetime, int(m.group(2)))
-                    computetime.append(int(m.group(2)))
+                    #computetime.append(int(m.group(2)))
+                    computetime.append([int(m.group(1)), int(m.group(3))])
 
             if re.search("iteration[0-9]*  loglikelihood",line):
                 m = re.search("  time ([0-9\.]*)  elapsed time ([0-9\.]*)", line)
@@ -221,13 +224,19 @@ class LDATrainerLog():
                     #logger.info('match at %s , string_date=%s', line, m.group(1))
                     # computetime, iter time, elapse time
                     #min, max, mean, std
-                    _compute = np.array(computetime)
+                    #_compute = np.array(computetime)
+                    _compute = np.array([x[1] for x in computetime])
+
                     _min = np.min(_compute)
                     _max = np.max(_compute)
                     _mean = np.mean(_compute)
                     _std = np.std(_compute)
 
                     itertime.append( (_min, _max, _mean, _std, float(m.group(1)), float(m.group(2))) )
+
+                    #save raw computetime data
+                    _sort_compute = sorted(computetime, key = lambda x:x[0])
+                    itertimeFull.append([x[1] for x in _sort_compute])
                     #mx_computetime = 0
                     computetime = []
 
@@ -256,7 +265,7 @@ class LDATrainerLog():
 
         logger.info('runtime total=%d, train=%d, init=%d', app_span, train_span, init_span)
 
-        return app_span, train_span, init_span, itertime
+        return app_span, train_span, init_span, itertime, itertimeFull
 
 
     def load_applog_petuum(self, appdir, filepattern='.info.log'):
@@ -266,7 +275,7 @@ class LDATrainerLog():
                     logger.info('load log from %s at %s', f, dirpath)
                     try:
                         # itertime <computetime min, max, mean, std, iter time, elapse time>
-                        app_t, train_t, init_t, itertime = self.load_timelog_petuum(os.path.join(dirpath, f))
+                        app_t, train_t, init_t, itertime, itertimeFull = self.load_timelog_petuum(os.path.join(dirpath, f))
                     except:
                         logger.error('failed...\n')
                         itertime = []
@@ -286,6 +295,9 @@ class LDATrainerLog():
                         statMatrix[3] = np.array([x[3]*1000 for x in itertime])
 
                         np.savetxt(output_name + '.comput-stat', statMatrix,fmt='%.2f')
+
+                        iterMatrix = np.transpose(np.array(itertimeFull)) * 1000
+                        np.savetxt(output_name + '.computetime', iterMatrix,fmt='%.2f')
 
                         # itertime
                         statMatrix = np.zeros((4, iternum))
