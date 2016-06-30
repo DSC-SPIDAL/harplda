@@ -22,6 +22,7 @@ format:
 
 
     harp   : hadoop user logs, syslog, each node has one directory
+        newformat:      Iteration 1: 161738, compute time: 67431, comm time: 212347, misc: 75982, numTokens: 101884477, percentage(): 10
         app_start       2015-10-10 19:44:35,269 INFO [main] 
         train_start     initialize Z took
         app_end         Server ends
@@ -65,7 +66,8 @@ class LDATrainerLog():
         "mallet":"^([0-9]+)ms",
         "harp-clock":"(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)",
         "harp-newformat":"Iteration ([0-9]*): ([0-9]*), compute time: ([0-9]*), comm time: ([0-9]*)",
-        "harp-numTokens":"numTokens: ([0-9]*), schedule: [0-9]*",
+        #"harp-numTokens":"numTokens: ([0-9]*), schedule: [0-9]*",
+        "harp-numTokens":"numTokens: ([0-9]*), percentage",
         "harp-compute":"Compute time: ([0-9]*), comm time: ([0-9]*)",
         "harp-iter":"Iteration [0-9]* took: ([0-9]*)",
         "ylda-clock":"[IWEF](\d\d\d\d \d\d:\d\d:\d\d.[0-9]*)",
@@ -346,6 +348,7 @@ class LDATrainerLog():
         train_starttime = app_starttime
         app_endtime = app_starttime
 
+        totalNumTokens = 0
         for line in logf:
             if line.find("nitialize Z took") > 0 or line.find('nit Z took') > 0:
                 m = re.search(self.pattern[self.name+'-clock'], line)
@@ -360,7 +363,13 @@ class LDATrainerLog():
                     #logger.info('match at %s , string_date=%s', line, m.group(1))
                     string_date = m.group(1)
                     app_endtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S,%f")
-        
+                    #add Total num of tokens check
+
+            if totalNumTokens == 0:
+                m = re.search('Total number of tokens ([0-9]*)', line)
+                if m:
+                    totalNumTokens = int(m.group(1))
+
         #
         # there is summer time, app_endtime < app_starttime
         #
@@ -387,6 +396,7 @@ class LDATrainerLog():
         tokencnt=[]
         last_iterspan = 0
         for line in logf:
+
             #new format first
             m = re.search(self.pattern[self.name+'-newformat'], line)
             if m:
@@ -405,7 +415,8 @@ class LDATrainerLog():
                 # check the numToken
                 mx = re.search(self.pattern[self.name+'-numTokens'], line)
                 if mx:
-                    tokencnt.append(int(m.group(1)))
+                    # iternum, numTokens
+                    tokencnt.append((int(m.group(1)), int(mx.group(1))) )
 
                 continue
 
@@ -430,17 +441,17 @@ class LDATrainerLog():
 
                 itertime.append( (int(m.group(1)),iter_span) )
 
-        return elapsed, app_span, train_span, itertime, tokencnt
+        return elapsed, app_span, train_span, itertime, tokencnt, totalNumTokens
 
     def load_applog_harp(self, appdir, filename='syslog'):
         models = []
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f == filename:
-                    elapsed, app_t, train_t, itertime, tokencnt = self.load_timelog_harp(os.path.join(dirpath, f))
+                    elapsed, app_t, train_t, itertime, tokencnt, totalNumTokens = self.load_timelog_harp(os.path.join(dirpath, f))
                     if len(elapsed) > 0:
                         logger.info('load log from %s at %s', f, dirpath)
-                        models.append((dirpath, elapsed, app_t, train_t, itertime, tokencnt))
+                        models.append((dirpath, elapsed, app_t, train_t, itertime, tokencnt, totalNumTokens))
 
         # (dirpath, [(compute time, comm time)])
         iternum = len(models[0][1])
@@ -454,6 +465,10 @@ class LDATrainerLog():
         iter_t = []
         app_t = []
         train_t = []
+        update=[]
+
+        # there should all be the same
+        totalNumTokens = models[0][6]
  
         for idx in range(nodenum):
             compute.append([x[0] for x in models[idx][1]])
@@ -462,6 +477,7 @@ class LDATrainerLog():
             train_t.append(models[idx][3])
             itertime.append([x[0] for x in models[idx][4]])
             iter_t.append([x[1] for x in models[idx][4]])
+            update.append([x[1] for x in models[idx][5]])
 
         #logger.debug('computeMatrix: %s', compute[:3])
 
@@ -469,6 +485,7 @@ class LDATrainerLog():
         computeMatrix = np.array(compute)
         commMatrix = np.array(comm)
         iterMatrix = np.array(itertime)
+        updateMatrix = np.array(update)
 
         # run time: col1:app_time, col2:train_time
         runtimeMatrix = np.zeros((2,nodenum))
@@ -486,10 +503,10 @@ class LDATrainerLog():
         np.savetxt(appdir + ".commtime", commMatrix, fmt='%d')
         np.savetxt(appdir + ".runtime", runtimeMatrix, fmt='%d')
         np.savetxt(appdir + ".itertime", iterMatrix, fmt='%d')
+        np.savetxt(appdir + ".update", updateMatrix, fmt='%d')
 
         #min, max, mean analysis
         # mean/std of compute, comm, iter restured
-        matrix = np.zeros((6, iternum))
 
         # compute time
         statMatrix = np.zeros((4, iternum))
@@ -497,10 +514,6 @@ class LDATrainerLog():
         statMatrix[1] = np.max(computeMatrix, axis=0)
         statMatrix[2] = np.mean(computeMatrix, axis=0)
         statMatrix[3] = np.std(computeMatrix, axis=0)
-
-        matrix[0] = statMatrix[2]
-        matrix[1] = statMatrix[3]
-
         np.savetxt(appdir + '.comput-stat', statMatrix,fmt='%.2f')
 
         # comm time
@@ -508,10 +521,6 @@ class LDATrainerLog():
         statMatrix[1] = np.max(commMatrix, axis=0)
         statMatrix[2] = np.mean(commMatrix, axis=0)
         statMatrix[3] = np.std(commMatrix, axis=0)
-
-        matrix[2] = statMatrix[2]
-        matrix[3] = statMatrix[3]
-
         np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
 
         # itertime
@@ -519,10 +528,6 @@ class LDATrainerLog():
         statMatrix[1] = np.max(iterMatrix, axis=0)
         statMatrix[2] = np.mean(iterMatrix, axis=0)
         statMatrix[3] = np.std(iterMatrix, axis=0)
-
-        matrix[4] = statMatrix[2]
-        matrix[5] = statMatrix[3]
-
         np.savetxt(appdir + '.iter-stat', statMatrix,fmt='%.2f')
 
         # runtime stat
@@ -531,15 +536,23 @@ class LDATrainerLog():
         statMatrix[1] = np.max(runtimeMatrix, axis=0)
         statMatrix[2] = np.mean(runtimeMatrix, axis=0)
         statMatrix[3] = np.std(runtimeMatrix, axis=0)
-
         np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
+
+        # update stat, add sum at row[4], ratio of iteration
+        statMatrix = np.zeros((6, iternum))
+        statMatrix[0] = np.min(updateMatrix, axis=0)
+        statMatrix[1] = np.max(updateMatrix, axis=0)
+        statMatrix[2] = np.mean(updateMatrix, axis=0)
+        statMatrix[3] = np.std(updateMatrix, axis=0)
+        statMatrix[4] = np.cumsum(np.sum(updateMatrix, axis=0))
+        statMatrix[5] = statMatrix[4] / totalNumTokens
+        np.savetxt(appdir + '.update-stat', statMatrix,fmt='%.2f')
+
 
         #logger.info('min = %s', np.min(computeMatrix, axis=0))
         #logger.info('max = %s', np.max(computeMatrix, axis=0))
         #logger.info('mean = %s', np.mean(computeMatrix, axis=0))
         #logger.info('std = %s', np.std(computeMatrix, axis=0))
-
-        return matrix
 
     def load_timelog_ylda(self, logfile):
         """

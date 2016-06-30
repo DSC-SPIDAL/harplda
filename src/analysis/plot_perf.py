@@ -486,8 +486,10 @@ class PlotEngine():
             dataflist.append(fname)
             fname = name + '.iter-stat'
             dataflist.append(fname)
+            fname = name + '.update-stat'
+            dataflist.append(fname)
 
-        self.perfdata.load(dataflist)
+        self.perfdata.load(dataflist, False)
 
         accuracy = []
         for tp in self.perfname:
@@ -497,6 +499,7 @@ class PlotEngine():
             lh_name = name + '.likelihood'
             runtime_name = name + '.runtime-stat'
             itertime_name = name + '.iter-stat'
+            update_name = name + '.update-stat'
             #
             # get (iternum, runttime-mean, perplexity, label)
             # 
@@ -511,9 +514,17 @@ class PlotEngine():
 
             itertimeMat = np.cumsum(self.perfdata[itertime_name][2,:]) / 1000.
 
-            accuracy.append((self.perfdata[lh_name][:,0], 
+            # convert iteration index number into real iternumber
+            iterIdx = self.perfdata[lh_name][:,0].astype(int) - 1
+            if self.perfdata[update_name] is not None:
+                realIterId = self.perfdata[update_name][5][iterIdx]
+            else:
+                realIterId = iterIdx
+
+            accuracy.append((iterIdx, 
                         self.perfdata[runtime_name][2,2:] + offset,
-                        self.perfdata[lh_name][:,1], label, itertimeMat))
+                        self.perfdata[lh_name][:,1], label, itertimeMat,
+                        realIterId))
 
         #fig, ax = plt.subplots()
 
@@ -523,20 +534,18 @@ class PlotEngine():
         grp_size = len(accuracy)
         for idx in range(grp_size):
             if plottype == 0:
-                x = accuracy[idx][0]
+                x = accuracy[idx][5]
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
                 self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
             elif plottype ==3:
                 x = accuracy[idx][0]
                 #convert iternum to runtime
-                x_int = x.astype(int)
-                x = accuracy[idx][4][x_int - 1 ]
+                x = accuracy[idx][4][x ]
                 self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
             else:
                 x = accuracy[idx][0]
                 #convert iternum to runtime
-                x_int = x.astype(int)
-                x = accuracy[idx][1][x_int - 1 ]
+                x = accuracy[idx][1][x]
                 self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
 
         #self.curax.set_ylabel('Model Perplexity')
