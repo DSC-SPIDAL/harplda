@@ -453,11 +453,19 @@ class LDATrainerLog():
                         logger.info('load log from %s at %s', f, dirpath)
                         models.append((dirpath, elapsed, app_t, train_t, itertime, tokencnt, totalNumTokens))
 
-        # (dirpath, [(compute time, comm time)])
-        iternum = len(models[0][1])
         nodenum = len(models)
         models =  sorted(models, key = lambda modeltp : modeltp[0])
-        logger.info('total %d iterations, %d nodes', iternum, nodenum)
+
+        #iternum = len(models[0][1])
+        # find the largest iter number
+        iternum = 0
+        for idx in range(nodenum):
+            if len(models[idx][1]) > iternum:
+                iternum =  len(models[idx][1]) 
+        # there should all be the same
+        totalNumTokens = models[0][6]
+
+        logger.info('total %d iterations, %d nodes, totalNumTokens=%d', iternum, nodenum, totalNumTokens)
         
         compute=[]
         comm=[]
@@ -467,25 +475,43 @@ class LDATrainerLog():
         train_t = []
         update=[]
 
-        # there should all be the same
-        totalNumTokens = models[0][6]
- 
         for idx in range(nodenum):
-            compute.append([x[0] for x in models[idx][1]])
-            comm.append([x[1] for x in models[idx][1]])
-            app_t.append(models[idx][2])
-            train_t.append(models[idx][3])
-            itertime.append([x[0] for x in models[idx][4]])
-            iter_t.append([x[1] for x in models[idx][4]])
-            update.append([x[1] for x in models[idx][5]])
+           compute.append([x[0] for x in models[idx][1]])
+           comm.append([x[1] for x in models[idx][1]])
+           app_t.append(models[idx][2])
+           train_t.append(models[idx][3])
+           itertime.append([x[0] for x in models[idx][4]])
+           iter_t.append([x[1] for x in models[idx][4]])
+           update.append([x[1] for x in models[idx][5]])
 
-        #logger.debug('computeMatrix: %s', compute[:3])
 
-        # id, compute time, comm time
-        computeMatrix = np.array(compute)
-        commMatrix = np.array(comm)
-        iterMatrix = np.array(itertime)
-        updateMatrix = np.array(update)
+        if False:
+            # old style, iternum are the same for all the nodes
+            # id, compute time, comm time
+            computeMatrix = np.array(compute)
+            commMatrix = np.array(comm)
+            iterMatrix = np.array(itertime)
+            updateMatrix = np.array(update)
+            iter_tMatrix = np.array(iter_t)
+        else:
+            # new style, iternum are NOT the same for all the nodes, analysis in the middle
+            # code from _ylda
+            computeMatrix = np.zeros((nodenum, iternum))
+            commMatrix = np.zeros((nodenum, iternum))
+            iterMatrix = np.zeros((nodenum, iternum))
+            updateMatrix = np.zeros((nodenum, iternum))
+            iter_tMatrix = np.zeros((nodenum, iternum))
+            for idx in range(nodenum):
+                l = len(compute[idx])
+                np.copyto(computeMatrix[idx][:l], np.array(compute[idx]))
+                l = len(comm[idx])
+                np.copyto(commMatrix[idx][:l], np.array(comm[idx]))
+                l = len(itertime[idx])
+                np.copyto(iterMatrix[idx][:l], np.array(itertime[idx]))
+                l = len(iter_t[idx])
+                np.copyto(iter_tMatrix[idx][:l], np.array(iter_t[idx]))
+                l = len(update[idx])
+                np.copyto(updateMatrix[idx][:l], np.array(update[idx]))
 
         # run time: col1:app_time, col2:train_time
         runtimeMatrix = np.zeros((2,nodenum))
@@ -494,7 +520,6 @@ class LDATrainerLog():
         runtimeMatrix = np.transpose(runtimeMatrix)
 
         # add iter_t matrix, (nodenum, iternum)
-        iter_tMatrix = np.array(iter_t)
         logger.info('iter shape=%s, runtime shape=%s', iter_tMatrix.shape, runtimeMatrix.shape)
         runtimeMatrix = np.concatenate((runtimeMatrix, iter_tMatrix), axis=1)
 
