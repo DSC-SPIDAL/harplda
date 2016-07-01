@@ -253,6 +253,7 @@ class PlotEngine():
             "accuracy_itertime":self.plot_accuracy_itertime,
             "accuracy_runtime":self.plot_accuracy_runtime,
             "accuracy_overalltime":self.plot_accuracy_overalltime,
+            "loadbalance_runtime":self.plot_loadbalance_runtime,
             "overhead":self.plot_overhead_top,
             "overhead_end":self.plot_overhead_end,
             "overhead_all":self.plot_overhead_all,
@@ -356,6 +357,16 @@ class PlotEngine():
                         ha='center', va='bottom')
             idx += 1
  
+    ######################3
+    def analysis(self, analy_type, data):
+        """
+            data := [(label, x,y) ] 
+        """
+        if analy_type == 'convergelevel':
+            logger.info('Begin analysis %s', analy_type)
+            
+            #1. curve fit on the first line
+        pass
 
     ######################3
     def plot(self, plotname, fig, conf):
@@ -530,6 +541,7 @@ class PlotEngine():
 
         #grp_size = len(accuracy)/2
         # data is two group, one in ib, other in eth
+        curveData = []
 
         grp_size = len(accuracy)
         for idx in range(grp_size):
@@ -537,6 +549,10 @@ class PlotEngine():
                 x = accuracy[idx][5]
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
                 self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+
+                # save the lines in this figure for stop critierion analysis
+                curveData.append( (accuracy[idx][3], x, accuracy[idx][2]) )
+
             elif plottype ==3:
                 x = accuracy[idx][0]
                 #convert iternum to runtime
@@ -573,7 +589,8 @@ class PlotEngine():
             #plt.savefig('tail-'+figname)
             self.savefig(figname)
 
-        #plt.show()
+        #curveData for convergelevel analysis
+        #self.analysis('convergelevel', curveData)
 
     ###############################################
 
@@ -762,7 +779,137 @@ class PlotEngine():
             self.savefig(figname)
 
         #plt.show()
-    
+
+    #############################################
+    def plot_loadbalance_iter(self, figname, conf):
+        return self.plot_loadbalance(0, figname, conf)
+
+    def plot_loadbalance_runtime(self, figname, conf):
+        return self.plot_loadbalance(1, figname, conf)
+
+    def plot_loadbalance_overalltime(self, figname, conf):
+        return self.plot_loadbalance(2, figname, conf)
+
+    def plot_loadbalance_itertime(self, figname, conf):
+        return self.plot_loadbalance(3, figname, conf)
+
+    def plot_loadbalance(self, plottype, figname, conf):
+        """
+        get loadbalance from .comput-stat, and itertime from .runtime[3:]
+
+        plottype:
+            0   loadbalance .vs. iternum
+            1   loadbalance .vs. traintime
+            2   loadbalance .vs. execution time
+            3   loadbalance .vs. itertime
+        """
+        dataflist = []
+        #for name,label in self.perfname:
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            fname = name + '.comput-stat'
+            dataflist.append(fname)
+            fname = name + '.runtime-stat'
+            dataflist.append(fname)
+            fname = name + '.iter-stat'
+            dataflist.append(fname)
+            fname = name + '.update-stat'
+            dataflist.append(fname)
+
+        self.perfdata.load(dataflist, False)
+
+        accuracy = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+ 
+            lh_name = name + '.comput-stat'
+            runtime_name = name + '.runtime-stat'
+            itertime_name = name + '.iter-stat'
+            update_name = name + '.update-stat'
+
+            # code modified from plot_accuracy
+            # change .comput-stat to .likelihood like format
+            cvVector = self.perfdata[lh_name][3] / self.perfdata[lh_name][2]
+            iterNumber = cvVector.shape[0]
+            #
+            # get (iternum, runttime-mean, perplexity, label)
+            # 
+            #
+            logger.debug('runtime_name=%s', runtime_name)
+            # start overhead = apptime - traintime 
+            if plottype == 2:
+                # use overall time
+                offset = self.perfdata[runtime_name][2,0] - self.perfdata[runtime_name][2,1] 
+            else:
+                offset = 0
+
+            itertimeMat = np.cumsum(self.perfdata[itertime_name][2,:]) / 1000.
+
+            # convert iteration index number into real iternumber
+            iterIdx = np.arange(iterNumber)
+            if self.perfdata[update_name] is not None:
+                realIterId = self.perfdata[update_name][5][iterIdx]
+            else:
+                realIterId = iterIdx
+
+            accuracy.append((iterIdx, 
+                        self.perfdata[runtime_name][2,2:] + offset,
+                        cvVector, label, itertimeMat,
+                        realIterId))
+
+        #fig, ax = plt.subplots()
+
+        #grp_size = len(accuracy)/2
+        # data is two group, one in ib, other in eth
+
+        grp_size = len(accuracy)
+        for idx in range(grp_size):
+            if plottype == 0:
+                x = accuracy[idx][5]
+                #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+
+                # save the lines in this figure for stop critierion analysis
+                curveData.append( (accuracy[idx][3], x, accuracy[idx][2]) )
+
+            elif plottype ==3:
+                x = accuracy[idx][0]
+                #convert iternum to runtime
+                x = accuracy[idx][4][x ]
+                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+            else:
+                x = accuracy[idx][0]
+                #convert iternum to runtime
+                x = accuracy[idx][1][x]
+                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+
+        #self.curax.set_ylabel('Model Perplexity')
+        self.curax.set_ylabel('Coefficient of Variation of Computation')
+        if plottype == 0:
+            self.curax.set_xlabel('Iteration Number')
+        elif plottype == 1:
+            self.curax.set_xlabel('Training Time (s)')
+        elif plottype == 2:
+            self.curax.set_xlabel('Execution Time (s)')
+        elif plottype ==3:
+            self.curax.set_xlabel('Iteration Time (s)')
+
+
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('LDA Trainer Workload Balance')
+        #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        self.curax.legend(loc = 0)
+        
+        if figname:
+            #plt.savefig('full-'+figname)
+            #self.curax.set_ylim(0, 350)
+            #plt.savefig('tail-'+figname)
+            self.savefig(figname)
+
     #############################################
     def plot_comm_breakdown_top(self, figname, conf):
         return self.plot_comm_breakdown(0, figname, conf)
