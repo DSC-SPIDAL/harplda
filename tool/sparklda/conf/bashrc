@@ -1,0 +1,47 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+#use_mpi=openmpi
+#export mpi_version="openmpi"
+export mpi_version="mpich2"
+
+export C3_PATH=$HOME/local/opt/c3-5
+export C3_CONF=$HOME/.c3conf
+# added by Anaconda 2.3.0 installer
+export PATH=$HOME/hpda/mf-test/bin:$HOME/anaconda2/bin:$HOME/soft/apache-ant-1.9.6/bin:$HOME/local/usr/bin:$HOME/local/c3-5/usr/bin:$PATH
+MANPATH=$MANPATH:$HOME/share/man
+
+# User specific aliases and functions
+#echo "use $mpi_version and start setting up..."
+if [ $mpi_version ==  "openmpi" ]; then
+    export PATH=$HOME/share/bin:$PATH
+    export LD_LIBRARY_PATH=$HOME/share/lib/:$HOME/share/lib/openmpi:$LD_LIBRARY_PATH
+else
+#source $HOME/bin/tbbvars.sh intel64
+
+    export PATH=$HOME/local/mpich2/bin:$HOME/share/bin:$PATH
+    export LD_LIBRARY_PATH=$HOME/local/mpich2/lib/:$HOME/share/lib/:$LD_LIBRARY_PATH
+fi
+#echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+#echo "done"
+
+#export JAVA_HOME=$HOME/soft/jdk1.7.0_79
+
+# hadoop env
+LOCALDISK=/tmp/hpda
+export HADOOP_LOCALDISK=$LOCALDISK/hadoop
+export HADOOP_YARN_LOCALDISK=$LOCALDISK/hadoop
+export HADOOP_PREFIX=$LOCALDISK/hadoop
+export HADOOP_MASTER=localhost:$LOCALDISK/hadoop
+export HADOOP_CONF_DIR=$LOCALDISK/hadoop/etc/hadoop
+export PATH=$PATH:$LOCALDISK/hadoop/bin:
+
+# spark
+export SPARK_LOCALDISK=$LOCALDISK/spark
+export SPARK_HOME=$LOCALDISK/spark
+export PATH=$PATH:$LOCALDISK/spark/bin:
+
