@@ -672,10 +672,19 @@ class PlotEngine():
         # iternum may be different, e.g. enwiki-bigram petuum always fail in the middle iteration
         iternum = 999999
         for idx in range(grp_size):
+            # there are zeros filled now
+            #_iternum = compute_time[idx][0][2].shape[0]
+            #if _iternum < iternum:
+            #    iternum = _iternum
             _iternum = compute_time[idx][0][2].shape[0]
-            if _iternum < iternum:
-                iternum = _iternum
-        logger.info('shortest iternum = %s', iternum)
+            _firstzero = np.argwhere( compute_time[idx][0][0] == 0.)
+            if _firstzero.shape[0] > 0:
+                logger.info('firstzero = %s, shape=%s', _firstzero[:1], _firstzero.shape)
+                iternum = min(iternum, _iternum, _firstzero[0,0])
+            else:
+                iternum = min(iternum, _iternum)
+
+        logger.info('shortest nonzero iternum = %s', iternum)
 
         if plottype == 2:
             N = compute_time[0][0][2].shape[0]
@@ -696,7 +705,8 @@ class PlotEngine():
                 grp_data2_err = iter_time[idx][0][3]
  
                 #sample every 10 points
-                ind = np.arange(grp_data.shape[0])
+                #ind = np.arange(grp_data.shape[0])
+                ind = np.arange(iternum)
                 grp_data = grp_data[0:-1:10]
                 grp_data2 = grp_data2[0:-1:10]
                 x = ind[0:-1:10]

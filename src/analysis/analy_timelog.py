@@ -90,11 +90,12 @@ class LDATrainerLog():
         return self.engine[self.name](logdir)
 
     ##############################################################    
-    def load_applog_petuumrun(self, appdir, filename='.log'):
+    def load_applog_petuumrun(self, appdir, filename='learntopics.*\.log'):
         rawdata = None
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
-                if f.endswith(filename):
+                #if f.endswith(filename):
+                if re.search(filename,f):
                     rawdata = np.loadtxt(os.path.join(dirpath, f))
                     break
 
@@ -727,6 +728,7 @@ class LDATrainerLog():
 
         logger.info('computeMatrix shape=%s, commMatrix shape=%s', computeMatrix.shape, commMatrix.shape)
 
+
         logger.debug('computeMatrix[0,:]: %s', computeMatrix[0,:])
         logger.debug('commuMatrix[0,:] %s', commMatrix[0,:])
         
@@ -754,31 +756,25 @@ class LDATrainerLog():
         np.savetxt(appdir + ".computetime", computeMatrix, fmt='%d')
         np.savetxt(appdir + ".commtime", commMatrix, fmt='%d')
         np.savetxt(appdir + ".runtime", runtimeMatrix, fmt='%d')
+        
+        #for ylda, itermatrix is a accu sum of iter time
+        np.copyto(iterMatrix[:,1:], np.diff(iterMatrix, axis=1)) 
+        iterMatrix = iterMatrix * 1000
         np.savetxt(appdir + ".itertime", iterMatrix, fmt='%d')
 
         #min, max, mean analysis
         # mean/std of compute, comm restured
-        matrix = np.zeros((4, iternum))
-
         statMatrix = np.zeros((4, iternum))
         statMatrix[0] = np.min(computeMatrix, axis=0)
         statMatrix[1] = np.max(computeMatrix, axis=0)
         statMatrix[2] = np.mean(computeMatrix, axis=0)
         statMatrix[3] = np.std(computeMatrix, axis=0)
-
-        matrix[0] = statMatrix[2]
-        matrix[1] = statMatrix[3]
-
         np.savetxt(appdir + '.comput-stat', statMatrix,fmt='%.2f')
 
         statMatrix[0] = np.min(commMatrix, axis=0)
         statMatrix[1] = np.max(commMatrix, axis=0)
         statMatrix[2] = np.mean(commMatrix, axis=0)
         statMatrix[3] = np.std(commMatrix, axis=0)
-
-        matrix[2] = statMatrix[2]
-        matrix[3] = statMatrix[3]
-
         np.savetxt(appdir + '.comm-stat', statMatrix,fmt='%.2f')
 
         # itertime
@@ -786,8 +782,8 @@ class LDATrainerLog():
         statMatrix[1] = np.max(iterMatrix, axis=0)
         statMatrix[2] = np.mean(iterMatrix, axis=0)
         statMatrix[3] = np.std(iterMatrix, axis=0)
-
-        np.savetxt(appdir + '.iter-stat', statMatrix*1000,fmt='%.2f')
+        #np.savetxt(appdir + '.iter-stat', statMatrix*1000,fmt='%.2f')
+        np.savetxt(appdir + '.iter-stat', statMatrix,fmt='%.2f')
  
         # runtime stat
         K,V = runtimeMatrix.shape
@@ -800,11 +796,8 @@ class LDATrainerLog():
         #np.copyTo(statMatrix[1] , np.max(runtimeMatrix, axis=0))
         #np.copyTo(statMatrix[2] , np.mean(runtimeMatrix, axis=0))
         #np.copyTo(statMatrix[3] , np.std(runtimeMatrix, axis=0))
-
-
         np.savetxt(appdir + '.runtime-stat', statMatrix,fmt='%.2f')
 
-        return matrix
 
 def draw_mvmatrix(mv_matrix, trainer, fig, show = False):
     logger.info('draw the mean-var figure')
