@@ -705,13 +705,17 @@ class PlotEngine():
                 grp_data2_err = iter_time[idx][0][3]
  
                 #sample every 10 points
-                #ind = np.arange(grp_data.shape[0])
-                ind = np.arange(iternum)
-                grp_data = grp_data[0:-1:10]
-                grp_data2 = grp_data2[0:-1:10]
-                x = ind[0:-1:10]
-                logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
 
+                ind = np.arange(grp_data.shape[0])
+                #ind = np.arange(iternum)
+                
+                if False:   #  _use_sample_ == True:
+                    grp_data = grp_data[0:-1:10]
+                    grp_data2 = grp_data2[0:-1:10]
+                    x = ind[0:-1:10]
+                    logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
+                else:
+                    x = ind
                 #p1 = self.curax.errorbar(ind, grp_data, color=self.colors[idx*2], yerr= grp_data_err, label = compute_time[idx][1] +'-compute')
 
                 #p2 = self.curax.errorbar(ind, grp_data2, color=self.colors[idx*2+1], yerr= grp_data2_err, label = compute_time[idx][1]+'-overhead')
