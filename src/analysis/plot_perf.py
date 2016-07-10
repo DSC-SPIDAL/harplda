@@ -245,7 +245,7 @@ class DataSampler():
 
 class PlotEngine():
 
-    def __init__(self):
+    def __init__(self, use_shortest_x = True):
         self.ploters = {
             "overall_runtime":self.plot_overall_app,
             "overall_traintime":self.plot_overall_train,
@@ -283,6 +283,7 @@ class PlotEngine():
         self.linestyle=['-','--','-.',':']
         self.marker=['.','o','^','s','*','3']
 
+        self.use_shortest_x = use_shortest_x
 
     def init_data(self, datadir, perfname):
         """
@@ -543,26 +544,51 @@ class PlotEngine():
         # data is two group, one in ib, other in eth
         curveData = []
 
+        # limit x to the shortest iternumber among the curves
         grp_size = len(accuracy)
+        _draw_all_iters_ = True
+        if _draw_all_iters_ == True:
+            iternum = None
+        else:
+            iternum = 999999
+            for idx in range(grp_size):
+                _iternum = accuracy[idx][0].shape[0]
+                iternum = min(iternum, _iternum)
+
+        logger.info('shortest iternum = %s', iternum)
+
+
+        _trace_shortest_x = 1e+12
         for idx in range(grp_size):
             if plottype == 0:
-                x = accuracy[idx][5]
+                x = accuracy[idx][5][:iternum]
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
-                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2][:iternum], self.colors_orig[idx]+'.-', label = accuracy[idx][3][:iternum])
 
                 # save the lines in this figure for stop critierion analysis
-                curveData.append( (accuracy[idx][3], x, accuracy[idx][2]) )
+                #curveData.append( (accuracy[idx][3], x, accuracy[idx][2]) )
 
             elif plottype ==3:
-                x = accuracy[idx][0]
+                x = accuracy[idx][0][:iternum]
+
                 #convert iternum to runtime
                 x = accuracy[idx][4][x ]
-                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2][:iternum], self.colors_orig[idx]+'.-', label = accuracy[idx][3][:iternum])
             else:
-                x = accuracy[idx][0]
+                x = accuracy[idx][0][:iternum]
                 #convert iternum to runtime
                 x = accuracy[idx][1][x]
-                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2][:iternum], self.colors_orig[idx]+'.-', label = accuracy[idx][3][:iternum])
+
+            # trace on the x
+            logger.info('_trace_shortest_x = %s, x[-1]=%s', _trace_shortest_x, x[-1])
+            _trace_shortest_x = min(_trace_shortest_x, x[-1])
+
+        # set the x limit by _trace_shortest_x
+        if self.use_shortest_x:
+            self.curax.set_xlim(0, _trace_shortest_x)
+        logger.info('_trace_shortest_x = %s', _trace_shortest_x)
+
 
         #self.curax.set_ylabel('Model Perplexity')
         self.curax.set_ylabel('Model Likelihood')
@@ -695,6 +721,7 @@ class PlotEngine():
         #width = 0.5       # the width of the bars
         width = 1. / grp_size - 0.05
 
+        _trace_shortest_x = 1e+12
         for idx in range(grp_size):
             if plottype == 2:
                 grp_data = compute_time[idx][0][2]
@@ -734,6 +761,7 @@ class PlotEngine():
                 p1 = self.curax.plot(x, grp_data[:point_cnt], self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-compute')
                 p2= self.curax.plot(x, grp_data2[:point_cnt], self.colors_orig[idx]+'.--', label = compute_time[idx][1] +'-iter')
 
+                _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
                 #self.curax.set_xticks(x)
                 #self.curax.set_xticklabels([x+1 for x in range(N)])
@@ -775,6 +803,11 @@ class PlotEngine():
                     self.curax.set_xticklabels([ iternum -N + x +1 for x in range(N)])
 
                 self.curax.set_xlabel('Iteration')
+
+        if plottype == 2:
+            if self.use_shortest_x:
+                self.curax.set_xlim(0, _trace_shortest_x)
+                logger.info('_trace_shortest_x = %s', _trace_shortest_x)
 
         # all plots goes here
         self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
@@ -877,6 +910,7 @@ class PlotEngine():
 
         #grp_size = len(accuracy)/2
         # data is two group, one in ib, other in eth
+        _trace_shortest_x = 1e+12
 
         grp_size = len(accuracy)
         for idx in range(grp_size):
@@ -898,8 +932,13 @@ class PlotEngine():
                 #convert iternum to runtime
                 x = accuracy[idx][1][x]
                 self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+            
+            _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
         #self.curax.set_ylabel('Model Perplexity')
+        if self.use_shortest_x:
+            self.curax.set_xlim(0, _trace_shortest_x)
+    
         self.curax.set_ylabel('Coefficient of Variation of Computation')
         if plottype == 0:
             self.curax.set_xlabel('Iteration Number')
