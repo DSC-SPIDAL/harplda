@@ -275,7 +275,7 @@ class PlotEngine():
         self.init_subplot(1,1)
         self.set_subplot(1,1)
 
-        self.colors_orig=['r','b','m', 'g','c','y','k','r','b','m','g','c','y','k']
+        self.colors_orig=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']
         #self.colors=[(name, hex) for name, hex in matplotlib.colors.cnames.iteritems()]
         #self.colors=[hex for name, hex in matplotlib.colors.cnames.iteritems()]
         self.colors = self.colors_orig
