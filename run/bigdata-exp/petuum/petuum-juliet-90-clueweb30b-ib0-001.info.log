@@ -1,0 +1,6 @@
+--------------------------------------------------------------------------
+No nodes are available for this job, either due to a failure to
+allocate nodes to the job, or allocated nodes being marked
+as unavailable (e.g., down, rebooting, or a process attempting
+to be relocated to another node when none are available).
+--------------------------------------------------------------------------
