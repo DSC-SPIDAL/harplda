@@ -588,6 +588,13 @@ class PlotEngine():
         if self.use_shortest_x:
             self.curax.set_xlim(0, _trace_shortest_x)
         logger.info('_trace_shortest_x = %s', _trace_shortest_x)
+        #add xlim and ylim by conf
+        if 'xlim' in conf:
+            if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
+                self.curax.set_xlim(0, conf['xlim'])
+        if 'ylim_h' in conf:
+            self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
+
 
 
         #self.curax.set_ylabel('Model Perplexity')
@@ -818,6 +825,13 @@ class PlotEngine():
 
         for rect in rects:
             self.autolabel_stack(rect)
+        #add xlim and ylim by conf
+        if 'xlim' in conf:
+            if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
+                self.curax.set_xlim(0, conf['xlim'])
+        if 'ylim' in conf:
+            self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
+
 
         #ax.set_ylim(0, overall_time[0][0] * 2)
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
@@ -939,7 +953,7 @@ class PlotEngine():
         if self.use_shortest_x:
             self.curax.set_xlim(0, _trace_shortest_x)
     
-        self.curax.set_ylabel('Coefficient of Variation of Computation')
+        self.curax.set_ylabel('CV of Computation')
         if plottype == 0:
             self.curax.set_xlabel('Iteration Number')
         elif plottype == 1:
@@ -956,7 +970,14 @@ class PlotEngine():
             self.curax.set_title('LDA Trainer Workload Balance')
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
         self.curax.legend(loc = 0)
-        
+        #add xlim and ylim by conf
+        if 'xlim' in conf:
+            if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
+                self.curax.set_xlim(0, conf['xlim'])
+        if 'ylim' in conf:
+            self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
+
+
         if figname:
             #plt.savefig('full-'+figname)
             #self.curax.set_ylim(0, 350)

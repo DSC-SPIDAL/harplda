@@ -1,0 +1,20 @@
+lda12-rerun rtt-B+D ib
+#lda21 ldartt ib
+#ldaw1221 ldartt-w ib
+#lda22 ldalgs-opt ib
+#petuum-juliet-30-clueweb-ib0-004-computetime petuum ib
+petuum-juliet-30-clueweb-ib0-checkup5 petuum ib
+#ylda-clueweb-juliet-30-ib0.001 ylda ib
+#nlda-new rtt-B+B ib
+#nlda-minibatch rtt-mb4096 ib 
+#nlda-mb2048 rtt-mb2048 ib 
+#nlda-mb2048-II rtt-mb2048-II ib 
+#nlda-mb2048-III rtt-mb2048-III ib 
+#nlda-mb2048-30 rtt-mb2048-30 ib 
+#nlda-mb2048-II-rerun rtt-mb2048 ib 
+#nlda-mb2048-auto rtt-mb2048-auto ib 
+#nlda-mb2048-autoII rtt-mb2048-autoII ib 
+#nlda-mb2048-autoBound rtt-mb2048-autoBound ib 
+nlda-mb1024-autoBound rtt-mb1024-autoBound ib 
+nlda-clueweb-15x64 rtt-15
+petuum-juliet-15-clueweb-ib0-0325-2 petuum-15
