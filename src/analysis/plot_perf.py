@@ -527,13 +527,13 @@ class PlotEngine():
             itertimeMat = np.cumsum(self.perfdata[itertime_name][2,:]) / 1000.
 
             # convert iteration index number into real iternumber
-            iterIdx = self.perfdata[lh_name][:,0].astype(int) - 1
+            iterIdx = self.perfdata[lh_name][:,0].astype(int) 
             if self.perfdata[update_name] is not None:
-                realIterId = self.perfdata[update_name][5][iterIdx]
+                realIterId = self.perfdata[update_name][5][iterIdx -1 ]
             else:
                 realIterId = iterIdx
 
-            accuracy.append((iterIdx, 
+            accuracy.append((iterIdx -1, 
                         self.perfdata[runtime_name][2,2:] + offset,
                         self.perfdata[lh_name][:,1], label, itertimeMat,
                         realIterId))
@@ -913,7 +913,7 @@ class PlotEngine():
             if self.perfdata[update_name] is not None:
                 realIterId = self.perfdata[update_name][5][iterIdx]
             else:
-                realIterId = iterIdx
+                realIterId = iterIdx + 1
 
             accuracy.append((iterIdx, 
                         self.perfdata[runtime_name][2,2:] + offset,
