@@ -278,10 +278,12 @@ class PlotEngine():
         self.colors_orig=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']
         #self.colors=[(name, hex) for name, hex in matplotlib.colors.cnames.iteritems()]
         #self.colors=[hex for name, hex in matplotlib.colors.cnames.iteritems()]
-        self.colors = self.colors_orig
         self.colors_stackbar=['r','y','b','g', 'm','c','y','k','r','y','b','g','m','c','y','k']
         self.linestyle=['-','--','-.',':']
         self.marker=['.','o','^','s','*','3']
+        #default setting
+        self.colors = self.colors_orig
+        self.lines = ['.-'] * 10
 
         self.use_shortest_x = use_shortest_x
 
@@ -558,12 +560,22 @@ class PlotEngine():
         logger.info('shortest iternum = %s', iternum)
 
 
+        #setup the line style and mark, colors, etc
+        colors = self.colors
+        lines = self.lines
+
+        if 'lines' in conf:
+            lines = conf['lines']
+        if 'colors' in conf:
+            colors = conf['colors']
+
         _trace_shortest_x = 1e+12
         for idx in range(grp_size):
             if plottype == 0:
                 x = accuracy[idx][5][:iternum]
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
-                self.curax.plot(x, accuracy[idx][2][:iternum], self.colors_orig[idx]+'.-', label = accuracy[idx][3][:iternum])
+#self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
+                self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
 
                 # save the lines in this figure for stop critierion analysis
                 #curveData.append( (accuracy[idx][3], x, accuracy[idx][2]) )
@@ -573,12 +585,14 @@ class PlotEngine():
 
                 #convert iternum to runtime
                 x = accuracy[idx][4][x ]
-                self.curax.plot(x, accuracy[idx][2][:iternum], self.colors_orig[idx]+'.-', label = accuracy[idx][3][:iternum])
+#self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
+                self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx],label = accuracy[idx][3][:iternum])
             else:
                 x = accuracy[idx][0][:iternum]
                 #convert iternum to runtime
                 x = accuracy[idx][1][x]
-                self.curax.plot(x, accuracy[idx][2][:iternum], self.colors_orig[idx]+'.-', label = accuracy[idx][3][:iternum])
+#self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
+                self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
 
             # trace on the x
             logger.info('_trace_shortest_x = %s, x[-1]=%s', _trace_shortest_x, x[-1])
@@ -728,6 +742,16 @@ class PlotEngine():
         #width = 0.5       # the width of the bars
         width = 1. / grp_size - 0.05
 
+
+        #setup the line style and mark, colors, etc
+        colors = self.colors
+        lines = self.lines
+
+        if 'lines' in conf:
+            lines = conf['lines']
+        if 'colors' in conf:
+            colors = conf['colors']
+
         _trace_shortest_x = 1e+12
         for idx in range(grp_size):
             if plottype == 2:
@@ -765,8 +789,11 @@ class PlotEngine():
                 point_cnt = x.shape[0]
 
                 #draw
-                p1 = self.curax.plot(x, grp_data[:point_cnt], self.colors_orig[idx]+'.-', label = compute_time[idx][1] +'-compute')
-                p2= self.curax.plot(x, grp_data2[:point_cnt], self.colors_orig[idx]+'.--', label = compute_time[idx][1] +'-iter')
+#p1 = self.curax.plot(x, grp_data[:point_cnt], colors[idx*2]+lines[idx*2], label = compute_time[idx][1] +'-compute')
+#               p2= self.curax.plot(x, grp_data2[:point_cnt], colors[idx*2+1]+lines[idx*2+1], label = compute_time[idx][1] +'-iter')
+                p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx*2], color=colors[idx*2],label = compute_time[idx][1] +'-compute')
+                p2= self.curax.plot(x, grp_data2[:point_cnt], lines[idx*2+1], color=colors[idx*2+1],label = compute_time[idx][1] +'-iter')
+
 
                 _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
@@ -921,6 +948,15 @@ class PlotEngine():
                         realIterId))
 
         #fig, ax = plt.subplots()
+        #setup the line style and mark, colors, etc
+        colors = self.colors
+        lines = self.lines
+
+        if 'lines' in conf:
+            lines = conf['lines']
+        if 'colors' in conf:
+            colors = conf['colors']
+
 
         #grp_size = len(accuracy)/2
         # data is two group, one in ib, other in eth
@@ -931,7 +967,8 @@ class PlotEngine():
             if plottype == 0:
                 x = accuracy[idx][5]
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
-                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+#self.curax.plot(x, accuracy[idx][2], colors[idx]+lines[idx], label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2], lines[idx], color=colors[idx], label = accuracy[idx][3])
 
                 # save the lines in this figure for stop critierion analysis
                 curveData.append( (accuracy[idx][3], x, accuracy[idx][2]) )
@@ -940,12 +977,12 @@ class PlotEngine():
                 x = accuracy[idx][0]
                 #convert iternum to runtime
                 x = accuracy[idx][4][x ]
-                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2], lines[idx], color=colors[idx], label = accuracy[idx][3])
             else:
                 x = accuracy[idx][0]
                 #convert iternum to runtime
                 x = accuracy[idx][1][x]
-                self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+'.-', label = accuracy[idx][3])
+                self.curax.plot(x, accuracy[idx][2], lines[idx], color=colors[idx], label = accuracy[idx][3])
             
             _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
