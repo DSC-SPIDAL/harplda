@@ -28,13 +28,16 @@ ploter = PlotEngine(False)
 gridFlag = True
 prefix = 'nlda'
 
-def call_plot(plotname, datadir, namefile, figname, conf):
+def call_plot(plotname, datadir, namefile, figname, confset):
     perfname = PerfName(namefile)
     ploter.init_data(datadir, perfname)
-    ploter.plot(plotname, prefix + figname, conf)
+    if plotname in confset:
+        ploter.plot(plotname, prefix + figname, confset[plotname])
+    else:
+        ploter.plot(plotname, prefix + figname, confset['default'])
 
 def draw_newharp(conffile, conf):
-    nullconf={'title':''}
+    nullconf={'default':{'title':''}}
     #conffile='enwiki-1M_30x60-ib'
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
@@ -49,7 +52,7 @@ def draw_newharp(conffile, conf):
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
     ploter.curax.grid(gridFlag)
-    call_plot('accuracy_iter', '../../data', conffile, '-1-3.pdf',nullconf) 
+    call_plot('accuracy_iter', '../../data', conffile, '-1-3.pdf',conf) 
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
     ploter.curax.grid(gridFlag)
@@ -96,17 +99,63 @@ if __name__ == "__main__":
     draw_init()
     prefix = sys.argv[1].split('.')[0]
 
-    conf = {}
+    confset = {}
     if len(sys.argv) > 2:
         if sys.argv[2] == 'TRUE':
-            shortview = (sys.argv[2] == 'True')
-            ploter.use_shortest_x = shortview
-            logger.info('set use_shortest_x as : %s', shortview)
+            if len(sys.argv) > 3:
+                #set xlim by sys.argv[3]
+                ploter.use_shortest_x = True
+                conf={}
+                conf['title']=''
+                conf['xlim'] = int(sys.argv[3])
+                conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']
+                conf['lines']=['o-','^-','d-']*10
+                confset['default'] = conf
+                conf={}
+                conf['title']=''
+                conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']
+                conf['lines']=['o-','^-','d-']*10
+                confset['accuracy_iter'] = conf
+ 
+                conf={}
+                conf['title']=''
+                conf['xlim'] = int(sys.argv[3])
+                conf['colors']=['r','r','b','b','g', 'g','c','c','y','k','r','b','m','g','c','y','k']
+                conf['lines']=['-','--']*10
+                confset['overhead_all'] = conf
+                logger.info('set use_xlim_x as : %s', conf['xlim'])
+            else:
+                #only shortview
+                shortview = (sys.argv[2] == 'True')
+                ploter.use_shortest_x = shortview
+                logger.info('set use_shortest_x as : %s', shortview)
         else:
+            # maybe special to STRAGGLER
+            # there are 4 lines with 2 groups
             ploter.use_shortest_x = True
+            conf={}
             conf['title']=''
-            conf['xlim'] = int(sys.argv[2])
+            conf['xlim'] = int(sys.argv[3])
+#conf['colors']=['r','salmon','g', 'olivedrab','c','y','k','r','b','m','g','c','y','k']
+            conf['colors']=['r','r','g', 'g','c','y','k','r','b','m','g','c','y','k']
+            conf['lines']=['o-','o--','d-','d--']*10
+            confset['default'] = conf
+            conf={}
+            conf['title']=''
+#           conf['colors']=['r','salmon','g', 'olivedrab','c','y','k','r','b','m','g','c','y','k']
+            conf['colors']=['r','r','g', 'g','c','y','k','r','b','m','g','c','y','k']
+            conf['lines']=['o-','o--','d-','d--']*10
+            confset['accuracy_iter'] = conf
+ 
+            conf={}
+            conf['title']=''
+            conf['xlim'] = int(sys.argv[3])
+            conf['colors']=['r','r','salmon','salmon','g', 'g','olivedrab','olivedrab','y','k','r','b','m','g','c','y','k']
+#conf['colors']=['r','r','g', 'g','c','y','k','r','b','m','g','c','y','k']
+            conf['lines']=['-','--']*10
+            confset['overhead_all'] = conf
             logger.info('set use_xlim_x as : %s', conf['xlim'])
+
     else:
         plt.rcParams.update({'figure.figsize':(8,6)})
         logger.info('set large view')
@@ -115,4 +164,4 @@ if __name__ == "__main__":
     #draw_ylda()
     #draw_petuum()
     #draw_iteracc()
-    draw_newharp(sys.argv[1], conf)
+    draw_newharp(sys.argv[1], confset)

@@ -569,10 +569,12 @@ class PlotEngine():
         if 'colors' in conf:
             colors = conf['colors']
 
-        _trace_shortest_x = 1e+12
+        _trace_shortest_x = 1e+24
         for idx in range(grp_size):
             if plottype == 0:
-                x = accuracy[idx][5][:iternum]
+                #x = accuracy[idx][5][:iternum]
+                x = accuracy[idx][5][:iternum] * 29911407874
+
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
 #self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
                 self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
@@ -612,9 +614,10 @@ class PlotEngine():
 
 
         #self.curax.set_ylabel('Model Perplexity')
-        self.curax.set_ylabel('Model Likelihood')
+        self.curax.set_ylabel('Model Log-likelihood')
         if plottype == 0:
-            self.curax.set_xlabel('Iteration Number')
+            #self.curax.set_xlabel('Epoch Number')
+            self.curax.set_xlabel('Model Update Count')
         elif plottype == 1:
             self.curax.set_xlabel('Training Time (s)')
         elif plottype == 2:
@@ -990,7 +993,7 @@ class PlotEngine():
         if self.use_shortest_x:
             self.curax.set_xlim(0, _trace_shortest_x)
     
-        self.curax.set_ylabel('CV of Computation')
+        self.curax.set_ylabel('CV of Computation Time')
         if plottype == 0:
             self.curax.set_xlabel('Iteration Number')
         elif plottype == 1:

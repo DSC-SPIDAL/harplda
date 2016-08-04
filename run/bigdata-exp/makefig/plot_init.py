@@ -30,6 +30,8 @@ def draw_init():
         'ytick.labelsize': 10,
         
         'lines.linewidth':1.25,
+        'lines.markersize'  : 3,
+        'lines.markeredgewidth': 0.1,
         'savefig.dpi':600,
         }
     

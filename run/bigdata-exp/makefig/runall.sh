@@ -3,10 +3,10 @@
 mkdir -p out-short out-full
 rm out-short/* out-full/* *.pdf
 
-python plotall.py clueweb30-30x60.conf 25000
-python plotall.py clueweb30-60x30.conf 25000
-python plotall.py clueweb30-90x20.conf 25000
-python plotall.py clueweb30-straggler-30x60.conf 25000
+python plotall.py clueweb30-30x60.conf TRUE 25000
+python plotall.py clueweb30-60x30.conf TRUE 25000
+python plotall.py clueweb30-90x20.conf TRUE 25000
+python plotall.py clueweb30-straggler-30x60.conf STRAGGLER 25000
 
 mv *.pdf out-short
 
