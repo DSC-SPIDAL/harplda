@@ -157,6 +157,9 @@ if __name__ == "__main__":
             logger.info('set use_xlim_x as : %s', conf['xlim'])
 
     else:
+        conf={}
+        conf['title']=''
+        confset['default'] = conf
         plt.rcParams.update({'figure.figsize':(8,6)})
         logger.info('set large view')
 
