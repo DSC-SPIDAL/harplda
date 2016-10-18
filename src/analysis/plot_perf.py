@@ -145,6 +145,8 @@ class PerfName():
                 nf.seek(0,0)
 
                 for line in nf:
+                    if line.strip().replace(' ','') == '':
+                        break
                     tokens = line.strip().split(deli)
                     #perfname.append((tokens[0], tokens[1]))
                     if tokens[0][0] == '#':
@@ -254,6 +256,9 @@ class PlotEngine():
             "accuracy_runtime":self.plot_accuracy_runtime,
             "accuracy_overalltime":self.plot_accuracy_overalltime,
             "loadbalance_runtime":self.plot_loadbalance_runtime,
+            "throughput_runtime":self.plot_throughput_runtime,
+            "accthroughput_runtime":self.plot_accthroughput_runtime,
+            "scalability":self.plot_scalability,
             "overhead":self.plot_overhead_top,
             "overhead_end":self.plot_overhead_end,
             "overhead_all":self.plot_overhead_all,
@@ -337,7 +342,7 @@ class PlotEngine():
         """
         for rect in rects:
             height = rect.get_height()
-            self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%d'%int(height),
+            self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%.2f'%float(height),
                         ha='center', va='bottom')
 
     def autolabel_stack(self, rects):
@@ -1023,6 +1028,359 @@ class PlotEngine():
             #self.curax.set_ylim(0, 350)
             #plt.savefig('tail-'+figname)
             self.savefig(figname)
+
+    #############################################
+    def plot_scalability(self, figname, conf):
+        """
+        updatecnt is related to the result of model convergence 
+        updatecnt .vs. time is a near-linear curve in the burn-in part
+        here try to compare the scalability on updatecnt@1000s
+
+        polyfit it, and predict on updatecnt@10s
+        output <task, updatecnt@1000s>
+
+        draw a curve for each group
+
+        """
+
+        #
+        # normalize the performance of different trainer
+        # 1. byfit means use func fit on the modelupdate.vs.time curve
+        # and then align all the experiment to the same time value
+        # 2. otherwise, assume the experiment runs under the same
+        # total model updatecnt setting, such as set with same iternum
+        #
+        normalize_byfit = True
+        use_x_logscale = False
+        stop_threshold = 8000
+        predict_point = 5000
+    
+        dataflist = []
+        groups={}
+        for tp in self.perfname:
+            name = tp[0] 
+            label = tp[1]
+            fname = name + '.runtime-stat'
+            dataflist.append(fname)
+            fname = name + '.update-stat'
+            dataflist.append(fname)
+
+        self.perfdata.load(dataflist, quit_on_fail=False)
+
+        iterNumber = 10
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            #for simple, just write the tasknum here
+            tasknum = tp[2]
+            if label in groups:
+                groups[label].append((name, tasknum))
+            else:
+                groups[label] = [(name,tasknum)]
+
+
+        # get the throughput data
+
+        # twin plot the time/update count bar chart
+        seq = 0
+        width = 0.2
+        curveCnt = len(groups.keys())
+        maxX = 0
+        rects = []
+        for label in groups.keys():
+            curve = []
+            groupdata = groups[label]
+            for idx in range(len(groupdata)):
+                # get the data
+                #pfdata = self.perfdata[groupdata[idx][0]]
+                logger.debug('load data for %s, shape=', groupdata[idx][0])
+
+                if normalize_byfit:
+                    # updatecnt = self.perfdata[groupdata[idx][0] + '.update-stat'][5]
+                    timeout = self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:]
+                    iterIdx = np.arange(timeout.shape[0])
+                    update_name = groupdata[idx][0] + '.update-stat'
+                    if self.perfdata[update_name] is not None:
+                        realIterId = self.perfdata[update_name][5][iterIdx]
+                    else:
+                        realIterId = iterIdx + 1
+                    updatecnt = realIterId
+
+                    logger.info('updatecnt: %s', updatecnt)
+                    logger.info('timeout: %s', timeout)
+
+                    #find stop at 1000s
+                    stopat = np.sum(timeout < stop_threshold)
+                    updatecnt = updatecnt[:stopat]
+                    timeout = timeout[:stopat]
+                    logger.info('updatecnt: %s', updatecnt)
+                    logger.info('timeout: %s', timeout)
+
+
+                    # fit the curve
+                    z = np.polyfit(timeout, updatecnt, 2)
+                    p = np.poly1d(z)
+                    logger.info('polyfit all, z = %s, ratio=%f, val(4000)=%s', z, z[0]/z[1], p(predict_point))
+                    # add a item <tasknum, updatecnt@10s>
+                    curve.append([int(groupdata[idx][1]), p(predict_point)])
+
+            mat = np.array(curve)
+            #speed up = t1/tn
+            #_x = np.arange(1, mat.shape[0]+1)
+            
+            #use log scale for thread number
+            if use_x_logscale:
+                _x = np.log2(mat[:,0]).astype(np.int)
+            else:
+                _x = np.arange(mat[:,0].shape[0])
+
+            #logger.info('mat = %s',mat)
+            #logger.info('bar %s,%s,%s',_x, mat[:,0],mat[:,1])
+            #ax2.bar(mat[:,0]+seq*width, mat[:,1], width, color=self.colors_orig[seq])
+            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig[seq])
+            rects.append(bars)
+            seq += 1
+            if (mat[:,0][-1] > maxX):
+                maxX = mat[:,0][-1]
+
+        # 
+        self.curax.set_ylabel('Model Update Count@1000s' if normalize_byfit else
+                "Training Time Per Iteration(s)")
+        if use_x_logscale:
+            _x = np.arange(maxX)
+            self.curax.set_xticks(_x)
+            self.curax.set_xticklabels(np.exp2(_x).astype(np.int))
+        else:
+            self.curax.set_xticks(_x)
+            self.curax.set_xticklabels(mat[:,0].astype(np.int))
+ 
+
+        self.curax.set_xlabel('Task/Thread Number')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('LDA Trainer Scalability')
+
+        for rect in rects:
+            self.autolabel(rect)
+
+
+
+        # plot speedup, each group is a curve
+        ax2 = self.curax.twinx()
+        seq = 0
+        rects = []
+        for label in groups.keys():
+            curve = []
+            groupdata = groups[label]
+            for idx in range(len(groupdata)):
+                # get the data
+                logger.debug('load data for %s, shape=', groupdata[idx][0])
+                if normalize_byfit:
+                    # updatecnt = self.perfdata[groupdata[idx][0] + '.update-stat'][5]
+                    timeout = self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:]
+                    iterIdx = np.arange(timeout.shape[0])
+                    update_name = groupdata[idx][0] + '.update-stat'
+                    if self.perfdata[update_name] is not None:
+                        realIterId = self.perfdata[update_name][5][iterIdx]
+                    else:
+                        realIterId = iterIdx + 1
+                    updatecnt = realIterId
+ 
+
+                    #find stop at 1000s
+                    stopat = np.sum(timeout < stop_threshold)
+                    updatecnt = updatecnt[:stopat]
+                    timeout = timeout[:stopat]
+
+
+                    # fit the curve
+                    z = np.polyfit(timeout, updatecnt, 2)
+                    p = np.poly1d(z)
+                    logger.info('polyfit all, z = %s, ratio=%f, val(predict_point)=%s', z, z[0]/z[1], p(predict_point))
+                    # add a item <tasknum, updatecnt@10s>
+                    curve.append([int(groupdata[idx][1]), p(predict_point)])
+
+            mat = np.array(curve)
+            #speed up = t1/tn
+            #self.curax.plot(mat[:,0], mat[0,1] *1.0 / mat[:,1], self.colors_orig[seq]+'.-', label = label)
+            #_x = np.arange(1, mat.shape[0]+1)
+            #_x = np.arange(mat.shape[0])
+            if use_x_logscale:
+                _x = np.log2(mat[:,0]).astype(np.int)
+            else:
+                #_x = mat[:,0]
+                _x = np.arange(mat[:,0].shape[0])
+
+
+            #ax2.plot(_x + curveCnt*width*1./2, mat[0,1] *1.0 / mat[:,1], self.colors_orig[seq]+'.-', label = label)
+            # plots = ax2.plot(_x , mat[:,1] *1.0 / mat[0,1], self.colors_orig[seq+1]+'.-', label = label)
+            #_y = mat[0,1] *1.0 / mat[:,1]
+            plots = ax2.plot(_x , mat[:,1] *1.0 / mat[0,1], self.colors_orig[seq]+'.-', label = label)
+            _y = mat[:,1] *1.0 / mat[0,1]
+            for _p in range(_x.shape[0]):
+                #ax2.text(_x +0.2, mat[0,1] *1.0 / mat[:,1] - 0.2,  '%.1f'%(mat[0,1] *1.0 / mat[:,1]))
+                ax2.text(_x[_p] +0.2, _y[_p]- 0.2,  '%.1f'%(_y[_p]))
+            rects.append(plots)
+
+            seq += 1
+
+        # 
+        ax2.set_ylabel("SpeedUp ModelUpdate(N)/ModelUpdate(1)")
+
+        ax2.legend(loc = 0)
+        #for rect in rects:
+            #self.autolabel(rect)
+
+        if figname:
+            self.savefig(figname)
+
+
+
+
+    #############################################
+    def plot_throughput_runtime(self, figname, conf):
+        return self.plot_throughput(0, figname, conf)
+
+    def plot_accthroughput_runtime(self, figname, conf):
+        return self.plot_throughput(1, figname, conf)
+
+
+    def plot_throughput(self, plottype, figname, conf):
+        """
+        throughput is the model update count/s
+        acc_throughput is the accumulate update count by time
+
+        plottype:
+            0   throughput .vs. traintime   ; update throughput
+            1   acc_throughput .vs. traintime  ; accumulate updates
+        """
+        dataflist = []
+        #for name,label in self.perfname:
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            fname = name + '.comput-stat'
+            dataflist.append(fname)
+            fname = name + '.runtime-stat'
+            dataflist.append(fname)
+            fname = name + '.iter-stat'
+            dataflist.append(fname)
+            fname = name + '.update-stat'
+            dataflist.append(fname)
+
+        self.perfdata.load(dataflist, False)
+
+        accuracy = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+ 
+            lh_name = name + '.comput-stat'
+            runtime_name = name + '.runtime-stat'
+            itertime_name = name + '.iter-stat'
+            update_name = name + '.update-stat'
+
+            # code modified from plot_accuracy
+            # change .comput-stat to .likelihood like format
+            cvVector = self.perfdata[lh_name][3] / self.perfdata[lh_name][2]
+            iterNumber = cvVector.shape[0]
+            #
+            # get (iternum, runttime-mean, perplexity, label)
+            # 
+            #
+            logger.debug('runtime_name=%s', runtime_name)
+            # start overhead = apptime - traintime 
+            if plottype == 2:
+                # use overall time
+                offset = self.perfdata[runtime_name][2,0] - self.perfdata[runtime_name][2,1] 
+            else:
+                offset = 0
+
+            itertimeMat = np.cumsum(self.perfdata[itertime_name][2,:]) / 1000.
+
+            # convert iteration index number into real iternumber
+            iterIdx = np.arange(iterNumber)
+            if self.perfdata[update_name] is not None:
+                realIterId = self.perfdata[update_name][5][iterIdx]
+            else:
+                realIterId = iterIdx + 1
+
+            accuracy.append((iterIdx, 
+                        self.perfdata[runtime_name][2,2:] + offset,
+                        cvVector, label, itertimeMat,
+                        realIterId))
+
+        #fig, ax = plt.subplots()
+        #setup the line style and mark, colors, etc
+        colors = self.colors
+        lines = self.lines
+
+        if 'lines' in conf:
+            lines = conf['lines']
+        if 'colors' in conf:
+            colors = conf['colors']
+
+
+        #grp_size = len(accuracy)/2
+        # data is two group, one in ib, other in eth
+        _trace_shortest_x = 1e+12
+        
+        grp_size = len(accuracy)
+        for idx in range(grp_size):
+            if plottype == 1:
+                x = accuracy[idx][0]
+                #convert iternum to runtime
+                x = accuracy[idx][1][x]
+                y = np.cumsum(accuracy[idx][5])
+                self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
+            else:
+                x = accuracy[idx][0]
+                #convert iternum to runtime
+                x = accuracy[idx][1][x]
+                self.curax.plot(x, accuracy[idx][5], lines[idx], color=colors[idx], label = accuracy[idx][3])
+            
+
+                #try plotfit
+                z = np.polyfit(x, accuracy[idx][5], 2)
+                p = np.poly1d(z)
+                self.curax.plot(x, p(x), lines[idx], color=colors[idx], label = accuracy[idx][3])
+
+
+
+
+            _trace_shortest_x = min(_trace_shortest_x, x[-1])
+
+        #self.curax.set_ylabel('Model Perplexity')
+        if self.use_shortest_x:
+            self.curax.set_xlim(0, _trace_shortest_x)
+    
+        self.curax.set_xlabel('Training Time (s)')
+        if plottype == 0:
+            self.curax.set_ylabel('Throughput')
+        elif plottype == 1:
+            self.curax.set_ylabel('Accumulate Throughput')
+
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('LDA Trainer Throughput')
+        #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        self.curax.legend(loc = 0)
+        #add xlim and ylim by conf
+        if 'xlim' in conf:
+            if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
+                self.curax.set_xlim(0, conf['xlim'])
+        if 'ylim' in conf:
+            self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
+
+
+        if figname:
+            #plt.savefig('full-'+figname)
+            #self.curax.set_ylim(0, 350)
+            #plt.savefig('tail-'+figname)
+            self.savefig(figname)
+
 
     #############################################
     def plot_comm_breakdown_top(self, figname, conf):

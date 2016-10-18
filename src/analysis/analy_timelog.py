@@ -66,6 +66,7 @@ class LDATrainerLog():
         "mallet":"^([0-9]+)ms",
         "harp-clock":"(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)",
         "harp-newformat":"Iteration ([0-9]*): ([0-9]*), compute time: ([0-9]*), comm time: ([0-9]*)",
+        "harp-newformat2":"Iteration ([0-9]*): ([0-9]*), compute time: ([0-9]*), misc: ([0-9]*)",
         #"harp-numTokens":"numTokens: ([0-9]*), schedule: [0-9]*",
         "harp-numTokens":"numTokens: ([0-9]*), percentage",
         "harp-compute":"Compute time: ([0-9]*), comm time: ([0-9]*)",
@@ -399,7 +400,8 @@ class LDATrainerLog():
         for line in logf:
 
             #new format first
-            m = re.search(self.pattern[self.name+'-newformat'], line)
+            #m = re.search(self.pattern[self.name+'-newformat'], line)
+            m = re.search(self.pattern[self.name+'-newformat2'], line)
             if m:
                 elapsed.append( (int(m.group(3)), int(m.group(4))) )
 
@@ -464,6 +466,8 @@ class LDATrainerLog():
             if len(models[idx][1]) > iternum:
                 iternum =  len(models[idx][1]) 
         # there should all be the same
+        logger.info('total %d iterations, %d nodes, shape=%s', iternum, nodenum, models[0])
+
         totalNumTokens = models[0][6]
 
         logger.info('total %d iterations, %d nodes, totalNumTokens=%d', iternum, nodenum, totalNumTokens)
