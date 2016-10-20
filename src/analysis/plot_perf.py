@@ -289,6 +289,7 @@ class PlotEngine():
         #default setting
         self.colors = self.colors_orig
         self.lines = ['.-'] * 10
+        self.lines2 = ['--'] * 10
 
         self.use_shortest_x = use_shortest_x
 
@@ -1053,7 +1054,7 @@ class PlotEngine():
         normalize_byfit = True
         use_x_logscale = False
         stop_threshold = 8000
-        predict_point = 5000
+        predict_point = 2000
     
         dataflist = []
         groups={}
@@ -1315,6 +1316,7 @@ class PlotEngine():
         #setup the line style and mark, colors, etc
         colors = self.colors
         lines = self.lines
+        lines2 = self.lines2
 
         if 'lines' in conf:
             lines = conf['lines']
@@ -1344,7 +1346,7 @@ class PlotEngine():
                 #try plotfit
                 z = np.polyfit(x, accuracy[idx][5], 2)
                 p = np.poly1d(z)
-                self.curax.plot(x, p(x), lines[idx], color=colors[idx], label = accuracy[idx][3])
+                self.curax.plot(x, p(x), lines2[idx], color=colors[idx], label = accuracy[idx][3])
 
 
 
