@@ -431,7 +431,10 @@ class PlotEngine():
             # ax.bar(ind + width*idx, overall_time[idx][0], width, label = overall_time[idx][1])
             rects.append(self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx], label = groupname[idx]))
 
-        self.curax.set_xlabel('Model Log-Likelihood')
+        if 'xlabel' in conf:
+            self.curax.set_xlabel(conf['xlabel'])
+        else:
+            self.curax.set_xlabel('Model Log-Likelihood')
         self.curax.set_ylabel('Training Time (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
@@ -439,13 +442,19 @@ class PlotEngine():
             self.curax.set_title('LDA Trainer Convergence')
         self.curax.set_xticks(ind+width)
         #set xticklabel to levels
-        xticks = ['%.2e'%x for x in overall_time[0][:,0]]
+        if 'xticks' in conf:
+            xticks = conf['xticks']
+        else:
+            xticks = ['%.2e'%x for x in overall_time[0][:,0]]
         self.curax.set_xticklabels( xticks)
 
         for rect in rects:
             self.autolabel(rect, realnum=True)
 
-        self.curax.legend(loc = 2)
+        if 'loc' in conf:
+            self.curax.legend(loc = conf['loc'])
+        else:
+            self.curax.legend(loc = 2)
         if figname:
             self.savefig(figname)
 
