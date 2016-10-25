@@ -1139,6 +1139,188 @@ class PlotEngine():
     def plot_scalability(self, figname, conf):
         """
         updatecnt is related to the result of model convergence 
+        updatecnt .vs. time is a linear curve
+        here try to compare the scalability on updatecnt@10s
+
+        each xxx_taskxthread.rmse held a updatecnt .vs. time curve
+        polyfit it, and predict on updatecnt@10s
+        output <task, updatecnt@10s>
+
+        draw a curve for each group
+
+        """
+
+        #
+        # normalize the performance of different trainer
+        # 1. byfit means use func fit on the modelupdate.vs.time curve
+        # and then align all the experiment to the same time value
+        # 2. otherwise, assume the experiment runs under the same
+        # total model updatecnt setting, such as set with same iternum
+        #
+        normalize_byfit = True
+        use_x_logscale = False
+        stop_threshold = 8000
+        predict_pt =  8000
+
+        dataflist = []
+        groups={}
+        for tp in self.perfname:
+            name = tp[0] 
+            label = tp[1]
+            fname = name + '.runtime-stat'
+            dataflist.append(fname)
+            fname = name + '.update-stat'
+            dataflist.append(fname)
+
+        self.perfdata.load(dataflist, quit_on_fail=False)
+
+        iterNumber = 10
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            #for simple, just write the tasknum here
+            tasknum = tp[2]
+            if label in groups:
+                groups[label].append((name, tasknum))
+            else:
+                groups[label] = [(name,tasknum)]
+
+        # twin plot the time/update count bar chart
+        ax2 = self.curax.twinx()
+        seq = 0
+        width = 0.2
+        curveCnt = len(groups.keys())
+        maxX = 0
+        rects = []
+        for label in groups.keys():
+            curve = []
+            groupdata = groups[label]
+
+            #
+            # load data for this group <name, tasknum>
+            #
+            groupdata = sorted(groupdata, key = lambda item: item[1])
+
+            _min_rowcnt = np.min([ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:].shape[0] for idx  in range(len(groupdata))])
+            logger.info('min rowcnt=%s', _min_rowcnt)
+            raw_timeout = [ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:2+_min_rowcnt]  for idx  in range(len(groupdata))]
+
+
+            #updatecnt
+            iterIdx = np.arange(_min_rowcnt)
+            raw_updatecnt = []
+            for idx in range(len(groupdata)):
+                update_name = groupdata[idx][0] + '.update-stat'
+                if self.perfdata[update_name] is not None:
+                    realIterId = self.perfdata[update_name][4][iterIdx]
+                else:
+                    realIterId = (iterIdx + 1) * self.getTrainsetSize(groupdata[idx][0])
+
+                updatecnt = realIterId 
+                #logger.info('updatecnt: %s', updatecnt)
+                raw_updatecnt.append(updatecnt)
+
+            logger.info('groupdata = %s', groupdata)
+            #logger.info('tiem_out= %s', raw_timeout)
+            #logger.info('raw_updatecnt = %s', raw_updatecnt)
+
+            countindex = []
+            curcount = 1
+            lasttasknum = groupdata[0][1]
+            for idx in range(1,len(groupdata)+1):
+                if idx != len(groupdata):
+                    curtasknum = groupdata[idx][1]
+                else:
+                    curtasknum = -1
+
+                if lasttasknum != curtasknum:
+                    #save the last one
+                    countindex.append((idx - curcount, idx, lasttasknum))
+                    #reset
+                    curcount = 1
+                    lasttasknum = curtasknum
+                else:
+                    curcount += 1
+
+            logger.info('countindex=%s', countindex)
+
+            # do mean/std on countindex[start, end, tasknum]
+            for idx in range(len(countindex)):
+                item = countindex[idx]
+                predict = []
+                for lineid in range(item[0], item[1]):
+                    updatecnt = raw_updatecnt[lineid]
+                    timeout = raw_timeout[lineid]
+
+                    # fit the curve
+                    z = np.polyfit(timeout, updatecnt, 2)
+                    predict.append( np.poly1d(z)(predict_pt) )
+ 
+                    # add a item <tasknum, updatecnt@10s>
+                curve.append([int(item[2]), np.mean(predict), np.std(predict)])
+    
+
+            logger.info('curves: %s', curve)
+
+            mat = np.array(curve)
+            #speed up = t1/tn
+            #_x = np.arange(1, mat.shape[0]+1)
+            if use_x_logscale:
+                _x = np.log2(mat[:,0]).astype(np.int)
+            else:
+                _x = np.arange(mat[:,0].shape[0])
+
+
+            #logger.info('mat = %s',mat)
+            #logger.info('bar %s,%s,%s',_x, mat[:,0],mat[:,1])
+
+            ### draw bar chart
+            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig_shade[seq],yerr = mat[:,2])
+            rects.append(bars)
+            #if (mat[:,0][-1] > maxX):
+            #    maxX = mat[:,0][-1]
+
+            ### draw speedup line
+            _y = mat[:,1] *1.0 / mat[0,1]
+            plots = ax2.plot(_x , _y, self.colors_orig[seq]+'.-', label = label)
+            for _p in range(_x.shape[0]):
+                ax2.text(_x[_p] - 0.1, _y[_p]+0.003,'%.1f'%(_y[_p]))
+            
+            #go to next group
+            seq += 1
+
+        ### end draw
+        self.curax.set_ylabel('Model Update Count@%ds'%predict_pt if normalize_byfit else
+                "Training Time Per Iteration(s)")
+        if use_x_logscale:
+            _x = np.arange(maxX)
+            self.curax.set_xticks(_x)
+            self.curax.set_xticklabels(np.exp2(_x).astype(np.int))
+        else:
+            self.curax.set_xticks(_x)
+            self.curax.set_xticklabels(mat[:,0].astype(np.int))
+ 
+        self.curax.set_xlabel('Nodes Number')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('LDA Trainer Scalability')
+
+        #finally , update the recs
+        for rect in rects:
+            self.autolabel(rect)
+
+        ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
+
+        ax2.legend(loc = 0)
+
+        if figname:
+            self.savefig(figname)
+
+
+    def plot_scalability_nomeanstd(self, figname, conf):
+        """
+        updatecnt is related to the result of model convergence 
         updatecnt .vs. time is a near-linear curve in the burn-in part
         here try to compare the scalability on updatecnt@1000s
 
