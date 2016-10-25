@@ -249,6 +249,7 @@ class PlotEngine():
 
     def __init__(self, use_shortest_x = True):
         self.ploters = {
+            "converge_level":self.plot_converge_level,
             "overall_runtime":self.plot_overall_app,
             "overall_traintime":self.plot_overall_train,
             "accuracy_iter":self.plot_accuracy_iter,
@@ -281,6 +282,7 @@ class PlotEngine():
         self.set_subplot(1,1)
 
         self.colors_orig=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']
+        self.colors_orig_shade=['#ff8080','#8080ff','#80ff80', 'm','c','y','k','r','b','m','g','c','y','k']
         #self.colors=[(name, hex) for name, hex in matplotlib.colors.cnames.iteritems()]
         #self.colors=[hex for name, hex in matplotlib.colors.cnames.iteritems()]
         self.colors_stackbar=['r','y','b','g', 'm','c','y','k','r','y','b','g','m','c','y','k']
@@ -336,14 +338,14 @@ class PlotEngine():
         self.fig.tight_layout()
         self.fig.savefig(figname)
 
-    def autolabel(self, rects):
+    def autolabel(self, rects, realnum = False):
         """
         input:
             bar
         """
         for rect in rects:
             height = rect.get_height()
-            self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%.2f'%float(height),
+            self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%.1e'%float(height) if realnum==False else '%.0f'%float(height),
                         ha='center', va='bottom')
 
     def autolabel_stack(self, rects):
@@ -377,7 +379,99 @@ class PlotEngine():
             #1. curve fit on the first line
         pass
 
-    ######################3
+
+
+    ######################
+    def plot_converge_level(self, figname, conf):
+        """
+        .convege file input
+            level traintime
+
+        """
+        dataflist = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            fname = name + '.converge'
+            dataflist.append(fname)
+
+        self.perfdata.load(dataflist)
+
+        overall_time = []
+        groupname = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            fname = name + '.converge'
+            overall_time.append(self.perfdata[fname])
+            groupname.append(label)
+
+        grp_size = len(groupname)
+        rects = []
+        N = overall_time[0].shape[0]
+        ind = np.arange(N) + 0.10
+        width = 1. / grp_size - 0.20
+
+        for idx in range(grp_size):
+            #get trainingtime from <level, trainingtime>
+            grp_data = overall_time[idx][:,1]
+            logger.info('val = %s, label=%s', grp_data, groupname[idx])
+            # ax.bar(ind + width*idx, overall_time[idx][0], width, label = overall_time[idx][1])
+            rects.append(self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx], label = groupname[idx]))
+
+        self.curax.set_xlabel('Model Log-Likelihod')
+        self.curax.set_ylabel('Training Time (s)')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('LDA Trainer Convergence')
+        self.curax.set_xticks(ind+width)
+        #set xticklabel to levels
+        xticks = ['%.2e'%x for x in overall_time[0][:,0]]
+        self.curax.set_xticklabels( xticks)
+
+        for rect in rects:
+            self.autolabel(rect, realnum=True)
+
+        #self.curax.legend(loc = 4)
+        self.curax.legend()
+        if figname:
+            self.savefig(figname)
+
+
+    def plot_converge_levelEx(self, figname, figdata ):
+        """
+        input: figdata <label, name, time, ratio>
+
+        """
+        logger.info('figdata=%s, shape=%s', figdata, figdata.shape)
+        labels = figdata[:,0]
+        grp_size = len(figdata)
+        rects = []
+        N = len(figdata)
+        ind = np.arange(N) + 0.10
+        width = 1. / grp_size - 0.20
+
+        for idx in range(grp_size):
+            grp_data = figdata[:,2].astype(np.float)
+            # ax.bar(ind + width*idx, overall_time[idx][0], width, label = overall_time[idx][1])
+            rects.append(self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx], label = labels))
+
+        self.curax.set_ylabel('Training Time (s)')
+        self.curax.set_title('LDA Trainer Convergence')
+        self.curax.set_xticks(ind+width)
+        #self.curax.set_xticklabels( ('ib', 'eth') )
+        self.curax.set_xticklabels(labels)
+
+
+        for rect in rects:
+            self.autolabel(rect)
+
+        self.curax.legend(loc = 4)
+        if figname:
+            self.savefig(figname)
+
+    ######################
     def plot(self, plotname, fig, conf):
         if plotname in self.ploters:
             return self.ploters[plotname](fig, conf)
@@ -1054,7 +1148,7 @@ class PlotEngine():
         normalize_byfit = True
         use_x_logscale = False
         stop_threshold = 8000
-        predict_point = 2000
+        predict_point = 4000
     
         dataflist = []
         groups={}
@@ -1138,7 +1232,7 @@ class PlotEngine():
             #logger.info('mat = %s',mat)
             #logger.info('bar %s,%s,%s',_x, mat[:,0],mat[:,1])
             #ax2.bar(mat[:,0]+seq*width, mat[:,1], width, color=self.colors_orig[seq])
-            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig[seq])
+            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig_shade[seq])
             rects.append(bars)
             seq += 1
             if (mat[:,0][-1] > maxX):
@@ -1156,21 +1250,16 @@ class PlotEngine():
             self.curax.set_xticklabels(mat[:,0].astype(np.int))
  
 
-        self.curax.set_xlabel('Task/Thread Number')
+        self.curax.set_xlabel('Nodes Number')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
             self.curax.set_title('LDA Trainer Scalability')
 
-        for rect in rects:
-            self.autolabel(rect)
-
-
 
         # plot speedup, each group is a curve
         ax2 = self.curax.twinx()
         seq = 0
-        rects = []
         for label in groups.keys():
             curve = []
             groupdata = groups[label]
@@ -1200,7 +1289,8 @@ class PlotEngine():
                     p = np.poly1d(z)
                     logger.info('polyfit all, z = %s, ratio=%f, val(predict_point)=%s', z, z[0]/z[1], p(predict_point))
                     # add a item <tasknum, updatecnt@10s>
-                    curve.append([int(groupdata[idx][1]), p(predict_point)])
+                    #curve.append([int(groupdata[idx][1]), p(predict_point)])
+                    curve.append([int(groupdata[idx][1]), p(1000), p(100), p(2000), p(8000),p(12000)])
 
             mat = np.array(curve)
             #speed up = t1/tn
@@ -1213,6 +1303,15 @@ class PlotEngine():
                 #_x = mat[:,0]
                 _x = np.arange(mat[:,0].shape[0])
 
+            if normalize_byfit:
+                logger.info('speedup at different time point: p(100)=%s, p(1000)=%s, p(2000)=%s, p(5000)=%s,p(6000)=%s', 
+                    mat[:,2]*1.0/mat[0,2],
+                    mat[:,1]*1.0/mat[0,1],
+                    mat[:,3]*1.0/mat[0,3],
+                    mat[:,4]*1.0/mat[0,4],
+                    mat[:,5]*1.0/mat[0,5],
+                    )
+
 
             #ax2.plot(_x + curveCnt*width*1./2, mat[0,1] *1.0 / mat[:,1], self.colors_orig[seq]+'.-', label = label)
             # plots = ax2.plot(_x , mat[:,1] *1.0 / mat[0,1], self.colors_orig[seq+1]+'.-', label = label)
@@ -1221,13 +1320,15 @@ class PlotEngine():
             _y = mat[:,1] *1.0 / mat[0,1]
             for _p in range(_x.shape[0]):
                 #ax2.text(_x +0.2, mat[0,1] *1.0 / mat[:,1] - 0.2,  '%.1f'%(mat[0,1] *1.0 / mat[:,1]))
-                ax2.text(_x[_p] +0.2, _y[_p]- 0.2,  '%.1f'%(_y[_p]))
-            rects.append(plots)
+                ax2.text(_x[_p] - 0.1, _y[_p]+0.01,  '%.1f'%(_y[_p]))
+            # rects.append(plots)
 
             seq += 1
 
         # 
-        ax2.set_ylabel("SpeedUp ModelUpdate(N)/ModelUpdate(1)")
+        ax2.set_ylabel("SpeedUp")
+        for rect in rects:
+            self.autolabel(rect)
 
         ax2.legend(loc = 0)
         #for rect in rects:

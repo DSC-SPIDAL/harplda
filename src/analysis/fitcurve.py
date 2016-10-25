@@ -24,19 +24,13 @@ import matplotlib
 matplotlib.use('Svg')
 import matplotlib.pyplot as plt
 import logging
-from analysis.plot_perf import PerfName, PerfData
+from analysis.plot_perf import PerfName, PerfData, PlotEngine
 
 logger = logging.getLogger(__name__)
 
-datadir='../../data'
 
 
-def draw_showvar(confname):
-    conf = {}
-    perfname = PerfName(confname)
-    #ploter.init_data(plotconf.datadir, perfname, plotconf.savefmt)
-    perfdata = PerfData(datadir)
- 
+def draw_showvar(perfdata, perfname):
     dataflist = []
     #for name,label in self.perfname:
     for tp in perfname:
@@ -56,25 +50,26 @@ def draw_showvar(confname):
 
         varMat = np.diff(pdata, axis=0)
         varVec = varMat[1:,1] / varMat[1:,0]
+        logger.info('varVec = %s', varVec)
 
-        for idx in range(1, varVec.shape[0]):
-            print('%s\t:%s\n'%(pdata[idx,1] ,varVec[idx]))
+        for idx in range(varVec.shape[0]):
+            print('%s\t:%s, ratio = %s\n'%(pdata[idx + 1,1] ,varVec[idx], varVec[idx]/pdata[idx+1,1]))
 
 
-def draw_eval(confname, level):
-    conf = {}
-    perfname = PerfName(confname)
-    #ploter.init_data(plotconf.datadir, perfname, plotconf.savefmt)
-    perfdata = PerfData(datadir)
- 
+def draw_eval(perfdata, perfname, level):
+    figdata = []
     dataflist = []
     #for name,label in self.perfname:
     for tp in perfname:
         name = tp[0]
+        label = tp[1]
         fname = name + '.likelihood'
         dataflist.append(fname)
         fname = name + '.runtime-stat'
         dataflist.append(fname)
+
+        figdata.append(label)
+
     perfdata.load(dataflist)
 
     #rmse: iternum, time, rmse,...
@@ -113,16 +108,24 @@ def draw_eval(confname, level):
                 # the base line
                 baseX = iterpolateX
                 print('iter=%s, X = %s, Y = %s, ratio = %s\n'%(iterVec[idx], iterpolateX, rmseVec[idx], iterpolateX / baseX))
-                result.append((perfname.perfname[id][0], iterpolateX, iterpolateX/baseX))
+                result.append([figdata[id],perfname.perfname[id][0], iterpolateX, iterpolateX/baseX])
             else:
                 print('iter=%s, X = %s, Y = %s, ratio = %s\n'%(iterVec[idx], iterpolateX, rmseVec[idx], iterpolateX / baseX))
-                result.append((perfname.perfname[id][0], iterpolateX, iterpolateX/baseX))
+                result.append([figdata[id],perfname.perfname[id][0], iterpolateX, iterpolateX/baseX])
                 break
 
     #output
     print('converge level = %s'%level)
     for item in result:
-        print('%s\t%s\t%s'%(item[0], item[1], item[2]))
+        print('%s\t%s\t%s\t%s'%(item[0], item[1], item[2], item[3]))
+
+        #write into result file
+        with open(item[1] + '.converge' , 'a') as wf:
+            wf.write('%s %s\n'%(level, item[2]))
+
+
+    return np.array(result)
+
 
 if __name__ == "__main__":
     program = os.path.basename(sys.argv[0])
@@ -143,13 +146,19 @@ if __name__ == "__main__":
     drawtype = sys.argv[1]
     confname = sys.argv[2]
 
+    datadir='../../data'
+    conf = {}
+    perfname = PerfName(confname)
+    #ploter.init_data(plotconf.datadir, perfname, plotconf.savefmt)
+    perfdata = PerfData(datadir)
+    
     if drawtype == '-showvar':
-        draw_showvar(confname)
+        draw_showvar(perfdata, perfname)
     elif drawtype == '-eval':
         if len(sys.argv) >= 4:
             convlevel = float(sys.argv[3])
             logger.info('set convergence level as : %s', convlevel)
-            draw_eval(confname, convlevel)
+            draw_eval(perfdata, perfname, convlevel)
         else:
             logger.error(globals()['__doc__'] % locals())
 
