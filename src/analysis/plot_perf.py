@@ -295,6 +295,18 @@ class PlotEngine():
 
         self.use_shortest_x = use_shortest_x
 
+        self.dataset={
+            'clueweb30':29911407874,
+            'enwiki':1107903672
+        }
+
+    def getTrainsetSize(self,fname):
+        for name in self.dataset.keys():
+            if fname.find(name) > 0:
+                return self.dataset[name]
+        logger.error('getTrainsetSize(%s) failed', fname)
+        return 0
+
     def init_data(self, datadir, perfname):
         """
         perfdata is PerfData object
@@ -419,7 +431,7 @@ class PlotEngine():
             # ax.bar(ind + width*idx, overall_time[idx][0], width, label = overall_time[idx][1])
             rects.append(self.curax.bar(ind + width*idx, grp_data, width, color=self.colors[idx], label = groupname[idx]))
 
-        self.curax.set_xlabel('Model Log-Likelihod')
+        self.curax.set_xlabel('Model Log-Likelihood')
         self.curax.set_ylabel('Training Time (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
@@ -433,8 +445,7 @@ class PlotEngine():
         for rect in rects:
             self.autolabel(rect, realnum=True)
 
-        #self.curax.legend(loc = 4)
-        self.curax.legend()
+        self.curax.legend(loc = 2)
         if figname:
             self.savefig(figname)
 
@@ -1148,7 +1159,7 @@ class PlotEngine():
         normalize_byfit = True
         use_x_logscale = False
         stop_threshold = 8000
-        predict_point = 4000
+        predict_point = 8000
     
         dataflist = []
         groups={}
@@ -1196,11 +1207,11 @@ class PlotEngine():
                     iterIdx = np.arange(timeout.shape[0])
                     update_name = groupdata[idx][0] + '.update-stat'
                     if self.perfdata[update_name] is not None:
-                        realIterId = self.perfdata[update_name][5][iterIdx]
+                        realIterId = self.perfdata[update_name][4][iterIdx]
                     else:
-                        realIterId = iterIdx + 1
-                    updatecnt = realIterId
+                        realIterId = (iterIdx + 1) * self.getTrainsetSize(groupdata[idx][0])
 
+                    updatecnt = realIterId 
                     logger.info('updatecnt: %s', updatecnt)
                     logger.info('timeout: %s', timeout)
 
@@ -1239,7 +1250,7 @@ class PlotEngine():
                 maxX = mat[:,0][-1]
 
         # 
-        self.curax.set_ylabel('Model Update Count@1000s' if normalize_byfit else
+        self.curax.set_ylabel('Model Update Count@%ds'%predict_point if normalize_byfit else
                 "Training Time Per Iteration(s)")
         if use_x_logscale:
             _x = np.arange(maxX)
@@ -1272,9 +1283,9 @@ class PlotEngine():
                     iterIdx = np.arange(timeout.shape[0])
                     update_name = groupdata[idx][0] + '.update-stat'
                     if self.perfdata[update_name] is not None:
-                        realIterId = self.perfdata[update_name][5][iterIdx]
+                        realIterId = self.perfdata[update_name][4][iterIdx]
                     else:
-                        realIterId = iterIdx + 1
+                        realIterId = (iterIdx + 1) * self.getTrainsetSize(groupdata[idx][0])
                     updatecnt = realIterId
  
 
@@ -1290,7 +1301,7 @@ class PlotEngine():
                     logger.info('polyfit all, z = %s, ratio=%f, val(predict_point)=%s', z, z[0]/z[1], p(predict_point))
                     # add a item <tasknum, updatecnt@10s>
                     #curve.append([int(groupdata[idx][1]), p(predict_point)])
-                    curve.append([int(groupdata[idx][1]), p(1000), p(100), p(2000), p(8000),p(12000)])
+                    curve.append([int(groupdata[idx][1]), p(predict_point), p(1000), p(2000), p(8000),p(12000)])
 
             mat = np.array(curve)
             #speed up = t1/tn
