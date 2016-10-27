@@ -743,7 +743,8 @@ class PlotEngine():
         elif plottype == 2:
             self.curax.set_xlabel('Execution Time (s)')
         elif plottype ==3:
-            self.curax.set_xlabel('Iteration Time (s)')
+            #self.curax.set_xlabel('Iteration Time (s)')
+            self.curax.set_xlabel('Training Time (s)')
 
 
         if 'title' in conf:
@@ -1121,7 +1122,8 @@ class PlotEngine():
         elif plottype == 2:
             self.curax.set_xlabel('Execution Time (s)')
         elif plottype ==3:
-            self.curax.set_xlabel('Iteration Time (s)')
+            #self.curax.set_xlabel('Iteration Time (s)')
+            self.curax.set_xlabel('Training Time (s)')
 
 
         if 'title' in conf:
