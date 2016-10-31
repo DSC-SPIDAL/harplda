@@ -1,0 +1,13 @@
+#application_1476393948100_0026	90	20	LDA	with timer tuning	1000
+#application_1476393948100_0027	60	30	LDA	with timer tuning	1000
+#application_1476393948100_0032	25	40	LDA	with timer tuning	1000
+#application_1476393948100_0033	50	40	LDA	with timer tuning	1000
+#application_1476393948100_0034	75	40	LDA	with timer tuning	1000
+
+
+sh ./analy_harp.sh lda2540t application_1476393948100_0032 harp_clueweb30b_25x40_ipdps_0032
+sh ./analy_harp.sh lda5040t application_1476393948100_0033 harp_clueweb30b_50x40_ipdps_0033
+sh ./analy_harp.sh lda7540t application_1476393948100_0034 harp_clueweb30b_75x40_ipdps_0034
+sh ./analy_harp.sh lda6030t application_1476393948100_0027 harp_clueweb30b_60x30_ipdps_0027
+sh ./analy_harp.sh lda9020t application_1476393948100_0026 harp_clueweb30b_90x20_ipdps_0026
+

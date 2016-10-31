@@ -1,0 +1,20 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+ylda=/tmp/fg474/ylda
+workroot=/tmp/fg474/ylda-test-clueweb/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=juliet-100
+
+# enwiki-1M on juliet
+datadir=/tmp/fg474/data/clueweb-100/
+topics=10000
+iter=200
+alpha=100
+beta=0.01
+threads=40
+
+

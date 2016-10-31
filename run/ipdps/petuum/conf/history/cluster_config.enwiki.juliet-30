@@ -1,0 +1,23 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+workroot=/mnt/vol2/pengb/hpda/test/petuum-30/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=juliet-30
+ldall=/N/u/pengb/hpda/petuum/strads/apps/lda_release/bin/ldall
+
+# enwiki-1M on juliet
+#datadir=/mnt/vol1/pengb/hpda/test/ylda/enwiki-1M/
+#datafile=enwiki-1M.id.txt.ylda
+datadir=/mnt/vol1/data/enwiki-30/
+datafile=enwiki-reid.ylda
+topics=10000
+iter=300
+alpha=100
+beta=0.01
+threads=16
+
+

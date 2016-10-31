@@ -1,0 +1,25 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+workroot=/tmp/fg474/petuum-100/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=juliet-10
+ldall=/N/u/pengb/hpda/petuum/strads/apps/lda_release/bin/ldall
+
+# enwiki-1M on juliet
+#datadir=/N/u/pengb/hpda/data/clueweb/
+#datadir=/opt/hadoop-2.6.0/data/clueweb-100/
+#datadir=/N/u/fg474admin/hpda/data/
+#datafile=clueweb-30B.ylda
+datadir=/share/jproject/fg474/dataset/enwiki-1M/petuum-10/
+datafile=enwiki-1M.id.txt.ylda
+topics=10000
+iter=120
+alpha=100
+beta=0.01
+threads=30
+
+
