@@ -1,0 +1,9 @@
+
+Here is an example to generate the format for nips dataset from UCI
+===================================================================
+
+$ mkdir nips; cd nips 
+$ wget https://archive.ics.uci.edu/ml/machine-learning-databases/bag-of-words/docword.nips.txt.gz
+$ gunzip docword.nips.txt.gz
+$ ../gendata.py docword.nips.txt 1500 # 1500 is the number of documents in docword.nips.txt
+$ cd ..; ../lda-converter -m 1024 nips # create petsc binary format for the doc-word-matrix

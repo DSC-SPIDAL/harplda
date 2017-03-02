@@ -15,7 +15,7 @@ EOF
 
 localdir="/scratch/logs/userlogs"
 
-sharedir="/mnt/vol1/hadooplog"
+sharedir="/tmp/hpda/hadooplog"
 
 if [ $# -ne '1' ] ; then
     help
