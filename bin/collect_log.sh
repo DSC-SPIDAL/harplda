@@ -13,16 +13,27 @@ cat <<EOF
 EOF
 }
 
-localdir="/scratch/logs/userlogs"
+#detct cluster
+hostid=`hostname | grep -c "^t"`
+if [ $hostid -eq "1" ] ; then
+    # tango
+    localdir="/scratch/logs/userlogs"
+    sharedir="/scratch/hadooplog"
+    resourcemanager="t-006"
+else
+    #juliet
+    localdir="/scratch/logs/userlogs"
+    sharedir="/mnt/vol1/hadooplog"
+    resourcemanager="j-128"
+fi
 
-sharedir="/tmp/hpda/hadooplog"
 
 if [ $# -ne '1' ] ; then
     help
     exit 0
 fi
 
-name=`grep -Po "APPID=(.*)\t" /scratch/logs/yarn-fg474admin-resourcemanager-j-128.log | grep -Po "application_(.*)" |uniq | tail -n 1`
+name=`grep -Po "APPID=(.*)\t" /scratch/logs/yarn-fg474admin-resourcemanager-$resourcemanager.log | grep -Po "application_(.*)" |uniq | tail -n 1`
 echo 'found the last appname=$name'
 
 
