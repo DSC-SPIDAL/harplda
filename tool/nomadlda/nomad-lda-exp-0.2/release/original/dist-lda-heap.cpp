@@ -1,18 +1,8 @@
 #include "dist-lda-heap.h"
 
 #define ROOT 0 // Root procid
-#include <sys/time.h>
-#include <time.h>
 
 enum {INIT, GO, EVAL, STOP}; // system.status
-
-uint64_t timenow(void)
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return ((uint64_t)(tv.tv_sec) * 1000000 + tv.tv_usec);
-}
-
 
 inline int get_procid() { // {{{
 	int mpi_rank(-1);
@@ -976,27 +966,27 @@ double compute_training_LL(comm_space_t &space) { // {{{
 	auto alphabar = alpha*dim, betabar = beta*model.nr_words;
 
 	double LL = 0, localLL = 0;
-//#pragma omp parallel for reduction(+:localLL)
-//	for(auto doc = training.start_doc; doc < training.end_doc; doc++) {
-//		auto &Nd = Ndt[doc];
-//		var_t sum_Nd = 0;
-//		double tmpLL = 0.0;
-//		for(auto &elem: Nd) {
-//			tmpLL += lgamma(alpha+elem.value) - lgamma(alpha);
-//			sum_Nd += elem.value;
-//		}
-//		/*
-//		for(auto t = 0U; t < dim; t++) {
-//			if ( Nd[t] != 0 ) {
-//				tmpLL += lgamma(alpha+ Nd[t]) - lgamma(alpha);
-//				sum_Nd += Nd[t];
-//			}
-//		}
-//		*/
-//		tmpLL += lgamma(alphabar) - lgamma(alphabar + sum_Nd);
-//		localLL += tmpLL;
-//	}
-//	MPI_Allreduce(&localLL, &LL, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+#pragma omp parallel for reduction(+:localLL)
+	for(auto doc = training.start_doc; doc < training.end_doc; doc++) {
+		auto &Nd = Ndt[doc];
+		var_t sum_Nd = 0;
+		double tmpLL = 0.0;
+		for(auto &elem: Nd) {
+			tmpLL += lgamma(alpha+elem.value) - lgamma(alpha);
+			sum_Nd += elem.value;
+		}
+		/*
+		for(auto t = 0U; t < dim; t++) {
+			if ( Nd[t] != 0 ) {
+				tmpLL += lgamma(alpha+ Nd[t]) - lgamma(alpha);
+				sum_Nd += Nd[t];
+			}
+		}
+		*/
+		tmpLL += lgamma(alphabar) - lgamma(alphabar + sum_Nd);
+		localLL += tmpLL;
+	}
+	MPI_Allreduce(&localLL, &LL, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
 	vec_t Nt(dim);
 	size_t nonZeroTypeTopics = 0;
@@ -1214,9 +1204,7 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 		}
 	}
 	double totaltime = 0.;
-    double _elapse = 0.;
 	for(auto iter = 0; iter < param.maxiter; iter++) {
-        uint64_t _start = timenow();
 		if(param.nr_procs == 1) {
 			space.start_running(thread_id);
 			sampler_fun(thread_id, space);
@@ -1241,8 +1229,8 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 				MPI_Allreduce(&local_tokens, &global_tokens, 1, MPI_LONG_LONG, MPI_SUM, MPI_COMM_WORLD);
 			}
 		}// }}}
-		double timex = omp_get_wtime() - space.starttime;
-		totaltime += timex;
+		double time = omp_get_wtime() - space.starttime;
+		totaltime += time;
 
 #ifndef NDEBUG
 		if(procid == ROOT) { printf("origin"); for(auto i : space.tokens_of_proc) printf("%ld ", i); puts(""); }
@@ -1295,8 +1283,6 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 
 		//}}}
 
-        uint64_t _end1 = timenow();
-
 		double train_LL = compute_training_LL(space);
 		double test_perplexity = 0; 
 		if(space.param.do_predict)
@@ -1307,18 +1293,8 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 		MPI_Allreduce(&local_Nwt_cnt, &Nwt_cnt, 1, MPI_LONG_LONG, MPI_SUM, MPI_COMM_WORLD);
 		MPI_Allreduce(&local_Nt_cnt, &Nt_cnt, 1, MPI_LONG_LONG, MPI_SUM, MPI_COMM_WORLD);
 
-        uint64_t _end2 = timenow();
-        _elapse += (_end2 - _start)/1000000.0;
-
 		if(procid == ROOT) {
-            time_t rawtime;
-            struct tm * timeinfo;
-            time(&rawtime);
-            timeinfo = localtime(&rawtime);
-            printf ("%s:", asctime(timeinfo));
-
-			printf("iter %d time %.4g totaltime %.4g ", iter+1, timex, totaltime);
-			printf("time-1 %.4g time-2 %.4g eplasetime %.4g ", (_end1 - _start)/1000000.0, (_end2 - _end1)/1000000.0, _elapse);
+			printf("iter %d time %.4g totaltime %.4g ", iter+1, time, totaltime);
 			printf("training-LL %.6g ", train_LL);
 			if(param.do_predict)
 				printf("perplexity %.6g ", test_perplexity);
@@ -1351,11 +1327,6 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 		}
 #endif
 		space.nr_msg_sent = space.nr_msg_recv = space.nr_Nt_sent = space.nr_Nt_recv = 0;
-
-
-        //end of iter
-        uint64_t _end3 =timenow();
-        _elapse += (_end3 - _end2)/1000000.0;
 	}
 
 	space.stop_running(thread_id);

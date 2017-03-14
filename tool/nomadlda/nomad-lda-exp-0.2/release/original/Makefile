@@ -16,7 +16,7 @@ TBBROOT = tbb
 TBBLIB = -ltbb -ltbbmalloc
 
 #INCLUDEPATH = -I${TBBROOT}/include
-LIBS = ${TBBLIB} -lrt -lm -lc
+LIBS = ${TBBLIB} -lrt -lm
 
 all: lda-converter f+nomad-lda splda
 
