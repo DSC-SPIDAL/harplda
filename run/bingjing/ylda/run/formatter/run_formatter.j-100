@@ -1,0 +1,4 @@
+echo "run formatter on j-100"
+cd /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work
+cd /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin/ && source /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//setLibVars.sh
+cd /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work && cat /share/jproject/fg474/dataset/enwiki-1M/petuum-10//enwiki-1M.id.txt.ylda.3 | /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//formatter

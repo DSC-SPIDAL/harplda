@@ -1,0 +1,11 @@
+Log file created at: 2017/03/14 02:21:31
+Running on machine: j-128
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W0314 02:21:31.617224 136257 Merge_Dictionaries.cpp:71] ----------------------------------------------------------------------
+W0314 02:21:31.617885 136257 Merge_Dictionaries.cpp:73] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/global_dict/formatter.*
+W0314 02:21:31.617909 136257 Merge_Dictionaries.cpp:75] ----------------------------------------------------------------------
+W0314 02:21:31.618170 136257 Merge_Dictionaries.cpp:91] Initializing merge of 10 dictionaries using lda.dict.dump as prefix
+W0314 02:21:34.032588 136257 Merge_Dictionaries.cpp:94] Dictionaries merged
+W0314 02:21:34.032635 136257 Merge_Dictionaries.cpp:96] Num of unique words: 1000000
+W0314 02:21:34.032640 136257 Merge_Dictionaries.cpp:97] Dumping global dictionary for later use by learnTopics into lda.dict.dump
+W0314 02:21:34.442109 136257 Merge_Dictionaries.cpp:102] Finished dictionary dump

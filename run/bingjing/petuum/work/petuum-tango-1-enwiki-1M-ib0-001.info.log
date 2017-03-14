@@ -1,0 +1,203 @@
+--------------------------------------------------------------------------
+WARNING: No preset parameters were found for the device that Open MPI
+detected:
+
+  Local host:            t-004
+  Device name:           hfi1_0
+  Device vendor ID:      0x1175
+  Device vendor part ID: 9457
+
+Default device parameters will be used, which may result in lower
+performance.  You can edit any of the files specified by the
+btl_openib_device_param_files MCA parameter to set values for your
+device.
+
+NOTE: You can turn off this warning by setting the MCA parameter
+      btl_openib_warn_no_device_params_found to 0.
+--------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@ My rank(1) role (2) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@ My rank(2) role (1) [1:coord][0:worker][2:sched]
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+I0303 16:42:41.179728 112099 sysparam.hpp:71]  node file  : 
+I0303 16:42:41.180302 112099 sysparam.hpp:72]  star file  : 
+I0303 16:42:41.180335 112099 sysparam.hpp:73]  scheduling : 0
+I0303 16:42:41.180368 112099 sysparam.hpp:74]  schedulers : 1
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(1) coordinatemach (2)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+@@@@@@@@@@@@ My rank(1) role (2) [1:coord][0:worker][2:sched]
+ Scheduler call fork agent 1 rank  
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(1) coordinatemach (2)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+ Worker call fork agent ... 0 rank  
+I0303 16:42:41.183296 112099 worker.cpp:13] Worker CONSTRUCTOR : 0
+@@@@@@@@@@@@ My rank(2) role (1) [1:coord][0:worker][2:sched]
+ Coordinator call fork agent 2 rank  
+I0303 16:42:41.183496 112099 parse_netconf.cpp:40]   Machine ID(Rank): 0 -------------------------- 
+I0303 16:42:41.183534 112099 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0303 16:42:41.183581 112099 parse_netconf.cpp:43]   Rank : 0
+I0303 16:42:41.183645 112099 parse_netconf.cpp:40]   Machine ID(Rank): 1 -------------------------- 
+I0303 16:42:41.183673 112099 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0303 16:42:41.183696 112099 parse_netconf.cpp:43]   Rank : 1
+I0303 16:42:41.183720 112099 parse_netconf.cpp:40]   Machine ID(Rank): 2 -------------------------- 
+I0303 16:42:41.183744 112099 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0303 16:42:41.183769 112099 parse_netconf.cpp:43]   Rank : 2
+I0303 16:42:41.183329 112101 coordinator.cpp:13] coordinator CONSTRUCTOR : 2
+I0303 16:42:41.183329 112100 scheduler.cpp:11] Scheduler CONSTRUCTOR : 1
+I0303 16:42:41.206267 112101 strads_init.cpp:86] Rank (2)'s IP found in node file 10.55.54.4
+I0303 16:42:41.206267 112100 strads_init.cpp:86] Rank (1)'s IP found in node file 10.55.54.4
+I0303 16:42:41.206267 112099 strads_init.cpp:86] Rank (0)'s IP found in node file 10.55.54.4
+I0303 16:42:41.206454 112099 parse_netconf.cpp:105]   PS Machine ID(Rank): 0 -------------------------- 
+I0303 16:42:41.206490 112099 parse_netconf.cpp:107] PS  IP Address: 10.55.54.4
+I0303 16:42:41.206516 112099 parse_netconf.cpp:108] PS  Rank : 0
+I0303 16:42:41.206543 112099 parse_netconf.cpp:105]   PS Machine ID(Rank): 1 -------------------------- 
+I0303 16:42:41.206568 112099 parse_netconf.cpp:107] PS  IP Address: 10.55.54.4
+I0303 16:42:41.206591 112099 parse_netconf.cpp:108] PS  Rank : 1
+[*****] ps configuration files(node/link) are parsed
+############################## rank(1) role(2) 
+@@@@@@@@@@@@ My rank(1) role (2) [1:coord][0:worker][2:sched]
+[*****] ps configuration files(node/link) are parsed
+############################## rank(2) role(1) 
+@@@@@@@@@@@@ My rank(2) role (1) [1:coord][0:worker][2:sched]
+I0303 16:42:41.206763 112099 parse_netconf.cpp:140] @@ PS Link: 0 -------------------------- 
+I0303 16:42:41.206799 112099 parse_netconf.cpp:142] PS src node: 0src port: 47010
+I0303 16:42:41.206825 112099 parse_netconf.cpp:143] PS dst node: 1dst port: 38010
+I0303 16:42:41.206852 112099 parse_netconf.cpp:140] @@ PS Link: 1 -------------------------- 
+I0303 16:42:41.206878 112099 parse_netconf.cpp:142] PS src node: 1src port: 47011
+I0303 16:42:41.206904 112099 parse_netconf.cpp:143] PS dst node: 0dst port: 38011
+[*****] ps configuration files(node/link) are parsed
+############################## rank(0) role(0) 
+I0303 16:42:41.207175 112099 parse_netconf.cpp:76] @@ Link: 0 -------------------------- 
+I0303 16:42:41.207298 112099 parse_netconf.cpp:78] src node: 2src port: 47000
+I0303 16:42:41.207330 112099 parse_netconf.cpp:79] dst node: 0dst port: 38000
+I0303 16:42:41.207355 112099 parse_netconf.cpp:76] @@ Link: 1 -------------------------- 
+I0303 16:42:41.207379 112099 parse_netconf.cpp:78] src node: 2src port: 47001
+I0303 16:42:41.207406 112099 parse_netconf.cpp:79] dst node: 1dst port: 38001
+I0303 16:42:41.207495 112099 parse_netconf.cpp:76] @@ Link: 2 -------------------------- 
+I0303 16:42:41.207517 112099 parse_netconf.cpp:78] src node: 0src port: 47002
+I0303 16:42:41.207541 112099 parse_netconf.cpp:79] dst node: 2dst port: 38002
+I0303 16:42:41.207566 112099 parse_netconf.cpp:76] @@ Link: 3 -------------------------- 
+I0303 16:42:41.207592 112099 parse_netconf.cpp:78] src node: 1src port: 47003
+I0303 16:42:41.207650 112099 parse_netconf.cpp:79] dst node: 2dst port: 38003
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(1) coordinatemach (2)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+Coordinator rank 2 open a porttcp://*:47000 FOR SEND PORT -- ptr to zmqsocket(0x1cad590) RCVHWM(1000) SNDHWM(5000)
+Coordinator rank 2 open a porttcp://*:47001 FOR SEND PORT -- ptr to zmqsocket(0x1cad570) RCVHWM(1000) SNDHWM(5000)
+@@@@@@@ Coordinator rank 2 open a porttcp://*:38002 FOR RECEIVE PORT -- ptr to zmqsocket(0x1cadcd0) HWM(5000)
+@@@@@@@ Coordinator rank 2 open a porttcp://*:38003 FOR RECEIVE PORT -- ptr to zmqsocket(0x1cadce0) HWM(5000)
+[Coordinator] Open ports and start hands shaking worker_recvportsize(1) worker_sendportsize(1)
+Coordinator -- wait for 0th worker RECV out of  1  pport(0x1cadcd0)
+RANK rank 1 CONNECT a port  tcp://10.55.54.4:47001 FOR RECEIVE PORT -- ptr to socket(0x24c3590) HWM(5000) 
+Rank 1 CONNECT a porttcp://10.55.54.4:38003 FOR SEND PORT -- ptr to socket(0x24c3570) 
+RANK rank 0 CONNECT a port  tcp://10.55.54.4:47000 FOR RECEIVE PORT -- ptr to socket(0x1d41590) HWM(5000) 
+Rank 0 CONNECT a porttcp://10.55.54.4:38002 FOR SEND PORT -- ptr to socket(0x1d41570) 
+Rank(1) Send HB to SEND PORT ptr -- socket(0x24c3570) 
+Rank(0) Send HB to SEND PORT ptr -- socket(0x1d41570) 
+[Coordinator @@@@@] finish worker recv port confirm 
+Coordinator -- wait for 0th worker SENDPORT out of  1  pport(0x1cad590)
+[Rank 0] got confirm for RECV PORT 
+Rank(0) Send HB to RECV PORT ptr -- socket(0x1d41590) 
+[Coordinator @@@@@] finish worker send port confirm 
+Coordinator -- wait for 0th scheduler RECVPORT out of  1  pport(0x1cadce0)
+[Coordinator @@@@@] finish scheduler recv port confirm 
+Coordinator -- wait for 0th scheduler SENDPORT out of  1  pport(0x1cad570)
+Rank(1) Send HB to RECV PORT ptr -- socket(0x24c3590) 
+[Rank 1] got confirm for RECV PORT 
+[Rank 0] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (0)
+[Coordinator @@@@@] finish scheduler send port confirm 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (2)
+[Rank 1] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (1)
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@@@@@ My rank(1) role (2) [1:coord][0:worker][2:sched]
+I0303 16:42:43.213393 112099 parse_netconf.cpp:76] @@ Link: 0 -------------------------- 
+I0303 16:42:43.213466 112099 parse_netconf.cpp:78] src node: 1src port: 47004
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@@@@@ My rank(2) role (1) [1:coord][0:worker][2:sched]
+I0303 16:42:43.213500 112099 parse_netconf.cpp:79] dst node: 2dst port: 38004
+I0303 16:42:43.213531 112099 parse_netconf.cpp:76] @@ Link: 1 -------------------------- 
+I0303 16:42:43.213559 112099 parse_netconf.cpp:78] src node: 2src port: 47005
+I0303 16:42:43.213750 112099 parse_netconf.cpp:79] dst node: 1dst port: 38005
+I0303 16:42:43.213796 112099 parse_netconf.cpp:76] @@ Link: 2 -------------------------- 
+I0303 16:42:43.213838 112099 parse_netconf.cpp:78] src node: 2src port: 47006
+I0303 16:42:43.213883 112099 parse_netconf.cpp:79] dst node: 0dst port: 38006
+I0303 16:42:43.213930 112099 parse_netconf.cpp:76] @@ Link: 3 -------------------------- 
+Rank 2 CONNECT a porttcp://10.55.54.4:38006 FOR SEND PORT -- ptr to socket(0x1cadcc0) 
+@@@@@@@ Coordinator rank 2 open a porttcp://*:38007 FOR RECEIVE PORT -- ptr to zmqsocket(0x1cadcb0) HWM(5000)
+I0303 16:42:43.213973 112099 parse_netconf.cpp:78] src node: 0src port: 47007
+I0303 16:42:43.214020 112099 parse_netconf.cpp:79] dst node: 2dst port: 38007
+I0303 16:42:43.214063 112099 parse_netconf.cpp:76] @@ Link: 4 -------------------------- 
+I0303 16:42:43.214107 112099 parse_netconf.cpp:78] src node: 0src port: 47008
+I0303 16:42:43.214215 112099 parse_netconf.cpp:79] dst node: 2dst port: 38008
+I0303 16:42:43.214295 112099 parse_netconf.cpp:76] @@ Link: 5 -------------------------- 
+I0303 16:42:43.214368 112099 parse_netconf.cpp:78] src node: 2src port: 47009
+I0303 16:42:43.214398 112099 parse_netconf.cpp:79] dst node: 0dst port: 38009
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(1) coordinatemach (2)
+@@@@@@@ Coordinator rank 2 open a porttcp://*:38008 FOR RECEIVE PORT -- ptr to zmqsocket(0x1cadca0) HWM(5000)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+Rank 2 CONNECT a porttcp://10.55.54.4:38009 FOR SEND PORT -- ptr to socket(0x1cadc90) 
+ctx->rank 2 breaks rules :  pshctx->ring_sendportmap.size() : 1 
+ldall: /N/u/pengb/hpda/petuum/strads/src/strads/netdriver/zmq/zmq-common.cpp:1138: void create_ringworker_ethernet_aux(sharedctx*, zmq::context_t&, int, std::string&): Assertion `pshctx->ring_sendportmap.size() == 2' failed.
+*** Aborted at 1488577363 (unix time) try "date -d @1488577363" if you are using GNU date ***
+PC: @     0x7f129b62a5f7 __GI_raise
+*** SIGABRT (@0x44d0001b5e5) received by PID 112101 (TID 0x7f129e2b4780) from PID 112101; stack trace: ***
+    @     0x7f129b9c5100 (unknown)
+    @     0x7f129b62a5f7 __GI_raise
+    @     0x7f129b62bce8 __GI_abort
+    @     0x7f129b623566 __assert_fail_base
+    @     0x7f129b623612 __GI___assert_fail
+    @           0x439eb2 create_ringworker_ethernet_aux()
+    @           0x4302f1 strads_init()
+    @           0x40d940 main
+    @     0x7f129b616b15 __libc_start_main
+    @           0x40e8bd (unknown)
+*** Aborted at 1488577364 (unix time) try "date -d @1488577364" if you are using GNU date ***
+PC: @     0x7fc5533fa42d __GI_nanosleep
+*** SIGTERM (@0x44d0001b5d7) received by PID 112099 (TID 0x7fc555ffc780) from PID 112087; stack trace: ***
+    @     0x7fc55370d100 (unknown)
+    @     0x7fc5533fa42d __GI_nanosleep
+    @     0x7fc5533fa2c4 __sleep
+    @           0x438e10 create_ringworker_ethernet_aux()
+    @           0x4302f1 strads_init()
+    @           0x40d940 main
+    @     0x7fc55335eb15 __libc_start_main
+    @           0x40e8bd (unknown)
+*** Aborted at 1488577364 (unix time) try "date -d @1488577364" if you are using GNU date ***
+PC: @     0x7f67016080f7 opal_progress
+*** SIGTERM (@0x44d0001b5d7) received by PID 112100 (TID 0x7f6702f7b780) from PID 112087; stack trace: ***
+    @     0x7f670068c100 (unknown)
+    @     0x7f67016080f7 opal_progress
+    @     0x7f6701b86425 ompi_request_default_wait_all
+    @     0x7f66f9e1ab08 ompi_coll_tuned_barrier_intra_bruck
+    @     0x7f6701b9d4e6 PMPI_Barrier
+    @           0x439ba0 create_ringworker_ethernet_aux()
+    @           0x4302f1 strads_init()
+    @           0x40d940 main
+    @     0x7f67002ddb15 __libc_start_main
+    @           0x40e8bd (unknown)
+--------------------------------------------------------------------------
+mpirun noticed that process rank 2 with PID 0 on node t-004 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+[t-006:147206] 2 more processes have sent help message help-mpi-btl-openib.txt / no device params found
+[t-006:147206] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages

@@ -1,0 +1,810 @@
+Start ylda, config as 
+work dir = /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work
+data set = /share/jproject/fg474/dataset/enwiki-1M/petuum-10/
+topics=10000, iter=120, alpha=100, beta=0.01, threads=30
+start job as ylda-enwiki-10-0313
+initialize the working directory
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+--------- j-099---------
+--------- j-100---------
+--------- j-101---------
+--------- j-102---------
+--------- j-103---------
+--------- j-104---------
+--------- j-105---------
+--------- j-106---------
+--------- j-107---------
+--------- j-108---------
+--------- j-109---------
+--------- j-110---------
+--------- j-111---------
+cp: cannot stat `../input/work/lda*': No such file or directory
+--------- j-112---------
+--------- j-113---------
+--------- j-114---------
+--------- j-115---------
+--------- j-116---------
+--------- j-117---------
+--------- j-118---------
+--------- j-119---------
+--------- j-120---------
+--------- j-121---------
+--------- j-122---------
+--------- j-123---------
+--------- j-124---------
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+--------- j-127---------
+Clean up all DM_server and learners
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+DM_server not found, quit
+--------- j-099---------
+DM_server not found, quit
+--------- j-100---------
+DM_server not found, quit
+--------- j-101---------
+DM_server not found, quit
+--------- j-102---------
+DM_server not found, quit
+--------- j-103---------
+DM_server not found, quit
+--------- j-104---------
+DM_server not found, quit
+--------- j-105---------
+DM_server not found, quit
+--------- j-106---------
+DM_server not found, quit
+--------- j-107---------
+DM_server not found, quit
+--------- j-108---------
+DM_server not found, quit
+--------- j-109---------
+DM_server not found, quit
+--------- j-110---------
+DM_server not found, quit
+--------- j-111---------
+DM_server not found, quit
+--------- j-112---------
+DM_server not found, quit
+--------- j-113---------
+DM_server not found, quit
+--------- j-114---------
+DM_server not found, quit
+--------- j-115---------
+DM_server not found, quit
+--------- j-116---------
+DM_server not found, quit
+--------- j-117---------
+DM_server not found, quit
+--------- j-118---------
+DM_server not found, quit
+--------- j-119---------
+DM_server not found, quit
+--------- j-120---------
+DM_server not found, quit
+--------- j-121---------
+DM_server not found, quit
+--------- j-122---------
+DM_server not found, quit
+--------- j-123---------
+DM_server not found, quit
+--------- j-124---------
+DM_server not found, quit
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+DM_server not found, quit
+--------- j-127---------
+DM_server not found, quit
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+learntopics not found, quit
+--------- j-099---------
+learntopics not found, quit
+--------- j-100---------
+learntopics not found, quit
+--------- j-101---------
+learntopics not found, quit
+--------- j-102---------
+learntopics not found, quit
+--------- j-103---------
+learntopics not found, quit
+--------- j-104---------
+learntopics not found, quit
+--------- j-105---------
+learntopics not found, quit
+--------- j-106---------
+learntopics not found, quit
+--------- j-107---------
+learntopics not found, quit
+--------- j-108---------
+learntopics not found, quit
+--------- j-109---------
+learntopics not found, quit
+--------- j-110---------
+learntopics not found, quit
+--------- j-111---------
+learntopics not found, quit
+--------- j-112---------
+learntopics not found, quit
+--------- j-113---------
+learntopics not found, quit
+--------- j-114---------
+learntopics not found, quit
+--------- j-115---------
+learntopics not found, quit
+--------- j-116---------
+learntopics not found, quit
+--------- j-117---------
+learntopics not found, quit
+--------- j-118---------
+learntopics not found, quit
+--------- j-119---------
+learntopics not found, quit
+--------- j-120---------
+learntopics not found, quit
+--------- j-121---------
+learntopics not found, quit
+--------- j-122---------
+learntopics not found, quit
+--------- j-123---------
+learntopics not found, quit
+--------- j-124---------
+learntopics not found, quit
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+learntopics not found, quit
+--------- j-127---------
+learntopics not found, quit
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+--------- j-099---------
+--------- j-100---------
+--------- j-101---------
+--------- j-102---------
+--------- j-103---------
+--------- j-104---------
+--------- j-105---------
+--------- j-106---------
+--------- j-107---------
+--------- j-108---------
+--------- j-109---------
+--------- j-110---------
+--------- j-111---------
+--------- j-112---------
+--------- j-113---------
+--------- j-114---------
+--------- j-115---------
+--------- j-116---------
+--------- j-117---------
+--------- j-118---------
+--------- j-119---------
+--------- j-120---------
+--------- j-121---------
+--------- j-122---------
+--------- j-123---------
+--------- j-124---------
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+--------- j-127---------
+Start up the DM_Server......
+get server host from ../conf/juliet-10-server.hostname
+get server ip list from ../conf/juliet-10-server.ip
+10.16.0.98 10.16.0.99 10.16.0.100 10.16.0.101 10.16.0.102 10.16.0.103 10.16.0.104 10.16.0.105 10.16.0.106 10.16.0.107
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+--------- j-099---------
+--------- j-100---------
+--------- j-101---------
+--------- j-102---------
+--------- j-103---------
+--------- j-104---------
+--------- j-105---------
+--------- j-106---------
+--------- j-107---------
+--------- j-108---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-108': No such file or directory
+--------- j-109---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-109': No such file or directory
+--------- j-110---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-110': No such file or directory
+--------- j-111---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-111': No such file or directory
+--------- j-112---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-112': No such file or directory
+--------- j-113---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-113': No such file or directory
+--------- j-114---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-114': No such file or directory
+--------- j-115---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-115': No such file or directory
+--------- j-116---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-116': No such file or directory
+--------- j-117---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-117': No such file or directory
+--------- j-118---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-118': No such file or directory
+--------- j-119---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-119': No such file or directory
+--------- j-120---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-120': No such file or directory
+--------- j-121---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-121': No such file or directory
+--------- j-122---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-122': No such file or directory
+--------- j-123---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-123': No such file or directory
+--------- j-124---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-124': No such file or directory
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-126': No such file or directory
+--------- j-127---------
+chmod: cannot access `/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-127': No such file or directory
+wait for DM_server startup......
+Start lda learners......
+get server host from ../conf/juliet-10.hostname
+make run_lda.xxx scripts as: chkinterval=10
+Mon Mar 13 22:27:53 EDT 2017
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+run learntopics on j-098
+W0313 22:27:54.256983 66378 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.257474 66378 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.257488 66378 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.257676 66378 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.257848 66378 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.075161 66378 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.815904 66378 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 860956 words & 10000 topics.
+W0313 22:32:21.531477 66378 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:21.531554 66378 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:21.531625 66378 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:21.531632 66378 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:21.531638 66378 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458741 (unix time) try "date -d @1489458741" if you are using GNU date ***
+PC: @       0x3a9c0325e5 (unknown)
+*** SIGABRT (@0x44d0001034a) received by PID 66378 (TID 0x7f52911b0720) from PID 66378; stack trace: ***
+    @       0x3a9c40f7e0 (unknown)
+    @       0x3a9c0325e5 (unknown)
+    @       0x3a9c033dc5 (unknown)
+    @     0x7f52921a7871 tbb::assertion_failure()
+    @     0x7f52921aa3ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x3a9c01ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-098: line 3: 66378 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-099---------
+run learntopics on j-099
+W0313 22:27:54.253392 67992 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.253865 67992 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.253877 67992 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.254079 67992 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.254263 67992 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.080072 67992 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.783650 67992 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 863054 words & 10000 topics.
+W0313 22:32:20.902091 67992 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:20.902168 67992 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:20.902256 67992 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:20.902266 67992 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:20.902271 67992 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458740 (unix time) try "date -d @1489458740" if you are using GNU date ***
+PC: @       0x346d4325e5 (unknown)
+*** SIGABRT (@0x44d00010998) received by PID 67992 (TID 0x7f644ac57720) from PID 67992; stack trace: ***
+    @       0x346d80f7e0 (unknown)
+    @       0x346d4325e5 (unknown)
+    @       0x346d433dc5 (unknown)
+    @     0x7f644bc4e871 tbb::assertion_failure()
+    @     0x7f644bc513ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x346d41ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-099: line 3: 67992 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-100---------
+run learntopics on j-100
+W0313 22:27:54.246711 69457 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.247169 69457 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.247184 69457 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.247375 69457 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.247560 69457 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.075157 69457 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.768812 69457 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 859866 words & 10000 topics.
+W0313 22:32:21.557468 69457 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:21.557544 69457 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:21.557626 69457 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:21.557633 69457 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:21.557639 69457 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458741 (unix time) try "date -d @1489458741" if you are using GNU date ***
+PC: @       0x3bc36325e5 (unknown)
+*** SIGABRT (@0x44d00010f51) received by PID 69457 (TID 0x7f86c6ac2720) from PID 69457; stack trace: ***
+    @       0x3bc3a0f7e0 (unknown)
+    @       0x3bc36325e5 (unknown)
+    @       0x3bc3633dc5 (unknown)
+    @     0x7f86c7ab9871 tbb::assertion_failure()
+    @     0x7f86c7abc3ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x3bc361ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-100: line 3: 69457 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-101---------
+run learntopics on j-101
+W0313 22:27:54.259299 68551 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.259989 68551 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.260022 68551 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.260349 68551 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.260653 68551 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.085856 68551 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.727644 68551 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 857954 words & 10000 topics.
+W0313 22:32:19.920383 68551 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:19.920446 68551 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:19.920521 68551 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:19.920527 68551 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:19.920534 68551 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458739 (unix time) try "date -d @1489458739" if you are using GNU date ***
+PC: @       0x3a60e325e5 (unknown)
+*** SIGABRT (@0x44d00010bc7) received by PID 68551 (TID 0x7f46b0539720) from PID 68551; stack trace: ***
+    @       0x3a6120f7e0 (unknown)
+    @       0x3a60e325e5 (unknown)
+    @       0x3a60e33dc5 (unknown)
+    @     0x7f46b1530871 tbb::assertion_failure()
+    @     0x7f46b15333ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x3a60e1ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-101: line 3: 68551 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-102---------
+run learntopics on j-102
+W0313 22:27:54.257412 68459 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.257851 68459 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.257866 68459 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.258051 68459 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.258224 68459 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.081734 68459 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.749428 68459 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 859977 words & 10000 topics.
+W0313 22:32:20.566828 68459 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:20.566892 68459 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:20.566972 68459 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:20.566979 68459 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:20.566985 68459 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458740 (unix time) try "date -d @1489458740" if you are using GNU date ***
+PC: @       0x32634325e5 (unknown)
+*** SIGABRT (@0x44d00010b6b) received by PID 68459 (TID 0x7f3838a63720) from PID 68459; stack trace: ***
+    @       0x326380f7e0 (unknown)
+    @       0x32634325e5 (unknown)
+    @       0x3263433dc5 (unknown)
+    @     0x7f3839a5a871 tbb::assertion_failure()
+    @     0x7f3839a5d3ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x326341ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-102: line 3: 68459 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-103---------
+run learntopics on j-103
+W0313 22:27:54.259940 69090 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.260380 69090 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.260406 69090 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.260632 69090 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.260828 69090 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.085016 69090 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.772347 69090 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 862188 words & 10000 topics.
+W0313 22:32:23.129799 69090 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:23.129870 69090 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:23.129953 69090 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:23.129966 69090 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:23.129976 69090 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458743 (unix time) try "date -d @1489458743" if you are using GNU date ***
+PC: @       0x37b52325e5 (unknown)
+*** SIGABRT (@0x44d00010de2) received by PID 69090 (TID 0x7f7953e55720) from PID 69090; stack trace: ***
+    @       0x37b560f7e0 (unknown)
+    @       0x37b52325e5 (unknown)
+    @       0x37b5233dc5 (unknown)
+    @     0x7f7954e4c871 tbb::assertion_failure()
+    @     0x7f7954e4f3ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x37b521ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-103: line 3: 69090 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-104---------
+run learntopics on j-104
+W0313 22:27:54.257915 66320 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.258379 66320 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.258395 66320 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.258589 66320 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.258764 66320 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.078662 66320 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.769094 66320 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 859793 words & 10000 topics.
+W0313 22:32:19.567992 66320 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:19.568070 66320 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:19.568150 66320 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:19.568156 66320 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:19.568162 66320 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458739 (unix time) try "date -d @1489458739" if you are using GNU date ***
+PC: @       0x3fa9c325e5 (unknown)
+*** SIGABRT (@0x44d00010310) received by PID 66320 (TID 0x7fb823490720) from PID 66320; stack trace: ***
+    @       0x3faa00f7e0 (unknown)
+    @       0x3fa9c325e5 (unknown)
+    @       0x3fa9c33dc5 (unknown)
+    @     0x7fb824487871 tbb::assertion_failure()
+    @     0x7fb82448a3ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x3fa9c1ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-104: line 3: 66320 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-105---------
+run learntopics on j-105
+W0313 22:27:54.255677 66169 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.256434 66169 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.256455 66169 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.256778 66169 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.257081 66169 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.079818 66169 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.781862 66169 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 860408 words & 10000 topics.
+W0313 22:32:21.144316 66169 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:21.144382 66169 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:21.144457 66169 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:21.144464 66169 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:21.144471 66169 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458741 (unix time) try "date -d @1489458741" if you are using GNU date ***
+PC: @       0x3c702325e5 (unknown)
+*** SIGABRT (@0x44d00010279) received by PID 66169 (TID 0x7f030d57e720) from PID 66169; stack trace: ***
+    @       0x3c7060f7e0 (unknown)
+    @       0x3c702325e5 (unknown)
+    @       0x3c70233dc5 (unknown)
+    @     0x7f030e575871 tbb::assertion_failure()
+    @     0x7f030e5783ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x3c7021ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-105: line 3: 66169 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-106---------
+run learntopics on j-106
+W0313 22:27:54.257472 69984 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.257905 69984 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.257920 69984 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.258108 69984 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.258283 69984 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.084144 69984 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.763717 69984 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 862129 words & 10000 topics.
+W0313 22:32:21.048704 69984 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:21.048770 69984 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:21.048847 69984 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:21.048854 69984 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:21.048872 69984 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458741 (unix time) try "date -d @1489458741" if you are using GNU date ***
+PC: @       0x36810325e5 (unknown)
+*** SIGABRT (@0x44d00011160) received by PID 69984 (TID 0x7fdbca41a720) from PID 69984; stack trace: ***
+    @       0x368140f7e0 (unknown)
+    @       0x36810325e5 (unknown)
+    @       0x3681033dc5 (unknown)
+    @     0x7fdbcb411871 tbb::assertion_failure()
+    @     0x7fdbcb4143ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x368101ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-106: line 3: 69984 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-107---------
+run learntopics on j-107
+W0313 22:27:54.255831 67735 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.256523 67735 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.256548 67735 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.256875 67735 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.257171 67735 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:54.257524 67735 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:54.259800 67735 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 0 words & 10000 topics.
+W0313 22:27:54.259877 67735 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:27:54.259896 67735 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:27:54.260022 67735 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:27:54.260038 67735 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:27:54.260048 67735 Unigram_Model_Trainer.cpp:67] Beta param initialized
+init TBB pipeline with num_threads = 30Assertion !my_scheduler failed on line 344 of file ../../src/tbb/governor.cpp
+Detailed description: task_scheduler_init already initialized
+*** Aborted at 1489458474 (unix time) try "date -d @1489458474" if you are using GNU date ***
+PC: @       0x31232325e5 (unknown)
+*** SIGABRT (@0x44d00010897) received by PID 67735 (TID 0x7f534cfa2720) from PID 67735; stack trace: ***
+    @       0x312360f7e0 (unknown)
+    @       0x31232325e5 (unknown)
+    @       0x3123233dc5 (unknown)
+    @     0x7f534df99871 tbb::assertion_failure()
+    @     0x7f534df9c3ba tbb::task_scheduler_init::initialize()
+    @           0x45ac36 TBB_Pipeline::TBB_Pipeline()
+    @           0x4d0551 Unigram_Model_Training_Builder::create_pipeline()
+    @           0x4490f8 Model_Director::build_model()
+    @           0x439597 main
+    @       0x312321ed1d (unknown)
+    @           0x40f089 (unknown)
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-107: line 3: 67735 Aborted                 (core dumped) /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10
+--------- j-108---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-108: No such file or directory
+--------- j-109---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-109: No such file or directory
+--------- j-110---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-110: No such file or directory
+--------- j-111---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-111: No such file or directory
+--------- j-112---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-112: No such file or directory
+--------- j-113---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-113: No such file or directory
+--------- j-114---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-114: No such file or directory
+--------- j-115---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-115: No such file or directory
+--------- j-116---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-116: No such file or directory
+--------- j-117---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-117: No such file or directory
+--------- j-118---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-118: No such file or directory
+--------- j-119---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-119: No such file or directory
+--------- j-120---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-120: No such file or directory
+--------- j-121---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-121: No such file or directory
+--------- j-122---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-122: No such file or directory
+--------- j-123---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-123: No such file or directory
+--------- j-124---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-124: No such file or directory
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-126: No such file or directory
+--------- j-127---------
+sh: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_lda.j-127: No such file or directory
+Mon Mar 13 22:32:29 EDT 2017
+Get global dictionary...
+get server host from ../conf/juliet-10.hostname
+get all lda.dict.dump from clients
+run Merge_Dictionaries
+/tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//Merge_Dictionaries --dictionaries=10 --dumpprefix=lda.dict.dump
+distribute lda.dict.dump.global
+Collect all intermediate model files...
+get server host from ../conf/juliet-10.hostname
+get all files under working directories from clients
+get server host from ../../conf/juliet-10.hostname
+get all logs from clients
+Stop DM_Servers ...
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+run DM_Server on j-098
+--------- j-099---------
+run DM_Server on j-099
+--------- j-100---------
+run DM_Server on j-100
+--------- j-101---------
+run DM_Server on j-101
+--------- j-102---------
+run DM_Server on j-102
+--------- j-103---------
+run DM_Server on j-103
+--------- j-104---------
+run DM_Server on j-104
+--------- j-105---------
+run DM_Server on j-105
+--------- j-106---------
+run DM_Server on j-106
+--------- j-107---------
+run DM_Server on j-107
+--------- j-108---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-108: No such file or directory
+--------- j-109---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-109: No such file or directory
+--------- j-110---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-110: No such file or directory
+--------- j-111---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-111: No such file or directory
+--------- j-112---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-112: No such file or directory
+--------- j-113---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-113: No such file or directory
+--------- j-114---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-114: No such file or directory
+--------- j-115---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-115: No such file or directory
+--------- j-116---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-116: No such file or directory
+--------- j-117---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-117: No such file or directory
+--------- j-118---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-118: No such file or directory
+--------- j-119---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-119: No such file or directory
+--------- j-120---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-120: No such file or directory
+--------- j-121---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-121: No such file or directory
+--------- j-122---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-122: No such file or directory
+--------- j-123---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-123: No such file or directory
+--------- j-124---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-124: No such file or directory
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-126: No such file or directory
+--------- j-127---------
+bash: /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//bin/run_server.j-127: No such file or directory
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+DM_Server Process 66253 has been killed after 1 seconds.
+--------- j-099---------
+DM_Server Process 67867 has been killed after 1 seconds.
+--------- j-100---------
+DM_Server Process 69332 has been killed after 1 seconds.
+--------- j-101---------
+DM_Server Process 68426 has been killed after 1 seconds.
+--------- j-102---------
+DM_Server Process 68334 has been killed after 1 seconds.
+--------- j-103---------
+DM_Server Process 68965 has been killed after 1 seconds.
+--------- j-104---------
+DM_Server Process 66195 has been killed after 1 seconds.
+--------- j-105---------
+DM_Server Process 66044 has been killed after 1 seconds.
+--------- j-106---------
+DM_Server Process 69859 has been killed after 1 seconds.
+--------- j-107---------
+DM_Server Process 67610 has been killed after 1 seconds.
+--------- j-108---------
+DM_Server not found, quit
+--------- j-109---------
+DM_Server not found, quit
+--------- j-110---------
+DM_Server not found, quit
+--------- j-111---------
+DM_Server not found, quit
+--------- j-112---------
+DM_Server not found, quit
+--------- j-113---------
+DM_Server not found, quit
+--------- j-114---------
+DM_Server not found, quit
+--------- j-115---------
+DM_Server not found, quit
+--------- j-116---------
+DM_Server not found, quit
+--------- j-117---------
+DM_Server not found, quit
+--------- j-118---------
+DM_Server not found, quit
+--------- j-119---------
+DM_Server not found, quit
+--------- j-120---------
+DM_Server not found, quit
+--------- j-121---------
+DM_Server not found, quit
+--------- j-122---------
+DM_Server not found, quit
+--------- j-123---------
+DM_Server not found, quit
+--------- j-124---------
+DM_Server not found, quit
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+DM_Server not found, quit
+--------- j-127---------
+DM_Server not found, quit
+Save work directory to work-ylda-enwiki-10-0313
+************************* juliet1 *************************
+--------- j-097---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.97
+--------- j-098---------
+--------- j-099---------
+--------- j-100---------
+--------- j-101---------
+--------- j-102---------
+--------- j-103---------
+--------- j-104---------
+--------- j-105---------
+--------- j-106---------
+--------- j-107---------
+--------- j-108---------
+--------- j-109---------
+--------- j-110---------
+--------- j-111---------
+--------- j-112---------
+--------- j-113---------
+--------- j-114---------
+--------- j-115---------
+--------- j-116---------
+--------- j-117---------
+--------- j-118---------
+--------- j-119---------
+--------- j-120---------
+--------- j-121---------
+--------- j-122---------
+--------- j-123---------
+--------- j-124---------
+--------- j-125---------
+Access denied: user fg474admin (uid=1101) has no active jobs.
+Connection closed by 172.16.0.125
+--------- j-126---------
+--------- j-127---------
+result model files are in result/ylda-enwiki-10-0313, enjoy~

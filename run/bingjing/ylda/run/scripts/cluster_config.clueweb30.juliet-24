@@ -1,0 +1,21 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+ylda=/tmp/hpda/pengb/hpda/test/bingjing/ylda/bin/
+workroot=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=juliet-24
+
+# enwiki-1M on juliet
+datadir=/share/jproject/fg474/dataset/clueweb30b/petuum-24/
+datafile=clueweb-30B.ylda
+topics=10000
+iter=100
+alpha=100
+beta=0.01
+threads=30
+
+

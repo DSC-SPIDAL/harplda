@@ -1,0 +1,3 @@
+echo "run DM_Server on j-103"
+cd /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin/ && source /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//setLibVars.sh
+cd /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work && /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//DM_Server 1 5 10 10.16.0.103:10000 --Ice.ThreadPool.Server.SizeMax=10 &

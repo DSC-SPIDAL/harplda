@@ -1,0 +1,21 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+ylda=/scratch/pengb/ylda/bin/
+workroot=/scratch/pengb/ylda/run/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=tango-5
+
+# enwiki-1M on juliet
+datadir=/scratch/pengb/data/petuum-5/
+datafile=enwiki-1M.id.txt.ylda
+topics=10000
+iter=120
+alpha=100
+beta=0.01
+threads=60
+
+

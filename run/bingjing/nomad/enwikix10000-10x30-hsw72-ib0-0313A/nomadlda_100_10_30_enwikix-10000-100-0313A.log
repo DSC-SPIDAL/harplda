@@ -1,0 +1,12 @@
+options:
+mpiexec -n 10 /tmp/hpda/pengb/hpda/test/bingjing/nomad/bin/f+nomad-lda -T 50 -k 10000 -a 100 -b 0.01 -t 100 -n 30 /share/jproject/fg474/dataset//enwikix
+Data loading done (3.62668 sec)!
+start model init
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 69557 RUNNING AT 10.16.0.110
+=   EXIT CODE: 9
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================

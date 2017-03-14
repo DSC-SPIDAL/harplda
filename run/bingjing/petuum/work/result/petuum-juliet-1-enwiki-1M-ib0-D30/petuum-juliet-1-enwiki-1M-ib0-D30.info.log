@@ -1,0 +1,28 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+I0308 22:11:34.918586 25350 sysparam.hpp:71]  node file  : 
+I0308 22:11:34.918735 25350 sysparam.hpp:72]  star file  : 
+I0308 22:11:34.918741 25350 sysparam.hpp:73]  scheduling : 0
+I0308 22:11:34.918752 25350 sysparam.hpp:74]  schedulers : 1
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+Assertion `false` failed in /N/u/pengb/hpda/petuum/strads/src/strads/util/cfgen.cpp line Assertion `false` failed in /N/u/pengb/hpda/petuum/strads/src/strads/util/cfgen.cpp line 64: node file not open
+Assertion `false` failed in /N/u/pengb/hpda/petuum/strads/src/strads/util/cfgen.cpp line 64: node file not open
+64: node file not open
+Assertion `false` failed in /N/u/pengb/hpda/petuum/strads/src/strads/util/cfgen.cpp line 64: node file not open
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code.. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[19144,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------

@@ -1,0 +1,16 @@
+#nlda-clueweb-15x64 rtt-15
+#petuum-juliet-15-clueweb-ib0-0325-2 petuum-15
+nlda-cluewbe30-30x60-oldtuning lda harp
+#nlda-cluewbe30-30x60-newtuning1 lda1
+#nlda-cluewbe30-30x60-newtuning2 lda2
+#nlda-cluewbe30-30x60-newtuning3 lda3
+nlda-cluewbe30-30x60-newtuning6 lda6 harp
+#petuum-juliet-30-clueweb30b-ib0-0618-001 petuum-straggler
+petuum-juliet-30-clueweb30b-ib0-0619-001 petuum petuum
+#petuum-juliet-30-clueweb30b-ib0-0620-001 petuum3
+#nlda-cluewbe30-30x60-stragglerj111 lda-straggler
+nlda-cluewbe30-30x60-noj111 lda8 harp
+#nlda-cluewbe30-30x60-notuning lda-notuning
+#ylda-clueweb30b-30-30x60 ylda
+nlda-cluewbe30-30x60-newtuning10 lda10 harp
+nlda-cluewbe30-30x60-newtuning11 lda11 harp

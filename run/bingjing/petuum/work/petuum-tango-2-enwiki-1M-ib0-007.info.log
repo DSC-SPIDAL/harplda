@@ -1,0 +1,343 @@
+--------------------------------------------------------------------------
+WARNING: No preset parameters were found for the device that Open MPI
+detected:
+
+  Local host:            t-004
+  Device name:           hfi1_0
+  Device vendor ID:      0x1175
+  Device vendor part ID: 9457
+
+Default device parameters will be used, which may result in lower
+performance.  You can edit any of the files specified by the
+btl_openib_device_param_files MCA parameter to set values for your
+device.
+
+NOTE: You can turn off this warning by setting the MCA parameter
+      btl_openib_warn_no_device_params_found to 0.
+--------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[3]->ip (10.55.54.4) id(3)  funcname(default-func) 
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[3]->ip (10.55.54.4) id(3)  funcname(default-func) 
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[3]->ip (10.55.54.4) id(3)  funcname(default-func) 
+I0303 14:56:23.518399 110876 sysparam.hpp:71]  node file  : 
+I0303 14:56:23.519878 110876 sysparam.hpp:72]  star file  : 
+I0303 14:56:23.520002 110876 sysparam.hpp:73]  scheduling : 0
+I0303 14:56:23.520056 110876 sysparam.hpp:74]  schedulers : 1
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[3]->ip (10.55.54.4) id(3)  funcname(default-func) 
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+ Worker call fork agent ... 1 rank  
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+ Worker call fork agent ... 0 rank  
+I0303 14:56:23.525128 110876 worker.cpp:13] Worker CONSTRUCTOR : 0
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+ Coordinator call fork agent 3 rank  
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+ Scheduler call fork agent 2 rank  
+I0303 14:56:23.525357 110876 parse_netconf.cpp:40]   Machine ID(Rank): 0 -------------------------- 
+I0303 14:56:23.525408 110876 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0303 14:56:23.525470 110876 parse_netconf.cpp:43]   Rank : 0
+I0303 14:56:23.525511 110876 parse_netconf.cpp:40]   Machine ID(Rank): 1 -------------------------- 
+I0303 14:56:23.525543 110876 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0303 14:56:23.525579 110876 parse_netconf.cpp:43]   Rank : 1
+I0303 14:56:23.525679 110876 parse_netconf.cpp:40]   Machine ID(Rank): 2 -------------------------- 
+I0303 14:56:23.525158 110879 coordinator.cpp:13] coordinator CONSTRUCTOR : 3
+I0303 14:56:23.525158 110877 worker.cpp:13] Worker CONSTRUCTOR : 1
+I0303 14:56:23.525158 110878 scheduler.cpp:11] Scheduler CONSTRUCTOR : 2
+I0303 14:56:23.525770 110876 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0303 14:56:23.525810 110876 parse_netconf.cpp:43]   Rank : 2
+I0303 14:56:23.525868 110876 parse_netconf.cpp:40]   Machine ID(Rank): 3 -------------------------- 
+I0303 14:56:23.525899 110876 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0303 14:56:23.525928 110876 parse_netconf.cpp:43]   Rank : 3
+I0303 14:56:23.559864 110877 strads_init.cpp:86] Rank (1)'s IP found in node file 10.55.54.4
+I0303 14:56:23.559850 110878 strads_init.cpp:86] Rank (2)'s IP found in node file 10.55.54.4
+I0303 14:56:23.559864 110879 strads_init.cpp:86] Rank (3)'s IP found in node file 10.55.54.4
+I0303 14:56:23.559883 110876 strads_init.cpp:86] Rank (0)'s IP found in node file 10.55.54.4
+I0303 14:56:23.560065 110876 parse_netconf.cpp:105]   PS Machine ID(Rank): 0 -------------------------- 
+[*****] ps configuration files(node/link) are parsed
+############################## rank(1) role(0) 
+[*****] ps configuration files(node/link) are parsed
+############################## rank(2) role(2) 
+I0303 14:56:23.560106 110876 parse_netconf.cpp:107] PS  IP Address: 10.55.54.4
+I0303 14:56:23.560137 110876 parse_netconf.cpp:108] PS  Rank : 0
+I0303 14:56:23.560166 110876 parse_netconf.cpp:105]   PS Machine ID(Rank): 1 -------------------------- 
+I0303 14:56:23.560197 110876 parse_netconf.cpp:107] PS  IP Address: 10.55.54.4
+I0303 14:56:23.560235 110876 parse_netconf.cpp:108] PS  Rank : 1
+I0303 14:56:23.560267 110876 parse_netconf.cpp:105]   PS Machine ID(Rank): 2 -------------------------- 
+I0303 14:56:23.560302 110876 parse_netconf.cpp:107] PS  IP Address: 10.55.54.4
+I0303 14:56:23.560334 110876 parse_netconf.cpp:108] PS  Rank : 2
+[*****] ps configuration files(node/link) are parsed
+############################## rank(3) role(1) 
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+I0303 14:56:23.560487 110876 parse_netconf.cpp:140] @@ PS Link: 0 -------------------------- 
+I0303 14:56:23.560572 110876 parse_netconf.cpp:142] PS src node: 0src port: 47014
+I0303 14:56:23.560694 110876 parse_netconf.cpp:143] PS dst node: 2dst port: 38014
+I0303 14:56:23.560724 110876 parse_netconf.cpp:140] @@ PS Link: 1 -------------------------- 
+I0303 14:56:23.560750 110876 parse_netconf.cpp:142] PS src node: 1src port: 47015
+I0303 14:56:23.560776 110876 parse_netconf.cpp:143] PS dst node: 2dst port: 38015
+I0303 14:56:23.560801 110876 parse_netconf.cpp:140] @@ PS Link: 2 -------------------------- 
+I0303 14:56:23.560825 110876 parse_netconf.cpp:142] PS src node: 2src port: 47016
+I0303 14:56:23.560847 110876 parse_netconf.cpp:143] PS dst node: 0dst port: 38016
+I0303 14:56:23.560868 110876 parse_netconf.cpp:140] @@ PS Link: 3 -------------------------- 
+I0303 14:56:23.560886 110876 parse_netconf.cpp:142] PS src node: 2src port: 47017
+I0303 14:56:23.560909 110876 parse_netconf.cpp:143] PS dst node: 1dst port: 38017
+[*****] ps configuration files(node/link) are parsed
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+############################## rank(0) role(0) 
+I0303 14:56:23.561245 110876 parse_netconf.cpp:76] @@ Link: 0 -------------------------- 
+I0303 14:56:23.561293 110876 parse_netconf.cpp:78] src node: 3src port: 47000
+I0303 14:56:23.561316 110876 parse_netconf.cpp:79] dst node: 0dst port: 38000
+I0303 14:56:23.561398 110876 parse_netconf.cpp:76] @@ Link: 1 -------------------------- 
+I0303 14:56:23.561427 110876 parse_netconf.cpp:78] src node: 3src port: 47001
+I0303 14:56:23.561453 110876 parse_netconf.cpp:79] dst node: 1dst port: 38001
+I0303 14:56:23.561509 110876 parse_netconf.cpp:76] @@ Link: 2 -------------------------- 
+I0303 14:56:23.561548 110876 parse_netconf.cpp:78] src node: 3src port: 47002
+I0303 14:56:23.561574 110876 parse_netconf.cpp:79] dst node: 2dst port: 38002
+I0303 14:56:23.561647 110876 parse_netconf.cpp:76] @@ Link: 3 -------------------------- 
+I0303 14:56:23.561693 110876 parse_netconf.cpp:78] src node: 0src port: 47003
+I0303 14:56:23.561722 110876 parse_netconf.cpp:79] dst node: 3dst port: 38003
+I0303 14:56:23.561749 110876 parse_netconf.cpp:76] @@ Link: 4 -------------------------- 
+I0303 14:56:23.561776 110876 parse_netconf.cpp:78] src node: 1src port: 47004
+I0303 14:56:23.561802 110876 parse_netconf.cpp:79] dst node: 3dst port: 38004
+I0303 14:56:23.561863 110876 parse_netconf.cpp:76] @@ Link: 5 -------------------------- 
+Coordinator rank 3 open a porttcp://*:47000 FOR SEND PORT -- ptr to zmqsocket(0x1a31c60) RCVHWM(1000) SNDHWM(5000)
+I0303 14:56:23.561904 110876 parse_netconf.cpp:78] src node: 2src port: 47005
+I0303 14:56:23.561936 110876 parse_netconf.cpp:79] dst node: 3dst port: 38005
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+Coordinator rank 3 open a porttcp://*:47001 FOR SEND PORT -- ptr to zmqsocket(0x1a31c40) RCVHWM(1000) SNDHWM(5000)
+Coordinator rank 3 open a porttcp://*:47002 FOR SEND PORT -- ptr to zmqsocket(0x1a31c20) RCVHWM(1000) SNDHWM(5000)
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38003 FOR RECEIVE PORT -- ptr to zmqsocket(0x1a31c30) HWM(5000)
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38004 FOR RECEIVE PORT -- ptr to zmqsocket(0x1a31c10) HWM(5000)
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38005 FOR RECEIVE PORT -- ptr to zmqsocket(0x1a31c00) HWM(5000)
+[Coordinator] Open ports and start hands shaking worker_recvportsize(2) worker_sendportsize(2)
+Coordinator -- wait for 0th worker RECV out of  2  pport(0x1a31c30)
+RANK rank 1 CONNECT a port  tcp://10.55.54.4:47001 FOR RECEIVE PORT -- ptr to socket(0x1fadc60) HWM(5000) 
+RANK rank 2 CONNECT a port  tcp://10.55.54.4:47002 FOR RECEIVE PORT -- ptr to socket(0x16b1c60) HWM(5000) 
+Rank 2 CONNECT a porttcp://10.55.54.4:38005 FOR SEND PORT -- ptr to socket(0x16b1c40) 
+Rank 1 CONNECT a porttcp://10.55.54.4:38004 FOR SEND PORT -- ptr to socket(0x1fadc40) 
+Rank(1) Send HB to SEND PORT ptr -- socket(0x1fadc40) 
+Rank(2) Send HB to SEND PORT ptr -- socket(0x16b1c40) 
+RANK rank 0 CONNECT a port  tcp://10.55.54.4:47000 FOR RECEIVE PORT -- ptr to socket(0x1175c60) HWM(5000) 
+Rank 0 CONNECT a porttcp://10.55.54.4:38003 FOR SEND PORT -- ptr to socket(0x1175c40) 
+Rank(0) Send HB to SEND PORT ptr -- socket(0x1175c40) 
+Coordinator -- wait for 1th worker RECV out of  2  pport(0x1a31c10)
+[Coordinator @@@@@] finish worker recv port confirm 
+Coordinator -- wait for 0th worker SENDPORT out of  2  pport(0x1a31c60)
+[Rank 0] got confirm for RECV PORT 
+[Rank 1] got confirm for RECV PORT 
+Rank(1) Send HB to RECV PORT ptr -- socket(0x1fadc60) 
+Rank(0) Send HB to RECV PORT ptr -- socket(0x1175c60) 
+Coordinator -- wait for 1th worker SENDPORT out of  2  pport(0x1a31c40)
+[Coordinator @@@@@] finish worker send port confirm 
+Coordinator -- wait for 0th scheduler RECVPORT out of  1  pport(0x1a31c00)
+[Coordinator @@@@@] finish scheduler recv port confirm 
+Coordinator -- wait for 0th scheduler SENDPORT out of  1  pport(0x1a31c20)
+[Rank 1] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (1)
+[Rank 2] got confirm for RECV PORT 
+Rank(2) Send HB to RECV PORT ptr -- socket(0x16b1c60) 
+[Rank 0] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (0)
+[Coordinator @@@@@] finish scheduler send port confirm 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (3)
+[Rank 2] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (2)
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+Rank 3 CONNECT a porttcp://10.55.54.4:38008 FOR SEND PORT -- ptr to socket(0x1a31bf0) 
+coordinator put rdataport into sendport for dstnode 0 (sendport[0x19b3860]
+I0303 14:56:25.569272 110876 parse_netconf.cpp:76] @@ Link: 0 -------------------------- 
+I0303 14:56:25.569432 110876 parse_netconf.cpp:78] src node: 2src port: 47006
+I0303 14:56:25.569475 110876 parse_netconf.cpp:79] dst node: 3dst port: 38006
+I0303 14:56:25.569514 110876 parse_netconf.cpp:76] @@ Link: 1 -------------------------- 
+I0303 14:56:25.569551 110876 parse_netconf.cpp:78] src node: 3src port: 47007
+I0303 14:56:25.569586 110876 parse_netconf.cpp:79] dst node: 2dst port: 38007
+I0303 14:56:25.569659 110876 parse_netconf.cpp:76] @@ Link: 2 -------------------------- 
+I0303 14:56:25.569696 110876 parse_netconf.cpp:78] src node: 3src port: 47008
+I0303 14:56:25.569736 110876 parse_netconf.cpp:79] dst node: 0dst port: 38008
+I0303 14:56:25.569772 110876 parse_netconf.cpp:76] @@ Link: 3 -------------------------- 
+I0303 14:56:25.569810 110876 parse_netconf.cpp:78] src node: 0src port: 47009
+I0303 14:56:25.569851 110876 parse_netconf.cpp:79] dst node: 1dst port: 38009
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38010 FOR RECEIVE PORT -- ptr to zmqsocket(0x1a31be0) HWM(5000)
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38011 FOR RECEIVE PORT -- ptr to zmqsocket(0x1a31bd0) HWM(5000)
+I0303 14:56:25.569890 110876 parse_netconf.cpp:76] @@ Link: 4 -------------------------- 
+I0303 14:56:25.569988 110876 parse_netconf.cpp:78] src node: 1src port: 47010
+I0303 14:56:25.570024 110876 parse_netconf.cpp:79] dst node: 3dst port: 38010
+I0303 14:56:25.570058 110876 parse_netconf.cpp:76] @@ Link: 5 -------------------------- 
+I0303 14:56:25.570096 110876 parse_netconf.cpp:78] src node: 0src port: 47011
+I0303 14:56:25.570133 110876 parse_netconf.cpp:79] dst node: 3dst port: 38011
+I0303 14:56:25.570175 110876 parse_netconf.cpp:76] @@ Link: 6 -------------------------- 
+I0303 14:56:25.570212 110876 parse_netconf.cpp:78] src node: 1src port: 47012
+I0303 14:56:25.570250 110876 parse_netconf.cpp:79] dst node: 0dst port: 38012
+I0303 14:56:25.570304 110876 parse_netconf.cpp:76] @@ Link: 7 -------------------------- 
+Rank 3 CONNECT a porttcp://10.55.54.4:38013 FOR SEND PORT -- ptr to socket(0x1a31bc0) 
+[ Coordinator Rank : 3 ]  GOT MESSAGE recvport (0x1a31be0) 
+I0303 14:56:25.570354 110876 parse_netconf.cpp:78] src node: 3src port: 47013
+I0303 14:56:25.570392 110876 parse_netconf.cpp:79] dst node: 1dst port: 38013
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+COORDINATOR Rank(3) Send HB to SEND PORT ptr -- socket(0x1a31bf0) -- Sending is DONE  
+@@@@@@@ WORKER rank 1 open a porttcp://*:38009 FOR RECEIVE PORT -- ptr to zmqsocket(0x1fadc20) HWM(5000)
+Rank 1 CONNECT a porttcp://10.55.54.4:38010 FOR SEND PORT -- ptr to socket(0x1fadc30) 
+Rank 1 CONNECT a porttcp://10.55.54.4:38012 FOR SEND PORT -- ptr to socket(0x1fadc10) 
+@@@@@@@ WORKER rank 1 open a porttcp://*:38013 FOR RECEIVE PORT -- ptr to zmqsocket(0x1fadc00) HWM(5000)
+[ Rank : 1 ]  GOT MESSAGE recvport (0x1fadc20) 
+COORDINATOR Rank(1) Send HB to SEND PORT ptr -- socket(0x1fadc30) -- Sending is DONE  
+[ Coordinator Rank : 3 ]  GOT MESSAGE recvport (0x1a31be0) DONE DONE 
+@@@@@@@ WORKER rank 0 open a porttcp://*:38008 FOR RECEIVE PORT -- ptr to zmqsocket(0x1175c20) HWM(5000)
+Rank 0 CONNECT a porttcp://10.55.54.4:38009 FOR SEND PORT -- ptr to socket(0x1175c30) 
+Rank 0 CONNECT a porttcp://10.55.54.4:38011 FOR SEND PORT -- ptr to socket(0x1175c10) 
+@@@@@@@ WORKER rank 0 open a porttcp://*:38012 FOR RECEIVE PORT -- ptr to zmqsocket(0x1175c00) HWM(5000)
+[ Rank : 0 ]  GOT MESSAGE recvport (0x1175c20) 
+COORDINATOR Rank(0) Send HB to SEND PORT ptr -- socket(0x1175c30) -- Sending is DONE  
+[ Worker Rank : 1 ]  GOT MESSAGE recvport (0x1fadc20) DONE DONE 
+COORDINATOR Rank(1) Send HB to SEND PORT ptr -- socket(0x1fadc10) -- Sending is DONE  
+[Worker Rank 1] got confirm for SEND PORT 
+[ Rank : 1 ]  GOT MESSAGE recvport (0x1fadc00) 
+[ Worker Rank : 0 ]  GOT MESSAGE recvport (0x1175c20) DONE DONE 
+[Worker Rank 0] got confirm for SEND PORT 
+COORDINATOR Rank(0) Send HB to SEND PORT ptr -- socket(0x1175c10) -- Sending is DONE  
+[ Rank : 0 ]  GOT MESSAGE recvport (0x1175c00) 
+[Coordinator Rank 3] got confirm for SEND PORT 
+COORDINATOR Rank(3) Send HB to SEND PORT ptr -- socket(0x1a31bc0) -- Sending is DONE  
+[ Coordinator Rank : 3 ]  GOT MESSAGE recvport (0x1a31bd0) 
+[ Coordinator Rank : 3 ]  GOT MESSAGE recvport (0x1a31bd0) DONE DONE 
+[ Worker Rank : 1 ]  GOT MESSAGE recvport (0x1fadc00) DONE DONE 
+[Coordinator Rank 3] got confirm for SEND PORT 
+[ Worker Rank : 0 ]  GOT MESSAGE recvport (0x1175c00) DONE DONE 
+[Worker Rank 0] got confirm for SEND PORT 
+[Worker Rank 1] got confirm for SEND PORT 
+I0303 14:56:27.712404 110877 strads_init.cpp:111] Star Topology is cretaed with 4 machines (processes) 
+I0303 14:56:27.712409 110879 strads_init.cpp:111] Star Topology is cretaed with 4 machines (processes) 
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+I0303 14:56:27.712400 110876 strads_init.cpp:111] Star Topology is cretaed with 4 machines (processes) 
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+I0303 14:56:27.712447 110878 strads_init.cpp:111] Star Topology is cretaed with 4 machines (processes) 
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+@@@@@@@ PS rank 2 open a porttcp://*:38014 FOR RECEIVE PORT -- ptr to zmqsocket(0x16b1c20) HWM(5000)
+@@@@@@@ PS rank 2 open a porttcp://*:38015 FOR RECEIVE PORT -- ptr to zmqsocket(0x16b1c30) HWM(5000)
+PS rank 2 open a porttcp://*:47016 FOR SEND PORT -- ptr to zmqsocket(0x16b1c10) RCVHWM(5000) SNDHWM(5000)
+PS rank 2 open a porttcp://*:47017 FOR SEND PORT -- ptr to zmqsocket(0x16b1c00) RCVHWM(5000) SNDHWM(5000)
+[PS] Open ports and start hands shaking worker_recvportsize(0) worker_sendportsize(0)
+PS -- wait for 0th worker RECV out of  2  pport(0x16b1c20)
+[t-006:141163] 3 more processes have sent help message help-mpi-btl-openib.txt / no device params found
+[t-006:141163] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+Rank 1 CONNECT a porttcp://10.55.54.4:38015 FOR SEND PORT -- ptr to socket(0x1fadbf0) 
+Rank 0 CONNECT a porttcp://10.55.54.4:38014 FOR SEND PORT -- ptr to socket(0x1175bf0) 
+RANK rank 1 CONNECT a port  tcp://10.55.54.4:47017 FOR RECEIVE PORT -- ptr to socket(0x1fadbe0) HWM(5000) 
+PS Rank(0) Send HB to SEND PORT ptr -- socket(0x1175bf0) 
+PS Rank(1) Send HB to SEND PORT ptr -- socket(0x1fadbf0) 
+RANK rank 0 CONNECT a port  tcp://10.55.54.4:47016 FOR RECEIVE PORT -- ptr to socket(0x1175be0) HWM(5000) 
+PS -- wait for 1th worker RECV out of  2  pport(0x16b1c30)
+[PS @@@@@] finish worker recv port confirm 
+Coordinator -- wait for 0th worker SENDPORT out of  2  pport(0x16b1c10)
+PS Rank(1) Send HB to RECV PORT ptr -- socket(0x1fadbe0) 
+PS [Rank 1] got confirm for RECV PORT 
+PS Rank(0) Send HB to RECV PORT ptr -- socket(0x1175be0) 
+PS [Rank 0] got confirm for RECV PORT 
+Coordinator -- wait for 1th worker SENDPORT out of  2  pport(0x16b1c00)
+[PS @@@@@] finish worker send port confirm 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PSPS finish create star  ethernet by rank (2)  with server rank 2
+PS [Rank 1] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PSPS finish create star  ethernet by rank (1)  with server rank 2
+I0303 14:56:29.716018 110879 strads_init.cpp:129]  EXIT : in stards_init function MPI RANK :  3
+EXIT strads init (3) role(1) 
+I0303 14:56:29.715951 110877 strads_init.cpp:129]  EXIT : in stards_init function MPI RANK :  1
+EXIT strads init (1) role(0) 
+I0303 14:56:29.716051 110877 ldall.cpp:22]  in main function MPI rank :  1mach_role: 0
+PS [Rank 0] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PSPS finish create star  ethernet by rank (0)  with server rank 2
+I0303 14:56:29.715958 110876 strads_init.cpp:129]  EXIT : in stards_init function MPI RANK :  0
+EXIT strads init (0) role(0) 
+I0303 14:56:29.716056 110876 ldall.cpp:22]  in main function MPI rank :  0mach_role: 0
+[worker(0)] boot up out of 2 workers 
+I0303 14:56:29.716421 110878 strads_init.cpp:129]  EXIT : in stards_init function MPI RANK :  2
+EXIT strads init (2) role(2) 
+I0303 14:56:29.716151 110879 ldall.cpp:22]  in main function MPI rank :  3mach_role: 1
+[coordinator] rank 3 mworkers: 2 
+[worker(1)] boot up out of 2 workers 
+I0303 14:56:29.716548 110878 ldall.cpp:22]  in main function MPI rank :  2mach_role: 2
+STRADS SCHEDULER rank 2 
+I0303 14:58:51.779863 110877 trainer.cpp:207] fname: /scratch/pengb/data/petuum-2//enwiki-1M.id.txt.ylda.1
+I0303 14:58:51.779970 110877 trainer.cpp:208] num doc (train): 1887777
+I0303 14:58:51.780035 110877 trainer.cpp:209] num doc (eval): 0
+I0303 14:58:51.780069 110877 trainer.cpp:210] num word (total): 1000001
+I0303 14:58:51.780097 110877 trainer.cpp:211] num token (total): 553946363
+I0303 14:58:51.780120 110877 trainer.cpp:212] total workers (total): 2
+I0303 14:58:51.780141 110877 trainer.cpp:213] ALPHA: 0.01
+I0303 14:58:51.780267 110877 trainer.cpp:214] BETA: 0.01
+I0303 14:58:51.780331 110877 trainer.cpp:215] --------------------------------------------------------------
+[worker(1)] finish loading data 
+I0303 14:58:55.662781 110876 trainer.cpp:207] fname: /scratch/pengb/data/petuum-2//enwiki-1M.id.txt.ylda.0
+I0303 14:58:55.662883 110876 trainer.cpp:208] num doc (train): 1887777
+I0303 14:58:55.662947 110876 trainer.cpp:209] num doc (eval): 0
+I0303 14:58:55.662977 110876 trainer.cpp:210] num word (total): 1000001
+I0303 14:58:55.662998 110876 trainer.cpp:211] num token (total): 553957308
+I0303 14:58:55.663018 110876 trainer.cpp:212] total workers (total): 2
+I0303 14:58:55.663036 110876 trainer.cpp:213] ALPHA: 0.01
+I0303 14:58:55.663164 110876 trainer.cpp:214] BETA: 0.01
+I0303 14:58:55.663256 110876 trainer.cpp:215] --------------------------------------------------------------
+[worker(0)] finish loading data 
+	[coordinator] worker(0) tokencnt: 553957308  docnt: 1887777  wordmax: 1000001
+	[coordinator] worker(1) tokencnt: 553946363  docnt: 1887777  wordmax: 1000001
+[coordinator] Aggregated : tokencnt: 1107903671  docnt: 3775554  wordmax: 1000001
+	[worker(0)] got wordmax: 1000001
+	[worker(1)] got wordmax: 1000001
+I0303 14:58:55.829288 110879 ll-coordinator.cpp:185] [coordinator] start initialization ...
+[coordinator] Make Bucket Information Packet
+	 Bucket 0 size 500001
+	 Bucket 1 size 500000
+[coordinator] Make Bucket Information Packet done 
+[coordinator] Bucket Information Packet Size : 2983507 scatter over machine via control
+ Received : bucket(0) has entries 500001
+ Received : bucket(1) has entries 500000
+Parts : 2
+ Received : bucket(0) has entries 500001
+ Received : bucket(0) has entries wid(0) 513725
+Parts : 2
+ Received : bucket(0) has entries 500001
+ Received : bucket(0) has entries wid(0) 513725
+ Received : bucket(1) has entries 500000
+ Received : bucket(1) has entries wid(0) 76985
+ Received : bucket(1) has entries 500000
+ Received : bucket(1) has entries wid(0) 76985

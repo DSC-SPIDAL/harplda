@@ -1,0 +1,21 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+ylda=/tmp/hpda/pengb/hpda/test/bingjing/ylda/bin/
+workroot=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=juliet-10
+
+# enwiki-1M on juliet
+datadir=/share/jproject/fg474/dataset/enwiki-1M/petuum-10/
+datafile=enwiki-1M.id.txt.ylda
+topics=10000
+iter=120
+alpha=100
+beta=0.01
+threads=30
+
+

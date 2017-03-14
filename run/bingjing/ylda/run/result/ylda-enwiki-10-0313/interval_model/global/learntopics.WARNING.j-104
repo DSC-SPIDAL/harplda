@@ -1,0 +1,15 @@
+Log file created at: 2017/03/13 22:27:54
+Running on machine: j-104
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W0313 22:27:54.257915 66320 Controller.cpp:96] ----------------------------------------------------------------------
+W0313 22:27:54.258379 66320 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0313 22:27:54.258395 66320 Controller.cpp:100] ----------------------------------------------------------------------
+W0313 22:27:54.258589 66320 Controller.cpp:115] You have chosen multi machine training mode
+W0313 22:27:54.258764 66320 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0313 22:27:55.078662 66320 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0313 22:27:58.769094 66320 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 859793 words & 10000 topics.
+W0313 22:32:19.567992 66320 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0313 22:32:19.568070 66320 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0313 22:32:19.568150 66320 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0313 22:32:19.568156 66320 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0313 22:32:19.568162 66320 Unigram_Model_Trainer.cpp:67] Beta param initialized

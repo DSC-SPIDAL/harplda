@@ -1,0 +1,3 @@
+echo "run learntopics on j-098"
+cd /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin/ && source /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//setLibVars.sh
+cd /tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work && export GLOG_log_dir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work && /tmp/hpda/pengb/hpda/test/bingjing/ylda/bin//learntopics --topics=10000 --iter=120 --servers=10.16.0.98:10000,10.16.0.99:10000,10.16.0.100:10000,10.16.0.101:10000,10.16.0.102:10000,10.16.0.103:10000,10.16.0.104:10000,10.16.0.105:10000,10.16.0.106:10000,10.16.0.107:10000 --alpha=100 --beta=0.01 --optimizestats=5000 --samplerthreads=30 --chkptdir=/tmp/hpda/pengb/hpda/test/bingjing/ylda/run//work --chkptinterval=10

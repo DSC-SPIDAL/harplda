@@ -1,0 +1,648 @@
+--------------------------------------------------------------------------
+WARNING: No preset parameters were found for the device that Open MPI
+detected:
+
+  Local host:            t-004
+  Device name:           hfi1_0
+  Device vendor ID:      0x1175
+  Device vendor part ID: 9457
+
+Default device parameters will be used, which may result in lower
+performance.  You can edit any of the files specified by the
+btl_openib_device_param_files MCA parameter to set values for your
+device.
+
+NOTE: You can turn off this warning by setting the MCA parameter
+      btl_openib_warn_no_device_params_found to 0.
+--------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+I0305 23:57:57.596668 118731 sysparam.hpp:71]  node file  : 
+I0305 23:57:57.596951 118731 sysparam.hpp:72]  star file  : 
+I0305 23:57:57.596974 118731 sysparam.hpp:73]  scheduling : 0
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+I0305 23:57:57.596999 118731 sysparam.hpp:74]  schedulers : 1
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@@@@@@@@@@@@@@@@ M MAX PEND : 500 init count  0 @@@@@@@@@@@@@2 
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[3]->ip (10.55.54.4) id(3)  funcname(default-func) 
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[3]->ip (10.55.54.4) id(3)  funcname(default-func) 
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[3]->ip (10.55.54.4) id(3)  funcname(default-func) 
+[coordinator] nodes[0]->ip (10.55.54.4) id(0)  funcname(default-func) 
+[coordinator] nodes[1]->ip (10.55.54.4) id(1)  funcname(default-func) 
+[coordinator] nodes[2]->ip (10.55.54.4) id(2)  funcname(default-func) 
+[coordinator] nodes[3]->ip (10.55.54.4) id(3)  funcname(default-func) 
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+ Worker call fork agent ... 1 rank  
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+ Worker call fork agent ... 0 rank  
+I0305 23:57:57.602366 118731 worker.cpp:13] Worker CONSTRUCTOR : 0
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+ Scheduler call fork agent 2 rank  
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+ Coordinator call fork agent 3 rank  
+I0305 23:57:57.602452 118734 coordinator.cpp:13] coordinator CONSTRUCTOR : 3
+I0305 23:57:57.602517 118731 parse_netconf.cpp:40]   Machine ID(Rank): 0 -------------------------- 
+I0305 23:57:57.602542 118731 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0305 23:57:57.602576 118731 parse_netconf.cpp:43]   Rank : 0
+I0305 23:57:57.602599 118731 parse_netconf.cpp:40]   Machine ID(Rank): 1 -------------------------- 
+I0305 23:57:57.602643 118731 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0305 23:57:57.602661 118731 parse_netconf.cpp:43]   Rank : 1
+I0305 23:57:57.602679 118731 parse_netconf.cpp:40]   Machine ID(Rank): 2 -------------------------- 
+I0305 23:57:57.602697 118731 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0305 23:57:57.602717 118731 parse_netconf.cpp:43]   Rank : 2
+I0305 23:57:57.602737 118731 parse_netconf.cpp:40]   Machine ID(Rank): 3 -------------------------- 
+I0305 23:57:57.602756 118731 parse_netconf.cpp:42]   IP Address: 10.55.54.4
+I0305 23:57:57.602773 118731 parse_netconf.cpp:43]   Rank : 3
+I0305 23:57:57.602455 118732 worker.cpp:13] Worker CONSTRUCTOR : 1
+I0305 23:57:57.602455 118733 scheduler.cpp:11] Scheduler CONSTRUCTOR : 2
+I0305 23:57:57.632668 118732 strads_init.cpp:86] Rank (1)'s IP found in node file 10.55.54.4
+I0305 23:57:57.632650 118734 strads_init.cpp:86] Rank (3)'s IP found in node file 10.55.54.4
+I0305 23:57:57.632668 118733 strads_init.cpp:86] Rank (2)'s IP found in node file 10.55.54.4
+[*****] ps configuration files(node/link) are parsed
+[*****] ps configuration files(node/link) are parsed
+[*****] ps configuration files(node/link) are parsed
+############################## rank(2) role(2) 
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+############################## rank(1) role(0) 
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+############################## rank(3) role(1) 
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+Coordinator rank 3 open a porttcp://*:47000 FOR SEND PORT -- ptr to zmqsocket(0x13a5c60) RCVHWM(1000) SNDHWM(5000)
+Coordinator rank 3 open a porttcp://*:47001 FOR SEND PORT -- ptr to zmqsocket(0x13a5c40) RCVHWM(1000) SNDHWM(5000)
+Coordinator rank 3 open a porttcp://*:47002 FOR SEND PORT -- ptr to zmqsocket(0x13a5c20) RCVHWM(1000) SNDHWM(5000)
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38003 FOR RECEIVE PORT -- ptr to zmqsocket(0x13a5c30) HWM(5000)
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38004 FOR RECEIVE PORT -- ptr to zmqsocket(0x13a5c10) HWM(5000)
+I0305 23:57:57.634738 118731 strads_init.cpp:86] Rank (0)'s IP found in node file 10.55.54.4
+I0305 23:57:57.634886 118731 parse_netconf.cpp:105]   PS Machine ID(Rank): 0 -------------------------- 
+I0305 23:57:57.634912 118731 parse_netconf.cpp:107] PS  IP Address: 10.55.54.4
+I0305 23:57:57.634932 118731 parse_netconf.cpp:108] PS  Rank : 0
+I0305 23:57:57.634951 118731 parse_netconf.cpp:105]   PS Machine ID(Rank): 1 -------------------------- 
+I0305 23:57:57.634969 118731 parse_netconf.cpp:107] PS  IP Address: 10.55.54.4
+I0305 23:57:57.634987 118731 parse_netconf.cpp:108] PS  Rank : 1
+I0305 23:57:57.635004 118731 parse_netconf.cpp:105]   PS Machine ID(Rank): 2 -------------------------- 
+I0305 23:57:57.635021 118731 parse_netconf.cpp:107] PS  IP Address: 10.55.54.4
+I0305 23:57:57.635040 118731 parse_netconf.cpp:108] PS  Rank : 2
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38005 FOR RECEIVE PORT -- ptr to zmqsocket(0x13a5c00) HWM(5000)
+[Coordinator] Open ports and start hands shaking worker_recvportsize(2) worker_sendportsize(2)
+Coordinator -- wait for 0th worker RECV out of  2  pport(0x13a5c30)
+I0305 23:57:57.635140 118731 parse_netconf.cpp:140] @@ PS Link: 0 -------------------------- 
+I0305 23:57:57.635160 118731 parse_netconf.cpp:142] PS src node: 0src port: 47014
+I0305 23:57:57.635179 118731 parse_netconf.cpp:143] PS dst node: 2dst port: 38014
+I0305 23:57:57.635196 118731 parse_netconf.cpp:140] @@ PS Link: 1 -------------------------- 
+I0305 23:57:57.635213 118731 parse_netconf.cpp:142] PS src node: 1src port: 47015
+I0305 23:57:57.635231 118731 parse_netconf.cpp:143] PS dst node: 2dst port: 38015
+I0305 23:57:57.635248 118731 parse_netconf.cpp:140] @@ PS Link: 2 -------------------------- 
+I0305 23:57:57.635265 118731 parse_netconf.cpp:142] PS src node: 2src port: 47016
+I0305 23:57:57.635282 118731 parse_netconf.cpp:143] PS dst node: 0dst port: 38016
+I0305 23:57:57.635300 118731 parse_netconf.cpp:140] @@ PS Link: 3 -------------------------- 
+I0305 23:57:57.635318 118731 parse_netconf.cpp:142] PS src node: 2src port: 47017
+I0305 23:57:57.635334 118731 parse_netconf.cpp:143] PS dst node: 1dst port: 38017
+[*****] ps configuration files(node/link) are parsed
+############################## rank(0) role(0) 
+I0305 23:57:57.635504 118731 parse_netconf.cpp:76] @@ Link: 0 -------------------------- 
+I0305 23:57:57.635525 118731 parse_netconf.cpp:78] src node: 3src port: 47000
+I0305 23:57:57.635542 118731 parse_netconf.cpp:79] dst node: 0dst port: 38000
+I0305 23:57:57.635560 118731 parse_netconf.cpp:76] @@ Link: 1 -------------------------- 
+I0305 23:57:57.635577 118731 parse_netconf.cpp:78] src node: 3src port: 47001
+I0305 23:57:57.635594 118731 parse_netconf.cpp:79] dst node: 1dst port: 38001
+I0305 23:57:57.635637 118731 parse_netconf.cpp:76] @@ Link: 2 -------------------------- 
+I0305 23:57:57.635654 118731 parse_netconf.cpp:78] src node: 3src port: 47002
+I0305 23:57:57.635673 118731 parse_netconf.cpp:79] dst node: 2dst port: 38002
+I0305 23:57:57.635689 118731 parse_netconf.cpp:76] @@ Link: 3 -------------------------- 
+I0305 23:57:57.635707 118731 parse_netconf.cpp:78] src node: 0src port: 47003
+I0305 23:57:57.635725 118731 parse_netconf.cpp:79] dst node: 3dst port: 38003
+I0305 23:57:57.635741 118731 parse_netconf.cpp:76] @@ Link: 4 -------------------------- 
+I0305 23:57:57.635758 118731 parse_netconf.cpp:78] src node: 1src port: 47004
+I0305 23:57:57.635776 118731 parse_netconf.cpp:79] dst node: 3dst port: 38004
+I0305 23:57:57.635793 118731 parse_netconf.cpp:76] @@ Link: 5 -------------------------- 
+I0305 23:57:57.635812 118731 parse_netconf.cpp:78] src node: 2src port: 47005
+I0305 23:57:57.635828 118731 parse_netconf.cpp:79] dst node: 3dst port: 38005
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+RANK rank 1 CONNECT a port  tcp://10.55.54.4:47001 FOR RECEIVE PORT -- ptr to socket(0x2495c60) HWM(5000) 
+RANK rank 2 CONNECT a port  tcp://10.55.54.4:47002 FOR RECEIVE PORT -- ptr to socket(0x1779c60) HWM(5000) 
+Rank 2 CONNECT a porttcp://10.55.54.4:38005 FOR SEND PORT -- ptr to socket(0x1779c40) 
+Rank 1 CONNECT a porttcp://10.55.54.4:38004 FOR SEND PORT -- ptr to socket(0x2495c40) 
+Rank(1) Send HB to SEND PORT ptr -- socket(0x2495c40) 
+Rank(2) Send HB to SEND PORT ptr -- socket(0x1779c40) 
+RANK rank 0 CONNECT a port  tcp://10.55.54.4:47000 FOR RECEIVE PORT -- ptr to socket(0x267bc60) HWM(5000) 
+Rank 0 CONNECT a porttcp://10.55.54.4:38003 FOR SEND PORT -- ptr to socket(0x267bc40) 
+Rank(0) Send HB to SEND PORT ptr -- socket(0x267bc40) 
+Rank(0) Send HB to RECV PORT ptr -- socket(0x267bc60) 
+[Rank 0] got confirm for RECV PORT 
+[Rank 0] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (0)
+Coordinator -- wait for 1th worker RECV out of  2  pport(0x13a5c10)
+[Coordinator @@@@@] finish worker recv port confirm 
+Coordinator -- wait for 0th worker SENDPORT out of  2  pport(0x13a5c60)
+Coordinator -- wait for 1th worker SENDPORT out of  2  pport(0x13a5c40)
+[Rank 1] got confirm for RECV PORT 
+Rank(1) Send HB to RECV PORT ptr -- socket(0x2495c60) 
+[Coordinator @@@@@] finish worker send port confirm 
+Coordinator -- wait for 0th scheduler RECVPORT out of  1  pport(0x13a5c00)
+[Coordinator @@@@@] finish scheduler recv port confirm 
+Coordinator -- wait for 0th scheduler SENDPORT out of  1  pport(0x13a5c20)
+[Rank 2] got confirm for RECV PORT 
+[Rank 1] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (1)
+Rank(2) Send HB to RECV PORT ptr -- socket(0x1779c60) 
+[Coordinator @@@@@] finish scheduler send port confirm 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (3)
+[Rank 2] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ finish create starring ethernet by rank (2)
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@@@@@ My rank(3) role (1) [1:coord][0:worker][2:sched]
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+I0305 23:57:59.659775 118731 parse_netconf.cpp:76] @@ Link: 0 -------------------------- 
+I0305 23:57:59.659839 118731 parse_netconf.cpp:78] src node: 2src port: 47006
+I0305 23:57:59.659875 118731 parse_netconf.cpp:79] dst node: 3dst port: 38006
+I0305 23:57:59.659907 118731 parse_netconf.cpp:76] @@ Link: 1 -------------------------- 
+Rank 3 CONNECT a porttcp://10.55.54.4:38008 FOR SEND PORT -- ptr to socket(0x13a5bf0) 
+coordinator put rdataport into sendport for dstnode 0 (sendport[0x1327860]
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38010 FOR RECEIVE PORT -- ptr to zmqsocket(0x13a5be0) HWM(5000)
+I0305 23:57:59.659942 118731 parse_netconf.cpp:78] src node: 3src port: 47007
+I0305 23:57:59.659977 118731 parse_netconf.cpp:79] dst node: 2dst port: 38007
+I0305 23:57:59.660010 118731 parse_netconf.cpp:76] @@ Link: 2 -------------------------- 
+I0305 23:57:59.660043 118731 parse_netconf.cpp:78] src node: 3src port: 47008
+I0305 23:57:59.660074 118731 parse_netconf.cpp:79] dst node: 0dst port: 38008
+I0305 23:57:59.660106 118731 parse_netconf.cpp:76] @@ Link: 3 -------------------------- 
+I0305 23:57:59.660137 118731 parse_netconf.cpp:78] src node: 0src port: 47009
+I0305 23:57:59.660171 118731 parse_netconf.cpp:79] dst node: 1dst port: 38009
+I0305 23:57:59.660202 118731 parse_netconf.cpp:76] @@ Link: 4 -------------------------- 
+I0305 23:57:59.660234 118731 parse_netconf.cpp:78] src node: 1src port: 47010
+I0305 23:57:59.660266 118731 parse_netconf.cpp:79] dst node: 3dst port: 38010
+@@@@@@@ Coordinator rank 3 open a porttcp://*:38011 FOR RECEIVE PORT -- ptr to zmqsocket(0x13a5bd0) HWM(5000)
+Rank 3 CONNECT a porttcp://10.55.54.4:38013 FOR SEND PORT -- ptr to socket(0x13a5bc0) 
+I0305 23:57:59.660300 118731 parse_netconf.cpp:76] @@ Link: 5 -------------------------- 
+I0305 23:57:59.660328 118731 parse_netconf.cpp:78] src node: 0src port: 47011
+I0305 23:57:59.660362 118731 parse_netconf.cpp:79] dst node: 3dst port: 38011
+I0305 23:57:59.660394 118731 parse_netconf.cpp:76] @@ Link: 6 -------------------------- 
+I0305 23:57:59.660426 118731 parse_netconf.cpp:78] src node: 1src port: 47012
+I0305 23:57:59.660459 118731 parse_netconf.cpp:79] dst node: 0dst port: 38012
+I0305 23:57:59.660491 118731 parse_netconf.cpp:76] @@ Link: 7 -------------------------- 
+I0305 23:57:59.660523 118731 parse_netconf.cpp:78] src node: 3src port: 47013
+I0305 23:57:59.660555 118731 parse_netconf.cpp:79] dst node: 1dst port: 38013
+[ Coordinator Rank : 3 ]  GOT MESSAGE recvport (0x13a5be0) 
+COORDINATOR Rank(3) Send HB to SEND PORT ptr -- socket(0x13a5bf0) -- Sending is DONE  
+
+
+
+[ Ring worker ring ] start
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+@@@@@@@ WORKER rank 1 open a porttcp://*:38009 FOR RECEIVE PORT -- ptr to zmqsocket(0x2495c20) HWM(5000)
+Rank 1 CONNECT a porttcp://10.55.54.4:38010 FOR SEND PORT -- ptr to socket(0x2495c30) 
+Rank 1 CONNECT a porttcp://10.55.54.4:38012 FOR SEND PORT -- ptr to socket(0x2495c10) 
+@@@@@@@ WORKER rank 1 open a porttcp://*:38013 FOR RECEIVE PORT -- ptr to zmqsocket(0x2495c00) HWM(5000)
+[ Rank : 1 ]  GOT MESSAGE recvport (0x2495c20) 
+COORDINATOR Rank(1) Send HB to SEND PORT ptr -- socket(0x2495c30) -- Sending is DONE  
+@@@@@@@ WORKER rank 0 open a porttcp://*:38008 FOR RECEIVE PORT -- ptr to zmqsocket(0x267bc20) HWM(5000)
+Rank 0 CONNECT a porttcp://10.55.54.4:38009 FOR SEND PORT -- ptr to socket(0x267bc30) 
+Rank 0 CONNECT a porttcp://10.55.54.4:38011 FOR SEND PORT -- ptr to socket(0x267bc10) 
+@@@@@@@ WORKER rank 0 open a porttcp://*:38012 FOR RECEIVE PORT -- ptr to zmqsocket(0x267bc00) HWM(5000)
+[ Rank : 0 ]  GOT MESSAGE recvport (0x267bc20) 
+COORDINATOR Rank(0) Send HB to SEND PORT ptr -- socket(0x267bc30) -- Sending is DONE  
+[ Coordinator Rank : 3 ]  GOT MESSAGE recvport (0x13a5be0) DONE DONE 
+[ Worker Rank : 1 ]  GOT MESSAGE recvport (0x2495c20) DONE DONE 
+[Worker Rank 1] got confirm for SEND PORT 
+[ Rank : 1 ]  GOT MESSAGE recvport (0x2495c00) 
+COORDINATOR Rank(1) Send HB to SEND PORT ptr -- socket(0x2495c10) -- Sending is DONE  
+[ Worker Rank : 0 ]  GOT MESSAGE recvport (0x267bc20) DONE DONE 
+[Worker Rank 0] got confirm for SEND PORT 
+COORDINATOR Rank(0) Send HB to SEND PORT ptr -- socket(0x267bc10) -- Sending is DONE  
+[ Rank : 0 ]  GOT MESSAGE recvport (0x267bc00) 
+[Coordinator Rank 3] got confirm for SEND PORT 
+[ Coordinator Rank : 3 ]  GOT MESSAGE recvport (0x13a5bd0) 
+COORDINATOR Rank(3) Send HB to SEND PORT ptr -- socket(0x13a5bc0) -- Sending is DONE  
+[ Coordinator Rank : 3 ]  GOT MESSAGE recvport (0x13a5bd0) DONE DONE 
+[ Worker Rank : 0 ]  GOT MESSAGE recvport (0x267bc00) DONE DONE 
+[Worker Rank 0] got confirm for SEND PORT 
+[ Worker Rank : 1 ]  GOT MESSAGE recvport (0x2495c00) DONE DONE 
+[Worker Rank 1] got confirm for SEND PORT 
+[Coordinator Rank 3] got confirm for SEND PORT 
+I0305 23:58:01.812237 118732 strads_init.cpp:111] Star Topology is cretaed with 4 machines (processes) 
+I0305 23:58:01.812250 118731 strads_init.cpp:111] Star Topology is cretaed with 4 machines (processes) 
+I0305 23:58:01.812237 118734 strads_init.cpp:111] Star Topology is cretaed with 4 machines (processes) 
+I0305 23:58:01.812278 118733 strads_init.cpp:111] Star Topology is cretaed with 4 machines (processes) 
+@@@@@@@@@@@@ My rank(2) role (2) [1:coord][0:worker][2:sched]
+@@@@@@@@ FIND ROLE : Rank(0) schedmach(1) schedmach(2) coordinatemach (3)
+@@@@@@@@@@@@ My rank(0) role (0) [1:coord][0:worker][2:sched]
+@@@@@@@@@@@@ My rank(1) role (0) [1:coord][0:worker][2:sched]
+@@@@@@@ PS rank 2 open a porttcp://*:38014 FOR RECEIVE PORT -- ptr to zmqsocket(0x1779c20) HWM(5000)
+@@@@@@@ PS rank 2 open a porttcp://*:38015 FOR RECEIVE PORT -- ptr to zmqsocket(0x1779c30) HWM(5000)
+PS rank 2 open a porttcp://*:47016 FOR SEND PORT -- ptr to zmqsocket(0x1779c10) RCVHWM(5000) SNDHWM(5000)
+PS rank 2 open a porttcp://*:47017 FOR SEND PORT -- ptr to zmqsocket(0x1779c00) RCVHWM(5000) SNDHWM(5000)
+[PS] Open ports and start hands shaking worker_recvportsize(0) worker_sendportsize(0)
+PS -- wait for 0th worker RECV out of  2  pport(0x1779c20)
+[t-006:257163] 3 more processes have sent help message help-mpi-btl-openib.txt / no device params found
+[t-006:257163] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+Rank 1 CONNECT a porttcp://10.55.54.4:38015 FOR SEND PORT -- ptr to socket(0x2495bf0) 
+RANK rank 1 CONNECT a port  tcp://10.55.54.4:47017 FOR RECEIVE PORT -- ptr to socket(0x2495be0) HWM(5000) 
+Rank 0 CONNECT a porttcp://10.55.54.4:38014 FOR SEND PORT -- ptr to socket(0x267bbf0) 
+RANK rank 0 CONNECT a port  tcp://10.55.54.4:47016 FOR RECEIVE PORT -- ptr to socket(0x267bbe0) HWM(5000) 
+PS Rank(1) Send HB to SEND PORT ptr -- socket(0x2495bf0) 
+PS Rank(0) Send HB to SEND PORT ptr -- socket(0x267bbf0) 
+PS -- wait for 1th worker RECV out of  2  pport(0x1779c30)
+[PS @@@@@] finish worker recv port confirm 
+Coordinator -- wait for 0th worker SENDPORT out of  2  pport(0x1779c10)
+PS [Rank 0] got confirm for RECV PORT 
+PS Rank(0) Send HB to RECV PORT ptr -- socket(0x267bbe0) 
+PS Rank(1) Send HB to RECV PORT ptr -- socket(0x2495be0) 
+Coordinator -- wait for 1th worker SENDPORT out of  2  pport(0x1779c00)
+PS [Rank 1] got confirm for RECV PORT 
+[PS @@@@@] finish worker send port confirm 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PSPS finish create star  ethernet by rank (2)  with server rank 2
+PS [Rank 0] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PSPS finish create star  ethernet by rank (0)  with server rank 2
+PS [Rank 1] got confirm for SEND PORT 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ PSPS finish create star  ethernet by rank (1)  with server rank 2
+I0305 23:58:03.815546 118733 strads_init.cpp:129]  EXIT : in stards_init function MPI RANK :  2
+I0305 23:58:03.815546 118731 strads_init.cpp:129]  EXIT : in stards_init function MPI RANK :  0
+EXIT strads init (0) role(0) 
+I0305 23:58:03.815649 118731 ldall.cpp:22]  in main function MPI rank :  0mach_role: 0
+[worker(0)] boot up out of 2 workers 
+I0305 23:58:03.815625 118734 strads_init.cpp:129]  EXIT : in stards_init function MPI RANK :  3
+EXIT strads init (3) role(1) 
+I0305 23:58:03.815734 118734 ldall.cpp:22]  in main function MPI rank :  3mach_role: 1
+[coordinator] rank 3 mworkers: 2 
+I0305 23:58:03.815572 118732 strads_init.cpp:129]  EXIT : in stards_init function MPI RANK :  1
+EXIT strads init (1) role(0) 
+I0305 23:58:03.815691 118732 ldall.cpp:22]  in main function MPI rank :  1mach_role: 0
+[worker(1)] boot up out of 2 workers 
+EXIT strads init (2) role(2) 
+I0305 23:58:03.816092 118733 ldall.cpp:22]  in main function MPI rank :  2mach_role: 2
+STRADS SCHEDULER rank 2 
+I0306 00:00:26.232427 118731 trainer.cpp:207] fname: /scratch/pengb/data/petuum-2//enwiki-1M.id.txt.ylda.0
+I0306 00:00:26.233645 118731 trainer.cpp:208] num doc (train): 1887777
+I0306 00:00:26.233728 118731 trainer.cpp:209] num doc (eval): 0
+I0306 00:00:26.233767 118731 trainer.cpp:210] num word (total): 1000001
+I0306 00:00:26.233790 118731 trainer.cpp:211] num token (total): 553957308
+I0306 00:00:26.233810 118731 trainer.cpp:212] total workers (total): 2
+I0306 00:00:26.233830 118731 trainer.cpp:213] ALPHA: 0.01
+I0306 00:00:26.233954 118731 trainer.cpp:214] BETA: 0.01
+I0306 00:00:26.234009 118731 trainer.cpp:215] --------------------------------------------------------------
+[worker(0)] finish loading data 
+	[coordinator] worker(0) tokencnt: 553957308  docnt: 1887777  wordmax: 1000001
+I0306 00:00:27.166038 118732 trainer.cpp:207] fname: /scratch/pengb/data/petuum-2//enwiki-1M.id.txt.ylda.1
+I0306 00:00:27.166152 118732 trainer.cpp:208] num doc (train): 1887777
+I0306 00:00:27.166219 118732 trainer.cpp:209] num doc (eval): 0
+I0306 00:00:27.166256 118732 trainer.cpp:210] num word (total): 1000001
+I0306 00:00:27.166286 118732 trainer.cpp:211] num token (total): 553946363
+I0306 00:00:27.166311 118732 trainer.cpp:212] total workers (total): 2
+I0306 00:00:27.166332 118732 trainer.cpp:213] ALPHA: 0.01
+I0306 00:00:27.166463 118732 trainer.cpp:214] BETA: 0.01
+I0306 00:00:27.166757 118732 trainer.cpp:215] --------------------------------------------------------------
+[worker(1)] finish loading data 
+	[coordinator] worker(1) tokencnt: 553946363  docnt: 1887777  wordmax: 1000001
+[coordinator] Aggregated : tokencnt: 1107903671  docnt: 3775554  wordmax: 1000001
+	[worker(0)] got wordmax: 1000001
+	[worker(1)] got wordmax: 1000001
+I0306 00:00:27.339820 118734 ll-coordinator.cpp:185] [coordinator] start initialization ...
+[coordinator] Make Bucket Information Packet
+	 Bucket 0 size 500001
+	 Bucket 1 size 500000
+[coordinator] Make Bucket Information Packet done 
+[coordinator] Bucket Information Packet Size : 2983507 scatter over machine via control
+ Received : bucket(0) has entries 500001
+ Received : bucket(1) has entries 500000
+Parts : 2
+ Received : bucket(0) has entries 500001
+ Received : bucket(0) has entries wid(0) 513725
+Parts : 2
+ Received : bucket(0) has entries 500001
+ Received : bucket(0) has entries wid(0) 513725
+ Received : bucket(1) has entries 500000
+ Received : bucket(1) has entries wid(0) 76985
+ Received : bucket(1) has entries 500000
+ Received : bucket(1) has entries wid(0) 76985
+[worker (1)] finish random topic assignment to all tokesn in doc in a worker
+[worker 1] max word size (dictionary size): 500000 in documents in my partition 
+[worker (0)] finish random topic assignment to all tokesn in doc in a worker
+[worker 0] max word size (dictionary size): 500001 in documents in my partition 
+		 progress: worker(1) got (10000) message I generated 
+		 progress: worker(1) got (20000) message I generated 
+		 progress: worker(1) got (30000) message I generated 
+		 progress: worker(1) got (40000) message I generated 
+		 progress: worker(1) got (50000) message I generated 
+		 progress: worker(1) got (60000) message I generated 
+		 progress: worker(1) got (70000) message I generated 
+		 progress: worker(1) got (80000) message I generated 
+		 progress: worker(1) got (90000) message I generated 
+		 progress: worker(1) got (100000) message I generated 
+		 progress: worker(1) got (110000) message I generated 
+		 progress: worker(1) got (120000) message I generated 
+		 progress: worker(1) got (130000) message I generated 
+		 progress: worker(1) got (140000) message I generated 
+		 progress: worker(1) got (150000) message I generated 
+		 progress: worker(1) got (160000) message I generated 
+		 progress: worker(1) got (170000) message I generated 
+		 progress: worker(1) got (180000) message I generated 
+		 progress: worker(1) got (190000) message I generated 
+		 progress: worker(1) got (200000) message I generated 
+		 progress: worker(1) got (210000) message I generated 
+		 progress: worker(1) got (220000) message I generated 
+		 progress: worker(1) got (230000) message I generated 
+		 progress: worker(1) got (240000) message I generated 
+		 progress: worker(0) got (10000) message I generated 
+		 progress: worker(0) got (20000) message I generated 
+		 progress: worker(0) got (30000) message I generated 
+		 progress: worker(0) got (40000) message I generated 
+		 progress: worker(0) got (50000) message I generated 
+		 progress: worker(0) got (60000) message I generated 
+		 progress: worker(0) got (70000) message I generated 
+		 progress: worker(1) got (250000) message I generated 
+		 progress: worker(0) got (80000) message I generated 
+		 progress: worker(0) got (90000) message I generated 
+		 progress: worker(0) got (100000) message I generated 
+		 progress: worker(0) got (110000) message I generated 
+		 progress: worker(0) got (120000) message I generated 
+		 progress: worker(0) got (130000) message I generated 
+		 progress: worker(0) got (140000) message I generated 
+		 progress: worker(0) got (150000) message I generated 
+		 progress: worker(0) got (160000) message I generated 
+		 progress: worker(0) got (170000) message I generated 
+		 progress: worker(1) got (260000) message I generated 
+		 progress: worker(0) got (180000) message I generated 
+		 progress: worker(0) got (190000) message I generated 
+		 progress: worker(0) got (200000) message I generated 
+		 progress: worker(0) got (210000) message I generated 
+		 progress: worker(0) got (220000) message I generated 
+		 progress: worker(0) got (230000) message I generated 
+		 progress: worker(1) got (270000) message I generated 
+		 progress: worker(0) got (240000) message I generated 
+		 progress: worker(0) got (250000) message I generated 
+		 progress: worker(0) got (260000) message I generated 
+		 progress: worker(0) got (270000) message I generated 
+		 progress: worker(1) got (280000) message I generated 
+		 progress: worker(0) got (280000) message I generated 
+		 progress: worker(0) got (290000) message I generated 
+		 progress: worker(1) got (290000) message I generated 
+		 progress: worker(0) got (300000) message I generated 
+		 progress: worker(1) got (300000) message I generated 
+		 progress: worker(0) got (310000) message I generated 
+		 progress: worker(1) got (310000) message I generated 
+		 progress: worker(0) got (320000) message I generated 
+		 progress: worker(1) got (320000) message I generated 
+		 progress: worker(0) got (330000) message I generated 
+		 progress: worker(1) got (330000) message I generated 
+		 progress: worker(0) got (340000) message I generated 
+		 progress: worker(1) got (340000) message I generated 
+		 progress: worker(0) got (350000) message I generated 
+		 progress: worker(1) got (350000) message I generated 
+		 progress: worker(0) got (360000) message I generated 
+		 progress: worker(1) got (360000) message I generated 
+		 progress: worker(0) got (370000) message I generated 
+		 progress: worker(1) got (370000) message I generated 
+		 progress: worker(0) got (380000) message I generated 
+		 progress: worker(1) got (380000) message I generated 
+		 progress: worker(0) got (390000) message I generated 
+		 progress: worker(1) got (390000) message I generated 
+		 progress: worker(0) got (400000) message I generated 
+		 progress: worker(1) got (400000) message I generated 
+		 progress: worker(0) got (410000) message I generated 
+		 progress: worker(1) got (410000) message I generated 
+		 progress: worker(0) got (420000) message I generated 
+		 progress: worker(1) got (420000) message I generated 
+		 progress: worker(0) got (430000) message I generated 
+		 progress: worker(1) got (430000) message I generated 
+		 progress: worker(0) got (440000) message I generated 
+		 progress: worker(1) got (440000) message I generated 
+		 progress: worker(0) got (450000) message I generated 
+		 progress: worker(1) got (450000) message I generated 
+		 progress: worker(0) got (460000) message I generated 
+		 progress: worker(1) got (460000) message I generated 
+		 progress: worker(0) got (470000) message I generated 
+		 progress: worker(1) got (470000) message I generated 
+		 progress: worker(0) got (480000) message I generated 
+		 progress: worker(1) got (480000) message I generated 
+		 progress: worker(0) got (490000) message I generated 
+		 progress: worker(1) got (490000) message I generated 
+		 progress: worker(0) got (500000) message I generated 
+[coordinator] get confirm from 0 , type 100 
+		 progress: worker(1) got (500000) message I generated 
+[coordinator] get confirm from 1 , type 100 
+[coordinator] Got signal from  all workers -- FINISH the first table CIRCULATION building
+[coordinator] log file ./learntopics.INFO_k10000_2w_thrd75.log 
+Rank(1) finish circulation
+Rank(0) finish circulation
+I0306 00:51:36.491225 118734 ll-coordinator.cpp:262] [coordinator] start iteration
+[worker 1] (after random init, some words are not assigned topic at all) 1 empty slots  
+[worker 1] total topic from summary : 553946363  for my own partition
+[worker 0] (after random init, some words are not assigned topic at all) 0 empty slots  
+[worker 0] total topic from summary : 553957308  for my own partition
+[coordinator] get partitioned summary 0 , type 500 
+[coordinator] localsum topic : 553957308 for worker 0
+[coordinator] get partitioned summary 1 , type 500 
+[coordinator] localsum topic : 553946363 for worker 1
+[coordinator] topics total sum from summary 1107903671 
+[coordinator] total topic from summary : 1107903671 
+[worker 0] topics total sum from summary_ in trainers 1107903671 (should be equal to total token size) 
+[worker 1] topics total sum from summary_ in trainers 1107903671 (should be equal to total token size) 
+[worker 1] childs trigger 500000 commands for my all words (441.702526)sec 
+[worker 0] childs trigger 500001 commands for my all words (460.967334)sec 
+		[worker 0]COGRAGT done (500001) message stat send( 1614040.906250 KB) recv( 1744297.179688 KB) procedjob(925311) wtnzcnt(94741521)
+[coordinator] get confirm from 0 , type 100 
+		[worker 1]COGRAGT done (500000) message stat send( 1744297.179688 KB) recv( 1747122.265625 KB) procedjob(1000001) wtnzcnt(94234812)
+[coordinator] get confirm from 1 , type 100 
+[coordinator]  Got signal from  all workers 
+		[worker 0] @@@ STAT (500001) send( 1747122.265625 KB) recv( 1744297.179688 KB) procedjob(1000001) wtnzcnt(94741521)
+		[worker 1] @@@ STAT (500000) send( 1744297.179688 KB) recv( 1747122.265625 KB) procedjob(1000001) wtnzcnt(94234812)
+		[worker 1] my local compute time: min 513(s), max 733(s)
+		[worker 0] my local compute time: min 480(s), max 764(s)
+		[worker 1] my local summary_ sum : 553946363 .. partitioned one (not equal to tokens)
+		[worker 0] my local summary_ sum : 553957308 .. partitioned one (not equal to tokens)
+[coordinator] get partitioned summary 0 , type 500 
+[coordinator] localsum topic : 553957308 for worker 0
+[coordinator] get partitioned summary 1 , type 500 
+[coordinator] localsum topic : 553946363 for worker 1
+[coordinator] topics total sum from summary 1107903671 
+[worker 3] total topic from summary : 1107903671 
+[worker 1] topics total sum from summary 0 
+[worker 0] topics total sum from summary 0 
+[worker 0] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 1] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 1]docll(-4.386242e+09) moll1(-1.210575e+10) moll2(9.089505e+08) nzwtg(4.334311e+08) local per iter(966.643853) (975.718000) (1053.817094) (1053.817375)
+[worker 1] word topic save file from mach :  ./tmplog/1.1 
+[worker 0]docll(-4.386056e+09) moll1(-1.210575e+10) moll2(8.433948e+08) nzwtg(4.357617e+08) local per iter(966.642848) (975.716887) (1054.650481) (1054.650618)
+[worker 0] word topic save file from mach :  ./tmplog/1.0 
+[coordinator] get information for LL calc from worker  0 , type 600 
+[coordinator] get information for LL calc from worker  1 , type 600 
+[coordinator] Log Likelihood: doc -8.772299e+09 + word : -1.122260e+10 = -1.999490e+10  
+
+
+@@@ iteration: 0  loglikelihood -1.999490e+10   per iter: 966.652759 (975.726421)(1054.664634) elapsed 966.652759(975.726421)(1054.664634)sendbytes(250046078.265625 KB) recbytes (1744297.179688 KB)
+
+
+@@@ iteration: 0  loglikelihood -1.999490e+10   per iter: 1054.664634 elapsed 1054.664634
+I0306 01:09:11.201200 118734 ll-coordinator.cpp:336] iteration0  loglikelihood -1.99949e+10  time 1054.66  elapsed time 1054.66
+[worker 1] childs trigger 500000 commands for my all words (345.856182)sec 
+[worker 0] childs trigger 500001 commands for my all words (381.493145)sec 
+		[worker 0]COGRAGT done (500001) message stat send( 1159524.703125 KB) recv( 1212929.140625 KB) procedjob(959457) wtnzcnt(70656139)
+[coordinator] get confirm from 0 , type 100 
+		[worker 1]COGRAGT done (500000) message stat send( 1212929.140625 KB) recv( 1214180.085938 KB) procedjob(1000001) wtnzcnt(70501883)
+[coordinator] get confirm from 1 , type 100 
+[coordinator]  Got signal from  all workers 
+		[worker 0] @@@ STAT (500001) send( 1214180.085938 KB) recv( 1212929.140625 KB) procedjob(1000001) wtnzcnt(70656139)
+		[worker 0] my local compute time: min 433(s), max 634(s)
+		[worker 1] @@@ STAT (500000) send( 1212929.140625 KB) recv( 1214180.085938 KB) procedjob(1000001) wtnzcnt(70501883)
+		[worker 1] my local compute time: min 411(s), max 675(s)
+		[worker 1] my local summary_ sum : 553946363 .. partitioned one (not equal to tokens)
+		[worker 0] my local summary_ sum : 553957308 .. partitioned one (not equal to tokens)
+[coordinator] get partitioned summary 0 , type 500 
+[coordinator] localsum topic : 553957308 for worker 0
+[coordinator] get partitioned summary 1 , type 500 
+[coordinator] localsum topic : 553946363 for worker 1
+[coordinator] topics total sum from summary 1107903671 
+[worker 3] total topic from summary : 1107903671 
+[worker 1] topics total sum from summary 0 
+[worker 1] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 0] topics total sum from summary 0 
+[worker 0] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 1]docll(-3.985950e+09) moll1(-1.210604e+10) moll2(1.052632e+09) nzwtg(3.242720e+08) local per iter(864.057227) (872.892744) (937.017363) (937.017651)
+[worker 0]docll(-3.985912e+09) moll1(-1.210604e+10) moll2(9.902545e+08) nzwtg(3.249815e+08) local per iter(862.100668) (870.936530) (936.682315) (936.682402)
+[coordinator] get information for LL calc from worker  0 , type 600 
+[coordinator] get information for LL calc from worker  1 , type 600 
+[coordinator] Log Likelihood: doc -7.971862e+09 + word : -1.071240e+10 = -1.868427e+10  
+
+
+@@@ iteration: 1  loglikelihood -1.868427e+10   per iter: 934.299592 (943.133848)(1008.884441) elapsed 1900.952351(1918.860269)(2063.549075)sendbytes(309515557.617188 KB) recbytes (1219359.953125 KB)
+
+
+@@@ iteration: 1  loglikelihood -1.868427e+10   per iter: 1008.884441 elapsed 2063.549075
+I0306 01:26:00.086026 118734 ll-coordinator.cpp:336] iteration1  loglikelihood -1.86843e+10  time 1008.88  elapsed time 2063.55
+[worker 1] childs trigger 500000 commands for my all words (322.285483)sec 
+[worker 0] childs trigger 500001 commands for my all words (341.837989)sec 
+		[worker 0]COGRAGT done (500001) message stat send( 917803.953125 KB) recv( 982145.570312 KB) procedjob(942746) wtnzcnt(58105974)
+[coordinator] get confirm from 0 , type 100 
+		[worker 1]COGRAGT done (500000) message stat send( 982145.570312 KB) recv( 982749.984375 KB) procedjob(1000001) wtnzcnt(58141345)
+[coordinator] get confirm from 1 , type 100 
+[coordinator]  Got signal from  all workers 
+		[worker 1] @@@ STAT (500000) send( 982145.570312 KB) recv( 982749.984375 KB) procedjob(1000001) wtnzcnt(58141345)
+		[worker 1] my local compute time: min 359(s), max 607(s)
+		[worker 0] @@@ STAT (500001) send( 982749.984375 KB) recv( 982145.570312 KB) procedjob(1000001) wtnzcnt(58105974)
+		[worker 0] my local compute time: min 317(s), max 620(s)
+		[worker 1] my local summary_ sum : 553946363 .. partitioned one (not equal to tokens)
+		[worker 0] my local summary_ sum : 553957308 .. partitioned one (not equal to tokens)
+[coordinator] get partitioned summary 0 , type 500 
+[coordinator] localsum topic : 553957308 for worker 0
+[coordinator] get partitioned summary 1 , type 500 
+[coordinator] localsum topic : 553946363 for worker 1
+[coordinator] topics total sum from summary 1107903671 
+[worker 3] total topic from summary : 1107903671 
+[worker 0] topics total sum from summary 0 
+[worker 0] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 1] topics total sum from summary 0 
+[worker 1] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 1]docll(-3.758240e+09) moll1(-1.210837e+10) moll2(1.197144e+09) nzwtg(2.674199e+08) local per iter(797.622917) (806.356875) (862.605797) (862.605928)
+[worker 0]docll(-3.758203e+09) moll1(-1.210837e+10) moll2(1.140170e+09) nzwtg(2.672573e+08) local per iter(796.002345) (804.735492) (862.752042) (862.752135)
+[coordinator] get information for LL calc from worker  0 , type 600 
+[coordinator] get information for LL calc from worker  1 , type 600 
+[coordinator] Log Likelihood: doc -7.516442e+09 + word : -1.030573e+10 = -1.782217e+10  
+
+
+@@@ iteration: 2  loglikelihood -1.782217e+10   per iter: 795.998126 (804.731144)(862.758628) elapsed 2696.950477(2723.591413)(2926.307703)sendbytes(37916768.640625 KB) recbytes (981916.914062 KB)
+
+
+@@@ iteration: 2  loglikelihood -1.782217e+10   per iter: 862.758628 elapsed 2926.307703
+I0306 01:40:22.844985 118734 ll-coordinator.cpp:336] iteration2  loglikelihood -1.78222e+10  time 862.759  elapsed time 2926.31
+[worker 1] childs trigger 500000 commands for my all words (299.418509)sec 
+[worker 0] childs trigger 500001 commands for my all words (317.767169)sec 
+		[worker 0]COGRAGT done (500001) message stat send( 800195.796875 KB) recv( 839980.984375 KB) procedjob(953171) wtnzcnt(49765447)
+[coordinator] get confirm from 0 , type 100 
+		[worker 1]COGRAGT done (500000) message stat send( 839980.984375 KB) recv( 840469.031250 KB) procedjob(1000001) wtnzcnt(49932815)
+[coordinator] get confirm from 1 , type 100 
+[coordinator]  Got signal from  all workers 
+		[worker 0] @@@ STAT (500001) send( 840469.031250 KB) recv( 839980.984375 KB) procedjob(1000001) wtnzcnt(49765447)
+		[worker 0] my local compute time: min 354(s), max 563(s)
+		[worker 1] @@@ STAT (500000) send( 839980.984375 KB) recv( 840469.031250 KB) procedjob(1000001) wtnzcnt(49932815)
+		[worker 1] my local compute time: min 343(s), max 563(s)
+		[worker 1] my local summary_ sum : 553946363 .. partitioned one (not equal to tokens)
+		[worker 0] my local summary_ sum : 553957308 .. partitioned one (not equal to tokens)
+[coordinator] get partitioned summary 0 , type 500 
+[coordinator] localsum topic : 553957308 for worker 0
+[coordinator] get partitioned summary 1 , type 500 
+[coordinator] localsum topic : 553946363 for worker 1
+[coordinator] topics total sum from summary 1107903671 
+[worker 3] total topic from summary : 1107903671 
+[worker 1] topics total sum from summary 0 
+[worker 0] topics total sum from summary 0 
+[worker 1] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 0] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 1]docll(-3.555313e+09) moll1(-1.212653e+10) moll2(1.380775e+09) nzwtg(2.296650e+08) local per iter(770.777586) (779.365416) (830.599136) (830.599259)
+[worker 0]docll(-3.554009e+09) moll1(-1.212653e+10) moll2(1.329945e+09) nzwtg(2.288952e+08) local per iter(769.009789) (777.597814) (830.347377) (830.347471)
+[coordinator] get information for LL calc from worker  0 , type 600 
+[coordinator] get information for LL calc from worker  1 , type 600 
+[coordinator] Log Likelihood: doc -7.109322e+09 + word : -9.874374e+09 = -1.698370e+10  
+
+
+@@@ iteration: 3  loglikelihood -1.698370e+10   per iter: 768.998257 (777.586924)(830.341211) elapsed 3465.948734(3501.178337)(3756.648914)sendbytes(127156817.234375 KB) recbytes (839062.781250 KB)
+
+
+@@@ iteration: 3  loglikelihood -1.698370e+10   per iter: 830.341211 elapsed 3756.648914
+I0306 01:54:13.186537 118734 ll-coordinator.cpp:336] iteration3  loglikelihood -1.69837e+10  time 830.341  elapsed time 3756.65
+[worker 1] childs trigger 500000 commands for my all words (284.476797)sec 
+[worker 0] childs trigger 500001 commands for my all words (312.549518)sec 
+		[worker 0]COGRAGT done (500001) message stat send( 715533.960938 KB) recv( 731448.148438 KB) procedjob(978062) wtnzcnt(43098960)
+[coordinator] get confirm from 0 , type 100 
+		[worker 1]COGRAGT done (500000) message stat send( 731448.148438 KB) recv( 731885.148438 KB) procedjob(1000001) wtnzcnt(43361704)
+[coordinator] get confirm from 1 , type 100 
+[coordinator]  Got signal from  all workers 
+		[worker 0] @@@ STAT (500001) send( 731885.148438 KB) recv( 731448.148438 KB) procedjob(1000001) wtnzcnt(43098960)
+		[worker 0] my local compute time: min 316(s), max 555(s)
+		[worker 1] @@@ STAT (500000) send( 731448.148438 KB) recv( 731885.148438 KB) procedjob(1000001) wtnzcnt(43361704)
+		[worker 1] my local compute time: min 271(s), max 520(s)
+		[worker 1] my local summary_ sum : 553946363 .. partitioned one (not equal to tokens)
+		[worker 0] my local summary_ sum : 553957308 .. partitioned one (not equal to tokens)
+[coordinator] get partitioned summary 0 , type 500 
+[coordinator] localsum topic : 553957308 for worker 0
+[coordinator] get partitioned summary 1 , type 500 
+[coordinator] localsum topic : 553946363 for worker 1
+[coordinator] topics total sum from summary 1107903671 
+[worker 3] total topic from summary : 1107903671 
+[worker 1] topics total sum from summary 0 
+[worker 0] topics total sum from summary 0 
+[worker 0] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 1] topics total sum from summary_ in trainers 1107903671 (should be equal to toal tokens) 
+[worker 1]docll(-3.326906e+09) moll1(-1.218634e+10) moll2(1.632370e+09) nzwtg(1.994413e+08) local per iter(750.526332) (758.957573) (804.357399) (804.357669)
+[worker 1] terminate job 
+I0306 02:07:36.025248 118732 ll-worker.cpp:528] [worker 1] terminate job
+[worker 0]docll(-3.324390e+09) moll1(-1.218634e+10) moll2(1.582182e+09) nzwtg(1.982328e+08) local per iter(749.010534) (757.441735) (804.754204) (804.754334)
+[worker 0] terminate job 
+I0306 02:07:37.937530 118731 ll-worker.cpp:528] [worker 0] terminate job
+[coordinator] get information for LL calc from worker  0 , type 600 
+[coordinator] get information for LL calc from worker  1 , type 600 
+[coordinator] Log Likelihood: doc -6.651296e+09 + word : -9.369467e+09 = -1.602076e+10  
+
+
+@@@ iteration: 4  loglikelihood -1.602076e+10   per iter: 749.006360 (757.436606)(804.754727) elapsed 4214.955094(4258.614943)(4561.403641)sendbytes(28048502.734375 KB) recbytes (726144.578125 KB)
+
+
+@@@ iteration: 4  loglikelihood -1.602076e+10   per iter: 804.754727 elapsed 4561.403641
+I0306 02:07:37.941632 118734 ll-coordinator.cpp:336] iteration4  loglikelihood -1.60208e+10  time 804.755  elapsed time 4561.4
+[coordinator ]  EXIT program normally see ./learntopics.INFO_k10000_2w_thrd75.log for log 

@@ -1,0 +1,883 @@
+Log file created at: 2017/03/11 14:07:22
+Running on machine: j-114
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W0311 14:07:22.490574 43050 Controller.cpp:96] ----------------------------------------------------------------------
+W0311 14:07:22.491050 43050 Controller.cpp:98] Log files are being stored at /tmp/hpda/pengb/hpda/test/bingjing/ylda/run/work/learnTopics.*
+W0311 14:07:22.491080 43050 Controller.cpp:100] ----------------------------------------------------------------------
+W0311 14:07:22.491294 43050 Controller.cpp:115] You have chosen multi machine training mode
+W0311 14:07:22.491489 43050 Unigram_Model_Training_Builder.cpp:60] Initializing Dictionary from lda.dict.dump
+W0311 14:07:23.310181 43050 Unigram_Model_Training_Builder.cpp:62] Dictionary Initialized
+W0311 14:08:00.751915 43050 Unigram_Model_Trainer.cpp:49] Initializing Word-Topic counts table from docs lda.wor, lda.top using 998247 words & 10000 topics.
+W0311 15:10:48.638108 43050 Unigram_Model_Trainer.cpp:53] Initialized Word-Topic counts table
+W0311 15:10:48.638195 43050 Unigram_Model_Trainer.cpp:57] Initializing Alpha vector from Alpha_bar = 100
+W0311 15:10:48.638285 43050 Unigram_Model_Trainer.cpp:60] Alpha vector initialized
+W0311 15:10:48.638298 43050 Unigram_Model_Trainer.cpp:63] Initializing Beta Parameter from specified Beta = 0.01
+W0311 15:10:48.638309 43050 Unigram_Model_Trainer.cpp:67] Beta param initialized
+W0311 15:10:50.382364 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 1 words have been transferred to DM_Server.
+W0311 15:11:31.979331 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 10001 words have been transferred to DM_Server.
+W0311 15:12:06.769562 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 20001 words have been transferred to DM_Server.
+W0311 15:12:34.587411 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 30001 words have been transferred to DM_Server.
+W0311 15:12:57.026532 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 40001 words have been transferred to DM_Server.
+W0311 15:13:16.670145 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 50001 words have been transferred to DM_Server.
+W0311 15:13:33.476204 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 60001 words have been transferred to DM_Server.
+W0311 15:13:47.822268 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 70001 words have been transferred to DM_Server.
+W0311 15:14:01.685145 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 80001 words have been transferred to DM_Server.
+W0311 15:14:14.809911 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 90001 words have been transferred to DM_Server.
+W0311 15:14:26.526824 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 100001 words have been transferred to DM_Server.
+W0311 15:14:37.407263 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 110001 words have been transferred to DM_Server.
+W0311 15:14:48.327970 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 120001 words have been transferred to DM_Server.
+W0311 15:14:58.438063 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 130001 words have been transferred to DM_Server.
+W0311 15:15:07.742173 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 140001 words have been transferred to DM_Server.
+W0311 15:15:16.859139 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 150001 words have been transferred to DM_Server.
+W0311 15:15:25.489156 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 160001 words have been transferred to DM_Server.
+W0311 15:15:33.482537 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 170001 words have been transferred to DM_Server.
+W0311 15:15:41.402786 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 180001 words have been transferred to DM_Server.
+W0311 15:15:48.294539 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 190001 words have been transferred to DM_Server.
+W0311 15:15:55.667026 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 200001 words have been transferred to DM_Server.
+W0311 15:16:02.574647 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 210001 words have been transferred to DM_Server.
+W0311 15:16:08.304479 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 220001 words have been transferred to DM_Server.
+W0311 15:16:14.920498 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 230001 words have been transferred to DM_Server.
+W0311 15:16:21.416630 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 240001 words have been transferred to DM_Server.
+W0311 15:16:27.620419 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 250001 words have been transferred to DM_Server.
+W0311 15:16:33.592027 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 260001 words have been transferred to DM_Server.
+W0311 15:16:39.663856 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 270001 words have been transferred to DM_Server.
+W0311 15:16:45.562959 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 280001 words have been transferred to DM_Server.
+W0311 15:16:51.213279 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 290001 words have been transferred to DM_Server.
+W0311 15:16:56.806696 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 300001 words have been transferred to DM_Server.
+W0311 15:17:02.045620 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 310001 words have been transferred to DM_Server.
+W0311 15:17:07.376616 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 320001 words have been transferred to DM_Server.
+W0311 15:17:12.365097 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 330001 words have been transferred to DM_Server.
+W0311 15:17:17.449141 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 340001 words have been transferred to DM_Server.
+W0311 15:17:22.250109 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 350001 words have been transferred to DM_Server.
+W0311 15:17:27.599205 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 360001 words have been transferred to DM_Server.
+W0311 15:17:32.402812 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 370001 words have been transferred to DM_Server.
+W0311 15:17:37.380977 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 380001 words have been transferred to DM_Server.
+W0311 15:17:42.125320 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 390001 words have been transferred to DM_Server.
+W0311 15:17:46.767606 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 400001 words have been transferred to DM_Server.
+W0311 15:17:51.355865 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 410001 words have been transferred to DM_Server.
+W0311 15:17:55.743057 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 420001 words have been transferred to DM_Server.
+W0311 15:17:59.663008 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 430001 words have been transferred to DM_Server.
+W0311 15:18:04.242411 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 440001 words have been transferred to DM_Server.
+W0311 15:18:08.724153 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 450001 words have been transferred to DM_Server.
+W0311 15:18:13.182238 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 460001 words have been transferred to DM_Server.
+W0311 15:18:17.416527 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 470001 words have been transferred to DM_Server.
+W0311 15:18:21.672061 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 480001 words have been transferred to DM_Server.
+W0311 15:18:25.642841 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 490001 words have been transferred to DM_Server.
+W0311 15:18:29.762936 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 500001 words have been transferred to DM_Server.
+W0311 15:18:33.747956 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 510001 words have been transferred to DM_Server.
+W0311 15:18:37.947324 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 520001 words have been transferred to DM_Server.
+W0311 15:18:42.425438 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 530001 words have been transferred to DM_Server.
+W0311 15:18:46.858922 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 540001 words have been transferred to DM_Server.
+W0311 15:18:51.060062 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 550001 words have been transferred to DM_Server.
+W0311 15:18:56.137118 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 560001 words have been transferred to DM_Server.
+W0311 15:19:01.573295 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 570001 words have been transferred to DM_Server.
+W0311 15:19:06.361495 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 580001 words have been transferred to DM_Server.
+W0311 15:19:10.209110 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 590001 words have been transferred to DM_Server.
+W0311 15:19:14.320453 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 600001 words have been transferred to DM_Server.
+W0311 15:19:18.582798 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 610001 words have been transferred to DM_Server.
+W0311 15:19:22.459189 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 620001 words have been transferred to DM_Server.
+W0311 15:19:26.344485 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 630001 words have been transferred to DM_Server.
+W0311 15:19:30.204982 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 640001 words have been transferred to DM_Server.
+W0311 15:19:34.080355 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 650001 words have been transferred to DM_Server.
+W0311 15:19:37.789052 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 660001 words have been transferred to DM_Server.
+W0311 15:19:41.301275 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 670001 words have been transferred to DM_Server.
+W0311 15:19:44.965734 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 680001 words have been transferred to DM_Server.
+W0311 15:19:48.390878 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 690001 words have been transferred to DM_Server.
+W0311 15:19:52.178025 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 700001 words have been transferred to DM_Server.
+W0311 15:19:55.785881 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 710001 words have been transferred to DM_Server.
+W0311 15:19:59.413270 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 720001 words have been transferred to DM_Server.
+W0311 15:20:02.891896 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 730001 words have been transferred to DM_Server.
+W0311 15:20:06.433889 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 740001 words have been transferred to DM_Server.
+W0311 15:20:09.835032 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 750001 words have been transferred to DM_Server.
+W0311 15:20:13.280911 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 760001 words have been transferred to DM_Server.
+W0311 15:20:16.775385 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 770001 words have been transferred to DM_Server.
+W0311 15:20:20.249205 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 780001 words have been transferred to DM_Server.
+W0311 15:20:23.769500 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 790001 words have been transferred to DM_Server.
+W0311 15:20:27.224169 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 800001 words have been transferred to DM_Server.
+W0311 15:20:30.607981 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 810001 words have been transferred to DM_Server.
+W0311 15:20:34.020392 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 820001 words have been transferred to DM_Server.
+W0311 15:20:37.298765 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 830001 words have been transferred to DM_Server.
+W0311 15:20:40.616191 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 840001 words have been transferred to DM_Server.
+W0311 15:20:43.582358 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 850001 words have been transferred to DM_Server.
+W0311 15:20:46.709636 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 860001 words have been transferred to DM_Server.
+W0311 15:20:50.003669 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 870001 words have been transferred to DM_Server.
+W0311 15:20:53.198382 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 880001 words have been transferred to DM_Server.
+W0311 15:20:56.441015 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 890001 words have been transferred to DM_Server.
+W0311 15:20:59.644937 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 900001 words have been transferred to DM_Server.
+W0311 15:21:02.975731 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 910001 words have been transferred to DM_Server.
+W0311 15:21:06.207576 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 920001 words have been transferred to DM_Server.
+W0311 15:21:09.551642 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 930001 words have been transferred to DM_Server.
+W0311 15:21:12.793603 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 940001 words have been transferred to DM_Server.
+W0311 15:21:16.012110 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 950001 words have been transferred to DM_Server.
+W0311 15:21:19.229053 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 960001 words have been transferred to DM_Server.
+W0311 15:21:22.510687 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 970001 words have been transferred to DM_Server.
+W0311 15:21:25.658915 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 980001 words have been transferred to DM_Server.
+W0311 15:21:28.562649 43050 Unigram_Model_Synchronizer_Helper.cpp:57] Counts of 990001 words have been transferred to DM_Server.
+W0311 15:21:31.191340 43050 Unigram_Model_Synchronizer_Helper.cpp:62] Local counts written to DM_Server. Phase1 for client complete
+W0311 15:31:35.901298 43050 Unigram_Model_Synchronizer_Helper.cpp:65] All clients have transferred their counts successfully. Global initial counts ready
+W0311 15:31:35.927368 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 1 words have been retrieved from DM_Server.
+W0311 15:33:44.675694 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 10001 words have been retrieved from DM_Server.
+W0311 15:37:54.767726 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 20001 words have been retrieved from DM_Server.
+W0311 15:41:41.262190 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 30001 words have been retrieved from DM_Server.
+W0311 15:43:51.496773 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 40001 words have been retrieved from DM_Server.
+W0311 15:45:35.671918 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 50001 words have been retrieved from DM_Server.
+W0311 15:47:10.275967 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 60001 words have been retrieved from DM_Server.
+W0311 15:48:33.127295 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 70001 words have been retrieved from DM_Server.
+W0311 15:49:47.598841 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 80001 words have been retrieved from DM_Server.
+W0311 15:50:57.091073 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 90001 words have been retrieved from DM_Server.
+W0311 15:51:56.074112 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 100001 words have been retrieved from DM_Server.
+W0311 15:53:00.430245 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 110001 words have been retrieved from DM_Server.
+W0311 15:53:54.582425 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 120001 words have been retrieved from DM_Server.
+W0311 15:54:56.596696 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 130001 words have been retrieved from DM_Server.
+W0311 15:56:02.317348 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 140001 words have been retrieved from DM_Server.
+W0311 15:56:47.672881 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 150001 words have been retrieved from DM_Server.
+W0311 15:57:32.895761 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 160001 words have been retrieved from DM_Server.
+W0311 15:58:28.521077 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 170001 words have been retrieved from DM_Server.
+W0311 15:59:21.204993 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 180001 words have been retrieved from DM_Server.
+W0311 16:00:08.151612 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 190001 words have been retrieved from DM_Server.
+W0311 16:00:57.017731 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 200001 words have been retrieved from DM_Server.
+W0311 16:01:41.310006 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 210001 words have been retrieved from DM_Server.
+W0311 16:02:19.064546 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 220001 words have been retrieved from DM_Server.
+W0311 16:03:02.714138 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 230001 words have been retrieved from DM_Server.
+W0311 16:03:45.275100 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 240001 words have been retrieved from DM_Server.
+W0311 16:04:25.002492 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 250001 words have been retrieved from DM_Server.
+W0311 16:05:03.439013 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 260001 words have been retrieved from DM_Server.
+W0311 16:05:42.499100 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 270001 words have been retrieved from DM_Server.
+W0311 16:06:19.421527 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 280001 words have been retrieved from DM_Server.
+W0311 16:06:54.324082 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 290001 words have been retrieved from DM_Server.
+W0311 16:07:29.199270 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 300001 words have been retrieved from DM_Server.
+W0311 16:08:01.875207 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 310001 words have been retrieved from DM_Server.
+W0311 16:08:34.906770 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 320001 words have been retrieved from DM_Server.
+W0311 16:09:05.051944 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 330001 words have been retrieved from DM_Server.
+W0311 16:09:36.227910 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 340001 words have been retrieved from DM_Server.
+W0311 16:10:04.874799 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 350001 words have been retrieved from DM_Server.
+W0311 16:10:39.495661 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 360001 words have been retrieved from DM_Server.
+W0311 16:11:07.504372 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 370001 words have been retrieved from DM_Server.
+W0311 16:11:35.832463 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 380001 words have been retrieved from DM_Server.
+W0311 16:11:52.118055 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 390001 words have been retrieved from DM_Server.
+W0311 16:12:07.663996 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 400001 words have been retrieved from DM_Server.
+W0311 16:12:23.057279 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 410001 words have been retrieved from DM_Server.
+W0311 16:12:40.924429 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 420001 words have been retrieved from DM_Server.
+W0311 16:13:03.326820 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 430001 words have been retrieved from DM_Server.
+W0311 16:13:29.322499 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 440001 words have been retrieved from DM_Server.
+W0311 16:13:55.411214 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 450001 words have been retrieved from DM_Server.
+W0311 16:14:21.457377 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 460001 words have been retrieved from DM_Server.
+W0311 16:14:45.882441 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 470001 words have been retrieved from DM_Server.
+W0311 16:15:09.958817 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 480001 words have been retrieved from DM_Server.
+W0311 16:15:31.690490 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 490001 words have been retrieved from DM_Server.
+W0311 16:15:55.593930 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 500001 words have been retrieved from DM_Server.
+W0311 16:16:18.932814 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 510001 words have been retrieved from DM_Server.
+W0311 16:16:43.357250 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 520001 words have been retrieved from DM_Server.
+W0311 16:17:04.605689 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 530001 words have been retrieved from DM_Server.
+W0311 16:17:26.502261 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 540001 words have been retrieved from DM_Server.
+W0311 16:17:50.635340 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 550001 words have been retrieved from DM_Server.
+W0311 16:18:18.511992 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 560001 words have been retrieved from DM_Server.
+W0311 16:18:47.493562 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 570001 words have been retrieved from DM_Server.
+W0311 16:19:08.466780 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 580001 words have been retrieved from DM_Server.
+W0311 16:19:29.199141 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 590001 words have been retrieved from DM_Server.
+W0311 16:19:52.872778 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 600001 words have been retrieved from DM_Server.
+W0311 16:20:15.858546 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 610001 words have been retrieved from DM_Server.
+W0311 16:20:37.469890 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 620001 words have been retrieved from DM_Server.
+W0311 16:20:58.565614 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 630001 words have been retrieved from DM_Server.
+W0311 16:21:20.142809 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 640001 words have been retrieved from DM_Server.
+W0311 16:21:42.146606 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 650001 words have been retrieved from DM_Server.
+W0311 16:22:03.143973 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 660001 words have been retrieved from DM_Server.
+W0311 16:22:21.000468 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 670001 words have been retrieved from DM_Server.
+W0311 16:22:41.293052 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 680001 words have been retrieved from DM_Server.
+W0311 16:22:59.472621 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 690001 words have been retrieved from DM_Server.
+W0311 16:23:20.346343 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 700001 words have been retrieved from DM_Server.
+W0311 16:23:40.283870 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 710001 words have been retrieved from DM_Server.
+W0311 16:23:59.926076 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 720001 words have been retrieved from DM_Server.
+W0311 16:24:19.201215 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 730001 words have been retrieved from DM_Server.
+W0311 16:24:38.623383 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 740001 words have been retrieved from DM_Server.
+W0311 16:24:57.938370 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 750001 words have been retrieved from DM_Server.
+W0311 16:25:17.030251 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 760001 words have been retrieved from DM_Server.
+W0311 16:25:36.246315 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 770001 words have been retrieved from DM_Server.
+W0311 16:25:55.103716 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 780001 words have been retrieved from DM_Server.
+W0311 16:26:14.238314 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 790001 words have been retrieved from DM_Server.
+W0311 16:26:32.332774 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 800001 words have been retrieved from DM_Server.
+W0311 16:26:48.793534 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 810001 words have been retrieved from DM_Server.
+W0311 16:27:07.356804 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 820001 words have been retrieved from DM_Server.
+W0311 16:27:25.316404 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 830001 words have been retrieved from DM_Server.
+W0311 16:27:43.691946 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 840001 words have been retrieved from DM_Server.
+W0311 16:27:57.643091 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 850001 words have been retrieved from DM_Server.
+W0311 16:28:14.773665 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 860001 words have been retrieved from DM_Server.
+W0311 16:28:33.411933 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 870001 words have been retrieved from DM_Server.
+W0311 16:28:51.123452 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 880001 words have been retrieved from DM_Server.
+W0311 16:29:09.520478 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 890001 words have been retrieved from DM_Server.
+W0311 16:29:26.988806 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 900001 words have been retrieved from DM_Server.
+W0311 16:29:46.379930 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 910001 words have been retrieved from DM_Server.
+W0311 16:30:04.254801 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 920001 words have been retrieved from DM_Server.
+W0311 16:30:23.636447 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 930001 words have been retrieved from DM_Server.
+W0311 16:30:42.648949 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 940001 words have been retrieved from DM_Server.
+W0311 16:31:01.612623 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 950001 words have been retrieved from DM_Server.
+W0311 16:31:21.162127 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 960001 words have been retrieved from DM_Server.
+W0311 16:31:42.142536 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 970001 words have been retrieved from DM_Server.
+W0311 16:32:00.136090 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 980001 words have been retrieved from DM_Server.
+W0311 16:32:14.449955 43050 Unigram_Model_Synchronizer_Helper.cpp:80] Global counts of 990001 words have been retrieved from DM_Server.
+W0311 16:32:29.545231 43050 Unigram_Model_Synchronizer_Helper.cpp:84] Client initialized successfully
+W0311 16:32:29.545604 43050 Training_Execution_Strategy.cpp:57] Starting Parallel training Pipeline
+W0311 16:32:29.545670 43970 Synchronizer.cpp:47] Starting synchronization
+W0311 16:50:16.050673 43970 Synchronizer.cpp:60] Synch pass 1 done. Took 1066.5 seconds
+W0311 17:13:16.219072 43970 Synchronizer.cpp:60] Synch pass 2 done. Took 1380.17 seconds
+W0311 17:15:48.881470 43050 Training_Execution_Strategy.cpp:76] Iteration 1 done. Took 43.3223 mins
+W0311 17:18:39.839818 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 1824.32
+W0311 17:18:39.840061 43050 Training_Execution_Strategy.cpp:81] >>>>>>>>>> Log-Likelihood (model, doc, total): -2.93362e+11 , -9.85742e+09 , -3.03219e+11
+W0311 17:18:40.655647 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 17:18:40.978297 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 1
+W0311 17:25:01.867638 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 1748.43
+W0311 17:35:07.831406 43970 Synchronizer.cpp:60] Synch pass 3 done. Took 1311.61 seconds
+W0311 17:55:16.523048 43970 Synchronizer.cpp:60] Synch pass 4 done. Took 1208.69 seconds
+W0311 18:06:58.535162 43050 Training_Execution_Strategy.cpp:76] Iteration 2 done. Took 41.9444 mins
+W0311 18:06:59.290519 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 18:15:34.129833 43970 Synchronizer.cpp:60] Synch pass 5 done. Took 1217.61 seconds
+W0311 18:34:26.528301 43970 Synchronizer.cpp:60] Synch pass 6 done. Took 1132.4 seconds
+W0311 18:48:19.563148 43050 Training_Execution_Strategy.cpp:76] Iteration 3 done. Took 41.331 mins
+W0311 18:48:20.303565 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 18:52:31.963341 43970 Synchronizer.cpp:60] Synch pass 7 done. Took 1085.43 seconds
+W0311 19:09:46.894001 43970 Synchronizer.cpp:60] Synch pass 8 done. Took 1034.93 seconds
+W0311 19:26:03.521040 43970 Synchronizer.cpp:60] Synch pass 9 done. Took 976.627 seconds
+W0311 19:29:04.933219 43050 Training_Execution_Strategy.cpp:76] Iteration 4 done. Took 40.7363 mins
+W0311 19:29:05.658074 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 19:42:09.370599 43970 Synchronizer.cpp:60] Synch pass 10 done. Took 965.849 seconds
+W0311 19:57:17.467090 43970 Synchronizer.cpp:60] Synch pass 11 done. Took 908.096 seconds
+W0311 20:09:08.933933 43050 Training_Execution_Strategy.cpp:76] Iteration 5 done. Took 40.0475 mins
+W0311 20:09:09.674309 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 20:12:09.341825 43970 Synchronizer.cpp:60] Synch pass 12 done. Took 891.874 seconds
+W0311 20:26:32.956426 43970 Synchronizer.cpp:60] Synch pass 13 done. Took 863.614 seconds
+W0311 20:40:11.016054 43970 Synchronizer.cpp:60] Synch pass 14 done. Took 818.059 seconds
+W0311 20:48:34.154902 43050 Training_Execution_Strategy.cpp:76] Iteration 6 done. Took 39.4012 mins
+W0311 20:48:34.882407 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 20:53:46.375007 43970 Synchronizer.cpp:60] Synch pass 15 done. Took 815.359 seconds
+W0311 21:06:43.993521 43970 Synchronizer.cpp:60] Synch pass 16 done. Took 777.618 seconds
+W0311 21:19:06.110301 43970 Synchronizer.cpp:60] Synch pass 17 done. Took 742.116 seconds
+W0311 21:27:04.294136 43050 Training_Execution_Strategy.cpp:76] Iteration 7 done. Took 38.4832 mins
+W0311 21:27:05.047590 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 21:31:25.588243 43970 Synchronizer.cpp:60] Synch pass 18 done. Took 739.478 seconds
+W0311 21:43:15.660264 43970 Synchronizer.cpp:60] Synch pass 19 done. Took 710.072 seconds
+W0311 21:54:37.200717 43970 Synchronizer.cpp:60] Synch pass 20 done. Took 681.54 seconds
+W0311 22:04:29.665407 43050 Training_Execution_Strategy.cpp:76] Iteration 8 done. Took 37.4038 mins
+W0311 22:04:30.417726 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 22:05:48.496007 43970 Synchronizer.cpp:60] Synch pass 21 done. Took 671.295 seconds
+W0311 22:16:53.295349 43970 Synchronizer.cpp:60] Synch pass 22 done. Took 664.799 seconds
+W0311 22:27:21.598057 43970 Synchronizer.cpp:60] Synch pass 23 done. Took 628.302 seconds
+W0311 22:37:33.831120 43970 Synchronizer.cpp:60] Synch pass 24 done. Took 612.233 seconds
+W0311 22:40:32.822801 43050 Training_Execution_Strategy.cpp:76] Iteration 9 done. Took 36.0326 mins
+W0311 22:40:33.618330 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 22:47:37.815462 43970 Synchronizer.cpp:60] Synch pass 25 done. Took 603.984 seconds
+W0311 22:57:08.298686 43970 Synchronizer.cpp:60] Synch pass 26 done. Took 570.483 seconds
+W0311 23:06:23.729354 43970 Synchronizer.cpp:60] Synch pass 27 done. Took 555.43 seconds
+W0311 23:14:48.395016 43050 Training_Execution_Strategy.cpp:76] Iteration 10 done. Took 34.2398 mins
+W0311 23:14:49.177862 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 23:14:49.652050 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 10
+W0311 23:15:26.652154 43970 Synchronizer.cpp:60] Synch pass 28 done. Took 542.923 seconds
+W0311 23:16:55.478875 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 523.962
+W0311 23:23:39.786981 43970 Synchronizer.cpp:60] Synch pass 29 done. Took 493.135 seconds
+W0311 23:31:46.097554 43970 Synchronizer.cpp:60] Synch pass 30 done. Took 486.31 seconds
+W0311 23:39:46.851985 43970 Synchronizer.cpp:60] Synch pass 31 done. Took 480.754 seconds
+W0311 23:47:34.407553 43970 Synchronizer.cpp:60] Synch pass 32 done. Took 467.55 seconds
+W0311 23:49:09.248793 43050 Training_Execution_Strategy.cpp:76] Iteration 11 done. Took 32.2295 mins
+W0311 23:49:09.978478 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0311 23:55:20.030798 43970 Synchronizer.cpp:60] Synch pass 33 done. Took 465.623 seconds
+W0312 00:02:33.391499 43970 Synchronizer.cpp:60] Synch pass 34 done. Took 433.36 seconds
+W0312 00:09:34.408048 43970 Synchronizer.cpp:60] Synch pass 35 done. Took 421.016 seconds
+W0312 00:16:24.159207 43970 Synchronizer.cpp:60] Synch pass 36 done. Took 409.751 seconds
+W0312 00:19:22.372509 43050 Training_Execution_Strategy.cpp:76] Iteration 12 done. Took 30.2002 mins
+W0312 00:19:23.121439 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 00:23:18.549978 43970 Synchronizer.cpp:60] Synch pass 37 done. Took 414.39 seconds
+W0312 00:29:41.042745 43970 Synchronizer.cpp:60] Synch pass 38 done. Took 382.492 seconds
+W0312 00:35:51.937299 43970 Synchronizer.cpp:60] Synch pass 39 done. Took 370.894 seconds
+W0312 00:41:52.847076 43970 Synchronizer.cpp:60] Synch pass 40 done. Took 360.909 seconds
+W0312 00:47:32.014137 43050 Training_Execution_Strategy.cpp:76] Iteration 13 done. Took 28.1413 mins
+W0312 00:47:32.810835 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 00:47:48.320189 43970 Synchronizer.cpp:60] Synch pass 41 done. Took 355.473 seconds
+W0312 00:53:36.474599 43970 Synchronizer.cpp:60] Synch pass 42 done. Took 348.154 seconds
+W0312 00:59:04.311511 43970 Synchronizer.cpp:60] Synch pass 43 done. Took 327.837 seconds
+W0312 01:04:28.032532 43970 Synchronizer.cpp:60] Synch pass 44 done. Took 323.721 seconds
+W0312 01:09:39.889372 43970 Synchronizer.cpp:60] Synch pass 45 done. Took 311.856 seconds
+W0312 01:13:45.372117 43050 Training_Execution_Strategy.cpp:76] Iteration 14 done. Took 26.2009 mins
+W0312 01:13:46.138301 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 01:14:53.402668 43970 Synchronizer.cpp:60] Synch pass 46 done. Took 313.513 seconds
+W0312 01:19:58.307617 43970 Synchronizer.cpp:60] Synch pass 47 done. Took 304.905 seconds
+W0312 01:24:45.868221 43970 Synchronizer.cpp:60] Synch pass 48 done. Took 287.56 seconds
+W0312 01:29:25.778486 43970 Synchronizer.cpp:60] Synch pass 49 done. Took 279.91 seconds
+W0312 01:34:01.345916 43970 Synchronizer.cpp:60] Synch pass 50 done. Took 275.567 seconds
+W0312 01:38:06.062379 43050 Training_Execution_Strategy.cpp:76] Iteration 15 done. Took 24.3246 mins
+W0312 01:38:06.851575 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 01:38:38.745630 43970 Synchronizer.cpp:60] Synch pass 51 done. Took 277.399 seconds
+W0312 01:43:09.189307 43970 Synchronizer.cpp:60] Synch pass 52 done. Took 270.443 seconds
+W0312 01:47:19.931692 43970 Synchronizer.cpp:60] Synch pass 53 done. Took 250.742 seconds
+W0312 01:51:29.040630 43970 Synchronizer.cpp:60] Synch pass 54 done. Took 249.109 seconds
+W0312 01:55:34.021073 43970 Synchronizer.cpp:60] Synch pass 55 done. Took 244.98 seconds
+W0312 01:59:31.478778 43970 Synchronizer.cpp:60] Synch pass 56 done. Took 237.457 seconds
+W0312 03:00:45.314033 43050 Training_Execution_Strategy.cpp:76] Iteration 16 done. Took 22.6331 mins
+W0312 03:00:46.037744 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 03:03:42.276587 43970 Synchronizer.cpp:60] Synch pass 57 done. Took 250.797 seconds
+W0312 03:07:35.786432 43970 Synchronizer.cpp:60] Synch pass 58 done. Took 233.509 seconds
+W0312 03:11:23.483762 43970 Synchronizer.cpp:60] Synch pass 59 done. Took 227.697 seconds
+W0312 03:15:05.151242 43970 Synchronizer.cpp:60] Synch pass 60 done. Took 221.667 seconds
+W0312 03:18:45.179986 43970 Synchronizer.cpp:60] Synch pass 61 done. Took 220.028 seconds
+W0312 03:21:42.335134 43050 Training_Execution_Strategy.cpp:76] Iteration 17 done. Took 20.9315 mins
+W0312 03:21:43.135884 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 03:22:31.765553 43970 Synchronizer.cpp:60] Synch pass 62 done. Took 226.58 seconds
+W0312 03:26:11.901839 43970 Synchronizer.cpp:60] Synch pass 63 done. Took 220.136 seconds
+W0312 03:29:38.847816 43970 Synchronizer.cpp:60] Synch pass 64 done. Took 206.946 seconds
+W0312 03:33:10.893501 43970 Synchronizer.cpp:60] Synch pass 65 done. Took 212.045 seconds
+W0312 03:36:35.772480 43970 Synchronizer.cpp:60] Synch pass 66 done. Took 204.879 seconds
+W0312 03:39:57.877604 43970 Synchronizer.cpp:60] Synch pass 67 done. Took 202.105 seconds
+W0312 03:41:10.806285 43050 Training_Execution_Strategy.cpp:76] Iteration 18 done. Took 19.4535 mins
+W0312 03:41:11.591533 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 03:43:31.539250 43970 Synchronizer.cpp:60] Synch pass 68 done. Took 213.661 seconds
+W0312 03:46:48.787863 43970 Synchronizer.cpp:60] Synch pass 69 done. Took 197.248 seconds
+W0312 03:50:01.078158 43970 Synchronizer.cpp:60] Synch pass 70 done. Took 192.29 seconds
+W0312 03:53:16.838210 43970 Synchronizer.cpp:60] Synch pass 71 done. Took 195.76 seconds
+W0312 03:56:25.322227 43970 Synchronizer.cpp:60] Synch pass 72 done. Took 188.483 seconds
+W0312 03:59:19.436964 43050 Training_Execution_Strategy.cpp:76] Iteration 19 done. Took 18.1236 mins
+W0312 03:59:20.245791 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 03:59:30.834867 43970 Synchronizer.cpp:60] Synch pass 73 done. Took 185.512 seconds
+W0312 04:02:46.918742 43970 Synchronizer.cpp:60] Synch pass 74 done. Took 196.084 seconds
+W0312 04:05:46.428401 43970 Synchronizer.cpp:60] Synch pass 75 done. Took 179.509 seconds
+W0312 04:08:49.302670 43970 Synchronizer.cpp:60] Synch pass 76 done. Took 182.874 seconds
+W0312 04:11:48.669811 43970 Synchronizer.cpp:60] Synch pass 77 done. Took 179.367 seconds
+W0312 04:14:48.399320 43970 Synchronizer.cpp:60] Synch pass 78 done. Took 179.727 seconds
+W0312 04:16:11.135542 43050 Training_Execution_Strategy.cpp:76] Iteration 20 done. Took 16.8404 mins
+W0312 04:16:11.930905 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 04:16:12.415350 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 20
+W0312 04:16:58.778905 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 136.757
+W0312 04:17:56.924988 43970 Synchronizer.cpp:60] Synch pass 79 done. Took 188.525 seconds
+W0312 04:20:46.418824 43970 Synchronizer.cpp:60] Synch pass 80 done. Took 169.493 seconds
+W0312 04:23:27.223825 43970 Synchronizer.cpp:60] Synch pass 81 done. Took 160.805 seconds
+W0312 04:26:16.246014 43970 Synchronizer.cpp:60] Synch pass 82 done. Took 169.022 seconds
+W0312 04:29:05.020133 43970 Synchronizer.cpp:60] Synch pass 83 done. Took 168.774 seconds
+W0312 04:31:48.926169 43970 Synchronizer.cpp:60] Synch pass 84 done. Took 163.906 seconds
+W0312 04:32:42.384439 43050 Training_Execution_Strategy.cpp:76] Iteration 21 done. Took 15.7267 mins
+W0312 04:32:43.151495 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 04:34:46.024091 43970 Synchronizer.cpp:60] Synch pass 85 done. Took 177.098 seconds
+W0312 04:37:23.991919 43970 Synchronizer.cpp:60] Synch pass 86 done. Took 157.968 seconds
+W0312 04:39:58.874265 43970 Synchronizer.cpp:60] Synch pass 87 done. Took 154.882 seconds
+W0312 04:42:41.978648 43970 Synchronizer.cpp:60] Synch pass 88 done. Took 163.104 seconds
+W0312 04:45:18.101577 43970 Synchronizer.cpp:60] Synch pass 89 done. Took 156.122 seconds
+W0312 04:47:26.410950 43050 Training_Execution_Strategy.cpp:76] Iteration 22 done. Took 14.7142 mins
+W0312 04:47:27.254127 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 04:47:58.697147 43970 Synchronizer.cpp:60] Synch pass 90 done. Took 160.593 seconds
+W0312 04:50:40.894711 43970 Synchronizer.cpp:60] Synch pass 91 done. Took 162.197 seconds
+W0312 04:53:09.166832 43970 Synchronizer.cpp:60] Synch pass 92 done. Took 148.272 seconds
+W0312 04:55:40.197476 43970 Synchronizer.cpp:60] Synch pass 93 done. Took 151.03 seconds
+W0312 04:58:08.191943 43970 Synchronizer.cpp:60] Synch pass 94 done. Took 147.994 seconds
+W0312 05:00:37.300624 43970 Synchronizer.cpp:60] Synch pass 95 done. Took 149.108 seconds
+W0312 05:01:17.794811 43050 Training_Execution_Strategy.cpp:76] Iteration 23 done. Took 13.8347 mins
+W0312 05:01:18.578318 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 05:03:23.617669 43970 Synchronizer.cpp:60] Synch pass 96 done. Took 166.317 seconds
+W0312 05:05:52.228811 43970 Synchronizer.cpp:60] Synch pass 97 done. Took 148.611 seconds
+W0312 05:08:16.772663 43970 Synchronizer.cpp:60] Synch pass 98 done. Took 144.544 seconds
+W0312 05:10:40.950428 43970 Synchronizer.cpp:60] Synch pass 99 done. Took 144.178 seconds
+W0312 05:13:06.019928 43970 Synchronizer.cpp:60] Synch pass 100 done. Took 145.069 seconds
+W0312 05:14:23.700922 43050 Training_Execution_Strategy.cpp:76] Iteration 24 done. Took 13.0785 mins
+W0312 05:14:24.549652 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 05:15:42.468731 43970 Synchronizer.cpp:60] Synch pass 101 done. Took 156.448 seconds
+W0312 05:18:00.598918 43970 Synchronizer.cpp:60] Synch pass 102 done. Took 138.13 seconds
+W0312 05:20:10.400063 43970 Synchronizer.cpp:60] Synch pass 103 done. Took 129.801 seconds
+W0312 05:22:30.194145 43970 Synchronizer.cpp:60] Synch pass 104 done. Took 139.794 seconds
+W0312 05:24:47.927042 43970 Synchronizer.cpp:60] Synch pass 105 done. Took 137.732 seconds
+W0312 05:26:51.898685 43050 Training_Execution_Strategy.cpp:76] Iteration 25 done. Took 12.4479 mins
+W0312 05:26:57.349069 43970 Synchronizer.cpp:60] Synch pass 106 done. Took 129.422 seconds
+W0312 05:27:18.432957 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 101.234
+W0312 05:27:18.433166 43050 Training_Execution_Strategy.cpp:81] >>>>>>>>>> Log-Likelihood (model, doc, total): -1.69758e+11 , -5.31987e+09 , -1.75078e+11
+W0312 05:27:19.313758 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 05:29:29.012317 43970 Synchronizer.cpp:60] Synch pass 107 done. Took 151.663 seconds
+W0312 05:31:50.497838 43970 Synchronizer.cpp:60] Synch pass 108 done. Took 141.485 seconds
+W0312 05:34:05.460714 43970 Synchronizer.cpp:60] Synch pass 109 done. Took 134.963 seconds
+W0312 05:36:20.664108 43970 Synchronizer.cpp:60] Synch pass 110 done. Took 135.203 seconds
+W0312 05:38:41.052500 43970 Synchronizer.cpp:60] Synch pass 111 done. Took 140.388 seconds
+W0312 05:39:03.284132 43050 Training_Execution_Strategy.cpp:76] Iteration 26 done. Took 11.7252 mins
+W0312 05:39:04.081429 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 05:41:11.398071 43970 Synchronizer.cpp:60] Synch pass 112 done. Took 150.345 seconds
+W0312 05:43:26.505348 43970 Synchronizer.cpp:60] Synch pass 113 done. Took 135.107 seconds
+W0312 05:45:44.842620 43970 Synchronizer.cpp:60] Synch pass 114 done. Took 138.337 seconds
+W0312 05:47:58.906641 43970 Synchronizer.cpp:60] Synch pass 115 done. Took 134.064 seconds
+W0312 05:50:04.551388 43970 Synchronizer.cpp:60] Synch pass 116 done. Took 125.644 seconds
+W0312 05:50:18.390705 43050 Training_Execution_Strategy.cpp:76] Iteration 27 done. Took 11.2308 mins
+W0312 05:50:19.109177 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 05:52:30.903764 43970 Synchronizer.cpp:60] Synch pass 117 done. Took 146.352 seconds
+W0312 05:54:43.397258 43970 Synchronizer.cpp:60] Synch pass 118 done. Took 132.493 seconds
+W0312 05:56:52.230417 43970 Synchronizer.cpp:60] Synch pass 119 done. Took 128.833 seconds
+W0312 05:59:03.669383 43970 Synchronizer.cpp:60] Synch pass 120 done. Took 131.439 seconds
+W0312 06:01:06.238433 43970 Synchronizer.cpp:60] Synch pass 121 done. Took 122.569 seconds
+W0312 06:01:06.620069 43050 Training_Execution_Strategy.cpp:76] Iteration 28 done. Took 10.7851 mins
+W0312 06:01:07.374371 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 06:03:26.884675 43970 Synchronizer.cpp:60] Synch pass 122 done. Took 140.643 seconds
+W0312 06:05:28.686542 43970 Synchronizer.cpp:60] Synch pass 123 done. Took 121.801 seconds
+W0312 06:07:31.588863 43970 Synchronizer.cpp:60] Synch pass 124 done. Took 122.902 seconds
+W0312 06:09:43.405246 43970 Synchronizer.cpp:60] Synch pass 125 done. Took 131.816 seconds
+W0312 06:11:30.262806 43050 Training_Execution_Strategy.cpp:76] Iteration 29 done. Took 10.3746 mins
+W0312 06:11:31.099670 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 06:12:01.114207 43970 Synchronizer.cpp:60] Synch pass 126 done. Took 137.709 seconds
+W0312 06:14:18.159621 43970 Synchronizer.cpp:60] Synch pass 127 done. Took 137.045 seconds
+W0312 06:16:25.972656 43970 Synchronizer.cpp:60] Synch pass 128 done. Took 127.813 seconds
+W0312 06:18:31.946051 43970 Synchronizer.cpp:60] Synch pass 129 done. Took 125.973 seconds
+W0312 06:20:40.948714 43970 Synchronizer.cpp:60] Synch pass 130 done. Took 129.002 seconds
+W0312 06:21:36.748117 43050 Training_Execution_Strategy.cpp:76] Iteration 30 done. Took 10.0869 mins
+W0312 06:21:37.482548 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 06:21:37.939417 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 30
+W0312 06:22:13.360373 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 84.2938
+W0312 06:22:59.912567 43970 Synchronizer.cpp:60] Synch pass 131 done. Took 138.963 seconds
+W0312 06:25:08.025295 43970 Synchronizer.cpp:60] Synch pass 132 done. Took 128.113 seconds
+W0312 06:27:07.351167 43970 Synchronizer.cpp:60] Synch pass 133 done. Took 119.326 seconds
+W0312 06:29:02.621654 43970 Synchronizer.cpp:60] Synch pass 134 done. Took 115.265 seconds
+W0312 06:31:01.204429 43970 Synchronizer.cpp:60] Synch pass 135 done. Took 118.582 seconds
+W0312 06:31:59.019822 43050 Training_Execution_Strategy.cpp:76] Iteration 31 done. Took 9.76096 mins
+W0312 06:31:59.800158 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 06:33:12.879276 43970 Synchronizer.cpp:60] Synch pass 136 done. Took 131.675 seconds
+W0312 06:35:09.873543 43970 Synchronizer.cpp:60] Synch pass 137 done. Took 116.994 seconds
+W0312 06:37:07.510814 43970 Synchronizer.cpp:60] Synch pass 138 done. Took 117.637 seconds
+W0312 06:39:11.370502 43970 Synchronizer.cpp:60] Synch pass 139 done. Took 123.859 seconds
+W0312 06:41:16.799425 43970 Synchronizer.cpp:60] Synch pass 140 done. Took 125.429 seconds
+W0312 06:41:33.969220 43050 Training_Execution_Strategy.cpp:76] Iteration 32 done. Took 9.56161 mins
+W0312 06:41:34.744457 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 06:43:35.083788 43970 Synchronizer.cpp:60] Synch pass 141 done. Took 138.284 seconds
+W0312 06:45:37.035035 43970 Synchronizer.cpp:60] Synch pass 142 done. Took 121.951 seconds
+W0312 06:47:29.388707 43970 Synchronizer.cpp:60] Synch pass 143 done. Took 112.353 seconds
+W0312 06:49:23.950165 43970 Synchronizer.cpp:60] Synch pass 144 done. Took 114.561 seconds
+W0312 06:50:57.653918 43050 Training_Execution_Strategy.cpp:76] Iteration 33 done. Took 9.37438 mins
+W0312 06:50:58.470685 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 06:51:24.839349 43970 Synchronizer.cpp:60] Synch pass 145 done. Took 120.889 seconds
+W0312 06:53:28.519953 43970 Synchronizer.cpp:60] Synch pass 146 done. Took 123.68 seconds
+W0312 06:55:20.745789 43970 Synchronizer.cpp:60] Synch pass 147 done. Took 112.225 seconds
+W0312 06:57:11.895453 43970 Synchronizer.cpp:60] Synch pass 148 done. Took 111.149 seconds
+W0312 06:59:04.929939 43970 Synchronizer.cpp:60] Synch pass 149 done. Took 113.034 seconds
+W0312 07:00:11.270854 43050 Training_Execution_Strategy.cpp:76] Iteration 34 done. Took 9.20586 mins
+W0312 07:00:12.005089 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 07:01:09.856655 43970 Synchronizer.cpp:60] Synch pass 150 done. Took 124.926 seconds
+W0312 07:03:08.557481 43970 Synchronizer.cpp:60] Synch pass 151 done. Took 118.7 seconds
+W0312 07:05:03.735740 43970 Synchronizer.cpp:60] Synch pass 152 done. Took 115.178 seconds
+W0312 07:06:56.336972 43970 Synchronizer.cpp:60] Synch pass 153 done. Took 112.601 seconds
+W0312 07:08:49.652617 43970 Synchronizer.cpp:60] Synch pass 154 done. Took 113.311 seconds
+W0312 07:09:13.836213 43050 Training_Execution_Strategy.cpp:76] Iteration 35 done. Took 9.02291 mins
+W0312 07:09:14.624500 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 07:10:58.917261 43970 Synchronizer.cpp:60] Synch pass 155 done. Took 129.264 seconds
+W0312 07:12:47.762850 43970 Synchronizer.cpp:60] Synch pass 156 done. Took 108.845 seconds
+W0312 07:14:38.629305 43970 Synchronizer.cpp:60] Synch pass 157 done. Took 110.865 seconds
+W0312 07:16:29.618432 43970 Synchronizer.cpp:60] Synch pass 158 done. Took 110.989 seconds
+W0312 07:18:09.618821 43050 Training_Execution_Strategy.cpp:76] Iteration 36 done. Took 8.90972 mins
+W0312 07:18:10.418931 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 07:18:26.039486 43970 Synchronizer.cpp:60] Synch pass 159 done. Took 116.421 seconds
+W0312 07:20:32.011982 43970 Synchronizer.cpp:60] Synch pass 160 done. Took 125.972 seconds
+W0312 07:22:24.587215 43970 Synchronizer.cpp:60] Synch pass 161 done. Took 112.575 seconds
+W0312 07:24:14.897527 43970 Synchronizer.cpp:60] Synch pass 162 done. Took 110.31 seconds
+W0312 07:26:07.612187 43970 Synchronizer.cpp:60] Synch pass 163 done. Took 112.714 seconds
+W0312 07:26:57.614212 43050 Training_Execution_Strategy.cpp:76] Iteration 37 done. Took 8.77874 mins
+W0312 07:26:58.424055 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 07:28:17.376726 43970 Synchronizer.cpp:60] Synch pass 164 done. Took 129.764 seconds
+W0312 07:30:15.403707 43970 Synchronizer.cpp:60] Synch pass 165 done. Took 118.026 seconds
+W0312 07:32:12.104473 43970 Synchronizer.cpp:60] Synch pass 166 done. Took 116.7 seconds
+W0312 07:34:10.476162 43970 Synchronizer.cpp:60] Synch pass 167 done. Took 118.371 seconds
+W0312 07:35:40.007951 43050 Training_Execution_Strategy.cpp:76] Iteration 38 done. Took 8.6856 mins
+W0312 07:35:40.766611 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 07:36:15.677667 43970 Synchronizer.cpp:60] Synch pass 168 done. Took 125.201 seconds
+W0312 07:38:21.602455 43970 Synchronizer.cpp:60] Synch pass 169 done. Took 125.924 seconds
+W0312 07:40:19.937212 43970 Synchronizer.cpp:60] Synch pass 170 done. Took 118.334 seconds
+W0312 07:42:14.660064 43970 Synchronizer.cpp:60] Synch pass 171 done. Took 114.722 seconds
+W0312 07:44:12.393524 43970 Synchronizer.cpp:60] Synch pass 172 done. Took 117.733 seconds
+W0312 07:44:15.491586 43050 Training_Execution_Strategy.cpp:76] Iteration 39 done. Took 8.57112 mins
+W0312 07:44:16.221453 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 07:46:24.136298 43970 Synchronizer.cpp:60] Synch pass 173 done. Took 131.742 seconds
+W0312 07:48:21.079773 43970 Synchronizer.cpp:60] Synch pass 174 done. Took 116.943 seconds
+W0312 07:50:17.181563 43970 Synchronizer.cpp:60] Synch pass 175 done. Took 116.101 seconds
+W0312 07:52:14.164654 43970 Synchronizer.cpp:60] Synch pass 176 done. Took 116.983 seconds
+W0312 07:52:45.493410 43050 Training_Execution_Strategy.cpp:76] Iteration 40 done. Took 8.48112 mins
+W0312 07:52:46.267124 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 07:52:46.730521 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 40
+W0312 07:53:17.560746 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 68.8596
+W0312 07:54:26.516073 43970 Synchronizer.cpp:60] Synch pass 177 done. Took 132.351 seconds
+W0312 07:56:20.671633 43970 Synchronizer.cpp:60] Synch pass 178 done. Took 114.155 seconds
+W0312 07:58:09.494529 43970 Synchronizer.cpp:60] Synch pass 179 done. Took 108.823 seconds
+W0312 07:59:57.855527 43970 Synchronizer.cpp:60] Synch pass 180 done. Took 108.361 seconds
+W0312 08:01:39.172260 43050 Training_Execution_Strategy.cpp:76] Iteration 41 done. Took 8.36016 mins
+W0312 08:01:39.989135 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 08:01:50.613807 43970 Synchronizer.cpp:60] Synch pass 181 done. Took 112.758 seconds
+W0312 08:03:56.734055 43970 Synchronizer.cpp:60] Synch pass 182 done. Took 126.12 seconds
+W0312 08:05:44.403115 43970 Synchronizer.cpp:60] Synch pass 183 done. Took 107.669 seconds
+W0312 08:07:30.991686 43970 Synchronizer.cpp:60] Synch pass 184 done. Took 106.588 seconds
+W0312 08:09:20.426295 43970 Synchronizer.cpp:60] Synch pass 185 done. Took 109.434 seconds
+W0312 08:09:58.266002 43050 Training_Execution_Strategy.cpp:76] Iteration 42 done. Took 8.29635 mins
+W0312 08:09:59.071795 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 08:11:25.183706 43970 Synchronizer.cpp:60] Synch pass 186 done. Took 124.757 seconds
+W0312 08:13:11.281157 43970 Synchronizer.cpp:60] Synch pass 187 done. Took 106.097 seconds
+W0312 08:14:57.958649 43970 Synchronizer.cpp:60] Synch pass 188 done. Took 106.677 seconds
+W0312 08:16:44.385175 43970 Synchronizer.cpp:60] Synch pass 189 done. Took 106.426 seconds
+W0312 08:18:12.784296 43050 Training_Execution_Strategy.cpp:76] Iteration 43 done. Took 8.22108 mins
+W0312 08:18:13.546072 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 08:18:37.610224 43970 Synchronizer.cpp:60] Synch pass 190 done. Took 113.225 seconds
+W0312 08:20:38.904851 43970 Synchronizer.cpp:60] Synch pass 191 done. Took 121.294 seconds
+W0312 08:22:27.657488 43970 Synchronizer.cpp:60] Synch pass 192 done. Took 108.752 seconds
+W0312 08:24:16.391530 43970 Synchronizer.cpp:60] Synch pass 193 done. Took 108.734 seconds
+W0312 08:26:04.234472 43970 Synchronizer.cpp:60] Synch pass 194 done. Took 107.843 seconds
+W0312 08:26:23.011746 43050 Training_Execution_Strategy.cpp:76] Iteration 44 done. Took 8.15051 mins
+W0312 08:26:23.826566 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 08:28:11.206344 43970 Synchronizer.cpp:60] Synch pass 195 done. Took 126.972 seconds
+W0312 08:30:00.369014 43970 Synchronizer.cpp:60] Synch pass 196 done. Took 109.162 seconds
+W0312 08:31:48.242492 43970 Synchronizer.cpp:60] Synch pass 197 done. Took 107.873 seconds
+W0312 08:33:37.556680 43970 Synchronizer.cpp:60] Synch pass 198 done. Took 109.312 seconds
+W0312 08:34:28.719172 43050 Training_Execution_Strategy.cpp:76] Iteration 45 done. Took 8.07346 mins
+W0312 08:34:29.535516 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 08:35:44.490025 43970 Synchronizer.cpp:60] Synch pass 199 done. Took 126.933 seconds
+W0312 08:37:34.601536 43970 Synchronizer.cpp:60] Synch pass 200 done. Took 110.111 seconds
+W0312 08:39:20.499377 43970 Synchronizer.cpp:60] Synch pass 201 done. Took 105.898 seconds
+W0312 08:41:06.093859 43970 Synchronizer.cpp:60] Synch pass 202 done. Took 105.594 seconds
+W0312 08:42:31.916599 43050 Training_Execution_Strategy.cpp:76] Iteration 46 done. Took 8.03179 mins
+W0312 08:42:32.796783 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 08:43:02.417776 43970 Synchronizer.cpp:60] Synch pass 203 done. Took 116.32 seconds
+W0312 08:45:03.154588 43970 Synchronizer.cpp:60] Synch pass 204 done. Took 120.736 seconds
+W0312 08:46:52.492429 43970 Synchronizer.cpp:60] Synch pass 205 done. Took 109.338 seconds
+W0312 08:48:39.509400 43970 Synchronizer.cpp:60] Synch pass 206 done. Took 107.017 seconds
+W0312 08:50:27.305084 43970 Synchronizer.cpp:60] Synch pass 207 done. Took 107.795 seconds
+W0312 08:50:30.351833 43050 Training_Execution_Strategy.cpp:76] Iteration 47 done. Took 7.94936 mins
+W0312 08:50:31.139403 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 08:52:30.401054 43970 Synchronizer.cpp:60] Synch pass 208 done. Took 123.096 seconds
+W0312 08:54:18.528539 43970 Synchronizer.cpp:60] Synch pass 209 done. Took 108.127 seconds
+W0312 08:56:04.689072 43970 Synchronizer.cpp:60] Synch pass 210 done. Took 106.16 seconds
+W0312 08:57:53.935591 43970 Synchronizer.cpp:60] Synch pass 211 done. Took 109.246 seconds
+W0312 08:58:26.135291 43050 Training_Execution_Strategy.cpp:76] Iteration 48 done. Took 7.90959 mins
+W0312 08:58:26.953768 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 09:00:02.034332 43970 Synchronizer.cpp:60] Synch pass 212 done. Took 128.098 seconds
+W0312 09:01:48.720700 43970 Synchronizer.cpp:60] Synch pass 213 done. Took 106.686 seconds
+W0312 09:03:36.732935 43970 Synchronizer.cpp:60] Synch pass 214 done. Took 108.012 seconds
+W0312 09:05:25.471366 43970 Synchronizer.cpp:60] Synch pass 215 done. Took 108.738 seconds
+W0312 09:06:18.774710 43050 Training_Execution_Strategy.cpp:76] Iteration 49 done. Took 7.8541 mins
+W0312 09:06:19.585568 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 09:07:28.832331 43970 Synchronizer.cpp:60] Synch pass 216 done. Took 123.361 seconds
+W0312 09:09:16.730089 43970 Synchronizer.cpp:60] Synch pass 217 done. Took 107.897 seconds
+W0312 09:10:59.714479 43970 Synchronizer.cpp:60] Synch pass 218 done. Took 102.984 seconds
+W0312 09:12:41.731910 43970 Synchronizer.cpp:60] Synch pass 219 done. Took 102.017 seconds
+W0312 09:14:12.174661 43050 Training_Execution_Strategy.cpp:76] Iteration 50 done. Took 7.86879 mins
+W0312 09:14:26.127949 43970 Synchronizer.cpp:60] Synch pass 220 done. Took 104.396 seconds
+W0312 09:14:32.562793 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 62.1881
+W0312 09:14:32.562970 43050 Training_Execution_Strategy.cpp:81] >>>>>>>>>> Log-Likelihood (model, doc, total): -1.47159e+11 , -5.44832e+09 , -1.52607e+11
+W0312 09:14:33.405560 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 09:14:33.914991 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 50
+W0312 09:15:03.983119 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 62.1324
+W0312 09:16:30.598067 43970 Synchronizer.cpp:60] Synch pass 221 done. Took 124.47 seconds
+W0312 09:18:15.293393 43970 Synchronizer.cpp:60] Synch pass 222 done. Took 104.695 seconds
+W0312 09:20:02.045384 43970 Synchronizer.cpp:60] Synch pass 223 done. Took 106.752 seconds
+W0312 09:21:48.546609 43970 Synchronizer.cpp:60] Synch pass 224 done. Took 106.501 seconds
+W0312 09:22:49.664291 43050 Training_Execution_Strategy.cpp:76] Iteration 51 done. Took 7.76133 mins
+W0312 09:22:50.415951 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 09:23:48.676502 43970 Synchronizer.cpp:60] Synch pass 225 done. Took 120.13 seconds
+W0312 09:25:41.151249 43970 Synchronizer.cpp:60] Synch pass 226 done. Took 112.474 seconds
+W0312 09:27:29.786371 43970 Synchronizer.cpp:60] Synch pass 227 done. Took 108.635 seconds
+W0312 09:29:16.957979 43970 Synchronizer.cpp:60] Synch pass 228 done. Took 107.171 seconds
+W0312 09:30:34.150297 43050 Training_Execution_Strategy.cpp:76] Iteration 52 done. Took 7.72068 mins
+W0312 09:30:34.947108 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 09:31:14.942939 43970 Synchronizer.cpp:60] Synch pass 229 done. Took 117.984 seconds
+W0312 09:33:09.690354 43970 Synchronizer.cpp:60] Synch pass 230 done. Took 114.747 seconds
+W0312 09:34:53.314995 43970 Synchronizer.cpp:60] Synch pass 231 done. Took 103.624 seconds
+W0312 09:36:37.060130 43970 Synchronizer.cpp:60] Synch pass 232 done. Took 103.745 seconds
+W0312 09:38:16.452350 43050 Training_Execution_Strategy.cpp:76] Iteration 53 done. Took 7.68398 mins
+W0312 09:38:17.235256 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 09:38:23.128855 43970 Synchronizer.cpp:60] Synch pass 233 done. Took 106.068 seconds
+W0312 09:40:29.858721 43970 Synchronizer.cpp:60] Synch pass 234 done. Took 126.73 seconds
+W0312 09:42:24.053313 43970 Synchronizer.cpp:60] Synch pass 235 done. Took 114.194 seconds
+W0312 09:44:14.258082 43970 Synchronizer.cpp:60] Synch pass 236 done. Took 110.204 seconds
+W0312 09:45:57.182515 43050 Training_Execution_Strategy.cpp:76] Iteration 54 done. Took 7.65804 mins
+W0312 09:45:58.065266 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 09:46:01.926281 43970 Synchronizer.cpp:60] Synch pass 237 done. Took 107.668 seconds
+W0312 09:48:07.056355 43970 Synchronizer.cpp:60] Synch pass 238 done. Took 125.13 seconds
+W0312 09:49:54.067050 43970 Synchronizer.cpp:60] Synch pass 239 done. Took 107.01 seconds
+W0312 09:51:37.596581 43970 Synchronizer.cpp:60] Synch pass 240 done. Took 103.529 seconds
+W0312 09:53:23.876250 43970 Synchronizer.cpp:60] Synch pass 241 done. Took 106.279 seconds
+W0312 09:53:34.832121 43050 Training_Execution_Strategy.cpp:76] Iteration 55 done. Took 7.60491 mins
+W0312 09:53:35.639034 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 09:55:31.859263 43970 Synchronizer.cpp:60] Synch pass 242 done. Took 127.983 seconds
+W0312 09:57:20.066838 43970 Synchronizer.cpp:60] Synch pass 243 done. Took 108.207 seconds
+W0312 09:59:04.513564 43970 Synchronizer.cpp:60] Synch pass 244 done. Took 104.446 seconds
+W0312 10:00:50.768838 43970 Synchronizer.cpp:60] Synch pass 245 done. Took 106.255 seconds
+W0312 10:01:11.225982 43050 Training_Execution_Strategy.cpp:76] Iteration 56 done. Took 7.58588 mins
+W0312 10:01:12.011762 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 10:02:55.684809 43970 Synchronizer.cpp:60] Synch pass 246 done. Took 124.916 seconds
+W0312 10:04:39.542814 43970 Synchronizer.cpp:60] Synch pass 247 done. Took 103.858 seconds
+W0312 10:06:26.898599 43970 Synchronizer.cpp:60] Synch pass 248 done. Took 107.355 seconds
+W0312 10:08:11.255861 43970 Synchronizer.cpp:60] Synch pass 249 done. Took 104.357 seconds
+W0312 10:08:45.917453 43050 Training_Execution_Strategy.cpp:76] Iteration 57 done. Took 7.55764 mins
+W0312 10:08:46.727479 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 10:10:16.816342 43970 Synchronizer.cpp:60] Synch pass 250 done. Took 125.56 seconds
+W0312 10:12:10.937988 43970 Synchronizer.cpp:60] Synch pass 251 done. Took 114.121 seconds
+W0312 10:14:03.769886 43970 Synchronizer.cpp:60] Synch pass 252 done. Took 112.832 seconds
+W0312 10:15:59.175918 43970 Synchronizer.cpp:60] Synch pass 253 done. Took 115.406 seconds
+W0312 10:16:19.235213 43050 Training_Execution_Strategy.cpp:76] Iteration 58 done. Took 7.53447 mins
+W0312 10:16:20.040014 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 10:18:07.383123 43970 Synchronizer.cpp:60] Synch pass 254 done. Took 128.207 seconds
+W0312 10:20:03.518975 43970 Synchronizer.cpp:60] Synch pass 255 done. Took 116.135 seconds
+W0312 10:21:56.996513 43970 Synchronizer.cpp:60] Synch pass 256 done. Took 113.477 seconds
+W0312 10:23:48.206920 43970 Synchronizer.cpp:60] Synch pass 257 done. Took 111.21 seconds
+W0312 10:23:50.905943 43050 Training_Execution_Strategy.cpp:76] Iteration 59 done. Took 7.50654 mins
+W0312 10:23:51.623965 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 10:25:50.314266 43970 Synchronizer.cpp:60] Synch pass 258 done. Took 122.107 seconds
+W0312 10:27:34.091509 43970 Synchronizer.cpp:60] Synch pass 259 done. Took 103.777 seconds
+W0312 10:29:16.078974 43970 Synchronizer.cpp:60] Synch pass 260 done. Took 101.987 seconds
+W0312 10:30:59.358703 43970 Synchronizer.cpp:60] Synch pass 261 done. Took 103.279 seconds
+W0312 10:31:20.733866 43050 Training_Execution_Strategy.cpp:76] Iteration 60 done. Took 7.47819 mins
+W0312 10:31:21.478907 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 10:31:21.926800 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 60
+W0312 10:31:50.395390 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 58.5109
+W0312 10:33:06.981385 43970 Synchronizer.cpp:60] Synch pass 262 done. Took 127.622 seconds
+W0312 10:35:01.682001 43970 Synchronizer.cpp:60] Synch pass 263 done. Took 114.697 seconds
+W0312 10:36:56.696645 43970 Synchronizer.cpp:60] Synch pass 264 done. Took 115.014 seconds
+W0312 10:38:52.063766 43970 Synchronizer.cpp:60] Synch pass 265 done. Took 115.367 seconds
+W0312 10:39:16.837318 43050 Training_Execution_Strategy.cpp:76] Iteration 61 done. Took 7.44067 mins
+W0312 10:39:17.651662 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 10:41:01.490356 43970 Synchronizer.cpp:60] Synch pass 266 done. Took 129.426 seconds
+W0312 10:42:47.817245 43970 Synchronizer.cpp:60] Synch pass 267 done. Took 106.326 seconds
+W0312 10:44:32.071584 43970 Synchronizer.cpp:60] Synch pass 268 done. Took 104.254 seconds
+W0312 10:46:16.716119 43970 Synchronizer.cpp:60] Synch pass 269 done. Took 104.64 seconds
+W0312 10:46:43.268612 43050 Training_Execution_Strategy.cpp:76] Iteration 62 done. Took 7.4194 mins
+W0312 10:46:44.051738 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 10:48:23.183724 43970 Synchronizer.cpp:60] Synch pass 270 done. Took 126.467 seconds
+W0312 10:50:18.030112 43970 Synchronizer.cpp:60] Synch pass 271 done. Took 114.846 seconds
+W0312 10:52:12.404314 43970 Synchronizer.cpp:60] Synch pass 272 done. Took 114.374 seconds
+W0312 10:54:02.609339 43970 Synchronizer.cpp:60] Synch pass 273 done. Took 110.205 seconds
+W0312 10:54:08.527667 43050 Training_Execution_Strategy.cpp:76] Iteration 63 done. Took 7.40038 mins
+W0312 10:54:09.343289 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 10:56:11.313408 43970 Synchronizer.cpp:60] Synch pass 274 done. Took 128.704 seconds
+W0312 10:58:00.988503 43970 Synchronizer.cpp:60] Synch pass 275 done. Took 109.675 seconds
+W0312 10:59:42.166388 43970 Synchronizer.cpp:60] Synch pass 276 done. Took 101.178 seconds
+W0312 11:01:26.845064 43970 Synchronizer.cpp:60] Synch pass 277 done. Took 104.678 seconds
+W0312 11:01:32.168925 43050 Training_Execution_Strategy.cpp:76] Iteration 64 done. Took 7.37305 mins
+W0312 11:01:32.962963 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 11:03:32.646864 43970 Synchronizer.cpp:60] Synch pass 278 done. Took 125.801 seconds
+W0312 11:05:16.540478 43970 Synchronizer.cpp:60] Synch pass 279 done. Took 103.893 seconds
+W0312 11:07:01.344110 43970 Synchronizer.cpp:60] Synch pass 280 done. Took 104.803 seconds
+W0312 11:08:47.630607 43970 Synchronizer.cpp:60] Synch pass 281 done. Took 106.286 seconds
+W0312 11:08:54.398708 43050 Training_Execution_Strategy.cpp:76] Iteration 65 done. Took 7.34968 mins
+W0312 11:08:55.194053 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 11:10:54.027202 43970 Synchronizer.cpp:60] Synch pass 282 done. Took 126.396 seconds
+W0312 11:12:37.996320 43970 Synchronizer.cpp:60] Synch pass 283 done. Took 103.969 seconds
+W0312 11:14:19.960778 43970 Synchronizer.cpp:60] Synch pass 284 done. Took 101.964 seconds
+W0312 11:16:04.899605 43970 Synchronizer.cpp:60] Synch pass 285 done. Took 104.939 seconds
+W0312 11:16:16.157009 43050 Training_Execution_Strategy.cpp:76] Iteration 66 done. Took 7.34184 mins
+W0312 11:16:16.959700 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 11:18:05.640806 43970 Synchronizer.cpp:60] Synch pass 286 done. Took 120.739 seconds
+W0312 11:19:49.349328 43970 Synchronizer.cpp:60] Synch pass 287 done. Took 103.708 seconds
+W0312 11:21:32.360129 43970 Synchronizer.cpp:60] Synch pass 288 done. Took 103.01 seconds
+W0312 11:23:15.919587 43970 Synchronizer.cpp:60] Synch pass 289 done. Took 103.554 seconds
+W0312 11:23:36.100332 43050 Training_Execution_Strategy.cpp:76] Iteration 67 done. Took 7.31135 mins
+W0312 11:23:36.881184 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 11:25:24.044952 43970 Synchronizer.cpp:60] Synch pass 290 done. Took 128.125 seconds
+W0312 11:27:14.677517 43970 Synchronizer.cpp:60] Synch pass 291 done. Took 110.632 seconds
+W0312 11:28:59.202028 43970 Synchronizer.cpp:60] Synch pass 292 done. Took 104.524 seconds
+W0312 11:30:44.559590 43970 Synchronizer.cpp:60] Synch pass 293 done. Took 105.357 seconds
+W0312 11:30:54.562832 43050 Training_Execution_Strategy.cpp:76] Iteration 68 done. Took 7.28736 mins
+W0312 11:30:55.349856 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 11:32:52.241382 43970 Synchronizer.cpp:60] Synch pass 294 done. Took 127.681 seconds
+W0312 11:34:42.917150 43970 Synchronizer.cpp:60] Synch pass 295 done. Took 110.674 seconds
+W0312 11:36:26.418889 43970 Synchronizer.cpp:60] Synch pass 296 done. Took 103.501 seconds
+W0312 11:38:11.962033 43970 Synchronizer.cpp:60] Synch pass 297 done. Took 105.543 seconds
+W0312 11:38:12.288653 43050 Training_Execution_Strategy.cpp:76] Iteration 69 done. Took 7.27519 mins
+W0312 11:38:13.086887 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 11:40:20.969149 43970 Synchronizer.cpp:60] Synch pass 298 done. Took 129.007 seconds
+W0312 11:42:08.965044 43970 Synchronizer.cpp:60] Synch pass 299 done. Took 107.996 seconds
+W0312 11:43:53.182104 43970 Synchronizer.cpp:60] Synch pass 300 done. Took 104.217 seconds
+W0312 11:45:28.920941 43050 Training_Execution_Strategy.cpp:76] Iteration 70 done. Took 7.25669 mins
+W0312 11:45:29.751899 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 11:45:30.283694 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 70
+W0312 11:45:39.388236 43970 Synchronizer.cpp:60] Synch pass 301 done. Took 106.206 seconds
+W0312 11:45:59.749874 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 56.1776
+W0312 11:47:39.253742 43970 Synchronizer.cpp:60] Synch pass 302 done. Took 119.865 seconds
+W0312 11:49:24.430948 43970 Synchronizer.cpp:60] Synch pass 303 done. Took 105.177 seconds
+W0312 11:51:09.463002 43970 Synchronizer.cpp:60] Synch pass 304 done. Took 105.032 seconds
+W0312 11:52:55.790895 43970 Synchronizer.cpp:60] Synch pass 305 done. Took 106.328 seconds
+W0312 11:53:12.956532 43050 Training_Execution_Strategy.cpp:76] Iteration 71 done. Took 7.22009 mins
+W0312 11:53:13.786435 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 11:55:00.442464 43970 Synchronizer.cpp:60] Synch pass 306 done. Took 124.651 seconds
+W0312 11:56:44.277997 43970 Synchronizer.cpp:60] Synch pass 307 done. Took 103.835 seconds
+W0312 11:58:25.484108 43970 Synchronizer.cpp:60] Synch pass 308 done. Took 101.206 seconds
+W0312 12:00:08.515964 43970 Synchronizer.cpp:60] Synch pass 309 done. Took 103.031 seconds
+W0312 12:00:28.150807 43050 Training_Execution_Strategy.cpp:76] Iteration 72 done. Took 7.23193 mins
+W0312 12:00:28.922055 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:02:09.168835 43970 Synchronizer.cpp:60] Synch pass 310 done. Took 120.652 seconds
+W0312 12:03:53.495156 43970 Synchronizer.cpp:60] Synch pass 311 done. Took 104.326 seconds
+W0312 12:05:38.047632 43970 Synchronizer.cpp:60] Synch pass 312 done. Took 104.552 seconds
+W0312 12:07:23.151612 43970 Synchronizer.cpp:60] Synch pass 313 done. Took 105.103 seconds
+W0312 12:07:41.530840 43050 Training_Execution_Strategy.cpp:76] Iteration 73 done. Took 7.2025 mins
+W0312 12:07:42.341929 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:09:30.264295 43970 Synchronizer.cpp:60] Synch pass 314 done. Took 127.112 seconds
+W0312 12:11:16.349133 43970 Synchronizer.cpp:60] Synch pass 315 done. Took 106.085 seconds
+W0312 12:12:58.534880 43970 Synchronizer.cpp:60] Synch pass 316 done. Took 102.185 seconds
+W0312 12:14:43.533715 43970 Synchronizer.cpp:60] Synch pass 317 done. Took 104.998 seconds
+W0312 12:14:54.430761 43050 Training_Execution_Strategy.cpp:76] Iteration 74 done. Took 7.19396 mins
+W0312 12:14:55.218057 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:16:43.597288 43970 Synchronizer.cpp:60] Synch pass 318 done. Took 120.063 seconds
+W0312 12:18:26.753070 43970 Synchronizer.cpp:60] Synch pass 319 done. Took 103.155 seconds
+W0312 12:20:06.939584 43970 Synchronizer.cpp:60] Synch pass 320 done. Took 100.186 seconds
+W0312 12:21:47.846833 43970 Synchronizer.cpp:60] Synch pass 321 done. Took 100.906 seconds
+W0312 12:22:08.793478 43050 Training_Execution_Strategy.cpp:76] Iteration 75 done. Took 7.21843 mins
+W0312 12:22:31.300912 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 55.2763
+W0312 12:22:31.301064 43050 Training_Execution_Strategy.cpp:81] >>>>>>>>>> Log-Likelihood (model, doc, total): -1.40845e+11 , -5.48292e+09 , -1.46328e+11
+W0312 12:22:32.153692 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:23:50.011183 43970 Synchronizer.cpp:60] Synch pass 322 done. Took 122.164 seconds
+W0312 12:25:35.488212 43970 Synchronizer.cpp:60] Synch pass 323 done. Took 105.477 seconds
+W0312 12:27:19.229626 43970 Synchronizer.cpp:60] Synch pass 324 done. Took 103.741 seconds
+W0312 12:29:03.068274 43970 Synchronizer.cpp:60] Synch pass 325 done. Took 103.838 seconds
+W0312 12:29:42.557095 43050 Training_Execution_Strategy.cpp:76] Iteration 76 done. Took 7.16408 mins
+W0312 12:29:43.368219 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:31:07.383666 43970 Synchronizer.cpp:60] Synch pass 326 done. Took 124.315 seconds
+W0312 12:33:02.916697 43970 Synchronizer.cpp:60] Synch pass 327 done. Took 115.532 seconds
+W0312 12:34:56.875157 43970 Synchronizer.cpp:60] Synch pass 328 done. Took 113.958 seconds
+W0312 12:36:50.595321 43970 Synchronizer.cpp:60] Synch pass 329 done. Took 113.72 seconds
+W0312 12:36:53.244830 43050 Training_Execution_Strategy.cpp:76] Iteration 77 done. Took 7.156 mins
+W0312 12:36:54.050348 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:38:59.452250 43970 Synchronizer.cpp:60] Synch pass 330 done. Took 128.857 seconds
+W0312 12:40:52.511003 43970 Synchronizer.cpp:60] Synch pass 331 done. Took 113.058 seconds
+W0312 12:42:45.213903 43970 Synchronizer.cpp:60] Synch pass 332 done. Took 112.702 seconds
+W0312 12:44:03.215178 43050 Training_Execution_Strategy.cpp:76] Iteration 78 done. Took 7.14375 mins
+W0312 12:44:04.066746 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:44:46.444494 43970 Synchronizer.cpp:60] Synch pass 333 done. Took 121.23 seconds
+W0312 12:46:45.852774 43970 Synchronizer.cpp:60] Synch pass 334 done. Took 119.408 seconds
+W0312 12:48:38.372596 43970 Synchronizer.cpp:60] Synch pass 335 done. Took 112.519 seconds
+W0312 12:50:31.498566 43970 Synchronizer.cpp:60] Synch pass 336 done. Took 113.126 seconds
+W0312 12:51:12.366528 43050 Training_Execution_Strategy.cpp:76] Iteration 79 done. Took 7.13029 mins
+W0312 12:51:13.200399 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:52:40.127002 43970 Synchronizer.cpp:60] Synch pass 337 done. Took 128.628 seconds
+W0312 12:54:33.678364 43970 Synchronizer.cpp:60] Synch pass 338 done. Took 113.551 seconds
+W0312 12:56:25.318653 43970 Synchronizer.cpp:60] Synch pass 339 done. Took 111.64 seconds
+W0312 12:58:19.082716 43970 Synchronizer.cpp:60] Synch pass 340 done. Took 113.764 seconds
+W0312 12:58:20.808116 43050 Training_Execution_Strategy.cpp:76] Iteration 80 done. Took 7.11893 mins
+W0312 12:58:21.567217 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 12:58:22.086700 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 80
+W0312 12:58:53.877295 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 54.5111
+W0312 13:00:23.626224 43970 Synchronizer.cpp:60] Synch pass 341 done. Took 124.543 seconds
+W0312 13:02:07.087545 43970 Synchronizer.cpp:60] Synch pass 342 done. Took 103.461 seconds
+W0312 13:03:49.584918 43970 Synchronizer.cpp:60] Synch pass 343 done. Took 102.497 seconds
+W0312 13:05:33.228142 43970 Synchronizer.cpp:60] Synch pass 344 done. Took 103.643 seconds
+W0312 13:05:59.851879 43050 Training_Execution_Strategy.cpp:76] Iteration 81 done. Took 7.09956 mins
+W0312 13:06:00.638510 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 13:07:37.713722 43970 Synchronizer.cpp:60] Synch pass 345 done. Took 124.485 seconds
+W0312 13:09:23.842229 43970 Synchronizer.cpp:60] Synch pass 346 done. Took 106.128 seconds
+W0312 13:11:07.943928 43970 Synchronizer.cpp:60] Synch pass 347 done. Took 104.099 seconds
+W0312 13:12:56.008595 43970 Synchronizer.cpp:60] Synch pass 348 done. Took 108.064 seconds
+W0312 13:13:06.120345 43050 Training_Execution_Strategy.cpp:76] Iteration 82 done. Took 7.08419 mins
+W0312 13:13:06.897132 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 13:15:01.540340 43970 Synchronizer.cpp:60] Synch pass 349 done. Took 125.532 seconds
+W0312 13:16:47.480059 43970 Synchronizer.cpp:60] Synch pass 350 done. Took 105.939 seconds
+W0312 13:18:31.727617 43970 Synchronizer.cpp:60] Synch pass 351 done. Took 104.247 seconds
+W0312 13:20:11.766831 43050 Training_Execution_Strategy.cpp:76] Iteration 83 done. Took 7.07406 mins
+W0312 13:20:12.586313 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 13:20:19.516621 43970 Synchronizer.cpp:60] Synch pass 352 done. Took 107.789 seconds
+W0312 13:22:19.647505 43970 Synchronizer.cpp:60] Synch pass 353 done. Took 120.131 seconds
+W0312 13:24:03.980558 43970 Synchronizer.cpp:60] Synch pass 354 done. Took 104.333 seconds
+W0312 13:25:47.540125 43970 Synchronizer.cpp:60] Synch pass 355 done. Took 103.559 seconds
+W0312 13:27:16.910151 43050 Training_Execution_Strategy.cpp:76] Iteration 84 done. Took 7.06418 mins
+W0312 13:27:17.734472 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 13:27:38.444181 43970 Synchronizer.cpp:60] Synch pass 356 done. Took 110.904 seconds
+W0312 13:29:38.084731 43970 Synchronizer.cpp:60] Synch pass 357 done. Took 119.64 seconds
+W0312 13:31:23.820583 43970 Synchronizer.cpp:60] Synch pass 358 done. Took 105.735 seconds
+W0312 13:33:07.322093 43970 Synchronizer.cpp:60] Synch pass 359 done. Took 103.501 seconds
+W0312 13:34:21.613901 43050 Training_Execution_Strategy.cpp:76] Iteration 85 done. Took 7.05664 mins
+W0312 13:34:22.432685 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 13:35:02.805897 43970 Synchronizer.cpp:60] Synch pass 360 done. Took 115.483 seconds
+W0312 13:36:58.368831 43970 Synchronizer.cpp:60] Synch pass 361 done. Took 115.562 seconds
+W0312 13:38:43.674042 43970 Synchronizer.cpp:60] Synch pass 362 done. Took 105.305 seconds
+W0312 13:40:29.241101 43970 Synchronizer.cpp:60] Synch pass 363 done. Took 105.567 seconds
+W0312 13:41:25.570480 43050 Training_Execution_Strategy.cpp:76] Iteration 86 done. Took 7.04452 mins
+W0312 13:41:26.388733 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 13:42:29.809839 43970 Synchronizer.cpp:60] Synch pass 364 done. Took 120.568 seconds
+W0312 13:44:18.770242 43970 Synchronizer.cpp:60] Synch pass 365 done. Took 108.96 seconds
+W0312 13:46:02.834036 43970 Synchronizer.cpp:60] Synch pass 366 done. Took 104.063 seconds
+W0312 13:47:47.217905 43970 Synchronizer.cpp:60] Synch pass 367 done. Took 104.38 seconds
+W0312 13:48:29.161669 43050 Training_Execution_Strategy.cpp:76] Iteration 87 done. Took 7.0385 mins
+W0312 13:48:29.968611 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 13:49:51.434247 43970 Synchronizer.cpp:60] Synch pass 368 done. Took 124.216 seconds
+W0312 13:51:38.450258 43970 Synchronizer.cpp:60] Synch pass 369 done. Took 107.016 seconds
+W0312 13:53:21.934170 43970 Synchronizer.cpp:60] Synch pass 370 done. Took 103.484 seconds
+W0312 13:55:05.957782 43970 Synchronizer.cpp:60] Synch pass 371 done. Took 104.023 seconds
+W0312 13:55:32.331888 43050 Training_Execution_Strategy.cpp:76] Iteration 88 done. Took 7.03137 mins
+W0312 13:55:33.141898 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 13:57:09.902731 43970 Synchronizer.cpp:60] Synch pass 372 done. Took 123.945 seconds
+W0312 13:58:56.009716 43970 Synchronizer.cpp:60] Synch pass 373 done. Took 106.107 seconds
+W0312 14:00:38.857642 43970 Synchronizer.cpp:60] Synch pass 374 done. Took 102.848 seconds
+W0312 14:02:24.249275 43970 Synchronizer.cpp:60] Synch pass 375 done. Took 105.391 seconds
+W0312 14:02:34.980468 43050 Training_Execution_Strategy.cpp:76] Iteration 89 done. Took 7.02351 mins
+W0312 14:02:35.796080 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 14:04:29.424335 43970 Synchronizer.cpp:60] Synch pass 376 done. Took 125.175 seconds
+W0312 14:06:15.863533 43970 Synchronizer.cpp:60] Synch pass 377 done. Took 106.439 seconds
+W0312 14:07:59.868737 43970 Synchronizer.cpp:60] Synch pass 378 done. Took 104.005 seconds
+W0312 14:09:37.054764 43050 Training_Execution_Strategy.cpp:76] Iteration 90 done. Took 7.01307 mins
+W0312 14:09:37.896524 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 14:09:38.351428 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 90
+W0312 14:09:45.886437 43970 Synchronizer.cpp:60] Synch pass 379 done. Took 106.017 seconds
+W0312 14:10:04.929991 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 53.3023
+W0312 14:11:46.150755 43970 Synchronizer.cpp:60] Synch pass 380 done. Took 120.264 seconds
+W0312 14:13:29.932035 43970 Synchronizer.cpp:60] Synch pass 381 done. Took 103.781 seconds
+W0312 14:15:12.185474 43970 Synchronizer.cpp:60] Synch pass 382 done. Took 102.253 seconds
+W0312 14:16:57.391021 43970 Synchronizer.cpp:60] Synch pass 383 done. Took 105.205 seconds
+W0312 14:17:04.810955 43050 Training_Execution_Strategy.cpp:76] Iteration 91 done. Took 6.998 mins
+W0312 14:17:05.616152 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 14:19:06.314286 43970 Synchronizer.cpp:60] Synch pass 384 done. Took 128.923 seconds
+W0312 14:20:58.888520 43970 Synchronizer.cpp:60] Synch pass 385 done. Took 112.574 seconds
+W0312 14:22:46.418417 43970 Synchronizer.cpp:60] Synch pass 386 done. Took 107.529 seconds
+W0312 14:24:05.843610 43050 Training_Execution_Strategy.cpp:76] Iteration 92 done. Took 6.99641 mins
+W0312 14:24:06.722780 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 14:24:41.050562 43970 Synchronizer.cpp:60] Synch pass 387 done. Took 114.632 seconds
+W0312 14:26:43.446998 43970 Synchronizer.cpp:60] Synch pass 388 done. Took 122.395 seconds
+W0312 14:28:35.322047 43970 Synchronizer.cpp:60] Synch pass 389 done. Took 111.875 seconds
+W0312 14:30:24.721031 43970 Synchronizer.cpp:60] Synch pass 390 done. Took 109.399 seconds
+W0312 14:31:06.768023 43050 Training_Execution_Strategy.cpp:76] Iteration 93 done. Took 6.99331 mins
+W0312 14:31:07.586040 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 14:32:30.266033 43970 Synchronizer.cpp:60] Synch pass 391 done. Took 125.545 seconds
+W0312 14:34:24.295027 43970 Synchronizer.cpp:60] Synch pass 392 done. Took 114.028 seconds
+W0312 14:36:15.053055 43970 Synchronizer.cpp:60] Synch pass 393 done. Took 110.758 seconds
+W0312 14:37:59.643527 43970 Synchronizer.cpp:60] Synch pass 394 done. Took 104.59 seconds
+W0312 14:38:06.748348 43050 Training_Execution_Strategy.cpp:76] Iteration 94 done. Took 6.97783 mins
+W0312 14:38:07.561816 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 14:40:04.606194 43970 Synchronizer.cpp:60] Synch pass 395 done. Took 124.962 seconds
+W0312 14:41:50.171485 43970 Synchronizer.cpp:60] Synch pass 396 done. Took 105.565 seconds
+W0312 14:43:34.664453 43970 Synchronizer.cpp:60] Synch pass 397 done. Took 104.493 seconds
+W0312 14:45:06.258846 43050 Training_Execution_Strategy.cpp:76] Iteration 95 done. Took 6.97051 mins
+W0312 14:45:07.080456 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 14:45:25.909924 43970 Synchronizer.cpp:60] Synch pass 398 done. Took 111.245 seconds
+W0312 14:47:31.099020 43970 Synchronizer.cpp:60] Synch pass 399 done. Took 125.189 seconds
+W0312 14:49:17.876101 43970 Synchronizer.cpp:60] Synch pass 400 done. Took 106.777 seconds
+W0312 14:51:02.525375 43970 Synchronizer.cpp:60] Synch pass 401 done. Took 104.649 seconds
+W0312 14:52:05.249485 43050 Training_Execution_Strategy.cpp:76] Iteration 96 done. Took 6.96127 mins
+W0312 14:52:06.099221 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 14:53:02.695060 43970 Synchronizer.cpp:60] Synch pass 402 done. Took 120.169 seconds
+W0312 14:55:01.419476 43970 Synchronizer.cpp:60] Synch pass 403 done. Took 118.724 seconds
+W0312 14:56:55.119235 43970 Synchronizer.cpp:60] Synch pass 404 done. Took 113.699 seconds
+W0312 14:58:47.898397 43970 Synchronizer.cpp:60] Synch pass 405 done. Took 112.779 seconds
+W0312 14:59:04.196271 43050 Training_Execution_Strategy.cpp:76] Iteration 97 done. Took 6.96039 mins
+W0312 14:59:05.040771 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 15:00:56.211261 43970 Synchronizer.cpp:60] Synch pass 406 done. Took 128.313 seconds
+W0312 15:02:39.993805 43970 Synchronizer.cpp:60] Synch pass 407 done. Took 103.782 seconds
+W0312 15:04:21.455188 43970 Synchronizer.cpp:60] Synch pass 408 done. Took 101.461 seconds
+W0312 15:06:01.356354 43050 Training_Execution_Strategy.cpp:76] Iteration 98 done. Took 6.93062 mins
+W0312 15:06:02.191558 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 15:06:04.730270 43970 Synchronizer.cpp:60] Synch pass 409 done. Took 103.275 seconds
+W0312 15:08:11.365839 43970 Synchronizer.cpp:60] Synch pass 410 done. Took 126.635 seconds
+W0312 15:09:55.326007 43970 Synchronizer.cpp:60] Synch pass 411 done. Took 103.96 seconds
+W0312 15:11:37.812935 43970 Synchronizer.cpp:60] Synch pass 412 done. Took 102.486 seconds
+W0312 15:12:57.676333 43050 Training_Execution_Strategy.cpp:76] Iteration 99 done. Took 6.91719 mins
+W0312 15:12:58.516082 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 15:13:27.816942 43970 Synchronizer.cpp:60] Synch pass 413 done. Took 110.004 seconds
+W0312 15:15:24.928632 43970 Synchronizer.cpp:60] Synch pass 414 done. Took 117.111 seconds
+W0312 15:17:07.081146 43970 Synchronizer.cpp:60] Synch pass 415 done. Took 102.152 seconds
+W0312 15:18:53.456153 43970 Synchronizer.cpp:60] Synch pass 416 done. Took 106.374 seconds
+W0312 15:19:55.874739 43050 Training_Execution_Strategy.cpp:76] Iteration 100 done. Took 6.94757 mins
+W0312 15:20:16.735088 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 51.5013
+W0312 15:20:16.735287 43050 Training_Execution_Strategy.cpp:81] >>>>>>>>>> Log-Likelihood (model, doc, total): -1.38224e+11 , -5.4888e+09 , -1.43713e+11
+W0312 15:20:17.593982 43050 Unigram_Model_Trainer.cpp:522] Restarting IO
+W0312 15:20:18.157249 43050 Training_Execution_Strategy.cpp:92] >>>>>>>>>>> Save model at iteration: 100
+W0312 15:20:34.614243 43970 Synchronizer.cpp:60] Synch pass 417 done. Took 101.158 seconds
+W0312 15:20:46.954887 43050 Unigram_Model.cpp:109] Average num of topics assigned per word = 51.4947
+W0312 15:20:46.955451 43050 Training_Execution_Strategy.cpp:104] Parallel training Pipeline done
+W0312 15:20:46.955476 43050 Synchronized_Training_Execution_Strategy.cpp:54] All Iters Done
+W0312 15:22:24.976385 43970 Synchronizer.cpp:60] Synch pass 418 done. Took 110.362 seconds
+W0312 15:22:24.976763 43970 Synchronizer.cpp:65] Stopping synchronization since all iterations are done
+W0312 15:22:24.976868 43050 Synchronized_Training_Execution_Strategy.cpp:58] All threads joined
+W0312 15:22:24.976935 43050 Controller.cpp:146] Model has been learnt
+W0312 15:22:26.049603 43050 Unigram_Model.cpp:129] Saving model for test pipeline in lda.ttc.dump and lda.par.dump
+W0312 15:22:27.921833 43050 Unigram_Model.cpp:133] Model saved
+W0312 15:22:27.921916 43050 Unigram_Model.cpp:155] Writing top words identified per topic into lda.topToWor.txt
+W0312 15:22:28.062546 43050 Unigram_Model.cpp:178] Word statistics per topic written
+W0312 15:22:28.062645 43050 Unigram_Model_Training_Builder.cpp:160] Saving document to topic-proportions in lda.docToTop.txt
+W0312 15:22:28.062665 43050 Unigram_Model_Training_Builder.cpp:161] Saving word to topic assignment in lda.worToTop.txt
+W0312 15:28:16.750741 43050 Unigram_Model_Training_Builder.cpp:227] Document to topic-proportions saved in lda.docToTop.txt
+W0312 15:28:16.750872 43050 Unigram_Model_Training_Builder.cpp:228] Word to topic assignment saved in lda.worToTop.txt

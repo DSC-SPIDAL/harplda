@@ -1,0 +1,21 @@
+#
+# cluster & experiment settings
+#
+
+#juliet
+ylda=/tmp/fg474/ylda
+workroot=/tmp/fg474/ylda-clueweb30b-30/
+work=$workroot/work
+bindir=$workroot/bin
+cluster=juliet-30
+
+# enwiki-1M on juliet
+datadir=/mnt/vol1/data/enwiki-noreid-30/
+datafile=enwiki-noreid.ylda
+topics=10000
+iter=600
+alpha=100
+beta=0.01
+threads=16
+
+
