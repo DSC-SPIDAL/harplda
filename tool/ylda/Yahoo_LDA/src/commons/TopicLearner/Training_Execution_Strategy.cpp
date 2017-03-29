@@ -54,6 +54,16 @@ void Training_Execution_Strategy::execute() {
     if (state.size() > 0)
         start_iter = *((int*) state.c_str()) + 1;
 
+    //add, 03172017,pb
+    //print the logLIkelihood before the iteration
+    //it's strange that enwiki run on 10 nodes, the lh after iter 1 is similar to iter 2 in petuum
+    if (1) {
+        double word_loglikelihood = _model.get_eval();
+        LOG(WARNING)
+                << ">>>>>>>>>> Log-Likelihood (model, doc, total): "
+                << word_loglikelihood;
+    }
+
     LOG(WARNING) << "Starting Parallel training Pipeline";
     for (int iter = start_iter; iter <= end_iter; ++iter) {
         bool compute_loglikelihood = (iter == start_iter) || (iter

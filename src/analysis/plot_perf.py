@@ -47,6 +47,7 @@ import matplotlib
 #matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import logging
+import matplotlib.ticker as ticker
 
 logger = logging.getLogger(__name__)
 
@@ -281,17 +282,17 @@ class PlotEngine():
         self.init_subplot(1,1)
         self.set_subplot(1,1)
 
-        self.colors_orig=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']
+        self.colors_orig=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*5
         self.colors_orig_shade=['#ff8080','#8080ff','#80ff80', 'm','c','y','k','r','b','m','g','c','y','k']
         #self.colors=[(name, hex) for name, hex in matplotlib.colors.cnames.iteritems()]
         #self.colors=[hex for name, hex in matplotlib.colors.cnames.iteritems()]
-        self.colors_stackbar=['r','y','b','g', 'm','c','y','k','r','y','b','g','m','c','y','k']
+        self.colors_stackbar=['r','y','b','g', 'm','c','y','k','r','y','b','g','m','c','y','k']*5
         self.linestyle=['-','--','-.',':']
         self.marker=['.','o','^','s','*','3']
         #default setting
         self.colors = self.colors_orig
-        self.lines = ['.-'] * 10
-        self.lines2 = ['--'] * 10
+        self.lines = ['.-'] * 40
+        self.lines2 = ['--'] * 40
 
         self.use_shortest_x = use_shortest_x
 
@@ -706,7 +707,8 @@ class PlotEngine():
                 x = accuracy[idx][0][:iternum]
 
                 #convert iternum to runtime
-                x = accuracy[idx][4][x ]
+                #x = accuracy[idx][4][x ]
+                x = accuracy[idx][4][x ] 
 #self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
                 self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx],label = accuracy[idx][3][:iternum])
             else:
@@ -745,7 +747,10 @@ class PlotEngine():
         elif plottype ==3:
             #self.curax.set_xlabel('Iteration Time (s)')
             self.curax.set_xlabel('Training Time (s)')
-
+            #self.curax.set_xlabel('Training Time (1000s)')
+            #ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/1e3))
+            ##ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:.1e}'.format(x))
+            #self.curax.xaxis.set_major_formatter(ticks_x)
 
         if 'title' in conf:
             self.curax.set_title(conf['title'])
@@ -1171,7 +1176,11 @@ class PlotEngine():
         normalize_byfit = True
         use_x_logscale = False
         stop_threshold = 8000
-        predict_pt =  8000
+        #predict_pt =  8000
+        predict_pt =  200
+        #draw_speedup = False
+        draw_speedup = True
+        #use_x_logscale = True
 
         dataflist = []
         groups={}
@@ -1186,6 +1195,7 @@ class PlotEngine():
         self.perfdata.load(dataflist, quit_on_fail=False)
 
         iterNumber = 10
+        label_seq=[]
         for tp in self.perfname:
             name = tp[0]
             label = tp[1]
@@ -1195,22 +1205,26 @@ class PlotEngine():
                 groups[label].append((name, tasknum))
             else:
                 groups[label] = [(name,tasknum)]
+                label_seq.append(label)
 
         # twin plot the time/update count bar chart
-        ax2 = self.curax.twinx()
+        if draw_speedup:
+            ax2 = self.curax.twinx()
+            ax2.set_yscale("log", basey=2, nonposy='clip')
         seq = 0
         width = 0.2
         curveCnt = len(groups.keys())
         maxX = 0
         rects = []
-        for label in groups.keys():
+        #for label in groups.keys():
+        for label in label_seq:
             curve = []
             groupdata = groups[label]
 
             #
             # load data for this group <name, tasknum>
             #
-            groupdata = sorted(groupdata, key = lambda item: item[1])
+            groupdata = sorted(groupdata, key = lambda item: int(item[1]))
 
             _min_rowcnt = np.min([ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:].shape[0] for idx  in range(len(groupdata))])
             logger.info('min rowcnt=%s', _min_rowcnt)
@@ -1263,10 +1277,240 @@ class PlotEngine():
                     updatecnt = raw_updatecnt[lineid]
                     timeout = raw_timeout[lineid]
 
+                    #
                     # fit the curve
-                    z = np.polyfit(timeout, updatecnt, 2)
-                    predict.append( np.poly1d(z)(predict_pt) )
+                    #
+                    # fit all the data
+                    #z = np.polyfit(timeout, updatecnt, 2)
+                    #predict.append( np.poly1d(z)(predict_pt) )
+                    # fit the first 10 points
+                    _stop = 20
+                    #z = np.polyfit(timeout[:_stop], updatecnt[:_stop], 2)
+                    #predict.append( np.poly1d(z)(predict_pt) )
+                    # just fit by mean
+                    logger.info('timeout:%s, sum=%s', timeout[:_stop], np.sum(timeout[:_stop]))
+                    logger.info('updatecnt:%s, sum=%s', updatecnt[:_stop], np.sum(updatecnt[:_stop]))
+                    logger.info('ratio:%s', updatecnt[:_stop]/timeout[:_stop])
+                    #predict.append(np.sum(updatecnt[:_stop]) *1. / np.sum(timeout[:_stop]) *predict_pt)
+
+                    _stop = 20
+                    #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
+                    predict.append((updatecnt[10]-updatecnt[1])*1./(timeout[10]-timeout[1]))
+                    _stop = -1
+                    #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
+                    #predict.append((updatecnt[-1]-updatecnt[-10])*1./(timeout[-1]-timeout[-10]))
+                        
+
+
+                    # add a item <tasknum, updatecnt@10s>
+                curve.append([int(item[2]), np.mean(predict), np.std(predict)])
+    
+
+            logger.info('curves: %s', curve)
+
+            mat = np.array(curve)
+            #speed up = t1/tn
+            #_x = np.arange(1, mat.shape[0]+1)
+            if use_x_logscale:
+                _x = np.log2(mat[:,0]).astype(np.int)
+            else:
+                _x = np.arange(mat[:,0].shape[0])
+
+
+            #logger.info('mat = %s',mat)
+            #logger.info('bar %s,%s,%s',_x, mat[:,0],mat[:,1])
+
+            ### draw bar chart
+            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig_shade[seq],yerr = mat[:,2], label=label)
+            rects.append(bars)
+            #if (mat[:,0][-1] > maxX):
+            #    maxX = mat[:,0][-1]
+
+            ### draw speedup line
+            if draw_speedup:
+                _y = mat[:,1] *1.0 / mat[0,1]
+                plots = ax2.plot(_x , _y, self.colors_orig[seq]+'.-', label = label)
+                for _p in range(_x.shape[0]):
+                    ax2.text(_x[_p] - 0.1, _y[_p]+0.003,'%.1f'%(_y[_p]))
+            
+            #go to next group
+            seq += 1
+
+        ### end draw
+        #self.curax.set_ylabel('Model Update Count@%ds'%predict_pt if normalize_byfit else
+        self.curax.set_ylabel('Throughput of First %ds(tokens/sec)'%predict_pt if normalize_byfit else
+                "Training Time Per Iteration(s)")
+        if use_x_logscale:
+            _x = np.arange(maxX)
+            self.curax.set_xticks(_x)
+            self.curax.set_xticklabels(np.exp2(_x).astype(np.int))
+        else:
+            self.curax.set_xticks(_x)
+            self.curax.set_xticklabels(mat[:,0].astype(np.int))
  
+        self.curax.set_xlabel('Nodes Number')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('LDA Trainer Scalability')
+
+        #finally , update the recs
+        for rect in rects:
+            self.autolabel(rect)
+
+        if draw_speedup:
+            #ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
+            ax2.set_ylabel('SpeedUp T(%d)/T(N)'%mat[0,0].astype(np.int))
+            ax2.legend(loc = 4)
+        else:
+            self.curax.legend(loc = 0)
+
+        if figname:
+            self.savefig(figname)
+
+
+    def plot_scalability_withspeedup(self, figname, conf):
+        """
+        updatecnt is related to the result of model convergence 
+        updatecnt .vs. time is a linear curve
+        here try to compare the scalability on updatecnt@10s
+
+        each xxx_taskxthread.rmse held a updatecnt .vs. time curve
+        polyfit it, and predict on updatecnt@10s
+        output <task, updatecnt@10s>
+
+        draw a curve for each group
+
+        """
+
+        #
+        # normalize the performance of different trainer
+        # 1. byfit means use func fit on the modelupdate.vs.time curve
+        # and then align all the experiment to the same time value
+        # 2. otherwise, assume the experiment runs under the same
+        # total model updatecnt setting, such as set with same iternum
+        #
+        normalize_byfit = True
+        use_x_logscale = False
+        stop_threshold = 8000
+        #predict_pt =  8000
+        predict_pt =  200
+
+        dataflist = []
+        groups={}
+        for tp in self.perfname:
+            name = tp[0] 
+            label = tp[1]
+            fname = name + '.runtime-stat'
+            dataflist.append(fname)
+            fname = name + '.update-stat'
+            dataflist.append(fname)
+
+        self.perfdata.load(dataflist, quit_on_fail=False)
+
+        iterNumber = 10
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            #for simple, just write the tasknum here
+            tasknum = tp[2]
+            if label in groups:
+                groups[label].append((name, tasknum))
+            else:
+                groups[label] = [(name,tasknum)]
+
+        # twin plot the time/update count bar chart
+        ax2 = self.curax.twinx()
+        seq = 0
+        width = 0.2
+        curveCnt = len(groups.keys())
+        maxX = 0
+        rects = []
+        for label in groups.keys():
+            curve = []
+            groupdata = groups[label]
+
+            #
+            # load data for this group <name, tasknum>
+            #
+            groupdata = sorted(groupdata, key = lambda item: int(item[1]))
+
+            _min_rowcnt = np.min([ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:].shape[0] for idx  in range(len(groupdata))])
+            logger.info('min rowcnt=%s', _min_rowcnt)
+            raw_timeout = [ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:2+_min_rowcnt]  for idx  in range(len(groupdata))]
+
+
+            #updatecnt
+            iterIdx = np.arange(_min_rowcnt)
+            raw_updatecnt = []
+            for idx in range(len(groupdata)):
+                update_name = groupdata[idx][0] + '.update-stat'
+                if self.perfdata[update_name] is not None:
+                    realIterId = self.perfdata[update_name][4][iterIdx]
+                else:
+                    realIterId = (iterIdx + 1) * self.getTrainsetSize(groupdata[idx][0])
+
+                updatecnt = realIterId 
+                #logger.info('updatecnt: %s', updatecnt)
+                raw_updatecnt.append(updatecnt)
+
+            logger.info('groupdata = %s', groupdata)
+            #logger.info('tiem_out= %s', raw_timeout)
+            #logger.info('raw_updatecnt = %s', raw_updatecnt)
+
+            countindex = []
+            curcount = 1
+            lasttasknum = groupdata[0][1]
+            for idx in range(1,len(groupdata)+1):
+                if idx != len(groupdata):
+                    curtasknum = groupdata[idx][1]
+                else:
+                    curtasknum = -1
+
+                if lasttasknum != curtasknum:
+                    #save the last one
+                    countindex.append((idx - curcount, idx, lasttasknum))
+                    #reset
+                    curcount = 1
+                    lasttasknum = curtasknum
+                else:
+                    curcount += 1
+
+            logger.info('countindex=%s', countindex)
+
+            # do mean/std on countindex[start, end, tasknum]
+            for idx in range(len(countindex)):
+                item = countindex[idx]
+                predict = []
+                for lineid in range(item[0], item[1]):
+                    updatecnt = raw_updatecnt[lineid]
+                    timeout = raw_timeout[lineid]
+
+                    #
+                    # fit the curve
+                    #
+                    # fit all the data
+                    #z = np.polyfit(timeout, updatecnt, 2)
+                    #predict.append( np.poly1d(z)(predict_pt) )
+                    # fit the first 10 points
+                    _stop = 20
+                    #z = np.polyfit(timeout[:_stop], updatecnt[:_stop], 2)
+                    #predict.append( np.poly1d(z)(predict_pt) )
+                    # just fit by mean
+                    logger.info('timeout:%s, sum=%s', timeout[:_stop], np.sum(timeout[:_stop]))
+                    logger.info('updatecnt:%s, sum=%s', updatecnt[:_stop], np.sum(updatecnt[:_stop]))
+                    logger.info('ratio:%s', updatecnt[:_stop]/timeout[:_stop])
+                    #predict.append(np.sum(updatecnt[:_stop]) *1. / np.sum(timeout[:_stop]) *predict_pt)
+
+                    _stop = 20
+                    #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
+                    predict.append((updatecnt[7]-updatecnt[1])*1./(timeout[7]-timeout[1]))
+                    _stop = -1
+                    #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
+                    #predict.append((updatecnt[-1]-updatecnt[-10])*1./(timeout[-1]-timeout[-10]))
+                        
+
+
                     # add a item <tasknum, updatecnt@10s>
                 curve.append([int(item[2]), np.mean(predict), np.std(predict)])
     
@@ -1301,6 +1545,7 @@ class PlotEngine():
             seq += 1
 
         ### end draw
+        #self.curax.set_ylabel('Model Update Count@%ds'%predict_pt if normalize_byfit else
         self.curax.set_ylabel('Model Update Count@%ds'%predict_pt if normalize_byfit else
                 "Training Time Per Iteration(s)")
         if use_x_logscale:
@@ -1634,6 +1879,7 @@ class PlotEngine():
         _trace_shortest_x = 1e+12
         
         grp_size = len(accuracy)
+        logger.info('grp_size:%s', grp_size)
         for idx in range(grp_size):
             if plottype == 1:
                 x = accuracy[idx][0]

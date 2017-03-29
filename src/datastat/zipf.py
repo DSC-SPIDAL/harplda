@@ -20,6 +20,8 @@ import sys, os, math,re
 import numpy as np
 from scipy import stats
 from scipy.stats import entropy
+import matplotlib
+matplotlib.use('Svg')
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import logging
@@ -101,8 +103,12 @@ def zipf(dictfile, description):
     vocab=[]
     dictf = open(dictfile,'r')
     logger.info('load from dict file %s', dictfile)
+    #detect deli
+    #line = dictf.readline()
+
     for line in dictf:
-        data = line.strip().split('\t')
+        data = line.strip().split()
+        #data = line.strip().split('\t')
         #vocabulary[data[1]] = int(data[1])
         vocab.append((data[0], int(data[1])))
 
@@ -132,7 +138,9 @@ if __name__ == '__main__':
         sys.exit(1)
 
     lowfile = sys.argv[1]
-    description ='Text Data'
+    #description ='Text Data'
+    description =lowfile[:lowfile.find('.')]
+
     if len(sys.argv)>2:
         description =sys.argv[2]
     zipf(lowfile, description)
