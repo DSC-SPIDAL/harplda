@@ -1,0 +1,6 @@
+./analy_harp.sh tango application_1490370155740_0005 harp_enwiki1M_5x60_knl_opt_0005
+./analy_harp.sh tango application_1490370155740_0006 harp_clueweb30b_12x60_knl_opt_0006
+./analy_harp.sh tango application_1490370155740_0007 harp_enwiki1M_2x30_knl_scale_timer_0007
+./analy_harp.sh tango application_1490370155740_0008 harp_enwiki1M_4x30_knl_scale_timer_0008
+./analy_harp.sh tango application_1490370155740_0009 harp_enwiki1M_8x30_knl_scale_timer_0009
+./analy_harp.sh tango application_1490370155740_0010 harp_enwiki1M_16x30_knl_scale_timer_0010

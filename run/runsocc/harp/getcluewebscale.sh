@@ -1,0 +1,11 @@
+./analy_harp.sh tango  application_1490370155740_0005	harp_clueweb30b_12x60_knl_scale_0005 
+./analy_harp.sh tango  application_1490370155740_0021	harp_clueweb30b_24x60_knl_scale_0021
+./analy_harp.sh tango  application_1490370155740_0022	harp_clueweb30b_36x60_knl_scale_0022
+
+./analy_harp.sh juliet  application_1490138485158_0038	harp_clueweb30b_18x30_hsw72_scale_0038
+./analy_harp.sh juliet  application_1490138485158_0036	harp_clueweb30b_24x30_hsw72_scale_0036
+./analy_harp.sh juliet  application_1490138485158_0040	harp_clueweb30b_30x30_hsw72_scale_0040
+
+./analy_harp.sh tango  application_1490138485158_0038	harp_clueweb30b_18x30_knl_scale_0038
+./analy_harp.sh tango  application_1490370155740_0022	harp_clueweb30b_36x60_knl_scale_0022
+./analy_harp.sh tango  application_1490370155740_0023	harp_clueweb30b_36x90_knl_scale_0023

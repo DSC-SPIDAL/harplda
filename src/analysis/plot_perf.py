@@ -298,7 +298,10 @@ class PlotEngine():
 
         self.dataset={
             'clueweb30':29911407874,
-            'enwiki':1107903672
+            'enwiki':1107903672,
+            'nytimes':99542125,
+            'pubmed2m':149031108
+            #'pubmedall':
         }
 
     def getTrainsetSize(self,fname):
@@ -693,8 +696,10 @@ class PlotEngine():
         _trace_shortest_x = 1e+24
         for idx in range(grp_size):
             if plottype == 0:
-                #x = accuracy[idx][5][:iternum]
-                x = accuracy[idx][5][:iternum] * 29911407874
+                # use iter number here
+                x = accuracy[idx][5][:iternum]
+                # convert into real update cnt, NEED totalNumTokens
+                #x = accuracy[idx][5][:iternum] * 29911407874
 
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
 #self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
