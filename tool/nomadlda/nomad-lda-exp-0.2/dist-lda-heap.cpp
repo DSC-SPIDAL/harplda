@@ -1215,6 +1215,8 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 	}
 	double totaltime = 0.;
     double _elapse = 0.;
+    size_t _lastnwt = 0;
+    int _nodes = get_nr_procs(); 
 	for(auto iter = 0; iter < param.maxiter; iter++) {
         uint64_t _start = timenow();
 		if(param.nr_procs == 1) {
@@ -1323,7 +1325,10 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 			if(param.do_predict)
 				printf("perplexity %.6g ", test_perplexity);
 			//printf("Nwt %ld avg %g Nt %ld", Nwt_cnt, (double)Nwt_cnt/(space.model.nr_words*space.param.nr_procs*space.param.samplers), Nt_cnt);
-			printf("Nwt %ld avg %g Nt %ld", Nwt_cnt, (double)Nwt_cnt/(double)total_words, Nt_cnt);
+			printf("Nwt %ld avg %g Nt %ld ", Nwt_cnt, (double)Nwt_cnt/(double)total_words, Nt_cnt);
+            double _time_periter =  (_end1 - _start)/1000000.0;
+			printf("nxt %dx%d, throughput %.6e", _nodes, param.samplers, (double)(Nwt_cnt - _lastnwt)/param.samplers/_nodes/_time_periter);
+            _lastnwt = Nwt_cnt;
 			puts("");
 			fflush(stdout);
 		}

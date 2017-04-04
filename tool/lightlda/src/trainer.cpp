@@ -126,7 +126,6 @@ namespace multiverso { namespace lightlda
         if (slice == 0 && barrier_->Wait())
         {
             Log::Info("doc likelihood : %e\n", doc_llh_);
-            doc_llh_ = 0;
         }
 
         // 2. Evaluate word likelihood
@@ -142,16 +141,24 @@ namespace multiverso { namespace lightlda
         if (block == 0 && barrier_->Wait())
         {
             Log::Info("word likelihood : %e\n", word_llh_);
-            word_llh_ = 0;
         }
 
         // 3. Evaluate normalize item for word likelihood
         if (TrainerId() == 0 && block == 0)
         {
-            Log::Info("Normalized likelihood : %e\n",
-                Eval::NormalizeWordLLH(this));
+            //Log::Info("Normalized likelihood : %e\n",
+            //    Eval::NormalizeWordLLH(this));
+
+            double _log_lh = Eval::NormalizeWordLLH(this);
+            //add a total output
+
+            Log::Info("log_likelihood : %e\n", _log_lh + doc_llh_ + word_llh_);
+            Log::Info("word_log_likelihood : %e\n", _log_lh + word_llh_);
+
         }
         barrier_->Wait();
+        doc_llh_ = 0;
+        word_llh_ = 0;
     }
 
     void Trainer::Dump(int32_t iter, LDADataBlock* lda_data_block)

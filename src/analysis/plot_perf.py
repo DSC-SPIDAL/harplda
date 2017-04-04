@@ -1366,7 +1366,8 @@ class PlotEngine():
         if draw_speedup:
             #ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
             ax2.set_ylabel('SpeedUp T(%d)/T(N)'%mat[0,0].astype(np.int))
-            ax2.legend(loc = 4)
+            #ax2.legend(loc = 4)
+            ax2.legend(loc = 0)
         else:
             self.curax.legend(loc = 0)
 

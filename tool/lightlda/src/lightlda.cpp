@@ -54,7 +54,7 @@ namespace multiverso { namespace lightlda
             }
             delete param_loader;
             
-            DumpDocTopic();
+            //DumpDocTopic();
 
             delete data_stream;
             delete barrier;
@@ -74,6 +74,9 @@ namespace multiverso { namespace lightlda
                     DataBlock& data_block = data_stream->CurrDataBlock();
                     data_block.set_meta(&meta.local_vocab(block));
                     int32_t num_slice = meta.local_vocab(block).num_slice();
+
+                    Log::Info("num_slice:%d, num_block:%d\n", num_slice, Config::num_blocks);
+
                     std::vector<LDADataBlock> data(num_slice);
                     // Train datablock slice by slice
                     for (int32_t slice = 0; slice < num_slice; ++slice)

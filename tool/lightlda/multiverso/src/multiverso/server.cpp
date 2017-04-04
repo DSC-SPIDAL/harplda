@@ -79,7 +79,7 @@ namespace multiverso
         delete router_;
         delete []poll_items_;
         // Dump model before Clear
-        DumpModel();
+        //DumpModel();
         for (auto &table : tables_)
         {
             delete table;
