@@ -53,6 +53,9 @@ format:
 
     lightlda:
         [INFO] [2017-03-28 21:03:13] Rank = 0, Training Time used: 10.59 s
+        [INFO] [2017-04-11 19:08:03] doc likelihood : -7.185419e+09
+        [INFO] [2017-04-11 19:08:04] word likelihood : 3.489482e+09
+        [INFO] [2017-04-11 19:08:04] log_likelihood : -2.262308e+10
         [INFO] [2017-03-28 21:03:17] word_log_likelihood : -1.554106e+09
 
     warplda:
@@ -1150,23 +1153,49 @@ class LDATrainerLog():
         tokencnt=[]
         likelihood=[]
         last_iterspan = 0
-        lightlda_time="Training Time used: (\d+\.\d+]*) s"
+        lightlda_startiter = "num_slice:\d+, num_block:\d+"
+        lightlda_time="Time used: (\d+\.\d+]*) s"
+        #lightlda_doclh="doc likelihood : ([-+]?\d+\.\d+e\+\d+)"
+        lightlda_wordlh="word likelihood : ([-+]?\d+\.\d+e\+\d+)"
         lightlda_likelihood="word_log_likelihood : ([-+]?\d+\.\d+e\+\d+)"
 
         iterid = 0
+        slice = 0
+        A , B, _time = 0.,0., 0.
         for line in logf:
+            m = re.search(lightlda_startiter, line)
+            if m:
+                if _time !=0.:
+                    itertime.append(( _time, 0) )
+
+                #update the last one
+                if A != 0.:
+                    _wlh = (A-B)/slice + B
+                    likelihood.append(( iterid, _wlh))
+                    #logger.info('iter=%d, slice=%d, wlh=%f, time=%f', iterid, slice, _wlh, _time)
+
+                #start a new iteration
+                A , B, _time = 0.,0., 0.
+                slice = 0
+
+                iterid += 1
+
             m = re.search(lightlda_time, line)
             if m:
                 #
                 # itertime< traintime from app,  traintime from wall clock>
                 #
-                itertime.append(( float(m.group(1))*1000, 0) )
-                iterid += 1
-
+                _time += float(m.group(1))*1000
+            
+            m = re.search(lightlda_wordlh, line)
+            if m:
+                B += float(m.group(1))
+                slice += 1
+ 
             m = re.search(lightlda_likelihood, line)
             if m:
-                likelihood.append(( iterid, float(m.group(1))))
-                continue
+                A += float(m.group(1))
+
         return itertime, likelihood
 
     def load_applog_lightlda(self, appdir, filepattern='.log'):
