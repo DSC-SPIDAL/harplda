@@ -6,7 +6,7 @@ CXXFLAGS = -O3 \
            -Wall \
            -Wno-sign-compare \
            -fno-omit-frame-pointer \
-           -fpermissive
+           -fpermissive 
 
 HEADERS_DIR = $(PROJECT)/include/multiverso
 MULTIVERSO_SRC = $(PROJECT)/src/multiverso

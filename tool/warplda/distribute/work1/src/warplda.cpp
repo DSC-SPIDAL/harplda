@@ -301,16 +301,7 @@ void WarpLDA<MH>::estimate(int _K, float _alpha, float _beta, int _niter, int _p
             ppl = perplexity();
 
         double tm = clk.timeElapsed();
-
-        //add time into log info
-        //
-        time_t _t = time(0);
-        char _str[64];
-        strftime(_str, sizeof(_str), "%Y-%m-%d %H:%M:%S", localtime(&_t));
-		//printf("Iteration %d, %f s, %.6f tokens/thread/sec, %d threads, log_likelihood (per token) %lf, total %.6e, word_likelihood %.6e", i, tm, (double)g.NE()/tm/omp_get_max_threads(),omp_get_max_threads(), total_log_likelihood/g.NE(), total_log_likelihood, word_log_likelihood);
-		printf("[%s] Iteration %d, %f s, %.6f tokens/thread/sec, %d threads, log_likelihood (per token) %lf, total %.6e, word_likelihood %.6e", \
-                _str, i, tm, (double)g.NE()/tm/omp_get_max_threads(),omp_get_max_threads(), \
-                total_log_likelihood/g.NE(), total_log_likelihood, word_log_likelihood);
+		printf("Iteration %d, %f s, %.6f tokens/thread/sec, %d threads, log_likelihood (per token) %lf, total %.6e, word_likelihood %.6e", i, tm, (double)g.NE()/tm/omp_get_max_threads(),omp_get_max_threads(), total_log_likelihood/g.NE(), total_log_likelihood, word_log_likelihood);
         if (eval_perplexity) printf(" perplexity %lf\n", ppl);
         else printf("\n");
 		fflush(stdout);

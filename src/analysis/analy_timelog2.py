@@ -1142,7 +1142,7 @@ class LDATrainerLog():
     #
     # lightlda
     #
-    def load_timelog_lightlda(self, logfile):
+    def load_timelog_lightlda_singlenode(self, logfile):
         logf = open(logfile,'r')
 
         totalNumTokens = 0
@@ -1158,6 +1158,63 @@ class LDATrainerLog():
         #lightlda_doclh="doc likelihood : ([-+]?\d+\.\d+e\+\d+)"
         lightlda_wordlh="word likelihood : ([-+]?\d+\.\d+e\+\d+)"
         lightlda_likelihood="word_log_likelihood : ([-+]?\d+\.\d+e\+\d+)"
+
+        iterid = 0
+        slice = 0
+        A , B, _time = 0.,0., 0.
+        for line in logf:
+            m = re.search(lightlda_startiter, line)
+            if m:
+                if _time !=0.:
+                    itertime.append(( _time, 0) )
+
+                #update the last one
+                if A != 0.:
+                    _wlh = (A-B)/slice + B
+                    likelihood.append(( iterid, _wlh))
+                    #logger.info('iter=%d, slice=%d, wlh=%f, time=%f', iterid, slice, _wlh, _time)
+
+                #start a new iteration
+                A , B, _time = 0.,0., 0.
+                slice = 0
+
+                iterid += 1
+
+            m = re.search(lightlda_time, line)
+            if m:
+                #
+                # itertime< traintime from app,  traintime from wall clock>
+                #
+                _time += float(m.group(1))*1000
+            
+            m = re.search(lightlda_wordlh, line)
+            if m:
+                B += float(m.group(1))
+                slice += 1
+ 
+            m = re.search(lightlda_likelihood, line)
+            if m:
+                A += float(m.group(1))
+
+        return itertime, likelihood
+
+
+    def load_timelog_lightlda(self, logfile):
+        logf = open(logfile,'r')
+
+        totalNumTokens = 0
+        app_span = 0
+        train_span = 0
+        elapsed=[]
+        itertime=[]
+        tokencnt=[]
+        likelihood=[]
+        last_iterspan = 0
+        lightlda_startiter = "Rank = 0, Iter = (\d+), Block = 0, Slice = 0"
+        lightlda_time="Rank = 0, .* Time used: (\d+\.\d+]*) s"
+        #lightlda_doclh="doc likelihood : ([-+]?\d+\.\d+e\+\d+)"
+        lightlda_wordlh="Rank = 0, word likelihood : ([-+]?\d+\.\d+e\+\d+)"
+        lightlda_likelihood="Rank = 0, word_log_likelihood : ([-+]?\d+\.\d+e\+\d+)"
 
         iterid = 0
         slice = 0

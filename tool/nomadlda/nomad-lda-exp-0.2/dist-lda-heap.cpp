@@ -1313,11 +1313,16 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
         _elapse += (_end2 - _start)/1000000.0;
 
 		if(procid == ROOT) {
-            time_t rawtime;
-            struct tm * timeinfo;
-            time(&rawtime);
-            timeinfo = localtime(&rawtime);
-            printf ("%s:", asctime(timeinfo));
+            //time_t rawtime;
+            //struct tm * timeinfo;
+            //time(&rawtime);
+            //timeinfo = localtime(&rawtime);
+            //printf ("%s:", asctime(timeinfo));
+            time_t _t = time(0);
+            char _str[64];
+            strftime(_str, sizeof(_str), "%Y-%m-%d %H:%M:%S", localtime(&_t));
+            printf ("[%s] ", _str);
+
 
 			printf("iter %d time %.4g totaltime %.4g ", iter+1, timex, totaltime);
 			printf("time-1 %.4g time-2 %.4g eplasetime %.4g ", (_end1 - _start)/1000000.0, (_end2 - _end1)/1000000.0, _elapse);

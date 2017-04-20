@@ -79,6 +79,10 @@ namespace multiverso { namespace lightlda
             Document* doc = data.GetOneDoc(doc_id);
             num_token += sampler_->SampleOneDoc(doc, slice, lastword, model_, alias_);
         }
+
+        //Barrier Fix
+        barrier_->Wait();
+
         if (TrainerId() == 0)
         {
             Log::Info("Rank = %d, Training Time used: %.2f s \n", 
@@ -113,20 +117,20 @@ namespace multiverso { namespace lightlda
         const LocalVocab& local_vocab = data.meta();
 
         // 1. Evaluate doc likelihood
-        for (int32_t doc_id = TrainerId(); doc_id < data.Size() && slice == 0;
-            doc_id += TrainerCount())
-        {
-            thread_doc += Eval::ComputeOneDocLLH(data.GetOneDoc(doc_id),
-                sampler_->doc_topic_counter());
-        }
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            doc_llh_ += thread_doc;
-        }
-        if (slice == 0 && barrier_->Wait())
-        {
-            Log::Info("doc likelihood : %e\n", doc_llh_);
-        }
+        //for (int32_t doc_id = TrainerId(); doc_id < data.Size() && slice == 0;
+        //    doc_id += TrainerCount())
+        //{
+        //    thread_doc += Eval::ComputeOneDocLLH(data.GetOneDoc(doc_id),
+        //        sampler_->doc_topic_counter());
+        //}
+        //{
+        //    std::lock_guard<std::mutex> lock(mutex_);
+        //    doc_llh_ += thread_doc;
+        //}
+        //if (slice == 0 && barrier_->Wait())
+        //{
+        //    Log::Info("Rank = %d, doc likelihood : %e\n",Multiverso::ProcessRank(), doc_llh_);
+        //}
 
         // 2. Evaluate word likelihood
         for (const int32_t* word = local_vocab.begin(slice) + TrainerId();
@@ -140,7 +144,7 @@ namespace multiverso { namespace lightlda
         }
         if (block == 0 && barrier_->Wait())
         {
-            Log::Info("word likelihood : %e\n", word_llh_);
+            Log::Info("Rank = %d, word likelihood : %e\n",  Multiverso::ProcessRank(),   word_llh_);
         }
 
         // 3. Evaluate normalize item for word likelihood
@@ -152,8 +156,8 @@ namespace multiverso { namespace lightlda
             double _log_lh = Eval::NormalizeWordLLH(this);
             //add a total output
 
-            Log::Info("log_likelihood : %e\n", _log_lh + doc_llh_ + word_llh_);
-            Log::Info("word_log_likelihood : %e\n", _log_lh + word_llh_);
+            Log::Info("Rank = %d, log_likelihood : %e\n",Multiverso::ProcessRank(), _log_lh + doc_llh_ + word_llh_);
+            Log::Info("Rank = %d, word_log_likelihood : %e\n",Multiverso::ProcessRank(), _log_lh + word_llh_);
 
         }
         barrier_->Wait();

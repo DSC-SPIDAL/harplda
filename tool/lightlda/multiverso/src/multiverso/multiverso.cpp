@@ -75,6 +75,10 @@ namespace multiverso
         {
             lock_manager_ = new LockManager(std::max<int>(config.num_lock, 1));
         }
+#if defined (_MPI_VERSION_)
+    Log::Info("init in mpi environment\n"); 
+#endif
+
 
         if (ret == 0)
         {
@@ -108,6 +112,11 @@ namespace multiverso
         {
             lock_manager_ = new LockManager(std::max<int>(config.num_lock, 1));
         }
+
+
+#if defined (_MPI_VERSION_)
+    Log::Info("init in mpi environment\n"); 
+#endif
 
         if (ret == 0)
         {
