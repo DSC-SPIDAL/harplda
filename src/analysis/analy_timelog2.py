@@ -49,7 +49,7 @@ format:
 
 
     nomadlda:
-        :iter 12 time 10 totaltime 120.1 time-1 10.64 time-2 0.5058 eplasetime 136.2 training-LL -1.20181e+09 Nwt 856822054 avg 5.74928 Nt 19970 nxt 1x16, throughput 4.171974e+05
+        [2017-03-28 21:03:13] iter 12 time 10 totaltime 120.1 time-1 10.64 time-2 0.5058 eplasetime 136.2 training-LL -1.20181e+09 Nwt 856822054 avg 5.74928 Nt 19970 nxt 1x16, throughput 4.171974e+05
 
     lightlda:
         [INFO] [2017-03-28 21:03:13] Rank = 0, Training Time used: 10.59 s
@@ -59,7 +59,7 @@ format:
         [INFO] [2017-03-28 21:03:17] word_log_likelihood : -1.554106e+09
 
     warplda:
-        Iteration 199, 2.744135 s, 1697154.799260 tokens/thread/sec, 32 threads, log_likelihood (per token) -9.064325, total -1.350866e+09, word_likelihood -6.696219e+08
+        [2017-03-28 21:03:13] Iteration 199, 2.744135 s, 1697154.799260 tokens/thread/sec, 32 threads, log_likelihood (per token) -9.064325, total -1.350866e+09, word_likelihood -6.696219e+08
 
     
 Usage: 
@@ -83,6 +83,7 @@ class LDATrainerLog():
     trainers=['mallet','harp','ylda','warplda','lightlda','nomadlda','petuum','petuum-run','petuum-new']
     pattern={
         "mallet":"^([0-9]+)ms",
+        "clock":"\[(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)\]",
         "harp-clock":"(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,[0-9]*)",
         "harp-newformat":"Iteration ([0-9]*): ([0-9]*), compute time: ([0-9]*), comm time: ([0-9]*)",
         "harp-newformat2":"Iteration ([0-9]*): ([0-9]*), compute time: ([0-9]*), misc: ([0-9]*)",
@@ -1199,7 +1200,7 @@ class LDATrainerLog():
         return itertime, likelihood
 
 
-    def load_timelog_lightlda(self, logfile):
+    def load_timelog_lightlda_olddist(self, logfile):
         logf = open(logfile,'r')
 
         totalNumTokens = 0
@@ -1255,7 +1256,8 @@ class LDATrainerLog():
 
         return itertime, likelihood
 
-    def load_applog_lightlda(self, appdir, filepattern='.log'):
+    def load_applog_lightldai_olddist(self, appdir, filepattern='.log'):
+
         models = []
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
@@ -1313,6 +1315,195 @@ class LDATrainerLog():
                         statMatrix[1] = np.max(iterMatrix, axis=0)
                         statMatrix[2] = np.mean(iterMatrix, axis=0)
                         statMatrix[3] = np.std(iterMatrix, axis=0)
+                        np.savetxt(bname + '.iter-stat', statMatrix,fmt='%.2f')
+
+
+    #addtime2log [2017-04-19 23:32:28] 
+    def gettime_fromline(self, line):
+        mx = re.search(self.pattern['clock'], line)
+        if mx:
+            #logger.info('match at %s , string_date=%s', line, m.group(1))
+            string_date = mx.group(1)
+            logtime = datetime.datetime.strptime(string_date, "%Y-%m-%d %H:%M:%S")
+            return logtime
+        return None
+
+    def load_timelog_lightlda(self, logfile):
+        logf = open(logfile,'r')
+    
+        #
+        # app start time
+        #
+        for line in logf:
+            app_starttime = self.gettime_fromline(line)
+            if app_starttime:
+                train_starttime = app_starttime
+                app_endtime = app_starttime
+                break
+
+        for line in logf:
+            if line.find("Begin of training.") > 0:
+                train_starttime = self.gettime_fromline(line)
+                break
+ 
+
+
+        #
+        # all the iterations
+        #
+        totalNumTokens = 0
+        elapsed=[]
+        itertime=[]
+        tokencnt=[]
+        likelihood=[]
+        last_iterspan = 0
+        lightlda_startiter = "Rank = 0, Iter = (\d+), Block = 0, Slice = 0"
+        lightlda_time="Rank = 0, .* Time used: (\d+\.\d+]*) s"
+        #lightlda_doclh="doc likelihood : ([-+]?\d+\.\d+e\+\d+)"
+        lightlda_wordlh="Rank = 0, word likelihood : ([-+]?\d+\.\d+e\+\d+)"
+        lightlda_likelihood="Rank = 0, word_log_likelihood : ([-+]?\d+\.\d+e\+\d+)"
+
+
+        #
+        # likelihood< iterid, word_log_likelihood>
+        # itertime< traintime from app,  traintime from wall clock>
+        #
+ 
+        slice = 0
+        A , B, _traintime = 0.,0., 0.
+        iter_starttime = None
+        for line in logf:
+            #
+            # Start of a Iteration
+            #
+            m = re.search(lightlda_startiter, line)
+            if m:
+                iterid = int(m.group(1))
+                if _traintime !=0.:
+                    #save the iter_span to the last iteration
+                    new_walltime = self.gettime_fromline(line)
+                    if iter_starttime:
+                        #iter_span = (new_walltime - iter_starttime).total_seconds()
+                        iter_span = (new_walltime - train_starttime).total_seconds()
+                        itertime.append(( _traintime, iter_span) )
+                    iter_starttime = new_walltime
+
+                #update the last one
+                if A != 0.:
+                    _wlh = (A-B)/slice + B
+                    likelihood.append(( iterid, _wlh))
+                    #logger.info('iter=%d, slice=%d, wlh=%f, time=%f', iterid, slice, _wlh, _time)
+
+                #start a new iteration
+                A , B, _traintime = 0.,0., 0.
+                slice = 0
+
+            #
+            # Collect all the time log during the iteration
+            # [Training , Alias, Evaluation]
+            #
+            #
+            m = re.search(lightlda_time, line)
+            if m:
+                #
+                # itertime< traintime from app,  traintime from wall clock>
+                #
+                _traintime += float(m.group(1))*1000
+            
+            #
+            # Collect all word log likelihood output during the iteration
+            #
+            m = re.search(lightlda_wordlh, line)
+            if m:
+                B += float(m.group(1))
+                slice += 1
+ 
+            m = re.search(lightlda_likelihood, line)
+            if m:
+                A += float(m.group(1))
+
+        #
+        # end of the app
+        #
+        app_endtime = iter_starttime
+        #
+        # there is summer time, app_endtime < app_starttime
+        #
+        if app_endtime < app_starttime:
+            app_span = (app_endtime - app_starttime).total_seconds() +  3600
+            train_span = (app_endtime - train_starttime).total_seconds() + 3600
+        else:
+            app_span = (app_endtime - app_starttime).total_seconds()
+            train_span = (app_endtime - train_starttime).total_seconds()
+        logger.info('runtime total=%d, train=%d, train_start at:%s', app_span, train_span, train_starttime)
+
+        return itertime, likelihood, app_span, train_span
+
+
+
+    def load_applog_lightlda(self, appdir, filepattern='.log'):
+        iter_app = iter_wall = []
+        for dirpath, dnames, fnames in os.walk(appdir):
+            for f in fnames:
+                if f.startswith('lightlda') and f.endswith(filepattern):
+                    itertime, likelihood, app_span, train_span = self.load_timelog_lightlda(os.path.join(dirpath, f))
+                    if len(itertime) > 0:
+                        logger.info('load log from %s at %s', f, dirpath)
+                        #bname=appdir +'/' + f[:f.rfind(filepattern)]
+                        bname= f[:f.rfind(filepattern)]
+
+                        # get this runid of log
+                        idx = 0
+                        iternum =  len(itertime) 
+                        nodenum = 1
+                        # there should all be the same
+                        logger.info('total %d iterations, %d nodes, shape=%s', iternum, nodenum, 0)
+                        #logger.info('itertime: %s', itertime)
+                        #logger.info('likelihood: %s', likelihood)
+
+                        #
+                        # itertime is app-train time, iter_t is wall clock time
+                        #
+                        iter_wall=[[x[1] for x in itertime]]
+                        iter_app=[[x[0] for x in itertime]]
+                        likelihood=[[x[0],x[1]] for x in likelihood]
+                        #logger.info('itertime: %s', iter_app)
+                        #logger.info('itertime: %s', iter_wall)
+                        #logger.info('likelihood: %s', likelihood)
+
+
+                        iter_appMatrix = np.array(iter_app)
+                        iter_wallMatrix = np.array(iter_wall)
+                        lhMatrix = np.array(likelihood)
+                        # run time: col1:app_time, col2:train_time
+                        runtimeMatrix = np.zeros((1,2))
+                        runtimeMatrix[0,0] = app_span
+                        runtimeMatrix[0,1] = train_span
+                        # add iter_t matrix, (nodenum, iternum)
+                        logger.info('%s, %s, %s', runtimeMatrix.shape, iter_wallMatrix.shape, iter_appMatrix.shape)
+                        runtimeMatrix = np.concatenate((runtimeMatrix, iter_wallMatrix), axis=1)
+
+                        np.savetxt(bname + ".itertime", iter_appMatrix, fmt='%d')
+                        np.savetxt(bname + ".runtime", runtimeMatrix, fmt='%d')
+                        np.savetxt(bname + ".likelihood", likelihood, fmt='%e')
+                        #self.save_likelihood(likelihood, bname + '.likelihood')
+
+                        #min, max, mean analysis
+                        # mean/std of compute, comm, iter restured
+                        # runtime stat
+                        statMatrix = np.zeros((4, 2 + iternum))
+                        statMatrix[0] = np.min(runtimeMatrix, axis=0)
+                        statMatrix[1] = np.max(runtimeMatrix, axis=0)
+                        statMatrix[2] = np.mean(runtimeMatrix, axis=0)
+                        statMatrix[3] = np.std(runtimeMatrix, axis=0)
+                        np.savetxt(bname + '.runtime-stat', statMatrix,fmt='%.2f')
+ 
+                        # itertime
+                        statMatrix = np.zeros((4, iternum))
+                        statMatrix[0] = np.min(iter_appMatrix, axis=0)
+                        statMatrix[1] = np.max(iter_appMatrix, axis=0)
+                        statMatrix[2] = np.mean(iter_appMatrix, axis=0)
+                        statMatrix[3] = np.std(iter_appMatrix, axis=0)
                         np.savetxt(bname + '.iter-stat', statMatrix,fmt='%.2f')
 
     #
