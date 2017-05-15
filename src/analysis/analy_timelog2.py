@@ -1536,7 +1536,7 @@ class LDATrainerLog():
         likelihood=[]
         last_iterspan = 0
         lightlda_startiter = "Rank = (\d+), Iter = (\d+), Block = 0, Slice = 0"
-        lightlda_time="Rank = (\d+), .* Time used: (\d+\.\d+]*) s"
+        lightlda_time="Rank = (\d+), [A,T].* Time used: (\d+\.\d+]*) s"
         #lightlda_doclh="doc likelihood : ([-+]?\d+\.\d+e\+\d+)"
         lightlda_wordlh="Rank = (\d+), word likelihood : ([-+]?\d+\.\d+e\+\d+)"
         lightlda_likelihood="Rank = (\d+), word_log_likelihood : ([-+]?\d+\.\d+e\+\d+)"
@@ -1593,10 +1593,11 @@ class LDATrainerLog():
 
                     if st[rankid].iter_starttime:
                         #iter_span = (new_walltime - iter_starttime).total_seconds()
-                        iter_span = (new_walltime - train_starttime).total_seconds()
+                        runtime_span = (new_walltime - train_starttime).total_seconds()
                         _traintime2 = (st[rankid].iter_endtime- st[rankid].iter_starttime).total_seconds()*1000
+                        iter_span = (new_walltime - st[rankid].iter_starttime).total_seconds()*1000
                         #itertime.append(( st[rankid]._traintime, iter_span, _traintime2, rankid, iterid) )
-                        itertime.append([ st[rankid]._traintime, iter_span, _traintime2, rankid, iterid] )
+                        itertime.append([ st[rankid]._traintime, runtime_span, _traintime2, rankid, iterid, iter_span] )
 
 
                 #update the last one
@@ -1622,8 +1623,10 @@ class LDATrainerLog():
                 rankid = int(m.group(1))
                 st[rankid]._traintime += float(m.group(2))*1000
                 #update iter_endtime
-                st[rankid].iter_endtime = self.gettime_fromline(line)
-                _last_walltime = st[rankid].iter_endtime
+                _walltime = self.gettime_fromline(line)
+                if _walltime:
+                    st[rankid].iter_endtime = _walltime
+                    _last_walltime = st[rankid].iter_endtime
 
                 continue
             #
@@ -1710,9 +1713,10 @@ class LDATrainerLog():
                         #
                         # itertime is app-train time, iter_t is wall clock time
                         #
-                        iter_appMatrix = np.array([models[models[:,3]==x][:iternum,0] for x in range(nodenum)])
+                        iter_appMatrix = np.array([models[models[:,3]==x][:iternum,5] for x in range(nodenum)])
                         iter_wallMatrix = np.array([models[models[:,3]==x][:iternum,2] for x in range(nodenum)])
                         runtime_wallMatrix = np.array([models[models[:,3]==x][:iternum,1] for x in range(nodenum)])
+                        computeMatrix = np.array([models[models[:,3]==x][:iternum,0] for x in range(nodenum)])
                         # run time: col1:app_time, col2:train_time
                         runtimeMatrix = np.zeros((nodenum,2))
                         runtimeMatrix[:,0] = app_span
@@ -1721,6 +1725,8 @@ class LDATrainerLog():
                         logger.info('%s, %s, %s', runtimeMatrix.shape, iter_wallMatrix.shape, iter_appMatrix.shape)
                         runtimeMatrix = np.concatenate((runtimeMatrix, runtime_wallMatrix), axis=1)
 
+
+                        np.savetxt(bname + ".computetime", computeMatrix, fmt='%d')
                         np.savetxt(bname + ".itertime", iter_appMatrix, fmt='%d')
                         np.savetxt(bname + ".iterwall", iter_wallMatrix, fmt='%d')
                         np.savetxt(bname + ".runtime", runtimeMatrix, fmt='%d')
@@ -1736,7 +1742,16 @@ class LDATrainerLog():
                         statMatrix[2] = np.mean(runtimeMatrix, axis=0)
                         statMatrix[3] = np.std(runtimeMatrix, axis=0)
                         np.savetxt(bname + '.runtime-stat', statMatrix,fmt='%.2f')
- 
+
+                        # compute time
+                        statMatrix = np.zeros((4, iternum))
+                        statMatrix[0] = np.min(computeMatrix, axis=0)
+                        statMatrix[1] = np.max(computeMatrix, axis=0)
+                        statMatrix[2] = np.mean(computeMatrix, axis=0)
+                        statMatrix[3] = np.std(computeMatrix, axis=0)
+                        np.savetxt(bname + '.comput-stat', statMatrix,fmt='%.2f')
+
+
                         # itertime
                         statMatrix = np.zeros((4, iternum))
                         statMatrix[0] = np.min(iter_appMatrix, axis=0)
@@ -1745,7 +1760,7 @@ class LDATrainerLog():
                         statMatrix[3] = np.std(iter_appMatrix, axis=0)
                         np.savetxt(bname + '.iter-stat', statMatrix,fmt='%.2f')
 
-                        # itertime
+                        # itertime by wall
                         statMatrix = np.zeros((4, iternum))
                         statMatrix[0] = np.min(iter_wallMatrix, axis=0)
                         statMatrix[1] = np.max(iter_wallMatrix, axis=0)
@@ -1760,14 +1775,34 @@ class LDATrainerLog():
     def load_timelog_nomadlda(self, logfile):
         logf = open(logfile,'r')
 
+        totaltoken_format="init phase done! (\d+) tokens"
+        nomadlda_format="iter ([0-9]*) .*time-1 (\d+\.\d+]*) .*training-LL ([-+]?\d*\.\d+e\+\d+]*) Nwt (\d+)"
         totalNumTokens = 0
         lastcnt = 0
         itertime=[]
         tokencnt=[]
         likelihood=[]
 
-        totaltoken_format="init phase done! (\d+) tokens"
-        nomadlda_format=":iter ([0-9]*) .*time-1 (\d+\.\d+]*) .*training-LL ([-+]?\d*\.\d+e\+\d+]*) Nwt (\d+)"
+
+        #
+        # app start time
+        #
+        #for line in logf:
+        #    app_starttime = self.gettime_fromline(line)
+        #    if app_starttime:
+        #        train_starttime = app_starttime
+        #        app_endtime = app_starttime
+        #        break
+
+        #for line in logf:
+        #    if line.find("Begin of training.") > 0:
+        #        train_starttime = self.gettime_fromline(line)
+        #        break
+
+        #logger.info('app_start at:%s, train_start at:%s', app_starttime, train_starttime)
+
+        train_starttime = None
+
         for line in logf:
             #new format first
             m = re.search(totaltoken_format, line)
@@ -1780,7 +1815,14 @@ class LDATrainerLog():
                 #
                 # itertime< traintime from app,  traintime from wall clock>
                 #
-                itertime.append(( float(m.group(2))*1000, 0) )
+
+                walltime = self.gettime_fromline(line)
+                if not train_starttime:
+                    train_starttime = walltime
+
+
+                runtime_span = (walltime - train_starttime).total_seconds()*1000
+                itertime.append(( float(m.group(2))*1000, runtime_span) )
                 likelihood.append(( int(m.group(1)), float(m.group(3))))
                 newcnt = int(m.group(4))
                 tokencnt.append( (newcnt - lastcnt , 0))
@@ -1809,6 +1851,7 @@ class LDATrainerLog():
                         #logger.info('itertime: %s', itertime)
                         #logger.info('likelihood: %s', likelihood)
 
+                        runtime=[[x[1] for x in itertime]]
                         itertime=[[x[0] for x in itertime]]
                         likelihood=[[x[0],x[1]] for x in likelihood]
                         updatecnt=[[x[0] for x in tokencnt]]
@@ -1816,19 +1859,23 @@ class LDATrainerLog():
                         #logger.info('likelihood: %s', likelihood)
 
 
-                        iterMatrix = np.array(itertime)
+                        iter_appMatrix = np.array(itertime)
+                        iter_wallMatrix = np.array(runtime)
                         lhMatrix = np.array(likelihood)
                         updateMatrix = np.array(updatecnt)
                         # run time: col1:app_time, col2:train_time
                         runtimeMatrix = np.zeros((1,2))
                         # add iter_t matrix, (nodenum, iternum)
-                        imat = np.cumsum(iterMatrix).reshape((1,iternum))
-                        runtimeMatrix = np.concatenate((runtimeMatrix, imat), axis=1)
+                        logger.info('iter.shape=%s,runtime.shape=%s, cumsum shape=%s', iter_appMatrix.shape, iter_wallMatrix.shape, np.cumsum(iter_wallMatrix).shape)
+
+                        #imat = np.cumsum(iter_wallMatrix).reshape((1,iternum))
+                        #runtimeMatrix = np.concatenate((runtimeMatrix, imat), axis=1)
+                        runtimeMatrix = np.concatenate((runtimeMatrix, iter_wallMatrix), axis=1)
                         runtimeMatrix = runtimeMatrix / 1000
 
 
                         # run time: col1:app_time, col2:train_time
-                        np.savetxt(bname + ".itertime", iterMatrix, fmt='%d')
+                        np.savetxt(bname + ".itertime", iter_appMatrix, fmt='%d')
                         np.savetxt(bname + ".runtime", runtimeMatrix, fmt='%d')
                         #np.savetxt(bname + ".likelihood", likelihood, fmt='%e')
                         self.save_likelihood(likelihood, bname + '.likelihood')
@@ -1848,10 +1895,10 @@ class LDATrainerLog():
 
                         # itertime
                         statMatrix = np.zeros((4, iternum))
-                        statMatrix[0] = np.min(iterMatrix, axis=0)
-                        statMatrix[1] = np.max(iterMatrix, axis=0)
-                        statMatrix[2] = np.mean(iterMatrix, axis=0)
-                        statMatrix[3] = np.std(iterMatrix, axis=0)
+                        statMatrix[0] = np.min(iter_appMatrix, axis=0)
+                        statMatrix[1] = np.max(iter_appMatrix, axis=0)
+                        statMatrix[2] = np.mean(iter_appMatrix, axis=0)
+                        statMatrix[3] = np.std(iter_appMatrix, axis=0)
                         np.savetxt(bname + '.iter-stat', statMatrix,fmt='%.2f')
 
                         # update stat, add sum at row[4], ratio of iteration
