@@ -1563,6 +1563,7 @@ class LDATrainerLog():
         #
         st={}
         _last_walltime = None
+        iterid = 0
         for line in logf:
             #
             # Start of a Iteration
@@ -1650,6 +1651,17 @@ class LDATrainerLog():
             # nonthing match
             # _last_walltime update here
 
+
+        #
+        # the last record
+        #
+        #update the last one
+        for rankid in st:
+            if st[rankid].A != 0.:
+                _wlh = (st[rankid].A-st[rankid].B)/st[rankid].slice + st[rankid].B
+                likelihood.append(( iterid, _wlh, rankid))
+                #logger.info('iter=%d, slice=%d, wlh=%f, time=%f', iterid, slice, _wlh, _time)
+
         #
         # end of the app
         #
@@ -1699,6 +1711,7 @@ class LDATrainerLog():
                         #logger.info('likelihood: %s', likelihood)
 
                         #likelihood
+                        logger.info('likelihood=%s', likelihood)
                         likelihood = sorted(likelihood, key = lambda x:x[2])
                         likelihood=np.array(likelihood)
 
@@ -1776,7 +1789,9 @@ class LDATrainerLog():
         logf = open(logfile,'r')
 
         totaltoken_format="init phase done! (\d+) tokens"
-        nomadlda_format="iter ([0-9]*) .*time-1 (\d+\.\d+]*) .*training-LL ([-+]?\d*\.\d+e\+\d+]*) Nwt (\d+)"
+        #nomadlda_format="iter ([0-9]*) .*time-1 (\d+\.\d+]*) .*training-LL ([-+]?\d*\.\d+e\+\d+]*) Nwt (\d+)"
+        # time is the training time, time-1 is the one with overhead of evaluation
+        nomadlda_format="iter ([0-9]*) time (\d+[\.\d+]*) .*eplasetime (\d+[\.\d+]*) training-LL ([-+]?\d*[\.\d+e\+\d+]*) Nwt (\d+)"
         totalNumTokens = 0
         lastcnt = 0
         itertime=[]
@@ -1816,15 +1831,18 @@ class LDATrainerLog():
                 # itertime< traintime from app,  traintime from wall clock>
                 #
 
-                walltime = self.gettime_fromline(line)
-                if not train_starttime:
-                    train_starttime = walltime
+                # it's not a good idea to use wall time log here, 
+                # use eplasetime instead
+                #walltime = self.gettime_fromline(line)
+                #if not train_starttime:
+                #    train_starttime = walltime
+            
+                #runtime_span = (walltime - train_starttime).total_seconds()*1000
 
-
-                runtime_span = (walltime - train_starttime).total_seconds()*1000
+                runtime_span = float(m.group(3))*1000  #eplasetime
                 itertime.append(( float(m.group(2))*1000, runtime_span) )
-                likelihood.append(( int(m.group(1)), float(m.group(3))))
-                newcnt = int(m.group(4))
+                likelihood.append(( int(m.group(1)), float(m.group(4))))
+                newcnt = int(m.group(5))
                 tokencnt.append( (newcnt - lastcnt , 0))
                 lastcnt = newcnt
                 continue

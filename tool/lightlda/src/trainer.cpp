@@ -81,7 +81,7 @@ namespace multiverso { namespace lightlda
         }
 
         //Barrier Fix
-        barrier_->Wait();
+        //barrier_->Wait();
 
         if (TrainerId() == 0)
         {
@@ -94,7 +94,8 @@ namespace multiverso { namespace lightlda
         // Evaluate loss function
         // Evaluate(lda_data_block);
         
-        if (iter % 5 == 0)
+        //if (iter % 5 == 0)
+        if (iter == Config::num_iterations - 1)
         {
             Evaluate(lda_data_block);
             if (TrainerId() == 0)

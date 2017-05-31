@@ -142,13 +142,16 @@ class PerfName():
                 content = nf.read()
                 deli = '\t'
                 if not content.find(deli) > 0:
-                    deli = ' '
+                    deli = ''
                 nf.seek(0,0)
 
                 for line in nf:
                     if line.strip().replace(' ','') == '':
                         break
-                    tokens = line.strip().split(deli)
+                    if deli:
+                        tokens = line.strip().split(deli)
+                    else:
+                        tokens = line.strip().split()
                     #perfname.append((tokens[0], tokens[1]))
                     if tokens[0][0] == '#':
                         continue
@@ -609,9 +612,9 @@ class PlotEngine():
 
         plottype:
             0   accuracy .vs. iternum
-            1   accuracy .vs. traintime
+            1   accuracy .vs. traintime ; runtime-stat
             2   accuracy .vs. execution time
-            3   accuracy .vs. itertime
+            3   accuracy .vs. itertime  ; iter-stat
         """
         dataflist = []
         #for name,label in self.perfname:
@@ -750,8 +753,8 @@ class PlotEngine():
         elif plottype == 2:
             self.curax.set_xlabel('Execution Time (s)')
         elif plottype ==3:
-            #self.curax.set_xlabel('Iteration Time (s)')
-            self.curax.set_xlabel('Training Time (s)')
+            self.curax.set_xlabel('Iteration Time (s)')
+            #self.curax.set_xlabel('Training Time (s)')
             #self.curax.set_xlabel('Training Time (1000s)')
             #ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/1e3))
             ##ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:.1e}'.format(x))
@@ -1192,6 +1195,10 @@ class PlotEngine():
         for tp in self.perfname:
             name = tp[0] 
             label = tp[1]
+            fname = name + '.comput-stat'
+            dataflist.append(fname)
+            fname = name + '.iter-stat'
+            dataflist.append(fname)
             fname = name + '.runtime-stat'
             dataflist.append(fname)
             fname = name + '.update-stat'
@@ -1231,9 +1238,27 @@ class PlotEngine():
             #
             groupdata = sorted(groupdata, key = lambda item: int(item[1]))
 
+            #
+            # use runtime-stat, then evaluation time included, brings bias for small dataset and bad evaluation code trainers
+            # use iter-stat, should be better to evaluate the true througput
+            #
             _min_rowcnt = np.min([ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:].shape[0] for idx  in range(len(groupdata))])
             logger.info('min rowcnt=%s', _min_rowcnt)
-            raw_timeout = [ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:2+_min_rowcnt]  for idx  in range(len(groupdata))]
+
+            if 'iter-throughput' not in conf:
+                logger.info('iter-throughput NOT set in conf, use runtime-stat')
+                raw_timeout = [ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:2+_min_rowcnt]  for idx  in range(len(groupdata))]
+            else:
+                logger.info('iter-throughput set in conf, use iter-stat')
+                #
+                #special hacks here, lightlda prefer to use comput-stat instead of iter-stat
+                #
+                if 'lightlda' in groupdata[idx][0]:
+                    raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.comput-stat'][2,:_min_rowcnt]/1000.)   for idx  in range(len(groupdata))]
+                else:
+                    raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.iter-stat'][2,:_min_rowcnt]/1000.)   for idx  in range(len(groupdata))]
+
+
 
 
             #updatecnt
@@ -1343,7 +1368,8 @@ class PlotEngine():
 
         ### end draw
         #self.curax.set_ylabel('Model Update Count@%ds'%predict_pt if normalize_byfit else
-        self.curax.set_ylabel('Throughput of First %ds(tokens/sec)'%predict_pt if normalize_byfit else
+        #self.curax.set_ylabel('Throughput of First %ds(tokens/sec)'%predict_pt if normalize_byfit else
+        self.curax.set_ylabel('Throughput of First 10 Iter(tokens/sec)' if normalize_byfit else
                 "Training Time Per Iteration(s)")
         if use_x_logscale:
             _x = np.arange(maxX)
@@ -1366,8 +1392,12 @@ class PlotEngine():
         if draw_speedup:
             #ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
             ax2.set_ylabel('SpeedUp T(%d)/T(N)'%mat[0,0].astype(np.int))
-            #ax2.legend(loc = 4)
-            ax2.legend(loc = 0)
+            if 'loc' in conf:
+                _loc = conf['loc']
+            else:
+                _loc = 2
+            ax2.legend(loc = _loc)
+            #ax2.legend(loc = 0)
         else:
             self.curax.legend(loc = 0)
 
