@@ -1791,7 +1791,7 @@ class LDATrainerLog():
         totaltoken_format="init phase done! (\d+) tokens"
         #nomadlda_format="iter ([0-9]*) .*time-1 (\d+\.\d+]*) .*training-LL ([-+]?\d*\.\d+e\+\d+]*) Nwt (\d+)"
         # time is the training time, time-1 is the one with overhead of evaluation
-        nomadlda_format="iter ([0-9]*) time (\d+[\.\d+]*) .*eplasetime (\d+[\.\d+]*) training-LL ([-+]?\d*[\.\d+e\+\d+]*) Nwt (\d+)"
+        nomadlda_format="iter ([0-9]*) time (\d+[\.]*\d+) .*eplasetime (\d+[\.]*\d+[e\+]*\d+) training-LL ([-+]?\d+[\.]*\d+e\+\d+) Nwt (\d+)"
         totalNumTokens = 0
         lastcnt = 0
         itertime=[]
@@ -1846,6 +1846,8 @@ class LDATrainerLog():
                 tokencnt.append( (newcnt - lastcnt , 0))
                 lastcnt = newcnt
                 continue
+            #else:
+            #    logger.info('ERR:%s', line)
         return itertime, likelihood, tokencnt, totalNumTokens
 
 

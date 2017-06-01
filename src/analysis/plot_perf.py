@@ -303,6 +303,7 @@ class PlotEngine():
             'clueweb30':29911407874,
             'enwiki':1107903672,
             'nytimes':99542125,
+            'bigram':1691033393,
             'pubmed2m':149031108
             #'pubmedall':
         }
@@ -1395,7 +1396,7 @@ class PlotEngine():
             if 'loc' in conf:
                 _loc = conf['loc']
             else:
-                _loc = 2
+                _loc = 0
             ax2.legend(loc = _loc)
             #ax2.legend(loc = 0)
         else:
@@ -1870,8 +1871,11 @@ class PlotEngine():
 
             # code modified from plot_accuracy
             # change .comput-stat to .likelihood like format
-            cvVector = self.perfdata[lh_name][3] / self.perfdata[lh_name][2]
+            #cvVector = self.perfdata[lh_name][3] / self.perfdata[lh_name][2]
+            #iterNumber = cvVector.shape[0]
+            cvVector =  self.perfdata[itertime_name][3]
             iterNumber = cvVector.shape[0]
+
             #
             # get (iternum, runttime-mean, perplexity, label)
             # 
@@ -1892,7 +1896,7 @@ class PlotEngine():
                 realIterId = self.perfdata[update_name][5][iterIdx]
             else:
                 realIterId = iterIdx + 1
-
+            realIterId = realIterId * self.getTrainsetSize(itertime_name)
             accuracy.append((iterIdx, 
                         self.perfdata[runtime_name][2,2:] + offset,
                         cvVector, label, itertimeMat,
@@ -1925,15 +1929,17 @@ class PlotEngine():
                 self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
             else:
                 x = accuracy[idx][0]
+                itertime = accuracy[idx][4][x]
                 #convert iternum to runtime
                 x = accuracy[idx][1][x]
-                self.curax.plot(x, accuracy[idx][5], lines[idx], color=colors[idx], label = accuracy[idx][3])
+                y = accuracy[idx][5]/ itertime
+                self.curax.plot(x[::10], y[::10], lines[idx], color=colors[idx], label = accuracy[idx][3])
             
 
-                #try plotfit
-                z = np.polyfit(x, accuracy[idx][5], 2)
-                p = np.poly1d(z)
-                self.curax.plot(x, p(x), lines2[idx], color=colors[idx], label = accuracy[idx][3])
+                ##try plotfit
+                #z = np.polyfit(x, accuracy[idx][5], 2)
+                #p = np.poly1d(z)
+                #self.curax.plot(x, p(x), lines2[idx], color=colors[idx], label = accuracy[idx][3])
 
 
 
@@ -1946,7 +1952,7 @@ class PlotEngine():
     
         self.curax.set_xlabel('Training Time (s)')
         if plottype == 0:
-            self.curax.set_ylabel('Throughput')
+            self.curax.set_ylabel('Throughput (tokens/s)')
         elif plottype == 1:
             self.curax.set_ylabel('Accumulate Throughput')
 
