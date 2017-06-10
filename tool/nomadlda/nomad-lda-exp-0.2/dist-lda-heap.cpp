@@ -1194,7 +1194,14 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 	total_words = 0;
 	for(auto &nt : model.Nt)
 		total_words += nt;
-	if(procid == ROOT) { printf("init phase done! %ld tokens\n", total_words); }
+	if(procid == ROOT) { 
+       time_t _t = time(0);
+       char _str[64];
+       strftime(_str, sizeof(_str), "%Y-%m-%d %H:%M:%S", localtime(&_t));
+       //printf ("[%s] ", _str);
+       //printf("init phase done! %ld tokens\n", total_words); 
+       printf("[%s] init phase done! %ld tokens\n", _str, total_words); 
+    }
 	comm_space_t space(training_set, test_set, param, model);
 
 	int thread_id = space.main_thread; 
@@ -1311,6 +1318,14 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 
         uint64_t _end2 = timenow();
         _elapse += (_end2 - _start)/1000000.0;
+
+
+        //add the workers log for each node
+		if(1) {
+			printf("rank %d iter %d localNwt %ld localNt %ld", procid, iter+1, local_Nwt_cnt, local_Nt_cnt);
+			puts("");
+			fflush(stdout);
+		}
 
 		if(procid == ROOT) {
             //time_t rawtime;

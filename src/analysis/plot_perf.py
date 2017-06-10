@@ -1324,9 +1324,11 @@ class PlotEngine():
                     logger.info('ratio:%s', updatecnt[:_stop]/timeout[:_stop])
                     #predict.append(np.sum(updatecnt[:_stop]) *1. / np.sum(timeout[:_stop]) *predict_pt)
 
-                    _stop = 20
+                    #_stop = 10
+                    _stop = 8
                     #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
-                    predict.append((updatecnt[10]-updatecnt[1])*1./(timeout[10]-timeout[1]))
+                    #predict.append((updatecnt[10]-updatecnt[1])*1./(timeout[10]-timeout[1]))
+                    predict.append((updatecnt[_stop]-updatecnt[1])*1./(timeout[_stop]-timeout[1]))
                     _stop = -1
                     #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
                     #predict.append((updatecnt[-1]-updatecnt[-10])*1./(timeout[-1]-timeout[-10]))

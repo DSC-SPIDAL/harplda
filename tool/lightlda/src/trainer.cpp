@@ -83,6 +83,10 @@ namespace multiverso { namespace lightlda
         //Barrier Fix
         //barrier_->Wait();
 
+        //add threadlog
+        Log::Info("Rank = %d, Threadid = %d, Training Time used: %.2f s \n", 
+                Multiverso::ProcessRank(), TrainerId(), watch.ElapsedSeconds());
+
         if (TrainerId() == 0)
         {
             Log::Info("Rank = %d, Training Time used: %.2f s \n", 
@@ -94,8 +98,8 @@ namespace multiverso { namespace lightlda
         // Evaluate loss function
         // Evaluate(lda_data_block);
         
-        //if (iter % 5 == 0)
-        if (iter == Config::num_iterations - 1)
+        if (iter % 5 == 0)
+        //if (iter == Config::num_iterations - 1)
         {
             Evaluate(lda_data_block);
             if (TrainerId() == 0)
