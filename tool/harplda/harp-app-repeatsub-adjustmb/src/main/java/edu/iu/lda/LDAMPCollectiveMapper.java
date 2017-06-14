@@ -127,9 +127,7 @@ public class LDAMPCollectiveMapper extends
     }
  
 
-    //time = enableTuning ? 1800L : 1000000000L;
-    time = 1800L;
-    //time = enableTuning ? 1000L : 1000000000L;
+    time = enableTuning ? 1000L : 1000000000L;
     hasOverTrained = false;
     lastUnderTrainIte = 0;
     breakPeriod = 0;

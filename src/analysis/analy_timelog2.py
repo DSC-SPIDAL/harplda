@@ -1065,17 +1065,38 @@ class LDATrainerLog():
                 # itertime< traintime from app,  traintime from wall clock>
                 #
                 itertime.append(( float(m.group(2))*1000, 0) )
+                #
+                # check the likelihood
+                #
+                #lh = float(m.group(3))
+                #if lh > 0:
                 likelihood.append(( int(m.group(1)), float(m.group(3))))
+
                 continue
         return itertime, likelihood
 
 
-    def save_likelihood(self,likelihood, fname):
+    def save_likelihood(self,likelihood, fname, interval = 10, changeiternum = False):
         with open(fname, 'w') as outf:
-            for lineid in range(len(likelihood)):
-                iterid = lineid + 1
-                if (iterid == 1) or (iterid %10 == 0):
-                    outf.write("%d %e\n"%(iterid, likelihood[lineid][1]))
+            # check the iternum start from 0 or 1
+            offset = 1 if likelihood[0][0] == 0 else 0
+
+            for lineid in range(offset, len(likelihood)):
+                if interval >0:
+                    #iterid = lineid + 1
+                    #if (iterid == 1) or (iterid % interval == 0):
+                    if (lineid == offset) or ((lineid -offset) % interval == 0):
+                        if changeiternum:
+                            outf.write("%d %e\n"%(lineid + 1, likelihood[lineid][1]))
+                        else:
+                            outf.write("%d %e\n"%(likelihood[lineid][0], likelihood[lineid][1]))
+                else:
+                    if(likelihood[lineid][1] != 0.):
+                        if changeiternum:
+                            outf.write("%d %e\n"%(lineid + 1, likelihood[lineid][1]))
+                        else:
+                            outf.write("%d %e\n"%(1 + likelihood[lineid][0],likelihood[lineid][1]))
+
 
     def load_applog_warplda(self, appdir, filepattern='.log'):
         models = []
@@ -1119,7 +1140,8 @@ class LDATrainerLog():
                         np.savetxt(bname + ".itertime", iterMatrix, fmt='%d')
                         np.savetxt(bname + ".runtime", runtimeMatrix, fmt='%d')
                         #np.savetxt(bname + ".likelihood", likelihood, fmt='%e')
-                        self.save_likelihood(likelihood, bname + '.likelihood')
+                        #save the likelihood directly, no sample by interval
+                        self.save_likelihood(likelihood, bname + '.likelihood', -1)
 
                         #min, max, mean analysis
                         # mean/std of compute, comm, iter restured
@@ -1791,9 +1813,14 @@ class LDATrainerLog():
         totaltoken_format="init phase done! (\d+) tokens"
         #nomadlda_format="iter ([0-9]*) .*time-1 (\d+\.\d+]*) .*training-LL ([-+]?\d*\.\d+e\+\d+]*) Nwt (\d+)"
         # time is the training time, time-1 is the one with overhead of evaluation
-        nomadlda_format="iter ([0-9]*) time (\d+[\.]*\d+) .*eplasetime (\d+[\.]*\d+[e\+]*\d+) training-LL ([-+]?\d+[\.]*\d+e\+\d+) Nwt (\d+)"
+        # the eplasetime is no-use, for the evaluation in nomadlda is extreemly slow
+        #nomadlda_format_largex="iter ([0-9]*) time (\d+[\.]*\d+) .*eplasetime (\d+[\.]*\d+[e\+]*\d+) training-LL ([-+]?\d+[\.]*\d+e\+\d+) Nwt (\d+)"
+        #nomadlda_format_smallx="iter ([0-9]*) time (\d+[\.]*\d+) .*eplasetime (\d+[\.]*\d+) training-LL ([-+]?\d+[\.]*\d+e\+\d+) Nwt (\d+)"
+        nomadlda_format_large="iter ([0-9]*) time (\d+[\.]*\d+) totaltime (\d+[\.]*\d+[e\+]*\d+) .*training-LL ([-+]?\d+[\.]*\d+e\+\d+) Nwt (\d+)"
+        nomadlda_format="iter ([0-9]*) time (\d+[\.]*\d+) totaltime (\d+[\.]*\d+) .*training-LL ([-+]?\d+[\.]*\d+e\+\d+) Nwt (\d+)"
         totalNumTokens = 0
         lastcnt = 0
+        lastrt = 0
         itertime=[]
         tokencnt=[]
         likelihood=[]
@@ -1818,6 +1845,8 @@ class LDATrainerLog():
 
         train_starttime = None
 
+
+        logger.info('start find ')
         for line in logf:
             #new format first
             m = re.search(totaltoken_format, line)
@@ -1839,13 +1868,42 @@ class LDATrainerLog():
             
                 #runtime_span = (walltime - train_starttime).total_seconds()*1000
 
-                runtime_span = float(m.group(3))*1000  #eplasetime
-                itertime.append(( float(m.group(2))*1000, runtime_span) )
+                #runtime_span = float(m.group(3))*1000  #eplasetime
+                runtime_span = float(m.group(3))*1000  #total time
+                #itertime.append(( float(m.group(2))*1000, runtime_span) )
+                itertime.append(( runtime_span - lastrt, runtime_span) )
+                lastrt = runtime_span
                 likelihood.append(( int(m.group(1)), float(m.group(4))))
                 newcnt = int(m.group(5))
                 tokencnt.append( (newcnt - lastcnt , 0))
                 lastcnt = newcnt
                 continue
+
+            m = re.search(nomadlda_format_large, line)
+            if m:
+                #
+                # itertime< traintime from app,  traintime from wall clock>
+                #
+
+                # it's not a good idea to use wall time log here, 
+                # use eplasetime instead
+                #walltime = self.gettime_fromline(line)
+                #if not train_starttime:
+                #    train_starttime = walltime
+            
+                #runtime_span = (walltime - train_starttime).total_seconds()*1000
+
+                runtime_span = float(m.group(3))*1000  #eplasetime
+                #itertime.append(( float(m.group(2))*1000, runtime_span) )
+                itertime.append(( runtime_span - lastrt, runtime_span) )
+                lastrt = runtime_span
+ 
+                likelihood.append(( int(m.group(1)), float(m.group(4))))
+                newcnt = int(m.group(5))
+                tokencnt.append( (newcnt - lastcnt , 0))
+                lastcnt = newcnt
+                continue
+ 
             #else:
             #    logger.info('ERR:%s', line)
         return itertime, likelihood, tokencnt, totalNumTokens
@@ -1898,7 +1956,9 @@ class LDATrainerLog():
                         np.savetxt(bname + ".itertime", iter_appMatrix, fmt='%d')
                         np.savetxt(bname + ".runtime", runtimeMatrix, fmt='%d')
                         #np.savetxt(bname + ".likelihood", likelihood, fmt='%e')
-                        self.save_likelihood(likelihood, bname + '.likelihood')
+                        #nomad log, the iter num is not continous if error in distribute log
+                        #replace the iternum in the log with a logical iter number
+                        self.save_likelihood(likelihood, bname + '.likelihood', 10, True)
 
                         np.savetxt(bname + ".update", updateMatrix, fmt='%d')
 

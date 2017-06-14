@@ -358,15 +358,17 @@ class PlotEngine():
         self.fig.tight_layout()
         self.fig.savefig(figname)
 
-    def autolabel(self, rects, realnum = False):
+    def autolabel(self, rects, realnum = 0):
         """
         input:
             bar
         """
         for rect in rects:
             height = rect.get_height()
-            self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%.1e'%float(height) if realnum==False else '%.0f'%float(height),
-                        ha='center', va='bottom')
+            if realnum > 0:
+                self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%.2f'%(float(height)/realnum),                    ha='center', va='bottom')
+            else:
+                self.curax.text(rect.get_x()+rect.get_width()/2., 1.01*height, '%.0f'%float(height),                    ha='center', va='bottom')
 
     def autolabel_stack(self, rects):
         """
@@ -633,6 +635,22 @@ class PlotEngine():
 
         self.perfdata.load(dataflist, False)
 
+        #hotfix
+        #
+        # calibrate the lightlda's subset likelihood by add the diff with harp
+        # 
+        #for tp in self.perfname:
+        #    name = tp[0]
+        #    label = tp[1]
+ 
+        #    lh_name = name + '.likelihood'
+        #    #
+        #    # get (iternum, runttime-mean, perplexity, label)
+        #    #
+        #    logger.debug('runtime_name=%s', runtime_name)
+        #    self.perfdata[lh_name][:,0].astype(int) 
+
+        # start here
         accuracy = []
         for tp in self.perfname:
             name = tp[0]
@@ -1300,6 +1318,8 @@ class PlotEngine():
 
             logger.info('countindex=%s', countindex)
 
+
+            fit_style = 'fit_middle'
             # do mean/std on countindex[start, end, tasknum]
             for idx in range(len(countindex)):
                 item = countindex[idx]
@@ -1311,28 +1331,41 @@ class PlotEngine():
                     #
                     # fit the curve
                     #
-                    # fit all the data
-                    #z = np.polyfit(timeout, updatecnt, 2)
-                    #predict.append( np.poly1d(z)(predict_pt) )
-                    # fit the first 10 points
-                    _stop = 20
-                    #z = np.polyfit(timeout[:_stop], updatecnt[:_stop], 2)
-                    #predict.append( np.poly1d(z)(predict_pt) )
-                    # just fit by mean
-                    logger.info('timeout:%s, sum=%s', timeout[:_stop], np.sum(timeout[:_stop]))
-                    logger.info('updatecnt:%s, sum=%s', updatecnt[:_stop], np.sum(updatecnt[:_stop]))
-                    logger.info('ratio:%s', updatecnt[:_stop]/timeout[:_stop])
-                    #predict.append(np.sum(updatecnt[:_stop]) *1. / np.sum(timeout[:_stop]) *predict_pt)
+                    if(fit_style == 'fit_first_iters'):
+                        # fit all the data
+                        #z = np.polyfit(timeout, updatecnt, 2)
+                        #predict.append( np.poly1d(z)(predict_pt) )
+                        # fit the first 10 points
+                        _stop = 20
+                        #z = np.polyfit(timeout[:_stop], updatecnt[:_stop], 2)
+                        #predict.append( np.poly1d(z)(predict_pt) )
+                        # just fit by mean
+                        logger.info('timeout:%s, sum=%s', timeout[:_stop], np.sum(timeout[:_stop]))
+                        logger.info('updatecnt:%s, sum=%s', updatecnt[:_stop], np.sum(updatecnt[:_stop]))
+                        logger.info('ratio:%s', updatecnt[:_stop]/timeout[:_stop])
+                        #predict.append(np.sum(updatecnt[:_stop]) *1. / np.sum(timeout[:_stop]) *predict_pt)
 
-                    #_stop = 10
-                    _stop = 8
-                    #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
-                    #predict.append((updatecnt[10]-updatecnt[1])*1./(timeout[10]-timeout[1]))
-                    predict.append((updatecnt[_stop]-updatecnt[1])*1./(timeout[_stop]-timeout[1]))
-                    _stop = -1
-                    #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
-                    #predict.append((updatecnt[-1]-updatecnt[-10])*1./(timeout[-1]-timeout[-10]))
-                        
+                        #_stop = 10
+                        _stop = 8
+                        #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
+                        #predict.append((updatecnt[10]-updatecnt[1])*1./(timeout[10]-timeout[1]))
+                        predict.append((updatecnt[_stop]-updatecnt[1])*1./(timeout[_stop]-timeout[1]))
+                        _stop = -1
+                        #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
+                        #predict.append((updatecnt[-1]-updatecnt[-10])*1./(timeout[-1]-timeout[-10]))
+                    elif (fit_style == 'fit_all'):
+                        # fit all the data
+                        predict.append(updatecnt[-1]*1./timeout[-1])
+
+                    elif (fit_style == 'fit_middle'):
+                        _stop = len(updatecnt) /2 
+                        predict.append(updatecnt[_stop]*1./timeout[_stop])
+
+                    elif (fit_style == 'fit_by_time'):
+                        #
+                        # search the timeout at _stop secs
+                        #
+                        pass
 
 
                     # add a item <tasknum, updatecnt@10s>
@@ -1372,7 +1405,8 @@ class PlotEngine():
         ### end draw
         #self.curax.set_ylabel('Model Update Count@%ds'%predict_pt if normalize_byfit else
         #self.curax.set_ylabel('Throughput of First %ds(tokens/sec)'%predict_pt if normalize_byfit else
-        self.curax.set_ylabel('Throughput of First 10 Iter(tokens/sec)' if normalize_byfit else
+        #self.curax.set_ylabel('Throughput of First 10 Iter(tokens/sec)' if normalize_byfit else
+        self.curax.set_ylabel('Average Throughput(tokens/sec)' if normalize_byfit else
                 "Training Time Per Iteration(s)")
         if use_x_logscale:
             _x = np.arange(maxX)
@@ -1382,7 +1416,8 @@ class PlotEngine():
             self.curax.set_xticks(_x)
             self.curax.set_xticklabels(mat[:,0].astype(np.int))
  
-        self.curax.set_xlabel('Nodes Number')
+        #self.curax.set_xlabel('Nodes Number')
+        self.curax.set_xlabel('Threads Number')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -1390,7 +1425,7 @@ class PlotEngine():
 
         #finally , update the recs
         for rect in rects:
-            self.autolabel(rect)
+            self.autolabel(rect, 1e+8)
 
         if draw_speedup:
             #ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')

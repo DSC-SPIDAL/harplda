@@ -116,7 +116,7 @@ public class Scheduler<D, S extends Simple, T extends MPTask<D, S>> {
     }
 
     //DEBUG INFO
-    //failCnt = 0;
+    failCnt = 0;
 
 
     while (numFreeRows > 0 && numFreeCols > 0) {
@@ -263,9 +263,9 @@ public class Scheduler<D, S extends Simple, T extends MPTask<D, S>> {
     //
     
     //debug info for the submission map
-    //LOG.info("DebugInfo: submissionMap: numRowSplits " + 
-    //        numRowSplits + " numColSplits " + numColSplits
-    //        + " failCnt: " + failCnt);
+    LOG.info("DebugInfo: submissionMap: numRowSplits " + 
+            numRowSplits + " numColSplits " + numColSplits
+            + " failCnt: " + failCnt);
     //String rowmap = "";  
     ////int allRowCount = 0;
     ////for (int i = 0; i < numRowSplits; i++) {
