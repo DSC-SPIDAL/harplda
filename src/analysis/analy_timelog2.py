@@ -1958,7 +1958,7 @@ class LDATrainerLog():
                         #np.savetxt(bname + ".likelihood", likelihood, fmt='%e')
                         #nomad log, the iter num is not continous if error in distribute log
                         #replace the iternum in the log with a logical iter number
-                        self.save_likelihood(likelihood, bname + '.likelihood', 10, True)
+                        self.save_likelihood(likelihood, bname + '.likelihood', 1, True)
 
                         np.savetxt(bname + ".update", updateMatrix, fmt='%d')
 
