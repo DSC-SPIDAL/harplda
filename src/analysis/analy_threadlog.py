@@ -47,7 +47,7 @@ class LDATrainerLog():
             m = re.search("Scheduler: Task (\d+) took (\d+), trained (\d+)", line)
             if m:
                 threadinfo.append((int(m.group(1)), int(m.group(2)),int(m.group(3))))
-            
+
             #m = re.search(self.pattern[self.name+'-newformat'], line)
             m = re.search(self.pattern[self.name+'-newformat2'], line)
             if m:
@@ -72,14 +72,19 @@ class LDATrainerLog():
         iternum = threadinfo.shape[0] / (node *slice* thread)
     
         diter = threadinfo.reshape((iternum, node*slice, thread, 3))
-    
+        aiter = iterinfo.reshape((iternum, 4))[:,2]
+
         #max time analysis
         diter_time = diter[:,:,:,1]
         itertime = np.sum(np.max(diter_time, axis=2), axis=1)
         cv = np.std(diter_time, axis=2)/np.mean(diter_time, axis=2)
         cvmax = np.max(cv, axis = 1)
-        logger.info('itertime: %s', itertime)
+
+        overhead = aiter - itertime
+        
+        logger.info('max thread occupy time: %s', itertime)
         logger.info('cvmax: %s', cvmax)
+        logger.info('overhead: %s', overhead)
     
         #thread cpu usage analysis
         #total thread time / total compute time
@@ -87,8 +92,7 @@ class LDATrainerLog():
         diter = threadinfo.reshape((iternum, node*slice*thread, 3))
         diter_time = np.sum(diter[:,:,1], axis = 1)
         #aiter = iterinfo[:,2]*thread
-        aiter = iterinfo.reshape((iternum, 4))[:,2]*thread
-        usage = diter_time * 1.0 / aiter
+        usage = diter_time * 1.0 / (aiter*thread)
         logger.info('usage: %s', usage)
 
 if __name__ == '__main__':

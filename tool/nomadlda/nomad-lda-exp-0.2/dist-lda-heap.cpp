@@ -3,6 +3,9 @@
 #define ROOT 0 // Root procid
 #include <sys/time.h>
 #include <time.h>
+#include <iostream>
+#include <sstream>
+#include <iterator>
 
 enum {INIT, GO, EVAL, STOP}; // system.status
 
@@ -13,6 +16,9 @@ uint64_t timenow(void)
     return ((uint64_t)(tv.tv_sec) * 1000000 + tv.tv_usec);
 }
 
+double get_cpu_time(){
+    return (double)clock() / CLOCKS_PER_SEC;
+}
 
 inline int get_procid() { // {{{
 	int mpi_rank(-1);
@@ -93,7 +99,7 @@ dist_lda_param_t parse_command_line(int argc, char **argv, char *train_src, char
 
 			case 'm':
 				param.max_tokens_per_msg = atoi(argv[i]);
-				param.max_tokens_per_msg = 100;
+				//param.max_tokens_per_msg = 100;
 				break;
 
 			case 't':
@@ -219,6 +225,9 @@ struct comm_space_t {
 	std::vector<std::array<uint16_t,3>> sampler_seeds;
 	std::vector<con_queue<size_t>> job_queues;
 	con_queue<size_t> sender_queue;
+	
+    //to track the computation time of each thread
+    std::vector<double> duration_time;
 
 	struct scheduler_t { // {{{
 		std::vector<con_queue<size_t>> &job_queues;
@@ -356,6 +365,7 @@ struct comm_space_t {
 		delta_Nt.resize(nr_samplers, model.dim);
 		heap_trees.resize(nr_samplers);
 		sampler_seeds.resize(nr_samplers);
+        duration_time.resize(nr_samplers);
 		for(auto s = 0; s < nr_samplers; s++) {
 			double betabar = param.beta*model.nr_words;
 			auto &D = heap_trees[s];
@@ -363,6 +373,7 @@ struct comm_space_t {
 			sampler_seeds[s][0] = (unsigned short) (s | nr_samplers);
 			sampler_seeds[s][1] = (unsigned short) (s<<1 | nr_samplers);
 			sampler_seeds[s][2] = (unsigned short) (s<<2 | nr_samplers);
+            duration_time[s] = 0.;
 			for(auto t = 0U; t < model.dim; t++) {
 				local_Nt[s][t] = model.Nt[t];
 				delta_Nt[s][t] = model.Nt[t];
@@ -580,6 +591,8 @@ void sampler_fun(int thread_id, comm_space_t &space) {//{{{
 
 	bool alive = false;
 	bool only_sampler = space.param.samplers*space.param.nr_procs == 1;
+    auto &global_duration = space.duration_time[thread_id];
+    uint64_t duration_time;
 
 	std::vector<double> C(dim);
 	size_t threshold = (size_t) floor(2.0*dim/(log2((double)dim)));
@@ -622,6 +635,10 @@ void sampler_fun(int thread_id, comm_space_t &space) {//{{{
 			if(alive) { 
 				space.alive_samplers--;
 				alive = false;
+
+                //stop here, write the duration_time
+                //
+                global_duration = double(duration_time)/ 1000000.0;
 			}
 			std::this_thread::yield(); continue;
 		} else if (space.system_state == STOP) {
@@ -634,12 +651,18 @@ void sampler_fun(int thread_id, comm_space_t &space) {//{{{
 			if(alive == false) {
 				space.alive_samplers++;
 				alive = true;
+
+                //start now
+                global_duration = 0.;
+                duration_time = 0LL;
 			}
 		} // }}}
 
 		if(thread_id == space.main_thread and space.check_timeout(thread_id)) {
 			alive = false;
 			space.alive_samplers --;
+
+            global_duration = double(duration_time)/ 1000000.0;
 			return;
 		}
 		check_ownership_of_Nt();
@@ -650,6 +673,10 @@ void sampler_fun(int thread_id, comm_space_t &space) {//{{{
 			//printf("t %d empty\n", thread_id);
 			std::this_thread::yield(); continue;
 		}
+
+
+        //training part
+        uint64_t _start_time = timenow();
 
 		auto &Nw = Nwt[cur_word];
 		if(training.word_ptr[cur_word] != training.word_ptr[cur_word+1]) { // {{{
@@ -752,6 +779,9 @@ void sampler_fun(int thread_id, comm_space_t &space) {//{{{
 					D.set_value(t, beta/(Nt[t]+betabar));
 			} // }}}
 		} // }}}
+
+        //end of training part
+        duration_time += timenow() - _start_time;
 
 #ifdef GG
 		// pass this token to next thread
@@ -1322,6 +1352,14 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 
         //add the workers log for each node
 		if(1) {
+            //local duration_time for threads
+            std::ostringstream oss;
+            std::copy(space.duration_time.begin(), 
+                   space.duration_time.end(), 
+                   std::ostream_iterator<double>(oss, ","));
+            printf("rank %d iter %d localthread duration time: %s\n", procid, iter+1, oss.str().c_str());
+
+            //local Nwt
 			printf("rank %d iter %d localNwt %ld localNt %ld", procid, iter+1, local_Nwt_cnt, local_Nt_cnt);
 			puts("");
 			fflush(stdout);
@@ -1347,7 +1385,8 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 			//printf("Nwt %ld avg %g Nt %ld", Nwt_cnt, (double)Nwt_cnt/(space.model.nr_words*space.param.nr_procs*space.param.samplers), Nt_cnt);
 			printf("Nwt %ld avg %g Nt %ld ", Nwt_cnt, (double)Nwt_cnt/(double)total_words, Nt_cnt);
             double _time_periter =  (_end1 - _start)/1000000.0;
-			printf("nxt %dx%d, throughput %.6e", _nodes, param.samplers, (double)(Nwt_cnt - _lastnwt)/param.samplers/_nodes/_time_periter);
+			//printf("nxt %dx%d, throughput %.6e", _nodes, param.samplers, (double)(Nwt_cnt - _lastnwt)/param.samplers/_nodes/_time_periter);
+			printf("nxt %dx%d, throughput %.6e", _nodes, param.samplers, (double)(Nwt_cnt - _lastnwt)/param.samplers/_nodes/timex);
             _lastnwt = Nwt_cnt;
 			puts("");
 			fflush(stdout);
