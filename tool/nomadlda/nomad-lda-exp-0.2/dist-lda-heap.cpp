@@ -1283,10 +1283,10 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 		double timex = omp_get_wtime() - space.starttime;
 		totaltime += timex;
 
+        uint64_t _end1 = timenow();
 #ifndef NDEBUG
 		if(procid == ROOT) { printf("origin"); for(auto i : space.tokens_of_proc) printf("%ld ", i); puts(""); }
 #endif
-
 
 		std::vector<unsigned short> membership(model.nr_words);
 		// Starting Evaluation...
@@ -1334,7 +1334,7 @@ void dist_lda_CGS(lda_blocks_t &training_set, lda_blocks_t &test_set, dist_lda_p
 
 		//}}}
 
-        uint64_t _end1 = timenow();
+        //uint64_t _end1 = timenow();
 
 		double train_LL = compute_training_LL(space);
 		double test_perplexity = 0; 

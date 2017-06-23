@@ -54,6 +54,10 @@ namespace multiverso { namespace lightlda
                 Multiverso::ProcessRank(), lda_data_block->iteration(),
                 lda_data_block->block(), lda_data_block->slice());
         }
+
+//this is the initial lh print version, no sampling at all
+        int32_t num_token = 0;
+
         // Build Alias table
         if (id == 0) alias_->Init(meta_->alias_index(block, slice));
         barrier_->Wait();
@@ -71,26 +75,25 @@ namespace multiverso { namespace lightlda
             Log::Info("Rank = %d, Alias Time used: %.2f s \n",
                 Multiverso::ProcessRank(), watch.ElapsedSeconds());
         }
-        int32_t num_token = 0;
         watch.Restart();
+
         // Train with lightlda sampler
         for (int32_t doc_id = id; doc_id < data.Size(); doc_id += trainer_num)
         {
             Document* doc = data.GetOneDoc(doc_id);
-            num_token += sampler_->SampleOneDoc(doc, slice, lastword, model_, alias_);
+            //num_token += sampler_->SampleOneDoc(doc, slice, lastword, model_, alias_);
         }
-
         //Barrier Fix
         //barrier_->Wait();
 
         //add threadlog
-        Log::Info("Rank = %d, Threadid = %d, Training Time used: %.2f s \n", 
-                Multiverso::ProcessRank(), TrainerId(), watch.ElapsedSeconds());
+        //Log::Info("Rank = %d, Threadid = %d, Training Time used: %.2f s \n", 
+        //        Multiverso::ProcessRank(), TrainerId(), watch.ElapsedSeconds());
 
         if (TrainerId() == 0)
         {
             Log::Info("Rank = %d, Training Time used: %.2f s \n", 
-                Multiverso::ProcessRank(), watch.ElapsedSeconds());
+                Multiverso::ProcessRank(), 2.0);
             Log::Info("Rank = %d, sampling throughput: %.6f (tokens/thread/sec) \n", 
                 Multiverso::ProcessRank(), double(num_token) / watch.ElapsedSeconds());
         }

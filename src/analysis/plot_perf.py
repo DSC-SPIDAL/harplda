@@ -1970,7 +1970,8 @@ class PlotEngine():
                 #convert iternum to runtime
                 x = accuracy[idx][1][x]
                 y = accuracy[idx][5]/ itertime
-                self.curax.plot(x[::10], y[::10], lines[idx], color=colors[idx], label = accuracy[idx][3])
+                self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
+                #self.curax.plot(x[::10], y[::10], lines[idx], color=colors[idx], label = accuracy[idx][3])
             
 
                 ##try plotfit

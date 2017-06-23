@@ -4,6 +4,7 @@ CXX = g++
 MPICXX = mpicxx
 
 #Maverick
+#export I_MPI_CXX=icc
 #CXX=icc
 #MPICXX=mpicxx
 
