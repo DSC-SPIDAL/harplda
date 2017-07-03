@@ -265,6 +265,7 @@ class PlotEngine():
             "accthroughput_runtime":self.plot_accthroughput_runtime,
             "scalability":self.plot_scalability,
             "overhead":self.plot_overhead_top,
+            "overhead_only":self.plot_overhead_only,
             "overhead_end":self.plot_overhead_end,
             "overhead_all":self.plot_overhead_all,
             "comm_breakdown":self.plot_comm_breakdown_top,
@@ -461,10 +462,11 @@ class PlotEngine():
         for rect in rects:
             self.autolabel(rect, realnum=True)
 
-        if 'loc' in conf:
-            self.curax.legend(loc = conf['loc'])
-        else:
-            self.curax.legend(loc = 2)
+        if not 'nolegend' in conf:
+            if 'loc' in conf:
+                self.curax.legend(loc = conf['loc'])
+            else:
+                self.curax.legend(loc = 2)
         if figname:
             self.savefig(figname)
 
@@ -497,7 +499,9 @@ class PlotEngine():
         for rect in rects:
             self.autolabel(rect)
 
-        self.curax.legend(loc = 4)
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 4)
+
         if figname:
             self.savefig(figname)
 
@@ -585,7 +589,10 @@ class PlotEngine():
 
         #ax.set_ylim(0, overall_time[0][0] * 2)
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 4)
+    
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 4)
+
         if figname:
             self.savefig(figname)
 
@@ -755,8 +762,9 @@ class PlotEngine():
         logger.info('_trace_shortest_x = %s', _trace_shortest_x)
         #add xlim and ylim by conf
         if 'xlim' in conf:
-            if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
-                self.curax.set_xlim(0, conf['xlim'])
+            #if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
+            #    self.curax.set_xlim(0, conf['xlim'])
+            self.curax.set_xlim(0, conf['xlim'])
         if 'ylim_h' in conf:
             self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
 
@@ -784,7 +792,9 @@ class PlotEngine():
         else:
             self.curax.set_title('LDA Trainer Accuracy')
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 0)
+            
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
         
         if figname:
             #plt.savefig('full-'+figname)
@@ -806,6 +816,10 @@ class PlotEngine():
     def plot_overhead_all(self, figname, conf):
         return self.plot_overhead(2, figname, conf)
 
+    def plot_overhead_only(self, figname, conf):
+        return self.plot_overhead(3, figname, conf)
+
+
     def plot_overhead(self, plottype, figname, conf):
         """
         get overhead value from .iter-stat and .comput-stat
@@ -822,12 +836,14 @@ class PlotEngine():
             dataflist.append(name + '.iter-stat')
             dataflist.append(name + '.comput-stat')
             dataflist.append(name + '.runtime-stat')
+            dataflist.append(name + '.overhead-stat')
 
         self.perfdata.load(dataflist, False)
 
         iter_time = []
         compute_time = []
         execution_time = []
+        overhead_time = []
 
         for tp in self.perfname:
             name = tp[0]
@@ -838,6 +854,7 @@ class PlotEngine():
             fname1 = name + '.iter-stat'
             fname2 = name + '.comput-stat'
             fname3 = name + '.runtime-stat'
+            fname4 = name + '.overhead-stat'
             if self.perfdata[fname1] is None or self.perfdata[fname2] is None:
                 continue
             else:
@@ -846,6 +863,13 @@ class PlotEngine():
                 # get execution time
                 offset = self.perfdata[fname3][2,0] - self.perfdata[fname3][2,1] 
                 execution_time.append((self.perfdata[fname3][2,2:] + offset, label, gname))
+
+                # if exists overhead
+                if not self.perfdata[fname4] is None:
+                    overhead_time.append((self.perfdata[fname4]/1000, label, gname))
+                #else:
+                #    #overhead = iter - compute
+                #    overhead = 
 
         #
         # data is in groups
@@ -957,6 +981,38 @@ class PlotEngine():
                 #self.curax.set_xticklabels([x+1 for x in range(N)])
                 self.curax.set_xlabel('Execution Time (s)')
 
+            elif plottype == 3:
+                #=== overhead only ==========
+                grp_data = overhead_time[idx][0][2]
+                grp_data_err = overhead_time[idx][0][3]
+                #sample every 10 points
+
+                ind = np.arange(grp_data.shape[0])
+                #ind = np.arange(iternum)
+                
+                if False:   #  _use_sample_ == True:
+                    grp_data = grp_data[0:-1:10]
+                    x = ind[0:-1:10]
+                    logger.info('x.shape=%s, data.shape=%s', x.shape, grp_data.shape)
+                else:
+                    x = ind
+                # draw by iteration or execution time
+                #self.curax.set_xlabel('iteration')
+                x_int = x.astype(int)
+                x = execution_time[idx][0][x_int]
+                
+                point_cnt = x.shape[0]
+
+                #draw
+                p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx*2], color=colors[idx*2],label = compute_time[idx][1])
+
+                _trace_shortest_x = min(_trace_shortest_x, x[-1])
+
+                #self.curax.set_xticks(x)
+                #self.curax.set_xticklabels([x+1 for x in range(N)])
+                self.curax.set_xlabel('Execution Time (s)')
+
+
             else:
                 grp_data = compute_time[idx][0][2]
                 grp_data_err = compute_time[idx][0][3]
@@ -1000,7 +1056,10 @@ class PlotEngine():
                 logger.info('_trace_shortest_x = %s', _trace_shortest_x)
 
         # all plots goes here
-        self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
+        if plottype == 3:
+            self.curax.set_ylabel('Overhead Time Per Iteration (s)')
+        else:
+            self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -1010,15 +1069,19 @@ class PlotEngine():
             self.autolabel_stack(rect)
         #add xlim and ylim by conf
         if 'xlim' in conf:
-            if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
-                self.curax.set_xlim(0, conf['xlim'])
+            #if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
+            #    self.curax.set_xlim(0, conf['xlim'])
+            self.curax.set_xlim(0, conf['xlim'])
         if 'ylim' in conf:
             self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
 
 
         #ax.set_ylim(0, overall_time[0][0] * 2)
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 0)
+            
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
+
         if figname:
             self.savefig(figname)
 
@@ -1137,8 +1200,16 @@ class PlotEngine():
             else:
                 x = accuracy[idx][0]
                 #convert iternum to runtime
+                #patch
+                
+                #logger.info('=====x.shape=%s', x.shape)
+
+                if accuracy[idx][1].shape[0] < x.shape[0]:
+                    x = x[:accuracy[idx][1].shape[0]]
+
                 x = accuracy[idx][1][x]
-                self.curax.plot(x, accuracy[idx][2], lines[idx], color=colors[idx], label = accuracy[idx][3])
+                y = accuracy[idx][2][:accuracy[idx][1].shape[0]]
+                self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
             
             _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
@@ -1163,11 +1234,15 @@ class PlotEngine():
         else:
             self.curax.set_title('LDA Trainer Workload Balance')
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 0)
+            
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
+
         #add xlim and ylim by conf
         if 'xlim' in conf:
-            if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
-                self.curax.set_xlim(0, conf['xlim'])
+            #if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
+            #    self.curax.set_xlim(0, conf['xlim'])
+            self.curax.set_xlim(0, conf['xlim'])
         if 'ylim' in conf:
             self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
 
@@ -1434,10 +1509,13 @@ class PlotEngine():
                 _loc = conf['loc']
             else:
                 _loc = 0
-            ax2.legend(loc = _loc)
-            #ax2.legend(loc = 0)
+                
+            if not 'nolegend' in conf:
+                ax2.legend(loc = _loc)
+                #ax2.legend(loc = 0)
         else:
-            self.curax.legend(loc = 0)
+            if not 'nolegend' in conf:
+                self.curax.legend(loc = 0)
 
         if figname:
             self.savefig(figname)
@@ -1642,7 +1720,8 @@ class PlotEngine():
 
         ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
 
-        ax2.legend(loc = 0)
+        if not 'nolegend' in conf:
+            ax2.legend(loc = 0)
 
         if figname:
             self.savefig(figname)
@@ -1853,7 +1932,8 @@ class PlotEngine():
         for rect in rects:
             self.autolabel(rect)
 
-        ax2.legend(loc = 0)
+        if not 'nolegend' in conf:
+            ax2.legend(loc = 0)
         #for rect in rects:
             #self.autolabel(rect)
 
@@ -1999,11 +2079,14 @@ class PlotEngine():
         else:
             self.curax.set_title('LDA Trainer Throughput')
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 0)
+            
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
         #add xlim and ylim by conf
         if 'xlim' in conf:
-            if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
-                self.curax.set_xlim(0, conf['xlim'])
+            #if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
+            #    self.curax.set_xlim(0, conf['xlim'])
+            self.curax.set_xlim(0, conf['xlim'])
         if 'ylim' in conf:
             self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
 
@@ -2202,7 +2285,10 @@ class PlotEngine():
 
         #ax.set_ylim(0, overall_time[0][0] * 2)
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 0)
+    
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
+
         if figname:
             self.savefig(figname)
 
@@ -2369,7 +2455,10 @@ class PlotEngine():
 
         #ax.set_ylim(0, overall_time[0][0] * 2)
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 0)
+    
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
+
         if figname:
             self.savefig(figname)
 
@@ -2486,7 +2575,9 @@ class PlotEngine():
         else:
             self.curax.set_title('System Performance')
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 0)
+            
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
         
         if figname:
             #plt.savefig('full-'+figname)
@@ -2571,7 +2662,10 @@ class PlotEngine():
 
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
         #self.curax.legend(loc = 1)
-        self.curax.legend(loc = 0)
+            
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
+
         if figname:
             self.savefig(figname)
 
@@ -2619,7 +2713,10 @@ class PlotEngine():
         #    self.autolabel_stack(rect)
 
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        self.curax.legend(loc = 0)
+            
+        if not 'nolegend' in conf:
+            self.curax.legend(loc = 0)
+
         if figname:
             self.savefig(figname)
 

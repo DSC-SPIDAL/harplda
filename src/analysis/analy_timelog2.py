@@ -1558,7 +1558,8 @@ class LDATrainerLog():
         likelihood=[]
         last_iterspan = 0
         lightlda_startiter = "Rank = (\d+), Iter = (\d+), Block = 0, Slice = 0"
-        lightlda_time="Rank = (\d+), [A,T].* Time used: (\d+\.\d+]*) s"
+        #Alias, Training only  be careful Threadid logs
+        lightlda_time="Rank = (\d+), [A,T][l,r].* Time used: (\d+\.\d+]*) s"
         #lightlda_doclh="doc likelihood : ([-+]?\d+\.\d+e\+\d+)"
         lightlda_wordlh="Rank = (\d+), word likelihood : ([-+]?\d+\.\d+e\+\d+)"
         lightlda_likelihood="Rank = (\d+), word_log_likelihood : ([-+]?\d+\.\d+e\+\d+)"
