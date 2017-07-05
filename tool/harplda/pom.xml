@@ -13,6 +13,7 @@
         <module>harp-app</module>
         <module>harp-app-newthreadlog</module>
         <module>harp-app-newthreadlog-nosort</module>
+        <module>harp-app-newthreadlog-longrun</module>
         <module>harp-app-noeval</module>
         <module>harp-app-repeatsubmission</module>
     </modules>

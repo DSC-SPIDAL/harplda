@@ -265,6 +265,7 @@ class PlotEngine():
             "throughput_runtime":self.plot_throughput_runtime,
             "accthroughput_runtime":self.plot_accthroughput_runtime,
             "scalability":self.plot_scalability,
+            "speedup":self.plot_speedup,
             "overhead":self.plot_overhead_top,
             "overhead_only":self.plot_overhead_only,
             "overhead_end":self.plot_overhead_end,
@@ -406,6 +407,70 @@ class PlotEngine():
 
 
     ######################
+    def plot_speedup(self, figname, conf):
+        """
+        .speedup <likelihood, time, ratio> tuples each line
+
+        """
+        #get the labels
+        labels = []
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            labels.append(label)
+
+        #get the confname
+        confname = self.perfname.confname
+
+        #speedup file
+        speedup = np.loadtxt(confname + '.speedup')
+
+        lineCnt, xCnt = speedup.shape
+
+        logger.info('speedup.shape=%s', speedup.shape)
+        speedup = speedup.reshape((lineCnt, xCnt/3, 3))
+        logger.info('speedup.shape=%s', speedup.shape)
+        x = speedup[0,:,0]
+        x = np.arange(x.shape[0])
+
+        for idx in range(lineCnt):
+            #get the ratio
+            y = speedup[idx, :, 2]
+            yidx = (y!=0)
+            logger.info('x.shape=%s, y.shpae=%s, yindx = %s', x.shape, y.shape, yidx)
+            yok = y[y!=0]
+            xok = x[y!=0]
+
+            #logger.info('val = %s, label=%s', grp_data, groupname[idx])
+
+            #self.curax.scatter(x ,y, color=self.colors[idx], label = labels[idx])
+            self.curax.plot(xok ,yok, color=self.colors[idx], label = labels[idx])
+
+        if 'xlabel' in conf:
+            self.curax.set_xlabel(conf['xlabel'])
+        else:
+            self.curax.set_xlabel('Model Log-Likelihood')
+        self.curax.set_ylabel('Speedup')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('Speedup of Convergence Speed')
+        #self.curax.set_xticks(ind+width)
+        #set xticklabel to levels
+        #if 'xticks' in conf:
+        #    xticks = conf['xticks']
+        #else:
+        #    xticks = ['%.2e'%x for x in overall_time[0][:,0]]
+        #self.curax.set_xticklabels( xticks)
+
+        if not 'nolegend' in conf:
+            if 'loc' in conf:
+                self.curax.legend(loc = conf['loc'])
+            else:
+                self.curax.legend(loc = 2)
+        if figname:
+            self.savefig(figname)
+
     def plot_converge_level(self, figname, conf):
         """
         .convege file input
@@ -1403,7 +1468,12 @@ class PlotEngine():
             logger.info('countindex=%s', countindex)
 
 
-            fit_style = 'fit_middle'
+            #fit_style = 'fit_middle'
+            fit_style = 'fit_by_end'
+            if 'fit_style' in conf:
+                fit_style = conf['fit_style']
+            logger.info('Set fit_style to %s', fit_style)
+
             # do mean/std on countindex[start, end, tasknum]
             for idx in range(len(countindex)):
                 item = countindex[idx]
@@ -1445,6 +1515,10 @@ class PlotEngine():
                         _stop = len(updatecnt) /2 
                         predict.append(updatecnt[_stop]*1./timeout[_stop])
 
+                    elif (fit_style == 'fit_by_end'):
+                        #use the largest one as a stable one
+                        _stop = -1
+                        predict.append(updatecnt[_stop]*1./timeout[_stop])
                     elif (fit_style == 'fit_by_time'):
                         #
                         # search the timeout at _stop secs

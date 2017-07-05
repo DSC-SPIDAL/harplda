@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Usage: analy_threadlog.py <trainer> <logfile>
+Usage: analy_threadlog.py <trainer> <logfile> <node> <thread>
     trainer:    harp, nomadlda, lightlda
 
 """
@@ -10,14 +10,6 @@ import logging
 import numpy as np
 
 logger = logging.getLogger(__name__)
-    
-
-# rankid, threadid, computetime
-INFO_RECCNT=3
-ID_RANKID=0
-ID_THREADID=1
-ID_TIME=2
-
 
 class LDATrainerLog():
     pattern={
@@ -84,7 +76,7 @@ class LDATrainerLog():
         return np.array(iterinfo), np.array(threadinfo)
 
 
-    def load_threadlog_harpX(self, logfile):
+    def load_threadlog_harp(self, logfile):
         node = self.node
         thread = self.thread
         slice = 2
@@ -156,148 +148,40 @@ class LDATrainerLog():
         statMatrix[3] = np.std(overheadMatrix, axis=0)
         np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.4f')
 
-    def load_threadlog_harp(self, logfile):
-        """
-        use the .computetime by harp itself
-
-
-        """
-        #find the configurations
-        nodeNum = 0
-        threadNum = 0
-
-        m = re.search("_(\d+)x(\d+)_", logfile)
-        if m:
-            nodeNum = int(m.group(1))
-            threadNum = int(m.group(2))
-
- 
-        #load .itertime
-        appname = logfile[:logfile.rfind('.')]
-        iterfile = appname + '.itertime'
-        if os.path.exists(iterfile):
-            itertime = np.loadtxt(iterfile)
-            logger.info('itertime shape = %s', itertime.shape)
-            iternum = itertime.shape[0 if nodeNum == 1 else 1]
-        else:
-            logger.info('.itertime not found, quit')
-            return
-
-        computeMatrix = np.loadtxt(appname + '.computetime')
-
-        rowNum = computeMatrix.shape[0]
-        logger.info('rowNum = %d, iternum=%d, itertime.shape=%s, computeMatrix.shape=%s', rowNum, iternum, itertime.shape,
-                computeMatrix.shape)
-        overheadMatrix = np.zeros((rowNum,iternum))
-        #for rowid in range(rowNum):
-        #    overheadMatrix[rowid] = (itertime - computeMatrix[rowid][:iternum]) *1.0 / itertime
-        overheadMatrix = (itertime - computeMatrix[:][:iternum]) *1.0 / itertime
-        np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%.4f')
-
-        statMatrix = np.zeros((4, iternum))
-        statMatrix[0] = np.min(overheadMatrix, axis=0)
-        statMatrix[1] = np.max(overheadMatrix, axis=0)
-        statMatrix[2] = np.mean(overheadMatrix, axis=0)
-        statMatrix[3] = np.std(overheadMatrix, axis=0)
-        np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.4f')
-
     #=============================================
     def load_timelog_nomadlda(self, logfile):
         """
         #format: "rank 0 iter 1 localthread duration time: 49.4224,19.7859,
         """
         logf = open(logfile,'r')
-
-        #find the configurations
-        nodeNum = 0
-        threadNum = 0
-
-        m = re.search("_(\d+)x(\d+)_", logfile)
-        if m:
-            nodeNum = int(m.group(1))
-            threadNum = int(m.group(2))
-
-        # rankid, threadid, computetime
+        # threadid, computetime
         threadinfo=[] 
         for line in logf:
 
             #new format first
             #edu.iu.dymoro.Scheduler: Task 4 took 2120, trained 569926
-            m = re.search("rank (\d+) iter (\d+) localthread duration time: (.*)", line)
+            m = re.search("rank \d+ iter (\d+) localthread duration time: (.*)", line)
             if m:
                 #threadtime = [x for x in m.group(2).split(',')][:-1]
                 #logger.debug('threadtime: %s',threadtime)
-                threadtime = [1000 * float(x) for x in m.group(3).split(',')[:-1]]
-                logger.info('threadtime=%s', threadtime)
-                for id, t_time in enumerate(threadtime):
-                    threadinfo.append(( int(m.group(1)) , id, t_time))
+                threadtime = [1000 * float(x) for x in m.group(2).split(',')[:-1]]
+                threadinfo.append(threadtime)
 
-        return np.array(threadinfo), nodeNum, threadNum
+        return np.array(threadinfo)
 
        
     def load_threadlog_nomadlda(self, logfile):
+        # node parameter here is the timeout, the iter time of nomad
+        totaltime = self.node
 
-        threadinfo, nodeNum, threadNum = self.load_timelog_nomadlda(logfile)
-        logger.info('threadinfo: %s, nodexthread=%dx%d', threadinfo.shape, nodeNum, threadNum)
-        logger.debug('threadinfo=%s', threadinfo)
+        threadinfo = self.load_timelog_nomadlda(logfile)
+        logger.info('threadinfo: %s', threadinfo.shape)
 
-
-        recCntEachIter = nodeNum * threadNum
-        iternumX = threadinfo.shape[0] / recCntEachIter
+        iternum, thread = threadinfo.shape
 
         appname = logfile[:logfile.rfind('.')]
-        #load .itertime
-        iterfile = appname + '.itertime'
-        if os.path.exists(iterfile):
-            itertime = np.loadtxt(iterfile)
-            logger.info('itertime shape = %s', itertime.shape)
-            #iternum = itertime.shape[0 if nodeNum == 1 else 1]
-            iternum = itertime.shape[0]
-        else:
-            logger.info('.itertime not found, quit')
-            return
-       
         #save as .compute-stat
-        #computeMatrix = np.zeros((nodeNum, iternum))
-        #logger.info('initial computeMatrix.shape=%s', computeMatrix.shape)
-        #diter = threadinfo.reshape((iternumX, recCntEachIter, INFO_RECCNT))
-        #for iter in range(iternum):
-        #    for idx in range(recCntEachIter):
-        #        if nodeNum == 1:
-        #            #single node or multi node
-        #            logger.info('Get all thread compute time in sigle node test')
-        #            threadtime = diter[iter,idx, ID_TIME]
-        #            #save the list
-        #            computeMatrix[: , iter] = threadtime
- 
-        #        else:
-        #            #get average on thread
-        #            rankid = diter[iter,idx, ID_RANKID]
-        #            threadtime = np.mean(diter[iter,idx, ID_TIME])
-        #            computeMatrix[rankid , iter] = threadtime
-        #            logger.info('Get average thread compute time')
-        computeMatrix = np.zeros((nodeNum, threadNum, iternum))
-        logger.info('initial computeMatrix.shape=%s', computeMatrix.shape)
-        diter = threadinfo.reshape((iternumX, recCntEachIter, INFO_RECCNT))
-        logger.debug('diter=%s', diter)
-        for iter in range(iternum):
-            for idx in range(recCntEachIter):
-                #summary on all the slices
-                rankid = diter[iter,idx, ID_RANKID]
-                threadid = diter[iter,idx, ID_THREADID]
-                threadtime = diter[iter,idx, ID_TIME]
-                computeMatrix[rankid, threadid , iter] += threadtime
- 
-        #single node or multi node
-        if nodeNum == 1:
-            computeMatrix.reshape( (threadNum, iternum) )
-            logger.info('Get all thread compute time in sigle node test')
-        else:
-            #get average on thread
-            computeMatrix = np.mean(computeMatrix, axis=ID_THREADID)
-            logger.info('Get average thread compute time')
-
-
+        computeMatrix = np.transpose(threadinfo)
         np.savetxt(appname + ".computetime", computeMatrix, fmt='%d')
 
         statMatrix = np.zeros((4, iternum))
@@ -307,13 +191,9 @@ class LDATrainerLog():
         statMatrix[3] = np.std(computeMatrix, axis=0)
         np.savetxt(appname + '.comput-stat', statMatrix,fmt='%.2f')
 
-        rowNum = computeMatrix.shape[0]
-        logger.info('rowNum = %d, iternum=%d, itertime.shape=%s, computeMatrix.shape=%s', rowNum, iternum, itertime.shape,
-                computeMatrix.shape)
-        overheadMatrix = np.zeros((rowNum,iternum))
-        #for rowid in range(rowNum):
-        #    overheadMatrix[rowid] = (itertime - computeMatrix[rowid][:iternum]) *1.0 / itertime
-        overheadMatrix = (itertime - computeMatrix[:][:iternum]) *1.0 / itertime
+
+        #overheadMatrix = np.zeros((thread,iternum))
+        overheadMatrix = (totaltime - computeMatrix)*1.0/ totaltime
         np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%.4f')
 
         statMatrix = np.zeros((4, iternum))
@@ -324,86 +204,54 @@ class LDATrainerLog():
         np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.4f')
 
     #===============================================
-       
     def load_timelog_lightlda(self, logfile):
         """
         #[INFO] [2017-06-12 01:40:40] Rank = 0, Threadid = 3, Training Time used: 13.10 s
         """
         logf = open(logfile,'r')
-
-        #find the configurations
-        sliceNum = 0
-        nodeNum = 0
-        threadNum = 0
-
-        m = re.search("_(\d+)x(\d+)_", logfile)
-        if m:
-            nodeNum = int(m.group(1))
-            threadNum = int(m.group(2))
-
-        for line in logf:
-            m = re.search("the number of slice = (\d+)", line)
-            if m:
-                sliceNum = int(m.group(1))
-                break
-
-        logf.seek(0,0)
+        # threadid, computetime
         threadinfo=[] 
         for line in logf:
 
             #new format first
             #edu.iu.dymoro.Scheduler: Task 4 took 2120, trained 569926
-            m = re.search("Rank = (\d+), Threadid = (\d+), Training Time used: (\d+\.\d+) s", line)
+            m = re.search("Rank = \d+, Threadid = (\d+), Training Time used: (\d+\.\d+) s", line)
             if m:
-                #nodeid, threadid, time
-                threadinfo.append(( int(m.group(1)), int(m.group(2)), 1000*float(m.group(3))))
+                #threadid, time
+                threadinfo.append((int(m.group(1)), 1000*float(m.group(2))))
 
-        return np.array(threadinfo), nodeNum, threadNum, sliceNum
+        return np.array(threadinfo)
 
 
     def load_threadlog_lightlda(self, logfile):
         # node parameter here is the slice number
-        #slice = self.node
-        #thread = self.thread
+        slice = self.node
+        thread = self.thread
 
-        threadinfo, nodeNum, threadNum, sliceNum = self.load_timelog_lightlda(logfile)
-        logger.info('threadinfo: %s, nodexthread=%dx%d, slice=%d', threadinfo.shape, nodeNum, threadNum, sliceNum)
+        threadinfo = self.load_timelog_lightlda(logfile)
+        logger.info('threadinfo: %s', threadinfo.shape)
 
-
-        recCntEachIter = sliceNum * threadNum * nodeNum
-        iternumX = threadinfo.shape[0] / recCntEachIter
+        iternumX = threadinfo.shape[0] / (slice* thread)
         appname = logfile[:logfile.rfind('.')]
         #load .itertime
         iterfile = appname + '.itertime'
         if os.path.exists(iterfile):
             itertime = np.loadtxt(iterfile)
             logger.info('itertime shape = %s', itertime.shape)
-            iternum = itertime.shape[0 if nodeNum == 1 else 1]
+            iternum = itertime.shape[0]
         else:
             logger.info('.itertime not found, quit')
             return
 
         #save as .compute-stat
-        computeMatrix = np.zeros((nodeNum, threadNum, iternum))
-        logger.info('initial computeMatrix.shape=%s', computeMatrix.shape)
-        diter = threadinfo.reshape((iternumX, recCntEachIter, INFO_RECCNT))
+        computeMatrix = np.zeros((thread,iternum))
+        diter = threadinfo.reshape((iternumX, slice*thread, 2))
         for iter in range(iternum):
-            for idx in range(recCntEachIter):
-                #summary on all the slices
-                rankid = diter[iter,idx, ID_RANKID]
-                threadid = diter[iter,idx, ID_THREADID]
-                threadtime = diter[iter,idx, ID_TIME]
-                computeMatrix[rankid, threadid , iter] += threadtime
- 
-        #single node or multi node
-        if nodeNum == 1:
-            computeMatrix.reshape( (threadNum, iternum) )
-            logger.info('Get all thread compute time in sigle node test')
-        else:
-            #get average on thread
-            computeMatrix = np.mean(computeMatrix, axis=ID_THREADID)
-            logger.info('Get average thread compute time')
-
+            for idx in range(slice*thread):
+                threadid = diter[iter,idx,0]
+                threadtime = diter[iter,idx,1]
+                computeMatrix[threadid , iter] += threadtime
+   
         np.savetxt(appname + ".computetime", computeMatrix, fmt='%d')
 
         statMatrix = np.zeros((4, iternum))
@@ -413,13 +261,9 @@ class LDATrainerLog():
         statMatrix[3] = np.std(computeMatrix, axis=0)
         np.savetxt(appname + '.comput-stat', statMatrix,fmt='%.2f')
 
-        rowNum = computeMatrix.shape[0]
-        logger.info('rowNum = %d, iternum=%d, itertime.shape=%s, computeMatrix.shape=%s', rowNum, iternum, itertime.shape,
-                computeMatrix.shape)
-        overheadMatrix = np.zeros((rowNum,iternum))
-        #for rowid in range(rowNum):
-        #    overheadMatrix[rowid] = (itertime - computeMatrix[rowid][:iternum]) *1.0 / itertime
-        overheadMatrix = (itertime - computeMatrix[:][:iternum]) *1.0 / itertime
+        overheadMatrix = np.zeros((thread,iternum))
+        for threadid in range(thread):
+            overheadMatrix[threadid] = (itertime - computeMatrix[threadid][:iternum]) *1.0 / itertime
         np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%.4f')
 
         statMatrix = np.zeros((4, iternum))
@@ -428,6 +272,8 @@ class LDATrainerLog():
         statMatrix[2] = np.mean(overheadMatrix, axis=0)
         statMatrix[3] = np.std(overheadMatrix, axis=0)
         np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.4f')
+
+
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
@@ -442,16 +288,15 @@ if __name__ == '__main__':
     logger.info("running %s" % ' '.join(sys.argv))
 
     # check and process input arguments
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 4:
         print(globals()['__doc__'] % locals())
         sys.exit(1)
 
     trainer = sys.argv[1]
     logfile = sys.argv[2]
-    #nodes = int(sys.argv[3])
-    #threads = int(sys.argv[4])
+    nodes = int(sys.argv[3])
+    threads = int(sys.argv[4])
 
-    #logAnalizer = LDATrainerLog(trainer, nodes, threads)
-    logAnalizer = LDATrainerLog(trainer, 1,1)
+    logAnalizer = LDATrainerLog(trainer, nodes, threads)
 
     logAnalizer.load_threadlog(logfile)
