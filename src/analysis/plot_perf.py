@@ -157,6 +157,7 @@ class PerfName():
                         continue
                     perfname.append(tokens)
 
+        self.confname = namefile
         self.perfname = perfname
         self.worklist = None
         self._pos = -1
@@ -508,6 +509,9 @@ class PlotEngine():
     ######################
     def plot(self, plotname, fig, conf):
         if plotname in self.ploters:
+            logger.info('='*20)
+            logger.info('StartPlot: %s',plotname)
+            logger.info('='*20)
             return self.ploters[plotname](fig, conf)
         else:
             logger.error('plotname %s not support yet', plotname)
@@ -622,9 +626,9 @@ class PlotEngine():
 
         plottype:
             0   accuracy .vs. iternum
-            1   accuracy .vs. traintime ; runtime-stat
-            2   accuracy .vs. execution time
-            3   accuracy .vs. itertime  ; iter-stat
+            1   accuracy .vs. traintime ; runtime-stat start from train, skip the preprocessing
+            2   accuracy .vs. execution time ; runtime-stat
+            3   accuracy .vs. itertime  ; iter-stat, app report iteration time
         """
         dataflist = []
         #for name,label in self.perfname:
@@ -688,6 +692,9 @@ class PlotEngine():
             else:
                 realIterId = iterIdx
 
+            #
+            # iternum, runtime, likelihood, label, itertime, realIterNum
+            #
             accuracy.append((iterIdx -1, 
                         self.perfdata[runtime_name][2,2:] + offset,
                         self.perfdata[lh_name][:,1], label, itertimeMat,
@@ -776,12 +783,13 @@ class PlotEngine():
             #self.curax.set_xlabel('Epoch Number')
             self.curax.set_xlabel('Model Update Count')
         elif plottype == 1:
-            self.curax.set_xlabel('Training Time (s)')
+            #self.curax.set_xlabel('Training Time (s)')
+            self.curax.set_xlabel('AppComputing Time (s)')
         elif plottype == 2:
             self.curax.set_xlabel('Execution Time (s)')
         elif plottype ==3:
-            self.curax.set_xlabel('Iteration Time (s)')
-            #self.curax.set_xlabel('Training Time (s)')
+            #self.curax.set_xlabel('Iteration Time (s)')
+            self.curax.set_xlabel('Training Time (s)')
             #self.curax.set_xlabel('Training Time (1000s)')
             #ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/1e3))
             ##ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:.1e}'.format(x))
@@ -866,7 +874,7 @@ class PlotEngine():
 
                 # if exists overhead
                 if not self.perfdata[fname4] is None:
-                    overhead_time.append((self.perfdata[fname4]/1000, label, gname))
+                    overhead_time.append((self.perfdata[fname4], label, gname))
                 #else:
                 #    #overhead = iter - compute
                 #    overhead = 
@@ -1004,7 +1012,8 @@ class PlotEngine():
                 point_cnt = x.shape[0]
 
                 #draw
-                p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx*2], color=colors[idx*2],label = compute_time[idx][1])
+                #p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx*2], color=colors[idx*2],label = compute_time[idx][1])
+                p1 = self.curax.errorbar(x, grp_data[:point_cnt],   yerr = grp_data_err[:point_cnt], fmt = lines[idx*2],color=colors[idx*2],label = compute_time[idx][1])
 
                 _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
@@ -1057,7 +1066,7 @@ class PlotEngine():
 
         # all plots goes here
         if plottype == 3:
-            self.curax.set_ylabel('Overhead Time Per Iteration (s)')
+            self.curax.set_ylabel('Overhead Ratio of Each Iteration')
         else:
             self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
         if 'title' in conf:

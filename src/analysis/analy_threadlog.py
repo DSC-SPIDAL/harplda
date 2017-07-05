@@ -136,16 +136,17 @@ class LDATrainerLog():
         aiter = iterinfo.reshape((iternum, 4))[:,1].reshape((1,iternum))
         overheadMatrix = np.zeros((thread,iternum))
         for threadid in range(thread):
-            overheadMatrix[threadid] = aiter - computeMatrix[threadid]
+            #overheadMatrix[threadid] = aiter - computeMatrix[threadid]
+            overheadMatrix[threadid] = (aiter - computeMatrix[threadid]) *1.0 /aiter
 
-        np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%d')
+        np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%.4f')
 
         statMatrix = np.zeros((4, iternum))
         statMatrix[0] = np.min(overheadMatrix, axis=0)
         statMatrix[1] = np.max(overheadMatrix, axis=0)
         statMatrix[2] = np.mean(overheadMatrix, axis=0)
         statMatrix[3] = np.std(overheadMatrix, axis=0)
-        np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.2f')
+        np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.4f')
 
     #=============================================
     def load_timelog_nomadlda(self, logfile):
@@ -192,15 +193,15 @@ class LDATrainerLog():
 
 
         #overheadMatrix = np.zeros((thread,iternum))
-        overheadMatrix = totaltime - computeMatrix
-        np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%d')
+        overheadMatrix = (totaltime - computeMatrix)*1.0/ totaltime
+        np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%.4f')
 
         statMatrix = np.zeros((4, iternum))
         statMatrix[0] = np.min(overheadMatrix, axis=0)
         statMatrix[1] = np.max(overheadMatrix, axis=0)
         statMatrix[2] = np.mean(overheadMatrix, axis=0)
         statMatrix[3] = np.std(overheadMatrix, axis=0)
-        np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.2f')
+        np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.4f')
 
     #===============================================
     def load_timelog_lightlda(self, logfile):
@@ -262,15 +263,15 @@ class LDATrainerLog():
 
         overheadMatrix = np.zeros((thread,iternum))
         for threadid in range(thread):
-            overheadMatrix[threadid] = itertime - computeMatrix[threadid][:iternum]
-        np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%d')
+            overheadMatrix[threadid] = (itertime - computeMatrix[threadid][:iternum]) *1.0 / itertime
+        np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%.4f')
 
         statMatrix = np.zeros((4, iternum))
         statMatrix[0] = np.min(overheadMatrix, axis=0)
         statMatrix[1] = np.max(overheadMatrix, axis=0)
         statMatrix[2] = np.mean(overheadMatrix, axis=0)
         statMatrix[3] = np.std(overheadMatrix, axis=0)
-        np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.2f')
+        np.savetxt(appname + '.overhead-stat', statMatrix,fmt='%.4f')
 
 
 

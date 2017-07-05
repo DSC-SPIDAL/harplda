@@ -11,6 +11,9 @@
 #include <multiverso/barrier.h>
 #include <multiverso/stop_watch.h>
 #include <multiverso/log.h>
+#include <thread>
+#include <random>
+#include <chrono>
 
 namespace multiverso { namespace lightlda
 {
@@ -55,7 +58,7 @@ namespace multiverso { namespace lightlda
                 lda_data_block->block(), lda_data_block->slice());
         }
 
-//this is the initial lh print version, no sampling at all
+        //this is the initial lh print version, no sampling at all
         int32_t num_token = 0;
 
         // Build Alias table
@@ -81,14 +84,19 @@ namespace multiverso { namespace lightlda
         for (int32_t doc_id = id; doc_id < data.Size(); doc_id += trainer_num)
         {
             Document* doc = data.GetOneDoc(doc_id);
+            // no sampling, so the model doesnt' chage
             //num_token += sampler_->SampleOneDoc(doc, slice, lastword, model_, alias_);
         }
         //Barrier Fix
         //barrier_->Wait();
 
+        std::mt19937_64 eng{std::random_device{}()};  // or seed however you want
+        std::uniform_int_distribution<> dist{100, 2000};
+        std::this_thread::sleep_for(std::chrono::milliseconds{dist(eng)});
+
         //add threadlog
-        //Log::Info("Rank = %d, Threadid = %d, Training Time used: %.2f s \n", 
-        //        Multiverso::ProcessRank(), TrainerId(), watch.ElapsedSeconds());
+        Log::Info("Rank = %d, Threadid = %d, Training Time used: %.2f s \n", 
+                Multiverso::ProcessRank(), TrainerId(), watch.ElapsedSeconds());
 
         if (TrainerId() == 0)
         {
@@ -101,7 +109,7 @@ namespace multiverso { namespace lightlda
         // Evaluate loss function
         // Evaluate(lda_data_block);
         
-        if (iter % 5 == 0)
+        //if (iter % 5 == 0)
         //if (iter == Config::num_iterations - 1)
         {
             Evaluate(lda_data_block);

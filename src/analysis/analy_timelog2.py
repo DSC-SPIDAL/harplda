@@ -1709,6 +1709,7 @@ class LDATrainerLog():
         for dirpath, dnames, fnames in os.walk(appdir):
             for f in fnames:
                 if f.startswith('lightlda') and f.endswith(filepattern):
+                    logger.info('load log from %s at %s', f, dirpath)
                     itertime, likelihood, app_span, train_span = self.load_timelog_lightlda(os.path.join(dirpath, f))
                     if len(itertime) > 0:
                         logger.info('load log from %s at %s', f, dirpath)
