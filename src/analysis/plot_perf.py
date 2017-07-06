@@ -430,8 +430,8 @@ class PlotEngine():
         logger.info('speedup.shape=%s', speedup.shape)
         speedup = speedup.reshape((lineCnt, xCnt/3, 3))
         logger.info('speedup.shape=%s', speedup.shape)
-        x = speedup[0,:,0]
-        x = np.arange(x.shape[0])
+        origin_x = speedup[0,:,0]
+        x = np.arange(origin_x.shape[0])
 
         for idx in range(lineCnt):
             #get the ratio
@@ -462,6 +462,10 @@ class PlotEngine():
         #else:
         #    xticks = ['%.2e'%x for x in overall_time[0][:,0]]
         #self.curax.set_xticklabels( xticks)
+
+        xticks = [('%.2e'%x)[:4] for x in origin_x]
+        self.curax.set_xticklabels( xticks)
+        self.curax.set_yscale('log')
 
         if not 'nolegend' in conf:
             if 'loc' in conf:
@@ -1078,7 +1082,7 @@ class PlotEngine():
 
                 #draw
                 #p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx*2], color=colors[idx*2],label = compute_time[idx][1])
-                p1 = self.curax.errorbar(x, grp_data[:point_cnt],   yerr = grp_data_err[:point_cnt], fmt = lines[idx*2],color=colors[idx*2],label = compute_time[idx][1])
+                p1 = self.curax.errorbar(x, grp_data[:point_cnt],   yerr = grp_data_err[:point_cnt], fmt = lines[idx],color=colors[idx],label = compute_time[idx][1])
 
                 _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
@@ -1329,6 +1333,300 @@ class PlotEngine():
 
     #############################################
     def plot_scalability(self, figname, conf):
+        """
+        throughput on updatecnt is a metric for efficiency
+
+        to get a single throughut value for a run,
+        it's better to set the end time point,
+        and calculate the area under the curve.
+
+        in fact, the area is the cumsum of update counts
+        till the end time point(the nearest point).
+        
+        draw the bar chart of the throughput value,
+        and draw the speedup for group data
+
+        """
+
+        #
+        # normalize the performance of different trainer
+        # 1. byfit means use func fit on the modelupdate.vs.time curve
+        # and then align all the experiment to the same time value
+        # 2. otherwise, assume the experiment runs under the same
+        # total model updatecnt setting, such as set with same iternum
+        #
+        normalize_byfit = True
+        use_x_logscale = False
+        stop_threshold = 8000
+        #predict_pt =  8000
+        predict_pt =  200
+        #draw_speedup = False
+        draw_speedup = True
+        #use_x_logscale = True
+
+        dataflist = []
+        groups={}
+        for tp in self.perfname:
+            name = tp[0] 
+            label = tp[1]
+            fname = name + '.comput-stat'
+            dataflist.append(fname)
+            fname = name + '.iter-stat'
+            dataflist.append(fname)
+            fname = name + '.runtime-stat'
+            dataflist.append(fname)
+            fname = name + '.update-stat'
+            dataflist.append(fname)
+
+        self.perfdata.load(dataflist, quit_on_fail=False)
+
+        label_seq=[]
+        for tp in self.perfname:
+            name = tp[0]
+            label = tp[1]
+            #for simple, just write the tasknum here
+            tasknum = tp[2]
+            if label in groups:
+                groups[label].append((name, tasknum))
+            else:
+                groups[label] = [(name,tasknum)]
+                label_seq.append(label)
+
+        # twin plot the time/update count bar chart
+        if draw_speedup:
+            ax2 = self.curax.twinx()
+            ax2.set_yscale("log", basey=2, nonposy='clip')
+        seq = 0
+        width = 0.2
+        curveCnt = len(groups.keys())
+        maxX = 0
+        rects = []
+        #for label in groups.keys():
+        for label in label_seq:
+            curve = []
+            groupdata = groups[label]
+
+            #
+            # load data for this group <name, tasknum>
+            #
+            groupdata = sorted(groupdata, key = lambda item: int(item[1]))
+
+            #
+            # align to the _min_rowcnt is a bad idea
+            # instead, should align to the same time point
+            # other than the same iternumber
+            #
+            #_min_rowcnt = np.min([ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:].shape[0] for idx  in range(len(groupdata))])
+            #bydefault, use all 
+            _min_rowcnt = -1
+            logger.info('min rowcnt=%s', _min_rowcnt)
+
+            #
+            # use runtime-stat, then evaluation time included, brings bias for small dataset and bad evaluation code trainers
+            # use iter-stat, should be better to evaluate the true througput
+            #
+            #if 'iter-throughput' not in conf:
+            #    logger.info('iter-throughput NOT set in conf, use runtime-stat')
+            #    raw_timeout = [ self.perfdata[groupdata[idx][0] + '.runtime-stat'][2,2:2+_min_rowcnt]  for idx  in range(len(groupdata))]
+            #else:
+            #    logger.info('iter-throughput set in conf, use iter-stat')
+            #    #
+            #    #special hacks here, lightlda prefer to use comput-stat instead of iter-stat
+            #    #
+            #    if 'lightlda' in groupdata[idx][0]:
+            #        raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.comput-stat'][2,:_min_rowcnt]/1000.)   for idx  in range(len(groupdata))]
+            #    else:
+            #        raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.iter-stat'][2,:_min_rowcnt]/1000.)   for idx  in range(len(groupdata))]
+            #bydeault, use iter-time
+            raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.iter-stat'][2,:_min_rowcnt]/1000.)   for idx  in range(len(groupdata))]
+            # iter numbers for each curve in this group
+            itercnt = [ self.perfdata[groupdata[idx][0] + '.iter-stat'][2].shape[0]  for idx  in range(len(groupdata))]
+
+            #updatecnt
+            #iterIdx = np.arange(_min_rowcnt)
+
+            raw_updatecnt = []
+            for idx in range(len(groupdata)):
+                iterIdx = np.arange(itercnt[idx])
+
+                update_name = groupdata[idx][0] + '.update-stat'
+                if self.perfdata[update_name] is not None:
+                    realIterId = self.perfdata[update_name][4][iterIdx]
+                else:
+                    realIterId = (iterIdx + 1) * self.getTrainsetSize(groupdata[idx][0])
+
+                updatecnt = realIterId 
+                #logger.info('updatecnt: %s', updatecnt)
+                raw_updatecnt.append(updatecnt)
+
+            logger.info('groupdata = %s', groupdata)
+            #logger.info('tiem_out= %s', raw_timeout)
+            #logger.info('raw_updatecnt = %s', raw_updatecnt)
+
+            countindex = []
+            curcount = 1
+            lasttasknum = groupdata[0][1]
+            for idx in range(1,len(groupdata)+1):
+                if idx != len(groupdata):
+                    curtasknum = groupdata[idx][1]
+                else:
+                    curtasknum = -1
+
+                if lasttasknum != curtasknum:
+                    #save the last one
+                    countindex.append((idx - curcount, idx, lasttasknum))
+                    #reset
+                    curcount = 1
+                    lasttasknum = curtasknum
+                else:
+                    curcount += 1
+
+            logger.info('countindex=%s', countindex)
+
+
+            #fit_style = 'fit_middle'
+            fit_time = 0
+            if 'fit_time' in conf:
+                # set the end time point (in sec)
+                fit_time = conf['fit_time']
+                fit_style = 'fit_time'
+            else:
+                fit_style = 'fit_all'
+            logger.info('Set fit_style to %s, fit_time =%s', 
+                    fit_style, fit_time)
+
+            # do mean/std on countindex[start, end, tasknum]
+            for idx in range(len(countindex)):
+                item = countindex[idx]
+                predict = []
+                for lineid in range(item[0], item[1]):
+                    updatecnt = raw_updatecnt[lineid]
+                    timeout = raw_timeout[lineid]
+
+                    #
+                    # fit the curve
+                    #
+                    if(fit_style == 'fit_first_iters'):
+                        # fit all the data
+                        #z = np.polyfit(timeout, updatecnt, 2)
+                        #predict.append( np.poly1d(z)(predict_pt) )
+                        # fit the first 10 points
+                        _stop = 20
+                        #z = np.polyfit(timeout[:_stop], updatecnt[:_stop], 2)
+                        #predict.append( np.poly1d(z)(predict_pt) )
+                        # just fit by mean
+                        logger.info('timeout:%s, sum=%s', timeout[:_stop], np.sum(timeout[:_stop]))
+                        logger.info('updatecnt:%s, sum=%s', updatecnt[:_stop], np.sum(updatecnt[:_stop]))
+                        logger.info('ratio:%s', updatecnt[:_stop]/timeout[:_stop])
+                        #predict.append(np.sum(updatecnt[:_stop]) *1. / np.sum(timeout[:_stop]) *predict_pt)
+
+                        #_stop = 10
+                        _stop = 8
+                        #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
+                        #predict.append((updatecnt[10]-updatecnt[1])*1./(timeout[10]-timeout[1]))
+                        predict.append((updatecnt[_stop]-updatecnt[1])*1./(timeout[_stop]-timeout[1]))
+                        _stop = -1
+                        #predict.append(updatecnt[_stop]*1./timeout[_stop]*predict_pt)
+                        #predict.append((updatecnt[-1]-updatecnt[-10])*1./(timeout[-1]-timeout[-10]))
+                    elif (fit_style == 'fit_all'):
+                        # fit all the data, the area
+                        predict.append(updatecnt[-1]*1./timeout[-1])
+
+                    elif (fit_style == 'fit_middle'):
+                        _stop = len(updatecnt) /2 
+                        predict.append(updatecnt[_stop]*1./timeout[_stop])
+
+                    elif (fit_style == 'fit_time'):
+                        #
+                        # search the fit_time in timeout
+                        #
+                        _stop = np.sum( timeout <= fit_time) - 1
+                        predict.append(updatecnt[_stop]*1./timeout[_stop])
+                        logger.info('fit_time: _stop=%d, update=%s,timeout=%s', _stop, updatecnt[_stop], timeout[_stop])
+
+
+                    # add a item <tasknum, updatecnt@10s>
+                curve.append([int(item[2]), np.mean(predict), np.std(predict)])
+    
+
+            logger.info('curves: %s', curve)
+
+            mat = np.array(curve)
+            #speed up = t1/tn
+            #_x = np.arange(1, mat.shape[0]+1)
+            if use_x_logscale:
+                _x = np.log2(mat[:,0]).astype(np.int)
+            else:
+                _x = np.arange(mat[:,0].shape[0])
+
+
+            #logger.info('mat = %s',mat)
+            #logger.info('bar %s,%s,%s',_x, mat[:,0],mat[:,1])
+
+            ### draw bar chart
+            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig_shade[seq],yerr = mat[:,2], label=label)
+            rects.append(bars)
+            #if (mat[:,0][-1] > maxX):
+            #    maxX = mat[:,0][-1]
+
+            ### draw speedup line
+            if draw_speedup:
+                _y = mat[:,1] *1.0 / mat[0,1]
+                plots = ax2.plot(_x , _y, self.colors_orig[seq]+'.-', label = label)
+                for _p in range(_x.shape[0]):
+                    ax2.text(_x[_p] - 0.1, _y[_p]+0.003,'%.1f'%(_y[_p]))
+            
+            #go to next group
+            seq += 1
+
+        ### end draw
+        #self.curax.set_ylabel('Model Update Count@%ds'%predict_pt if normalize_byfit else
+        #self.curax.set_ylabel('Throughput of First %ds(tokens/sec)'%predict_pt if normalize_byfit else
+        #self.curax.set_ylabel('Throughput of First 10 Iter(tokens/sec)' if normalize_byfit else
+        self.curax.set_ylabel('Average Throughput(tokens/sec)' if normalize_byfit else
+                "Training Time Per Iteration(s)")
+        if use_x_logscale:
+            _x = np.arange(maxX)
+            self.curax.set_xticks(_x)
+            self.curax.set_xticklabels(np.exp2(_x).astype(np.int))
+        else:
+            self.curax.set_xticks(_x)
+            self.curax.set_xticklabels(mat[:,0].astype(np.int))
+ 
+        #self.curax.set_xlabel('Nodes Number')
+        self.curax.set_xlabel('Threads Number')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('LDA Trainer Scalability')
+
+        #finally , update the recs
+        for rect in rects:
+            self.autolabel(rect, 1e+8)
+
+        if draw_speedup:
+            #ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
+            ax2.set_ylabel('SpeedUp T(%d)/T(N)'%mat[0,0].astype(np.int))
+            if 'loc' in conf:
+                _loc = conf['loc']
+            else:
+                _loc = 0
+                
+            if not 'nolegend' in conf:
+                ax2.legend(loc = _loc)
+                #ax2.legend(loc = 0)
+        else:
+            if not 'nolegend' in conf:
+                self.curax.legend(loc = 0)
+
+        if figname:
+            self.savefig(figname)
+
+
+
+
+
+    def plot_scalability_byiterthroughput(self, figname, conf):
         """
         updatecnt is related to the result of model convergence 
         updatecnt .vs. time is a linear curve

@@ -8,9 +8,23 @@ Usage: analy_threadlog.py <trainer> <logfile>
 import sys, os, math,re
 import logging
 import numpy as np
-
+from analysis.plot_perf import PerfData
+try:
+    from plot_init import PlotConfigure
+    plotconf = PlotConfigure() 
+    dataroot = plotconf.dataroot
+except: 
+    path1='/tmp/hpda/test/experiments/results/'
+    path2='/share/jproject/fg474/backup/runsocc/experiments/results/'
+    if os.path.exists(path1):
+        dataroot = path1
+    elif os.path.exists(path2):
+        dataroot = path2
+    else:
+        print('ERROR: data path not found, quit....')
+        sys.exit(-1)
+ 
 logger = logging.getLogger(__name__)
-    
 
 # rankid, threadid, computetime
 INFO_RECCNT=3
@@ -44,9 +58,21 @@ class LDATrainerLog():
             'lightlda':self.load_threadlog_lightlda
         }
 
+        #init the plot data load engine
+        self.perfdata = PerfData(dataroot)
+
     def load_threadlog(self, logdir):
         return self.engine[self.name](logdir)
 
+    def load_result(self, fname):
+        """
+        load result file by the perf data load engine
+        return:
+            narray
+        """
+        dataflist = [fname]
+        self.perfdata.load(dataflist)
+        return self.perfdata[fname]
 
     def load_timelog_harp(self, logfile):
         """
@@ -173,17 +199,21 @@ class LDATrainerLog():
 
  
         #load .itertime
-        appname = logfile[:logfile.rfind('.')]
+        _pos = logfile.rfind('.')
+        appname = logfile[:_pos] if _pos>0 else logfile
         iterfile = appname + '.itertime'
-        if os.path.exists(iterfile):
-            itertime = np.loadtxt(iterfile)
+        #if os.path.exists(iterfile):
+        #    #itertime = np.loadtxt(iterfile)
+        itertime = self.load_result(iterfile)
+        if not itertime is None:
             logger.info('itertime shape = %s', itertime.shape)
             iternum = itertime.shape[0 if nodeNum == 1 else 1]
         else:
             logger.info('.itertime not found, quit')
             return
 
-        computeMatrix = np.loadtxt(appname + '.computetime')
+        #computeMatrix = np.loadtxt(appname + '.computetime')
+        computeMatrix = self.load_result(appname + '.computetime')
 
         rowNum = computeMatrix.shape[0]
         logger.info('rowNum = %d, iternum=%d, itertime.shape=%s, computeMatrix.shape=%s', rowNum, iternum, itertime.shape,
@@ -248,8 +278,12 @@ class LDATrainerLog():
         appname = logfile[:logfile.rfind('.')]
         #load .itertime
         iterfile = appname + '.itertime'
-        if os.path.exists(iterfile):
-            itertime = np.loadtxt(iterfile)
+        #if os.path.exists(iterfile):
+        #    #itertime = np.loadtxt(iterfile)
+        #    itertime = self.load_result(iterfile)
+        itertime = self.load_result(iterfile)
+        if not itertime is None:
+ 
             logger.info('itertime shape = %s', itertime.shape)
             #iternum = itertime.shape[0 if nodeNum == 1 else 1]
             iternum = itertime.shape[0]
@@ -372,11 +406,19 @@ class LDATrainerLog():
 
         recCntEachIter = sliceNum * threadNum * nodeNum
         iternumX = threadinfo.shape[0] / recCntEachIter
+        
+        #reset the array, remove the unfinished runs
+        threadinfo = threadinfo[:iternumX * recCntEachIter,:]
+
         appname = logfile[:logfile.rfind('.')]
         #load .itertime
         iterfile = appname + '.itertime'
-        if os.path.exists(iterfile):
-            itertime = np.loadtxt(iterfile)
+        #if os.path.exists(iterfile):
+        #    #itertime = np.loadtxt(iterfile)
+        #    itertime = self.load_result(iterfile)
+        itertime = self.load_result(iterfile)
+        if not itertime is None:
+ 
             logger.info('itertime shape = %s', itertime.shape)
             iternum = itertime.shape[0 if nodeNum == 1 else 1]
         else:
@@ -419,7 +461,8 @@ class LDATrainerLog():
         overheadMatrix = np.zeros((rowNum,iternum))
         #for rowid in range(rowNum):
         #    overheadMatrix[rowid] = (itertime - computeMatrix[rowid][:iternum]) *1.0 / itertime
-        overheadMatrix = (itertime - computeMatrix[:][:iternum]) *1.0 / itertime
+        #overheadMatrix = (itertime - computeMatrix[:][:iternum]) *1.0 / itertime
+        overheadMatrix = (itertime - computeMatrix) *1.0 / itertime
         np.savetxt(appname + ".overheadtime", overheadMatrix, fmt='%.4f')
 
         statMatrix = np.zeros((4, iternum))

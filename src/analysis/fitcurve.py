@@ -177,7 +177,10 @@ def draw_speedup(perfdata, perfname, extrapolation = False):
         #get the average iter-time
         timeVec = perfdata[name][2,:]
 
-        dataVecs.append((iterVec, rmseVec, timeVec))
+        #cumsum to get the runtime
+        timeSumVec = np.cumsum(timeVec)
+
+        dataVecs.append((iterVec, rmseVec, timeSumVec))
 
     #    <cruveid, <rmse, time, speedup>>
     levelCnt = dataVecs[0][ID_RMSE].shape[0]
@@ -189,6 +192,7 @@ def draw_speedup(perfdata, perfname, extrapolation = False):
     for iter in range(levelCnt):
         level = dataVecs[0][ID_RMSE][iter]
         baseX = dataVecs[0][ID_TIME][iter]
+        logger.debug('Fit Level=%s, %s', level, '='*20)
 
         #set the first row
         result[0, iter, RID_RMSE] = level
@@ -225,6 +229,8 @@ def draw_speedup(perfdata, perfname, extrapolation = False):
                     yb = rmseVec[idx+1]
 
                     iterpolateX = xb - (level - yb)*(xb-xa)/(ya-yb)
+                    logger.debug('Curve:%d, [xa=%s,ya=%s]-- [xb=%s,yb=%s], fit level=%s',
+                            curveId,xa,ya, xb, yb,level)
                     break
 
             #find the X if X > 0
