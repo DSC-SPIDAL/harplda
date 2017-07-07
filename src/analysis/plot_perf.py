@@ -473,7 +473,7 @@ class PlotEngine():
         #    xticks = ['%.2e'%x for x in overall_time[0][:,0]]
         #self.curax.set_xticklabels( xticks)
 
-        xticks = [('%.2e'%(x/1e+10))[:5] for x in origin_x]
+        xticks = [('%.2f'%(x/1e+10))[:5] for x in origin_x]
         self.curax.set_xticklabels( xticks)
         self.curax.set_yscale('log')
 
@@ -1092,8 +1092,19 @@ class PlotEngine():
 
                 #draw
                 #p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx*2], color=colors[idx*2],label = compute_time[idx][1])
-                p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx],color=colors[idx],label = compute_time[idx][1])
-                #p1 = self.curax.errorbar(x, grp_data[:point_cnt],   yerr = grp_data_err[:point_cnt], fmt = lines[idx],color=colors[idx],label = compute_time[idx][1])
+                
+                sample = 1
+                if 'sample' in conf:
+                    logger.info('do sampling on data before render,sample=%s',conf['sample'])
+                    sample = conf['sample']
+                    #make sure there are enough points
+                    if x.shape[0]/sample < 10:
+                        sample = 1
+
+                if 'errobar' in conf:
+                    p1 = self.curax.errorbar(x[::sample], grp_data[:point_cnt:sample],   yerr = grp_data_err[:point_cnt:sample], fmt = lines[idx],color=colors[idx],label = compute_time[idx][1])
+                else:
+                    p1 = self.curax.plot(x[::sample], grp_data[:point_cnt:sample], lines[idx],color=colors[idx],label = compute_time[idx][1])
 
                 _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
@@ -1298,7 +1309,18 @@ class PlotEngine():
 
                 x = accuracy[idx][1][x]
                 y = accuracy[idx][2][:accuracy[idx][1].shape[0]]
-                self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
+
+                #add sampling here
+                sample = 1
+                if 'sample' in conf:
+                    logger.info('do sampling on data before render,sample=%s',conf['sample'])
+                    sample = conf['sample']
+                    #make sure there are enough points
+                    if x.shape[0]/sample < 10:
+                        sample = 1
+
+                #self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
+                self.curax.plot(x[::sample], y[::sample], lines[idx], color=colors[idx], label = accuracy[idx][3])
             
             _trace_shortest_x = min(_trace_shortest_x, x[-1])
 

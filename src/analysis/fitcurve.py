@@ -180,6 +180,9 @@ def draw_speedup(perfdata, perfname, extrapolation = False):
         #cumsum to get the runtime
         timeSumVec = np.cumsum(timeVec)
 
+        #get the time at the lh point
+        #timeVec = timeSumVec[iterVec - 1]
+
         dataVecs.append((iterVec, rmseVec, timeSumVec))
 
     #    <cruveid, <rmse, time, speedup>>
@@ -191,8 +194,10 @@ def draw_speedup(perfdata, perfname, extrapolation = False):
     #search the time for all convergence level by interpolation
     for iter in range(levelCnt):
         level = dataVecs[0][ID_RMSE][iter]
-        baseX = dataVecs[0][ID_TIME][iter]
-        logger.debug('Fit Level=%s, %s', level, '='*20)
+        iterval = dataVecs[0][ID_ITER][iter]
+        #baseX = dataVecs[0][ID_TIME][iter]
+        baseX = dataVecs[0][ID_TIME][iterval-1]
+        logger.debug('Fit Level=%s, baseX=%s, %s', level, baseX, '='*20)
 
         #set the first row
         result[0, iter, RID_RMSE] = level
@@ -218,7 +223,7 @@ def draw_speedup(perfdata, perfname, extrapolation = False):
                     yb = rmseVec[idx]
 
                     if extrapolation:
-                        iterpolateX = xb - (level - yb)*(xb-xa)/(ya-yb)
+                        iterpolateX = xb + (level - yb)*(xb-xa)/(yb-ya)
                     break
 
                 elif rmseVec[idx] < level and rmseVec[idx+1] >= level:
@@ -228,9 +233,9 @@ def draw_speedup(perfdata, perfname, extrapolation = False):
                     ya = rmseVec[idx]
                     yb = rmseVec[idx+1]
 
-                    iterpolateX = xb - (level - yb)*(xb-xa)/(ya-yb)
-                    logger.debug('Curve:%d, [xa=%s,ya=%s]-- [xb=%s,yb=%s], fit level=%s',
-                            curveId,xa,ya, xb, yb,level)
+                    iterpolateX = xa + (level - ya)*(xb-xa)/(yb-ya)
+                    logger.debug('Curve:%d, [xa=%s,ya=%s]-- [xb=%s,yb=%s], iterpolateX=%s, speedup=%s',
+                            curveId,xa,ya, xb, yb,iterpolateX, iterpolateX/baseX)
                     break
 
             #find the X if X > 0
