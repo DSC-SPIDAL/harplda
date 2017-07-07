@@ -431,7 +431,17 @@ class PlotEngine():
         speedup = speedup.reshape((lineCnt, xCnt/3, 3))
         logger.info('speedup.shape=%s', speedup.shape)
         origin_x = speedup[0,:,0]
-        x = np.arange(origin_x.shape[0])
+        #x = np.arange(origin_x.shape[0])
+        x = origin_x
+
+        #setup the line style and mark, colors, etc
+        colors = self.colors
+        lines = self.lines
+
+        if 'lines' in conf:
+            lines = conf['lines']
+        if 'colors' in conf:
+            colors = conf['colors']
 
         for idx in range(lineCnt):
             #get the ratio
@@ -444,7 +454,7 @@ class PlotEngine():
             #logger.info('val = %s, label=%s', grp_data, groupname[idx])
 
             #self.curax.scatter(x ,y, color=self.colors[idx], label = labels[idx])
-            self.curax.plot(xok ,yok, color=self.colors[idx], label = labels[idx])
+            self.curax.plot(xok ,yok, lines[idx],color=colors[idx], label = labels[idx])
 
         if 'xlabel' in conf:
             self.curax.set_xlabel(conf['xlabel'])
@@ -463,7 +473,7 @@ class PlotEngine():
         #    xticks = ['%.2e'%x for x in overall_time[0][:,0]]
         #self.curax.set_xticklabels( xticks)
 
-        xticks = [('%.2e'%x)[:4] for x in origin_x]
+        xticks = [('%.2e'%(x/1e+10))[:5] for x in origin_x]
         self.curax.set_xticklabels( xticks)
         self.curax.set_yscale('log')
 
@@ -1082,7 +1092,8 @@ class PlotEngine():
 
                 #draw
                 #p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx*2], color=colors[idx*2],label = compute_time[idx][1])
-                p1 = self.curax.errorbar(x, grp_data[:point_cnt],   yerr = grp_data_err[:point_cnt], fmt = lines[idx],color=colors[idx],label = compute_time[idx][1])
+                p1 = self.curax.plot(x, grp_data[:point_cnt], lines[idx],color=colors[idx],label = compute_time[idx][1])
+                #p1 = self.curax.errorbar(x, grp_data[:point_cnt],   yerr = grp_data_err[:point_cnt], fmt = lines[idx],color=colors[idx],label = compute_time[idx][1])
 
                 _trace_shortest_x = min(_trace_shortest_x, x[-1])
 
@@ -1438,7 +1449,10 @@ class PlotEngine():
             #    else:
             #        raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.iter-stat'][2,:_min_rowcnt]/1000.)   for idx  in range(len(groupdata))]
             #bydeault, use iter-time
-            raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.iter-stat'][2,:_min_rowcnt]/1000.)   for idx  in range(len(groupdata))]
+            if _min_rowcnt > 0:
+                raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.iter-stat'][2,:_min_rowcnt]/1000.)   for idx  in range(len(groupdata))]
+            else:
+                raw_timeout = [ np.cumsum(self.perfdata[groupdata[idx][0] + '.iter-stat'][2,:]/1000.)   for idx  in range(len(groupdata))]
             # iter numbers for each curve in this group
             itercnt = [ self.perfdata[groupdata[idx][0] + '.iter-stat'][2].shape[0]  for idx  in range(len(groupdata))]
 

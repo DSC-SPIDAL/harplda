@@ -45,7 +45,7 @@ init_lh_table={
     }
     }
 
-def calibrate(dstfile, use_upperbound = True):
+def calibrate(dstfile, use_upperbound = False):
     """
     input: .likelihood file
         lightlda_enwiki_t1000_4x16_i300_.05000000_0.01_4_0613-noreid.likelihood
@@ -82,9 +82,9 @@ def calibrate(dstfile, use_upperbound = True):
                     logger.info('gap : %e', gap)
 
                     # check if it has been calibrated
-                    if abs(gap) < 1e-4:
-                        logger.info('already calibrated, quit...')
-                        return
+                    #if abs(gap) < 1e-4:
+                    #    logger.info('gap too small, already calibrated, quit...')
+                    #    return
 
                     #calibrate
                     ndst = np.zeros(dst.shape)    

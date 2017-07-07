@@ -1579,7 +1579,7 @@ class LDATrainerLog():
                 self.slice = 0
                 self.A , self.B, self._traintime = 0.,0., 0.
             def __str__(self):
-                return '_traintime=%s, starttime=%s'%(self._traintime,self.iter_starttime)
+                return '_traintime=%s, starttime=%s, slice=%d'%(self._traintime,self.iter_starttime,self.slice)
  
         #
         # st, the dict of states for each node
@@ -1682,8 +1682,11 @@ class LDATrainerLog():
         for rankid in st:
             if st[rankid].A != 0.:
                 _wlh = (st[rankid].A-st[rankid].B)/st[rankid].slice + st[rankid].B
-                likelihood.append(( iterid, _wlh, rankid))
+                likelihood.append(( iterid + 1, _wlh, rankid))
                 #logger.info('iter=%d, slice=%d, wlh=%f, time=%f', iterid, slice, _wlh, _time)
+                if rankid==0:
+                    logger.info('last state=%s',st[rankid])
+
 
         #
         # end of the app
@@ -1734,7 +1737,7 @@ class LDATrainerLog():
                         #logger.info('itertime: %s', itertime)
                         #logger.info('likelihood: %s', likelihood)
 
-                        #likelihood
+                        #likelihood: <iterid, _wlh, rankid>
                         logger.info('likelihood=%s', likelihood)
                         likelihood = sorted(likelihood, key = lambda x:x[2])
                         likelihood=np.array(likelihood)
