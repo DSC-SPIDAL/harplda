@@ -1,0 +1,6 @@
+harp_enwiki_10x30_juliet_notimer_0528_0020 harp-notimer 10
+harp_enwiki_10x30_juliet_timer50_0528_0017 harp 10
+harp_enwiki_20x30_juliet_notimer_0528_0021 harp-notimer 20
+harp_enwiki_20x30_juliet_timer50_0528_0018 harp 20
+harp_enwiki_30x30_juliet_notimer_0528_0022 harp-notimer 30
+harp_enwiki_30x30_juliet_timer50_0528_0019 harp 30
