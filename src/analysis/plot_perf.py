@@ -456,16 +456,7 @@ class PlotEngine():
             #self.curax.scatter(x ,y, color=self.colors[idx], label = labels[idx])
             self.curax.plot(xok ,yok, lines[idx],color=colors[idx], label = labels[idx])
 
-        if 'xlabel' in conf:
-            self.curax.set_xlabel(conf['xlabel'])
-        else:
-            self.curax.set_xlabel('Model Log-Likelihood')
-        self.curax.set_ylabel('Speedup')
-        if 'title' in conf:
-            self.curax.set_title(conf['title'])
-        else:
-            self.curax.set_title('Speedup of Convergence Speed')
-        #self.curax.set_xticks(ind+width)
+       #self.curax.set_xticks(ind+width)
         #set xticklabel to levels
         #if 'xticks' in conf:
         #    xticks = conf['xticks']
@@ -473,10 +464,23 @@ class PlotEngine():
         #    xticks = ['%.2e'%x for x in overall_time[0][:,0]]
         #self.curax.set_xticklabels( xticks)
 
-        xticks = [('%.2f'%(x/1e+10))[:5] for x in origin_x]
+        xtick_scale = 1e+10
+        if 'xtick_scale' in conf:
+            xtick_scale = conf['xtick_scale']
+ 
+        xticks = [('%.2f'%(x/xtick_scale))[:5] for x in origin_x]
         self.curax.set_xticklabels( xticks)
-        self.curax.set_yscale('log')
-
+        #self.curax.set_yscale('log')
+        if 'xlabel' in conf:
+            self.curax.set_xlabel(conf['xlabel'])
+        else:
+            self.curax.set_xlabel('Model Log-Likelihood(x%.0e)'%xtick_scale)
+        self.curax.set_ylabel('Speedup')
+        if 'title' in conf:
+            self.curax.set_title(conf['title'])
+        else:
+            self.curax.set_title('Speedup of Convergence Speed')
+ 
         if not 'nolegend' in conf:
             if 'loc' in conf:
                 self.curax.legend(loc = conf['loc'])
@@ -742,10 +746,13 @@ class PlotEngine():
 
         # start here
         accuracy = []
+        trainername = []
         for tp in self.perfname:
             name = tp[0]
             label = tp[1]
  
+            trainername.append(name[:4])
+
             lh_name = name + '.likelihood'
             runtime_name = name + '.runtime-stat'
             itertime_name = name + '.iter-stat'
@@ -809,7 +816,23 @@ class PlotEngine():
             colors = conf['colors']
 
         _trace_shortest_x = 1e+24
+
+
         for idx in range(grp_size):
+
+            #check sample setting
+            sample = 1
+            if 'sample' in conf:
+                if 'dosample' in conf:
+                    if conf['dosample'].find(trainername[idx]) >= 0:  
+                        sample = conf['sample']
+                else:
+                    sample = conf['sample']
+                #make sure there are enough points
+                #if x.shape[0]/sample < 10:
+                #    sample = 1
+
+            logger.info('do sampling on %s before render,sample=%s',trainername, conf['sample'])
             if plottype == 0:
                 # use iter number here
                 x = accuracy[idx][5][:iternum]
@@ -818,7 +841,10 @@ class PlotEngine():
 
                 #self.curax.plot(x, accuracy[idx][2], self.colors_orig[idx]+self.marker[idx]+'-', label = accuracy[idx][3])
 #self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
-                self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
+
+                y=accuracy[idx][2][:iternum]
+                #self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
+                self.curax.plot(x[::sample],y[::sample], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
 
                 # save the lines in this figure for stop critierion analysis
                 #curveData.append( (accuracy[idx][3], x, accuracy[idx][2]) )
@@ -830,13 +856,18 @@ class PlotEngine():
                 #x = accuracy[idx][4][x ]
                 x = accuracy[idx][4][x ] 
 #self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
-                self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx],label = accuracy[idx][3][:iternum])
+
+                y = accuracy[idx][2][:iternum]
+                #self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx],label = accuracy[idx][3][:iternum])
+                self.curax.plot(x[::sample], y[::sample], lines[idx], color=colors[idx],label = accuracy[idx][3][:iternum])
             else:
                 x = accuracy[idx][0][:iternum]
                 #convert iternum to runtime
                 x = accuracy[idx][1][x]
 #self.curax.plot(x, accuracy[idx][2][:iternum], colors[idx]+lines[idx], label = accuracy[idx][3][:iternum])
-                self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
+                y = accuracy[idx][2][:iternum]
+                #self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
+                self.curax.plot(x[::sample], y[::sample], lines[idx], color=colors[idx], label = accuracy[idx][3][:iternum])
 
             # trace on the x
             logger.info('_trace_shortest_x = %s, x[-1]=%s', _trace_shortest_x, x[-1])
@@ -859,8 +890,8 @@ class PlotEngine():
         #self.curax.set_ylabel('Model Perplexity')
         self.curax.set_ylabel('Model Log-likelihood')
         if plottype == 0:
-            #self.curax.set_xlabel('Epoch Number')
-            self.curax.set_xlabel('Model Update Count')
+            self.curax.set_xlabel('Epoch Number')
+            #self.curax.set_xlabel('Model Update Count')
         elif plottype == 1:
             #self.curax.set_xlabel('Training Time (s)')
             self.curax.set_xlabel('AppComputing Time (s)')
@@ -1630,7 +1661,10 @@ class PlotEngine():
             self.curax.set_xticklabels(mat[:,0].astype(np.int))
  
         #self.curax.set_xlabel('Nodes Number')
-        self.curax.set_xlabel('Threads Number')
+        if 'xlabel' in conf:
+            self.curax.set_xlabel(conf['xlabel'])
+        else:
+            self.curax.set_xlabel('Nodes Number')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -1642,7 +1676,7 @@ class PlotEngine():
 
         if draw_speedup:
             #ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
-            ax2.set_ylabel('SpeedUp T(%d)/T(N)'%mat[0,0].astype(np.int))
+            ax2.set_ylabel('Throughput SpeedUp TP(N)/TP(%d)'%mat[0,0].astype(np.int))
             if 'loc' in conf:
                 _loc = conf['loc']
             else:
@@ -2467,7 +2501,14 @@ class PlotEngine():
                 #convert iternum to runtime
                 x = accuracy[idx][1][x]
                 y = accuracy[idx][5]/ itertime
-                self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
+
+                sample = 1
+                if 'sample' in conf:
+                    logger.info('do sampling on data before render,sample=%s',conf['sample'])
+                    sample = conf['sample']
+
+                #self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
+                self.curax.plot(x[::sample], y[::sample], lines[idx], color=colors[idx], label = accuracy[idx][3])
                 #self.curax.plot(x[::10], y[::10], lines[idx], color=colors[idx], label = accuracy[idx][3])
             
 
