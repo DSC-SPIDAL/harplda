@@ -73,7 +73,7 @@ def draw_ldascale(outname, compact = False):
     confxlim={
         'enwiki-1k':[2000, 4000, 4000,4000],
         'enwiki-10k':[2000, 4000, 4000,4000],
-        'clueweb-5k':[10000, 20000, 20000,20000]
+        'clueweb-5k':[10000, 15000, 15000,15000]
     }
 
 
@@ -84,14 +84,6 @@ def draw_ldascale(outname, compact = False):
     dnames=['enwiki-1k','enwiki-10k','clueweb-5k']
     rowCnt = len(dnames)
  
-    confset = {}
-    conf={}
-    conf['title']=''
-    conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
-    conf['lines']=['o-','^-','d-']*10
-    conf['nolegend'] = True
-    confset['default'] = conf
-
     setxlim = True
     #setxlim = False
 
@@ -107,6 +99,16 @@ def draw_ldascale(outname, compact = False):
 
     for idx, dataset in enumerate(dnames):
         logger.info('idx=%d, dataset=%s', idx, dataset)
+        confset = {}
+        conf={}
+        conf['title']=''
+        conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
+        conf['lines']=['o-','^-','d-']*10
+        conf['nolegend'] = True
+        confset['default'] = conf
+
+
+
 
         ploter.set_subplot(idx+1,1)
         if idx == 0:
@@ -129,6 +131,7 @@ def draw_ldascale(outname, compact = False):
             confset['default']['title'] = 'Speedup of Time'
         #if setxlim:
         #    confset['default']['xlim'] = confxlim[dataset][3]
+        confset['default']['yscale'] = 'log'
         call_plot('speedup', '', conffiles[dataset]['1'], '',confset) 
 
 

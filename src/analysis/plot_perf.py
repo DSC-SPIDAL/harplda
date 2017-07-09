@@ -470,7 +470,9 @@ class PlotEngine():
  
         xticks = [('%.2f'%(x/xtick_scale))[:5] for x in origin_x]
         self.curax.set_xticklabels( xticks)
-        #self.curax.set_yscale('log')
+        
+        if 'yscale' in conf:
+            self.curax.set_yscale('log')
         if 'xlabel' in conf:
             self.curax.set_xlabel(conf['xlabel'])
         else:
@@ -831,8 +833,8 @@ class PlotEngine():
                 #make sure there are enough points
                 #if x.shape[0]/sample < 10:
                 #    sample = 1
+                logger.info('do sampling on %s before render,sample=%s',trainername, conf['sample'])
 
-            logger.info('do sampling on %s before render,sample=%s',trainername, conf['sample'])
             if plottype == 0:
                 # use iter number here
                 x = accuracy[idx][5][:iternum]
