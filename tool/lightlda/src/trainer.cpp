@@ -11,9 +11,6 @@
 #include <multiverso/barrier.h>
 #include <multiverso/stop_watch.h>
 #include <multiverso/log.h>
-#include <thread>
-#include <random>
-#include <chrono>
 
 namespace multiverso { namespace lightlda
 {
@@ -57,10 +54,6 @@ namespace multiverso { namespace lightlda
                 Multiverso::ProcessRank(), lda_data_block->iteration(),
                 lda_data_block->block(), lda_data_block->slice());
         }
-
-        //this is the initial lh print version, no sampling at all
-        int32_t num_token = 0;
-
         // Build Alias table
         if (id == 0) alias_->Init(meta_->alias_index(block, slice));
         barrier_->Wait();
@@ -78,30 +71,26 @@ namespace multiverso { namespace lightlda
             Log::Info("Rank = %d, Alias Time used: %.2f s \n",
                 Multiverso::ProcessRank(), watch.ElapsedSeconds());
         }
+        int32_t num_token = 0;
         watch.Restart();
-
         // Train with lightlda sampler
         for (int32_t doc_id = id; doc_id < data.Size(); doc_id += trainer_num)
         {
             Document* doc = data.GetOneDoc(doc_id);
-            // no sampling, so the model doesnt' chage
-            //num_token += sampler_->SampleOneDoc(doc, slice, lastword, model_, alias_);
+            num_token += sampler_->SampleOneDoc(doc, slice, lastword, model_, alias_);
         }
+
         //Barrier Fix
         //barrier_->Wait();
 
-        std::mt19937_64 eng{std::random_device{}()};  // or seed however you want
-        std::uniform_int_distribution<> dist{100, 2000};
-        std::this_thread::sleep_for(std::chrono::milliseconds{dist(eng)});
-
         //add threadlog
-        Log::Info("Rank = %d, Threadid = %d, Training Time used: %.2f s \n", 
-                Multiverso::ProcessRank(), TrainerId(), watch.ElapsedSeconds());
+        //Log::Info("Rank = %d, Threadid = %d, Training Time used: %.2f s \n", 
+        //        Multiverso::ProcessRank(), TrainerId(), watch.ElapsedSeconds());
 
         if (TrainerId() == 0)
         {
             Log::Info("Rank = %d, Training Time used: %.2f s \n", 
-                Multiverso::ProcessRank(), 2.0);
+                Multiverso::ProcessRank(), watch.ElapsedSeconds());
             Log::Info("Rank = %d, sampling throughput: %.6f (tokens/thread/sec) \n", 
                 Multiverso::ProcessRank(), double(num_token) / watch.ElapsedSeconds());
         }
@@ -109,7 +98,7 @@ namespace multiverso { namespace lightlda
         // Evaluate loss function
         // Evaluate(lda_data_block);
         
-        //if (iter % 5 == 0)
+        if (iter % 5 == 0)
         //if (iter == Config::num_iterations - 1)
         {
             Evaluate(lda_data_block);

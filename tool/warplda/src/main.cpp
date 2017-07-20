@@ -40,7 +40,7 @@ int main(int argc, char** argv)
     SetIfEmpty(FLAGS_vocab, FLAGS_prefix + ".vocab");
     SetIfEmpty(FLAGS_topics, FLAGS_prefix + ".topics");
 
-    LDA *lda = new WarpLDA<1>();
+    LDA *lda = new WarpLDA<4>();
     lda->loadBinary(FLAGS_bin);
     if (FLAGS_estimate)
     {

@@ -819,6 +819,7 @@ class PlotEngine():
 
         _trace_shortest_x = 1e+24
 
+        xtick_scale = 1
 
         for idx in range(grp_size):
 
@@ -861,6 +862,11 @@ class PlotEngine():
 
                 y = accuracy[idx][2][:iternum]
                 #self.curax.plot(x, accuracy[idx][2][:iternum], lines[idx], color=colors[idx],label = accuracy[idx][3][:iternum])
+
+                if 'xtick_scale' in conf:
+                    xtick_scale = conf['xtick_scale']
+                    x /=  xtick_scale
+
                 self.curax.plot(x[::sample], y[::sample], lines[idx], color=colors[idx],label = accuracy[idx][3][:iternum])
             else:
                 x = accuracy[idx][0][:iternum]
@@ -887,7 +893,16 @@ class PlotEngine():
         if 'ylim_h' in conf:
             self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
 
-
+        # set xtick scale
+        ##xtick_scale = 1000
+        #if 'xtick_scale' in conf:
+        #    xtick_scale = conf['xtick_scale']
+ 
+        #xticks = [_x.get_text() for _x in self.curax.get_xticklabels()]
+        #logger.debug('xticks from %s', xticks)
+        #xticks = [('%.1f'%(float(_x.get_text())/xtick_scale)) for _x in self.curax.get_xticklabels()]
+        #self.curax.set_xticklabels( xticks)
+ 
 
         #self.curax.set_ylabel('Model Perplexity')
         self.curax.set_ylabel('Model Log-likelihood')
@@ -901,6 +916,9 @@ class PlotEngine():
             self.curax.set_xlabel('Execution Time (s)')
         elif plottype ==3:
             #self.curax.set_xlabel('Iteration Time (s)')
+            if xtick_scale > 1:
+                self.curax.set_xlabel('Training Time (%s s)'%(xtick_scale))
+        else:
             self.curax.set_xlabel('Training Time (s)')
             #self.curax.set_xlabel('Training Time (1000s)')
             #ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/1e3))
@@ -916,6 +934,9 @@ class PlotEngine():
         if not 'nolegend' in conf:
             self.curax.legend(loc = 0)
         
+
+
+
         if figname:
             #plt.savefig('full-'+figname)
             #self.curax.set_ylim(0, 350)
@@ -1633,7 +1654,8 @@ class PlotEngine():
             #logger.info('bar %s,%s,%s',_x, mat[:,0],mat[:,1])
 
             ### draw bar chart
-            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig_shade[seq],yerr = mat[:,2], label=label)
+            #bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig_shade[seq],yerr = mat[:,2], label=label)
+            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig[seq],yerr = mat[:,2], label=label)
             rects.append(bars)
             #if (mat[:,0][-1] > maxX):
             #    maxX = mat[:,0][-1]
@@ -1673,8 +1695,9 @@ class PlotEngine():
             self.curax.set_title('LDA Trainer Scalability')
 
         #finally , update the recs
-        for rect in rects:
-            self.autolabel(rect, 1e+8)
+        if 'autolabel' in conf:
+            for rect in rects:
+                self.autolabel(rect, 1e+8)
 
         if draw_speedup:
             #ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
@@ -2414,10 +2437,14 @@ class PlotEngine():
             1   acc_throughput .vs. traintime  ; accumulate updates
         """
         dataflist = []
+        trainername = []
         #for name,label in self.perfname:
         for tp in self.perfname:
             name = tp[0]
             label = tp[1]
+
+            trainername.append(name[:4])
+
             fname = name + '.comput-stat'
             dataflist.append(fname)
             fname = name + '.runtime-stat'
@@ -2508,6 +2535,8 @@ class PlotEngine():
                 if 'sample' in conf:
                     logger.info('do sampling on data before render,sample=%s',conf['sample'])
                     sample = conf['sample']
+                    if trainername[idx].find('warp') >= 0:
+                        sample *= 5
 
                 #self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
                 self.curax.plot(x[::sample], y[::sample], lines[idx], color=colors[idx], label = accuracy[idx][3])
@@ -2539,6 +2568,8 @@ class PlotEngine():
         else:
             self.curax.set_title('LDA Trainer Throughput')
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        if 'yscale' in conf:
+            self.curax.set_yscale('log')
             
         if not 'nolegend' in conf:
             self.curax.legend(loc = 0)

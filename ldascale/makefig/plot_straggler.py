@@ -59,7 +59,7 @@ def draw_ldascale(outname, compact = False):
 
 
     confxlim={
-        'clueweb30b-5k':[10000, 200, 10000,10000]
+        'clueweb30b-5k':[20000, 10000, 10000,10000]
     }
 
 
@@ -78,8 +78,8 @@ def draw_ldascale(outname, compact = False):
     #conf['nolegend'] = True
     confset['default'] = conf
 
-    #setxlim = True
-    setxlim = False
+    setxlim = True
+    #setxlim = False
 
     #plt.rcParams.update({'figure.figsize':(4.5*5,3*4.5)})
     plt.rcParams.update({'figure.figsize':(4,3)})
@@ -94,20 +94,25 @@ def draw_ldascale(outname, compact = False):
     for idx, dataset in enumerate(dnames):
         logger.info('idx=%d, dataset=%s', idx, dataset)
 
+        confset['default']['nolegend'] = True
         ploter.init_subplot(1,1)
         ploter.set_subplot(1,1)
+        #confset['default']['sample'] = 3
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][0]
         call_plot('accuracy_itertime', '', conffiles[dataset]['1'], outname + '-1.pdf',confset) 
 
 
-        confset['default']['nolegend'] = True
+        confset['default'].pop('nolegend',None)
+        confset['default']['loc'] = 7
         ploter.init_subplot(1,1)
         ploter.set_subplot(1,1)
+        confset['default']['sample'] = 10
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][1]
         call_plot('throughput_runtime', '', conffiles[dataset]['1'], outname + '-2.pdf',confset) 
 
+        confset['default']['nolegend'] = True
         ploter.init_subplot(1,1)
         ploter.set_subplot(1,1)
         if setxlim:

@@ -29,23 +29,108 @@ logger = logging.getLogger(__name__)
 
 
 #
-# harp iter0 as lower bound
-# harp notimer iter1 as upper bound
+# harp iter0 as lower bound, 1st column
+# harp notimer iter1 as upper bound, 2nd column
+# lightlda initlh as the 3rd column
 #
 init_lh_table={
     'enwiki':{
-        '1000':(-1.1510770005329836E10,-1.113608457877022E10 ),
-        '10000':(-12134290299,-1.121802667659592E10 ),
+        '1000':(-1.1510770005329836E10,-1.113608457877022E10, ),
+        '10000':(-12134290299,-1.121802667659592E10, ),
     },
     'clueweb30b':{
-        '5000':(-2.937724421012109E11,-2.8910496187401874E11 )
+        '5000':(-2.937724421012109E11,-2.8910496187401874E11,-2.937724421012109E11),
+        '10000':(-2.9517723560575433E11,0,-2.952832e+11),
+        '100000':(-3.0432081308185333E11,0,-3.056120e+11),
+        '1000000':(-3.27887235030662E11,0,-3.429382e+11 ),
     },
     'bigram':{
         '500': (-2.4805234740583996E10,-2.295583805893956E10 )
     }
     }
 
+lightlda_initlh={
+    'enwiki':{
+        '1000':{'2':-1.148262e+10,'4':-1.156652e+10,'8':-1.192392e+10},
+        '10000':{'2':-1.213115e+10,'4':-1.298263e+10,'8':-1.662276e+10}
+    },
+    'clueweb30b':{
+        '5000':{'20':0,'30':-2.938039e+11,'40':-2.938220e+11},
+        '10000':{'30':-2.952832e+11},
+        '100000':{'30':-3.056120e+11},
+        '1000000':{'30':-3.429382e+11}
+    },
+    'bigram':{
+        '500':{'10':0}
+    }
+}
+
 def calibrate(dstfile, use_upperbound = False):
+    """
+    input: .likelihood file
+        lightlda_enwiki_t1000_4x16_i300_.05000000_0.01_4_0613-noreid.likelihood
+    
+
+    """
+
+    if os.path.exists(dstfile + '.sav'):
+        logger.info('already calibrated, quit...')
+        return
+    
+    dst = np.loadtxt(dstfile)
+    #get dataset and K
+    for dataset in init_lh_table:
+        if dstfile.find(dataset) > 0:
+            m = re.search("lightlda_.*_t(\d+)_(\d+)x\d+_", dstfile)
+            if m:
+                K = m.group(1)
+                Node = m.group(2)
+                
+                logger.info('Dataset = %s, K = %s, Node=%s', dataset, K, Node)
+
+                if K in init_lh_table[dataset]:
+                    
+                    #
+                    # here, use first line to calculate the gap
+                    # it's not true, should get the lightlda's initial
+                    # likelihood, then calculate the gap
+                    # but, it seems that the initial one and the first 
+                    # iteration one is similar?????
+                    # there is a lightlda.initlh to get the initial value
+                    #
+                    idx = 1 if  use_upperbound else 0
+                    #gap = dst[0,1] - init_lh_table[dataset][K][idx]
+                    if not Node in lightlda_initlh[dataset][K]:
+                        logger.info('not found in lightlda_initlh table,quit...')
+                        return
+                    
+                    lightlda_init_val = lightlda_initlh[dataset][K][Node] 
+                    if lightlda_init_val == 0:
+                        logger.info('0 in lightlda_initlh table,quit...')
+                        return
+ 
+                    gap = lightlda_init_val - init_lh_table[dataset][K][idx]
+
+                    logger.info('gap : %e', gap)
+
+                    # check if it has been calibrated
+                    #if abs(gap) < 1e-4:
+                    #    logger.info('gap too small, already calibrated, quit...')
+                    #    return
+
+                    #calibrate
+                    ndst = np.zeros(dst.shape)    
+                    np.copyto(ndst, dst)
+                    ndst[:,1:] -= gap
+
+                    #save result
+                    np.savetxt(dstfile, ndst,fmt='%e')
+                    np.savetxt(dstfile + '.sav', dst,fmt='%e')
+
+                    return
+
+
+def calibrate_old(dstfile, use_upperbound = False):
     """
     input: .likelihood file
         lightlda_enwiki_t1000_4x16_i300_.05000000_0.01_4_0613-noreid.likelihood

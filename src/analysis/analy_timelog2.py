@@ -1763,6 +1763,7 @@ class LDATrainerLog():
                         runtimeMatrix[:,1] = train_span
                         # add iter_t matrix, (nodenum, iternum)
                         logger.info('%s, %s, %s', runtimeMatrix.shape, iter_wallMatrix.shape, iter_appMatrix.shape)
+                        logger.info('%s, %s, %s', runtimeMatrix.shape, runtime_wallMatrix.shape, iter_appMatrix.shape)
                         runtimeMatrix = np.concatenate((runtimeMatrix, runtime_wallMatrix), axis=1)
 
 

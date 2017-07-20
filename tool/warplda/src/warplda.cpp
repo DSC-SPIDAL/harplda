@@ -610,4 +610,4 @@ double WarpLDA<MH>::perplexity()
     return exp(-log_likelihood / g.NE());
 }
 
-template class WarpLDA<1>;
+template class WarpLDA<4>;

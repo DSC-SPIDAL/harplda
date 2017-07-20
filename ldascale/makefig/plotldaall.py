@@ -63,6 +63,7 @@ def draw_newharp(conffile, conf):
     ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
     ploter.curax.grid(gridFlag)
+    confset['default']['xtick_scale'] = 1000
     call_plot('accuracy_itertime', '', conffile, '-1-4.pdf',conf) 
 
     ploter.init_subplot(1,1)

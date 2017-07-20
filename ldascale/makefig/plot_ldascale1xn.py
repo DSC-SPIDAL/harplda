@@ -97,7 +97,7 @@ def draw_ldascale(outname, compact = False):
     plt.rcParams.update({'legend.fontsize':14})
     logger.info('set large view')
 
-    ploter.init_subplot(4,5)
+    ploter.init_subplot(3,4)
 
     setxlim = True
 
@@ -115,7 +115,7 @@ def draw_ldascale(outname, compact = False):
         confset['default'] = conf
 
 
-        ploter.set_subplot(idx+1,1)
+        ploter.set_subplot(1,idx+1)
         if idx == 0:
             confset['default']['title'] = 'Convergence Speed'
         else:
@@ -129,7 +129,7 @@ def draw_ldascale(outname, compact = False):
             confset['default']['xlim'] = confxlim[dataset][0]
         call_plot('accuracy_itertime', '', conffiles[dataset]['1'], '',confset) 
 
-        ploter.set_subplot(idx+1,2)
+        ploter.set_subplot(2,idx+1)
         if idx == 0:
             confset['default']['title'] = 'Convergence Rate'
         if setxlim:
@@ -138,21 +138,41 @@ def draw_ldascale(outname, compact = False):
         confset['default']['dosample'] = 'warp nomad'
             
         call_plot('accuracy_iter', '', conffiles[dataset]['1'], '',confset) 
-
-        ploter.set_subplot(idx+1,3)
-        if idx == 0:
-            confset['default']['title'] = 'Throughput'
-        confset['default']['sample'] = 10
-        if setxlim:
-            confset['default']['xlim'] = confxlim[dataset][2]
-        call_plot('throughput_runtime', '', conffiles[dataset]['1'], '',confset) 
-
         #the middle plot
         if idx == 3:
             lgd = ploter.curax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
                   fancybox=True, shadow=True, ncol=5)
 
-        ploter.set_subplot(idx+1,4)
+
+        ploter.set_subplot(3,idx+1)
+        if idx == 0:
+            confset['default']['title'] = 'Throughput'
+        confset['default']['sample'] = 10
+        confset['default']['yscale'] = 'log'
+        if setxlim:
+            confset['default']['xlim'] = confxlim[dataset][2]
+        call_plot('throughput_runtime', '', conffiles[dataset]['1'], '',confset) 
+
+    #
+    # save
+    #
+    ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
+
+
+
+    ploter.init_subplot(2,4)
+    for idx, dataset in enumerate(dnames):
+        logger.info('idx=%d, dataset=%s', idx, dataset)
+
+        confset = {}
+        conf={}
+        conf['title']=''
+        conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
+        conf['lines']=['o-','^-','d-']*10
+        conf['nolegend'] = True
+        confset['default'] = conf
+
+        ploter.set_subplot(1, idx+1)
         if idx == 0:
             confset['default']['title'] = 'Convergence Speed'
      
@@ -160,19 +180,24 @@ def draw_ldascale(outname, compact = False):
             confset['default']['xlim'] = confxlim[dataset][3]
         call_plot('accuracy_itertime', '', conffiles[dataset]['32'], '',confset) 
 
+        #the middle plot
+        if idx == 3:
+            lgd = ploter.curax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+                  fancybox=True, shadow=True, ncol=5)
 
-        ploter.set_subplot(idx+1,5)
+
+        ploter.set_subplot(2, idx+1)
         if idx == 0:
             confset['default']['title'] = 'Scalability'
         confset['default']['xlabel'] = 'Threads Number'
      
         call_plot('scalability', '', conffiles[dataset]['scale'], '',confset) 
 
-
     #
     # save
     #
-    ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
+    ploter.fig.savefig(outname + '-2.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
+
 
 
 if __name__ == "__main__":

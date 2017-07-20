@@ -70,4 +70,4 @@ private:
     std::vector<std::unique_ptr<LocalBuffer>> local_buffers;
 };
 
-extern template class WarpLDA<1>;
+extern template class WarpLDA<4>;
