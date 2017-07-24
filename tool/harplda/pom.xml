@@ -15,6 +15,7 @@
         <module>harp-app-newthreadlog-nosort</module>
         <module>harp-app-newthreadlog-longrun</module>
         <module>harp-app-nothreadlog-nosort-longrun</module>
+        <module>harp-app-nosortlog-nods</module>
         <module>harp-app-noeval</module>
         <module>harp-app-repeatsubmission</module>
     </modules>
