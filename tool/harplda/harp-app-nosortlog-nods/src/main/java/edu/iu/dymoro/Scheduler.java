@@ -110,78 +110,71 @@ public class Scheduler<D, S extends Simple, T extends MPTask<D, S>> {
       colIndex ++;
     }
     isRunning.set(true);
-    TimerTask timerTask = new TimerTask() {
-      @Override
-      public void run() {
-        isRunning.set(false);
-      }
-    };
+    //TimerTask timerTask = new TimerTask() {
+    //  @Override
+    //  public void run() {
+    //    isRunning.set(false);
+    //  }
+    //};
     // --------------------------
     // Record starts
-    //if (record) {
-    //  for (T task : compute.getTasks()) {
-    //    task.startRecord(record);
-    //  }
-    //} else {
-    //  for (T task : compute.getTasks()) {
-    //    task.startRecord(record);
-    //  }
-    //}
+    if (record) {
+      for (T task : compute.getTasks()) {
+        task.startRecord(record);
+      }
+    } else {
+      for (T task : compute.getTasks()) {
+        task.startRecord(record);
+      }
+    }
     //// -------------------------
-    timer.schedule(timerTask, time);
+    //timer.schedule(timerTask, time);
     compute.start();
 
-    List<RowColSplit<D,S>> splitList =
-        new ArrayList<RowColSplit<D,S>>(numColSplits);
+    //List<RowColSplit<D,S>> splitList =
+    //    new ArrayList<RowColSplit<D,S>>(numColSplits);
     int roundCnt = 0;
-    while (compute.hasOutput()) {
+    for(int round=1; round < numColSplits; round ++) {
 
       //1. wait for all to finish
       int finishedTaskCnt = 0;
       while(finishedTaskCnt < numColSplits){
         RowColSplit<D, S> split =
             compute.waitForOutput();
-        splitList.add(split);
+        //splitList.add(split);
         finishedTaskCnt ++;
       }
 
       //2. move to the right neighbor
-      for (RowColSplit<D,S> split : splitList){
-        //check end condition
-        //the (0,0) return back to it's original position
-        if ((split.row == 0) && (split.col ==0)){
-            if (roundCnt == 0){
-                roundCnt ++;
-            }
-            else{
-                break;
-            }
-        }
-        //shift 
-        RowColSplit<D, S> s =
-          splitMap[split.row][(split.col + 1 )%numColSplits];
-        compute.submit(s);
+      rowIndex = 0;
+      colIndex = round;
+      while (rowIndex < numColSplits) {
+        RowColSplit<D, S> split =
+          splitMap[rowIndex][colIndex];
+        compute.submit(split);
+        rowIndex ++;
+        colIndex = (colIndex+1)%numColSplits;
       }
-
     }
-    compute.pauseNow();
-    timerTask.cancel();
+
+    //compute.pauseNow();
+    //timerTask.cancel();
     while (compute.hasOutput()) {
       compute.waitForOutput();
     }
     compute.cleanInputQueue();
     // ------------------------
     // Record ends
-    //if (record) {
-    //  int i = 0;
-    //  for (T task : compute.getTasks()) {
-    //    LOG.info("Task " + i + " took "
-    //      + task.getRecordDuration()
-    //      + ", trained "
-    //      + task.getItemsRecorded());
-    //    i++;
-    //  }
-    //}
+    if (record) {
+      int i = 0;
+      for (T task : compute.getTasks()) {
+        LOG.info("Task " + i + " took "
+          + task.getRecordDuration()
+          + ", trained "
+          + task.getItemsRecorded());
+        i++;
+      }
+    }
     //// -----------------------
  
   }

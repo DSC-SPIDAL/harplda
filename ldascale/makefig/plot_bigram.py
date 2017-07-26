@@ -121,6 +121,8 @@ def draw_ldascale(outname, compact = False):
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][3]
         
+        #confset['default']['xtick_scale'] = 1000
+        confset['default'].pop('xtick_scale', None)
         call_plot('overhead_only', '', conffiles[dataset]['1'], outname + '-4.pdf',confset) 
 
 

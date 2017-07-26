@@ -56,6 +56,17 @@ def draw_eval_bars(namefile, conf):
 
 def draw_newharp(conffile, conf):
     nullconf={'default':{'title':''}}
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    ploter.curax.grid(gridFlag)
+    call_plot('loadbalance_runtime', '', conffile, '-2-3.pdf', conf)
+
+    ploter.init_subplot(1,1)
+    ploter.set_subplot(1,1)
+    ploter.curax.grid(gridFlag)
+    call_plot('overhead_only', '', conffile, '-3-5.pdf', conf)
+
+    return
 
     #draw_eval_bars(conffile, nullconf)
 

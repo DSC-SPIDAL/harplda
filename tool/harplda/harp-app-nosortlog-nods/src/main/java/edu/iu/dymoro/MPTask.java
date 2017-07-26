@@ -46,17 +46,17 @@ public abstract class MPTask<D, S extends Simple>
     // ----------------------------------
     // Code for recording
     long startTime = 0L;
-    //if (record) {
-    //  startTime = System.currentTimeMillis();
-    //}
+    if (record) {
+      startTime = System.currentTimeMillis();
+    }
     long n = doRun(split.cData, split.rData);
     numItems += n;
     // ----------------------------------
     // Code for recording
-    //if (record) {
-    //  itemsRecored += n;
-    //  durationTime += System.currentTimeMillis() - startTime;
-    //}
+    if (record) {
+      itemsRecored += n;
+      durationTime += System.currentTimeMillis() - startTime;
+    }
     //// ----------------------------------
     return split;
   }

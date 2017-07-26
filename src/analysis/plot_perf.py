@@ -918,8 +918,8 @@ class PlotEngine():
             #self.curax.set_xlabel('Iteration Time (s)')
             if xtick_scale > 1:
                 self.curax.set_xlabel('Training Time (%s s)'%(xtick_scale))
-        else:
-            self.curax.set_xlabel('Training Time (s)')
+            else:
+                self.curax.set_xlabel('Training Time (s)')
             #self.curax.set_xlabel('Training Time (1000s)')
             #ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/1e3))
             ##ticks_x = ticker.FuncFormatter(lambda x, pos: '{0:.1e}'.format(x))
@@ -1074,6 +1074,7 @@ class PlotEngine():
             colors = conf['colors']
 
         _trace_shortest_x = 1e+12
+        xtick_scale = 1
         for idx in range(grp_size):
             if plottype == 2:
                 grp_data = compute_time[idx][0][2]
@@ -1154,8 +1155,12 @@ class PlotEngine():
                     #make sure there are enough points
                     if x.shape[0]/sample < 10:
                         sample = 1
+                if 'xtick_scale' in conf:
+                    xtick_scale = conf['xtick_scale']
+                    x /=  xtick_scale
 
-                if 'errobar' in conf:
+
+                if 'errorbar' in conf:
                     p1 = self.curax.errorbar(x[::sample], grp_data[:point_cnt:sample],   yerr = grp_data_err[:point_cnt:sample], fmt = lines[idx],color=colors[idx],label = compute_time[idx][1])
                 else:
                     p1 = self.curax.plot(x[::sample], grp_data[:point_cnt:sample], lines[idx],color=colors[idx],label = compute_time[idx][1])
@@ -1164,8 +1169,12 @@ class PlotEngine():
 
                 #self.curax.set_xticks(x)
                 #self.curax.set_xticklabels([x+1 for x in range(N)])
-                self.curax.set_xlabel('Execution Time (s)')
-
+                #self.curax.set_xlabel('Execution Time (s)')
+                if xtick_scale > 1:
+                    self.curax.set_xlabel('Training Time (%s s)'%(xtick_scale))
+                else:
+                    self.curax.set_xlabel('Training Time (s)')
+ 
 
             else:
                 grp_data = compute_time[idx][0][2]
@@ -1225,7 +1234,7 @@ class PlotEngine():
         if 'xlim' in conf:
             #if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
             #    self.curax.set_xlim(0, conf['xlim'])
-            self.curax.set_xlim(0, conf['xlim'])
+            self.curax.set_xlim(0, conf['xlim']/xtick_scale)
         if 'ylim' in conf:
             self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
 
@@ -1335,6 +1344,7 @@ class PlotEngine():
         # data is two group, one in ib, other in eth
         _trace_shortest_x = 1e+12
 
+        xtick_scale = 1
         grp_size = len(accuracy)
         for idx in range(grp_size):
             if plottype == 0:
@@ -1373,6 +1383,10 @@ class PlotEngine():
                     if x.shape[0]/sample < 10:
                         sample = 1
 
+                if 'xtick_scale' in conf:
+                    xtick_scale = conf['xtick_scale']
+                    x /=  xtick_scale
+
                 #self.curax.plot(x, y, lines[idx], color=colors[idx], label = accuracy[idx][3])
                 self.curax.plot(x[::sample], y[::sample], lines[idx], color=colors[idx], label = accuracy[idx][3])
             
@@ -1386,7 +1400,10 @@ class PlotEngine():
         if plottype == 0:
             self.curax.set_xlabel('Iteration Number')
         elif plottype == 1:
-            self.curax.set_xlabel('Training Time (s)')
+            if xtick_scale > 1:
+                self.curax.set_xlabel('Training Time (%s s)'%(xtick_scale))
+            else:
+                self.curax.set_xlabel('Training Time (s)')
         elif plottype == 2:
             self.curax.set_xlabel('Execution Time (s)')
         elif plottype ==3:
@@ -1401,13 +1418,16 @@ class PlotEngine():
         #ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
             
         if not 'nolegend' in conf:
-            self.curax.legend(loc = 0)
+            if 'loc' in conf:
+                self.curax.legend(loc = conf['loc'])
+            else:
+                self.curax.legend(loc = 0)
 
         #add xlim and ylim by conf
         if 'xlim' in conf:
             #if _trace_shortest_x >0 and _trace_shortest_x > conf['xlim']:
             #    self.curax.set_xlim(0, conf['xlim'])
-            self.curax.set_xlim(0, conf['xlim'])
+            self.curax.set_xlim(0, conf['xlim']/xtick_scale)
         if 'ylim' in conf:
             self.curax.set_ylim(conf['ylim_l'], conf['ylim_h'])
 
@@ -1478,6 +1498,16 @@ class PlotEngine():
             else:
                 groups[label] = [(name,tasknum)]
                 label_seq.append(label)
+
+        #add color and lines setting
+        colors = self.colors
+        lines = self.lines
+
+        if 'lines' in conf:
+            lines = conf['lines']
+        if 'colors' in conf:
+            colors = conf['colors']
+
 
         # twin plot the time/update count bar chart
         if draw_speedup:
@@ -1655,7 +1685,8 @@ class PlotEngine():
 
             ### draw bar chart
             #bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig_shade[seq],yerr = mat[:,2], label=label)
-            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig[seq],yerr = mat[:,2], label=label)
+            #bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig[seq],yerr = mat[:,2], label=label)
+            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=colors[seq],yerr = mat[:,2], label=label)
             rects.append(bars)
             #if (mat[:,0][-1] > maxX):
             #    maxX = mat[:,0][-1]
@@ -1663,9 +1694,11 @@ class PlotEngine():
             ### draw speedup line
             if draw_speedup:
                 _y = mat[:,1] *1.0 / mat[0,1]
-                plots = ax2.plot(_x , _y, self.colors_orig[seq]+'.-', label = label)
-                for _p in range(_x.shape[0]):
-                    ax2.text(_x[_p] - 0.1, _y[_p]+0.003,'%.1f'%(_y[_p]))
+                #plots = ax2.plot(_x , _y, self.colors_orig[seq]+'.-', label = label)
+                plots = ax2.plot(_x , _y, lines[seq], color=colors[seq], label = label)
+                if 'text' in conf:
+                    for _p in range(_x.shape[0]):
+                        ax2.text(_x[_p] - 0.1, _y[_p]+0.003,'%.1f'%(_y[_p]))
             
             #go to next group
             seq += 1

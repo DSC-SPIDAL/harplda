@@ -76,12 +76,17 @@ def draw_ldascale(outname, compact = False):
         'clueweb-5k':[10000, 15000, 15000,15000]
     }
 
+    confylim={
+        'clueweb-5k':(0,0.2)
+    }
+
 
     #
     # init
     #
     #dnames=['enwiki-1k','enwiki-10k']
-    dnames=['enwiki-1k','enwiki-10k','clueweb-5k']
+    #dnames=['enwiki-1k','enwiki-10k','clueweb-5k']
+    dnames=['enwiki-10k','clueweb-5k']
     rowCnt = len(dnames)
  
     setxlim = True
@@ -89,9 +94,9 @@ def draw_ldascale(outname, compact = False):
 
     #plt.rcParams.update({'figure.figsize':(4.5*5,3*4.5)})
     plt.rcParams.update({'figure.figsize':(4.5*5,4.5*3/4.*rowCnt)})
-    plt.rcParams.update({'axes.titlesize':14})
+    plt.rcParams.update({'axes.titlesize':12})
     plt.rcParams.update({'axes.titleweight':'bold'})
-    plt.rcParams.update({'legend.fontsize':14})
+    plt.rcParams.update({'legend.fontsize':12})
     logger.info('set large view')
 
     #set number of subplots
@@ -128,10 +133,11 @@ def draw_ldascale(outname, compact = False):
             conf['xtick_scale'] = 1e+11
         ploter.set_subplot(idx+1,2)
         if idx == 0:
-            confset['default']['title'] = 'Speedup of Time'
+            confset['default']['title'] = 'Speedup in Time'
         #if setxlim:
         #    confset['default']['xlim'] = confxlim[dataset][3]
         confset['default']['yscale'] = 'log'
+        confset['default'].pop('xtick_scale',None)
         call_plot('speedup', '', conffiles[dataset]['1'], '',confset) 
 
 
@@ -142,12 +148,19 @@ def draw_ldascale(outname, compact = False):
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][1]
         confset['default']['sample'] = 10
+        confset['default']['xtick_scale'] = 1000
+
+        if dataset in confylim:
+            confset['default']['ylim'] = True
+            confset['default']['ylim_l'] = confylim[dataset][0]
+            confset['default']['ylim_h'] = confylim[dataset][1]
+
         call_plot('loadbalance_runtime', '', conffiles[dataset]['1'], '',confset) 
 
         #the middle plot
         if idx == rowCnt - 1:
             lgd = ploter.curax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
-                  fancybox=True, shadow=True, ncol=5)
+                  fancybox=True, shadow=False, ncol=5)
  
         ploter.set_subplot(idx+1,4)
         if idx == 0:
@@ -155,12 +168,14 @@ def draw_ldascale(outname, compact = False):
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][2]
         confset['default']['sample'] = 10
+        confset['default']['xtick_scale'] = 1000
+        confset['default'].pop('ylim', None) 
         call_plot('overhead_only', '', conffiles[dataset]['1'], '',confset) 
 
 
         ploter.set_subplot(idx+1,5)
         if idx == 0:
-            confset['default']['title'] = 'Scalability of Throughput'
+            confset['default']['title'] = 'Speedup in Throughput'
      
         #if setxlim:
         #    confset['default']['fit_time'] = confxlim[dataset][3]

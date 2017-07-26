@@ -372,9 +372,9 @@ public class LDAMPCollectiveMapper extends
       }
       rotator.start();
 
-      //long run test
+      //long run test, use 500 as the threshold to use longrun or normal iterations
       long systemRuntime = (System.currentTimeMillis() - systemStart)/1000;
-      if (systemRuntime >numIterations){
+      if (numIterations > 500 && systemRuntime >numIterations){
         LOG.info("End iteration with total run time" + systemRuntime);        break;
       }
     }
