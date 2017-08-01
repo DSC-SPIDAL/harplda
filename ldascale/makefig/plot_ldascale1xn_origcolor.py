@@ -90,8 +90,8 @@ def draw_ldascale(outname, compact = False):
     #
     # init
     #
-    dnames=['nytimes','pubmed2m','enwiki-1k','enwiki-10k']
-    #dnames=['nytimes','pubmed2m','enwiki-10k']
+    #dnames=['nytimes','pubmed2m','enwiki-1k','enwiki-10k']
+    dnames=['nytimes','pubmed2m','enwiki-10k']
     rowCnt = len(dnames)
 
     setxlim = True
@@ -103,9 +103,6 @@ def draw_ldascale(outname, compact = False):
     plt.rcParams.update({'legend.fontsize':12})
     logger.info('set large view')
 
-    #matplotlib.style.use('ggplot')
-    #matplotlib.style.use('seaborn')
-
     ploter.init_subplot(rowCnt,5)
 
     for idx, dataset in enumerate(dnames):
@@ -114,11 +111,8 @@ def draw_ldascale(outname, compact = False):
         confset = {}
         conf={}
         conf['title']=''
-        #conf['colors']=['r','b','g', 'm','y','c','k','r','b','m','g','c','y','k']*10
-        #conf['colors']=['C0','C1','C2', 'C3','C4','C5','C6','C7','C8','C9']*10
-        #conf['colors']=['#1f77b4','#ff7f0e','#2ca02c', '#d62728','#9467bd','#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf']*10
-        conf['colors']=['r','b','#ff7f00','g','m','y','k','r','b','m','g','c','y','k']*10
-        conf['lines']=['o-','^-','*-','d-','+-']*10
+        conf['colors']=['r','b','g', 'm','y','c','k','r','b','m','g','c','y','k']*10
+        conf['lines']=['o-','^-','d-']*10
         conf['nolegend'] = True
         confset['default'] = conf
 

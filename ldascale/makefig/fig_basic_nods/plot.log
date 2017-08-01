@@ -1,0 +1,1095 @@
+2017-08-01 10:04:42,463 : INFO : running ../plot_ldascale1xn.py fig_basic_nods
+/N/u/pengb/anaconda2/lib/python2.7/site-packages/matplotlib/__init__.py:855: UserWarning: text.fontsize is deprecated and replaced with font.size; please use the latter.
+  warnings.warn(self.msg_depr % (key, alt_key))
+2017-08-01 10:04:42,464 : INFO : set large view
+2017-08-01 10:04:43,279 : INFO : init_subplots as (4, 5), axarr shape=[[<matplotlib.axes._subplots.AxesSubplot object at 0x7f98c6d30d10>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98c6cc0b10>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98be66d410>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98be5ef490>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98be2c9a90>]
+ [<matplotlib.axes._subplots.AxesSubplot object at 0x7f98be1cbcd0>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98be277f50>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98be135590>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98be0b81d0>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98be012d90>]
+ [<matplotlib.axes._subplots.AxesSubplot object at 0x7f98bdf96ad0>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98be036e10>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98bdf096d0>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98bde0e310>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98bddf0950>]
+ [<matplotlib.axes._subplots.AxesSubplot object at 0x7f98bdd76690>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98bdcdb2d0>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98bdc5e310>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98bdbd6f10>
+  <matplotlib.axes._subplots.AxesSubplot object at 0x7f98bdbc6ad0>]]
+2017-08-01 10:04:43,280 : INFO : idx=0, dataset=nytimes
+2017-08-01 10:04:43,280 : INFO : set_subplot curax = Axes(0.175,0.776087;0.133621x0.173913)
+2017-08-01 10:04:43,281 : INFO : ====================
+2017-08-01 10:04:43,281 : INFO : StartPlot: accuracy_itertime
+2017-08-01 10:04:43,281 : INFO : ====================
+2017-08-01 10:04:43,286 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,287 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,288 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,289 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.likelihood
+2017-08-01 10:04:43,301 : DEBUG : load data from lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,302 : DEBUG : load data from lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,303 : DEBUG : load data from lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.likelihood
+2017-08-01 10:04:43,306 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.likelihood
+2017-08-01 10:04:43,306 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,307 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,308 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,310 : DEBUG : load data from warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,313 : DEBUG : load data from warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,315 : DEBUG : load data from warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.likelihood
+2017-08-01 10:04:43,319 : DEBUG : load data from nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.update-stat
+2017-08-01 10:04:43,319 : DEBUG : load data from nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.likelihood
+2017-08-01 10:04:43,320 : DEBUG : load data from nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.iter-stat
+2017-08-01 10:04:43,320 : DEBUG : load data from nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,321 : ERROR : lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,321 : ERROR : warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,321 : DEBUG : runtime_name=harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,321 : DEBUG : runtime_name=harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,321 : DEBUG : runtime_name=lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,322 : DEBUG : runtime_name=nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,322 : DEBUG : runtime_name=warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,322 : INFO : shortest iternum = None
+2017-08-01 10:04:43,322 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,324 : INFO : _trace_shortest_x = 1e+24, x[-1]=4923.709
+2017-08-01 10:04:43,324 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,325 : INFO : _trace_shortest_x = 4923.709, x[-1]=11747.085
+2017-08-01 10:04:43,325 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,327 : INFO : _trace_shortest_x = 4923.709, x[-1]=15161.0
+2017-08-01 10:04:43,327 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,328 : INFO : _trace_shortest_x = 4923.709, x[-1]=6001.0
+2017-08-01 10:04:43,328 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,329 : INFO : _trace_shortest_x = 4923.709, x[-1]=4729.74088
+2017-08-01 10:04:43,329 : INFO : _trace_shortest_x = 4729.74088
+2017-08-01 10:04:43,329 : INFO : set_subplot curax = Axes(0.335345,0.776087;0.133621x0.173913)
+2017-08-01 10:04:43,330 : INFO : ====================
+2017-08-01 10:04:43,330 : INFO : StartPlot: accuracy_iter
+2017-08-01 10:04:43,330 : INFO : ====================
+2017-08-01 10:04:43,352 : ERROR : lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,352 : ERROR : warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,353 : DEBUG : runtime_name=harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,353 : DEBUG : runtime_name=harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,353 : DEBUG : runtime_name=lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,353 : DEBUG : runtime_name=nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,353 : DEBUG : runtime_name=warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,353 : INFO : shortest iternum = None
+2017-08-01 10:04:43,353 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,354 : INFO : _trace_shortest_x = 1e+24, x[-1]=100.0
+2017-08-01 10:04:43,354 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,355 : INFO : _trace_shortest_x = 100.0, x[-1]=200.0
+2017-08-01 10:04:43,355 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,357 : INFO : _trace_shortest_x = 100.0, x[-1]=196
+2017-08-01 10:04:43,357 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,358 : INFO : _trace_shortest_x = 100.0, x[-1]=127.82
+2017-08-01 10:04:43,358 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,359 : INFO : _trace_shortest_x = 100.0, x[-1]=996
+2017-08-01 10:04:43,359 : INFO : _trace_shortest_x = 100.0
+2017-08-01 10:04:43,359 : INFO : set_subplot curax = Axes(0.49569,0.776087;0.133621x0.173913)
+2017-08-01 10:04:43,359 : INFO : ====================
+2017-08-01 10:04:43,359 : INFO : StartPlot: throughput_runtime
+2017-08-01 10:04:43,360 : INFO : ====================
+2017-08-01 10:04:43,364 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,376 : DEBUG : load data from lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,379 : DEBUG : load data from harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,384 : ERROR : lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,384 : ERROR : nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,384 : ERROR : warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,384 : ERROR : warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,385 : DEBUG : runtime_name=harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,385 : DEBUG : runtime_name=harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,385 : DEBUG : runtime_name=lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,385 : DEBUG : runtime_name=nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,385 : DEBUG : runtime_name=warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,385 : INFO : grp_size:5
+2017-08-01 10:04:43,385 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,386 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,387 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,388 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,390 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,391 : INFO : set_subplot curax = Axes(0.656034,0.776087;0.133621x0.173913)
+2017-08-01 10:04:43,392 : INFO : ====================
+2017-08-01 10:04:43,392 : INFO : StartPlot: accuracy_itertime
+2017-08-01 10:04:43,392 : INFO : ====================
+2017-08-01 10:04:43,396 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.likelihood
+2017-08-01 10:04:43,396 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,397 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,398 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,410 : DEBUG : load data from lightlda_nytimes_t1000_1x32_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,410 : DEBUG : load data from lightlda_nytimes_t1000_1x32_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,411 : DEBUG : load data from lightlda_nytimes_t1000_1x32_i200_.05000000_0.01_4_Basic.likelihood
+2017-08-01 10:04:43,414 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.likelihood
+2017-08-01 10:04:43,414 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,415 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,416 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,418 : DEBUG : load data from warplda_nytimes_t1000_1x32_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,420 : DEBUG : load data from warplda_nytimes_t1000_1x32_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,423 : DEBUG : load data from warplda_nytimes_t1000_1x32_i1000_50_0.01_4_Basic.likelihood
+2017-08-01 10:04:43,426 : DEBUG : load data from nomadlda_nytimes_t1000_1x32_i100_50_0.01_t20_Basic.runtime-stat
+2017-08-01 10:04:43,427 : DEBUG : load data from nomadlda_nytimes_t1000_1x32_i100_50_0.01_t20_Basic.iter-stat
+2017-08-01 10:04:43,427 : DEBUG : load data from nomadlda_nytimes_t1000_1x32_i100_50_0.01_t20_Basic.update-stat
+2017-08-01 10:04:43,428 : DEBUG : load data from nomadlda_nytimes_t1000_1x32_i100_50_0.01_t20_Basic.likelihood
+2017-08-01 10:04:43,429 : ERROR : lightlda_nytimes_t1000_1x32_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,429 : ERROR : warplda_nytimes_t1000_1x32_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,429 : DEBUG : runtime_name=harp_nytimes_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,429 : DEBUG : runtime_name=harp_nytimes_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,429 : DEBUG : runtime_name=lightlda_nytimes_t1000_1x32_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,429 : DEBUG : runtime_name=nomadlda_nytimes_t1000_1x32_i100_50_0.01_t20_Basic.runtime-stat
+2017-08-01 10:04:43,429 : DEBUG : runtime_name=warplda_nytimes_t1000_1x32_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,429 : INFO : shortest iternum = None
+2017-08-01 10:04:43,429 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,430 : INFO : _trace_shortest_x = 1e+24, x[-1]=223.796
+2017-08-01 10:04:43,430 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,431 : INFO : _trace_shortest_x = 223.796, x[-1]=654.56
+2017-08-01 10:04:43,432 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,433 : INFO : _trace_shortest_x = 223.796, x[-1]=1767.0
+2017-08-01 10:04:43,433 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,434 : INFO : _trace_shortest_x = 223.796, x[-1]=2000.0
+2017-08-01 10:04:43,434 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,435 : INFO : _trace_shortest_x = 223.796, x[-1]=288.92152
+2017-08-01 10:04:43,435 : INFO : _trace_shortest_x = 223.796
+2017-08-01 10:04:43,435 : INFO : set_subplot curax = Axes(0.816379,0.776087;0.133621x0.173913)
+2017-08-01 10:04:43,436 : INFO : ====================
+2017-08-01 10:04:43,436 : INFO : StartPlot: scalability
+2017-08-01 10:04:43,436 : INFO : ====================
+2017-08-01 10:04:43,441 : DEBUG : load data from harp_nytimes_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,442 : DEBUG : load data from harp_nytimes_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,442 : DEBUG : load data from harp_nytimes_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,443 : DEBUG : load data from harp_nytimes_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,444 : DEBUG : load data from harp_nytimes_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,445 : DEBUG : load data from harp_nytimes_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,445 : DEBUG : load data from harp_nytimes_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,446 : DEBUG : load data from harp_nytimes_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,446 : DEBUG : load data from harp_nytimes_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,447 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,448 : DEBUG : load data from harp_nytimes_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,448 : DEBUG : load data from harp_nytimes_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,449 : DEBUG : load data from harp_nytimes_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,450 : DEBUG : load data from harp_nytimes_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,450 : DEBUG : load data from harp_nytimes_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,451 : DEBUG : load data from harp_nytimes_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,452 : DEBUG : load data from harp_nytimes_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,453 : DEBUG : load data from harp_nytimes_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,453 : DEBUG : load data from harp_nytimes_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,454 : DEBUG : load data from harp_nytimes_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,455 : DEBUG : load data from harp_nytimes_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,469 : DEBUG : load data from lightlda_nytimes_t1000_1x4_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,470 : DEBUG : load data from lightlda_nytimes_t1000_1x8_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,471 : DEBUG : load data from lightlda_nytimes_t1000_1x16_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,471 : DEBUG : load data from lightlda_nytimes_t1000_1x64_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,472 : DEBUG : load data from lightlda_nytimes_t1000_1x2_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,472 : DEBUG : load data from lightlda_nytimes_t1000_1x64_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,473 : DEBUG : load data from lightlda_nytimes_t1000_1x16_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,474 : DEBUG : load data from lightlda_nytimes_t1000_1x2_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,474 : DEBUG : load data from lightlda_nytimes_t1000_1x2_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,475 : DEBUG : load data from lightlda_nytimes_t1000_1x32_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,476 : DEBUG : load data from lightlda_nytimes_t1000_1x16_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,476 : DEBUG : load data from lightlda_nytimes_t1000_1x8_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,477 : DEBUG : load data from lightlda_nytimes_t1000_1x4_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,478 : DEBUG : load data from lightlda_nytimes_t1000_1x4_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,478 : DEBUG : load data from lightlda_nytimes_t1000_1x64_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,479 : DEBUG : load data from lightlda_nytimes_t1000_1x8_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,483 : DEBUG : load data from harp_nytimes_j128_1x2_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,484 : DEBUG : load data from harp_nytimes_j128_1x8_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,484 : DEBUG : load data from harp_nytimes_j128_1x4_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,485 : DEBUG : load data from harp_nytimes_j128_1x16_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,486 : DEBUG : load data from harp_nytimes_j128_1x8_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,486 : DEBUG : load data from harp_nytimes_j128_1x2_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,487 : DEBUG : load data from harp_nytimes_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,488 : DEBUG : load data from harp_nytimes_j128_1x4_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,489 : DEBUG : load data from harp_nytimes_j128_1x64_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,489 : DEBUG : load data from harp_nytimes_j128_1x16_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,490 : DEBUG : load data from harp_nytimes_j128_1x64_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,490 : DEBUG : load data from harp_nytimes_j128_1x2_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,491 : DEBUG : load data from harp_nytimes_j128_1x16_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,492 : DEBUG : load data from harp_nytimes_j128_1x4_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,492 : DEBUG : load data from harp_nytimes_j128_1x4_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,493 : DEBUG : load data from harp_nytimes_j128_1x16_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,494 : DEBUG : load data from harp_nytimes_j128_1x8_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,495 : DEBUG : load data from harp_nytimes_j128_1x64_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,495 : DEBUG : load data from harp_nytimes_j128_1x2_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,496 : DEBUG : load data from harp_nytimes_j128_1x8_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,497 : DEBUG : load data from harp_nytimes_j128_1x64_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,499 : DEBUG : load data from warplda_nytimes_t1000_1x8_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,501 : DEBUG : load data from warplda_nytimes_t1000_1x2_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,504 : DEBUG : load data from warplda_nytimes_t1000_1x2_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,506 : DEBUG : load data from warplda_nytimes_t1000_1x64_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,509 : DEBUG : load data from warplda_nytimes_t1000_1x4_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,511 : DEBUG : load data from warplda_nytimes_t1000_1x4_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,514 : DEBUG : load data from warplda_nytimes_t1000_1x16_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,516 : DEBUG : load data from warplda_nytimes_t1000_1x8_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,519 : DEBUG : load data from warplda_nytimes_t1000_1x16_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,521 : DEBUG : load data from warplda_nytimes_t1000_1x64_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,526 : DEBUG : load data from nomadlda_nytimes_t1000_1x2_i100_50_0.01_t60_Basic.iter-stat
+2017-08-01 10:04:43,526 : DEBUG : load data from nomadlda_nytimes_t1000_1x4_i100_50_0.01_t40_Basic.update-stat
+2017-08-01 10:04:43,527 : DEBUG : load data from nomadlda_nytimes_t1000_1x16_i100_50_0.01_t20_Basic.iter-stat
+2017-08-01 10:04:43,527 : DEBUG : load data from nomadlda_nytimes_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.iter-stat
+2017-08-01 10:04:43,528 : DEBUG : load data from nomadlda_nytimes_t1000_1x2_i100_50_0.01_t60_Basic.update-stat
+2017-08-01 10:04:43,528 : DEBUG : load data from nomadlda_nytimes_t1000_1x8_i100_50_0.01_t40_Basic.update-stat
+2017-08-01 10:04:43,529 : DEBUG : load data from nomadlda_nytimes_t1000_1x2_i100_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,529 : DEBUG : load data from nomadlda_nytimes_t1000_1x8_i100_50_0.01_t40_Basic.iter-stat
+2017-08-01 10:04:43,530 : DEBUG : load data from nomadlda_nytimes_t1000_1x8_i100_50_0.01_t40_Basic.runtime-stat
+2017-08-01 10:04:43,530 : DEBUG : load data from nomadlda_nytimes_t1000_1x16_i100_50_0.01_t20_Basic.runtime-stat
+2017-08-01 10:04:43,531 : DEBUG : load data from nomadlda_nytimes_t1000_1x16_i100_50_0.01_t20_Basic.update-stat
+2017-08-01 10:04:43,531 : DEBUG : load data from nomadlda_nytimes_t1000_1x4_i100_50_0.01_t40_Basic.iter-stat
+2017-08-01 10:04:43,532 : DEBUG : load data from nomadlda_nytimes_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:43,532 : DEBUG : load data from nomadlda_nytimes_t1000_1x4_i100_50_0.01_t40_Basic.runtime-stat
+2017-08-01 10:04:43,533 : DEBUG : load data from nomadlda_nytimes_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.update-stat
+2017-08-01 10:04:43,534 : ERROR : lightlda_nytimes_t1000_1x16_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : lightlda_nytimes_t1000_1x2_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : lightlda_nytimes_t1000_1x32_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : lightlda_nytimes_t1000_1x64_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : lightlda_nytimes_t1000_1x4_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : lightlda_nytimes_t1000_1x8_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : nomadlda_nytimes_t1000_1x16_i100_50_0.01_t20_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : nomadlda_nytimes_t1000_1x2_i100_50_0.01_t60_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : nomadlda_nytimes_t1000_1x32_i100_50_0.01_t20_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : nomadlda_nytimes_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : nomadlda_nytimes_t1000_1x4_i100_50_0.01_t40_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : nomadlda_nytimes_t1000_1x8_i100_50_0.01_t40_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x16_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x16_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x2_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x2_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x32_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x32_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,534 : ERROR : warplda_nytimes_t1000_1x64_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,535 : ERROR : warplda_nytimes_t1000_1x64_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,535 : ERROR : warplda_nytimes_t1000_1x4_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,535 : ERROR : warplda_nytimes_t1000_1x4_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,535 : ERROR : warplda_nytimes_t1000_1x8_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,535 : ERROR : warplda_nytimes_t1000_1x8_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,568 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,568 : INFO : groupdata = [('harp_nytimes_j128_1x1_k1000_timer_l40_h80_r2_exp1basic', '1'), ('harp_nytimes_j128_1x2_k1000_timer_l40_h80_r2_exp1basic', '2'), ('harp_nytimes_j128_1x4_k1000_timer_l40_h80_r2_exp1basic', '4'), ('harp_nytimes_j128_1x8_k1000_timer_l40_h80_r2_exp1basic', '8'), ('harp_nytimes_j128_1x16_k1000_timer_l40_h80_r2_exp1basic', '16'), ('harp_nytimes_j128_1x32_k1000_timer_l40_h80_r2_exp1basic', '32'), ('harp_nytimes_j128_1x64_k1000_timer_l40_h80_r2_exp1basic', '64')]
+2017-08-01 10:04:43,568 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,568 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,569 : INFO : curves: [[1, 2021715.0270253581, 0.0], [2, 5095075.7082544714, 0.0], [4, 10068894.914503248, 0.0], [8, 18371825.352621727, 0.0], [16, 31902098.976514835, 0.0], [32, 51512860.958194084, 0.0], [64, 67297222.198121712, 0.0]]
+2017-08-01 10:04:43,580 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,580 : INFO : groupdata = [('harp_nytimes_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog', '1'), ('harp_nytimes_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog', '2'), ('harp_nytimes_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog', '4'), ('harp_nytimes_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog', '8'), ('harp_nytimes_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog', '16'), ('harp_nytimes_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog', '32'), ('harp_nytimes_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog', '64')]
+2017-08-01 10:04:43,580 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,580 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,580 : INFO : curves: [[1, 1694754.4859001196, 0.0], [2, 4522521.5995318554, 0.0], [4, 8690910.4481651634, 0.0], [8, 12336181.020978747, 0.0], [16, 18930800.595639959, 0.0], [32, 30414973.417257387, 0.0], [64, 38693951.526695304, 0.0]]
+2017-08-01 10:04:43,593 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,593 : INFO : groupdata = [('lightlda_nytimes_t1000_1x1_i200_.05000000_0.01_4_Basic', '1'), ('lightlda_nytimes_t1000_1x2_i200_.05000000_0.01_4_Basic', '2'), ('lightlda_nytimes_t1000_1x4_i200_.05000000_0.01_4_Basic', '4'), ('lightlda_nytimes_t1000_1x8_i200_.05000000_0.01_4_Basic', '8'), ('lightlda_nytimes_t1000_1x16_i200_.05000000_0.01_4_Basic', '16'), ('lightlda_nytimes_t1000_1x32_i200_.05000000_0.01_4_Basic', '32'), ('lightlda_nytimes_t1000_1x64_i200_.05000000_0.01_4_Basic', '64')]
+2017-08-01 10:04:43,593 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,593 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,593 : INFO : curves: [[1, 1288047.5242213409, 0.0], [2, 2596524.1676497576, 0.0], [4, 4602435.6122211898, 0.0], [8, 8379392.0791032147, 0.0], [16, 10398363.71391076, 0.0], [32, 11072600.824482951, 0.0], [64, 11364820.926563397, 0.0]]
+2017-08-01 10:04:43,605 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,605 : INFO : groupdata = [('nomadlda_nytimes_t1000_1x1_i100_50_0.01_t60_Basic', '1'), ('nomadlda_nytimes_t1000_1x2_i100_50_0.01_t60_Basic', '2'), ('nomadlda_nytimes_t1000_1x4_i100_50_0.01_t40_Basic', '4'), ('nomadlda_nytimes_t1000_1x8_i100_50_0.01_t40_Basic', '8'), ('nomadlda_nytimes_t1000_1x16_i100_50_0.01_t20_Basic', '16'), ('nomadlda_nytimes_t1000_1x32_i100_50_0.01_t20_Basic', '32'), ('nomadlda_nytimes_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2', '64')]
+2017-08-01 10:04:43,605 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,605 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,605 : INFO : curves: [[1, 2120189.9808365274, 0.0], [2, 4399955.0818196964, 0.0], [4, 7308800.9534999998, 0.0], [8, 6309056.9662584355, 0.0], [16, 7125313.6109999996, 0.0], [32, 10905227.111500001, 0.0], [64, 19953971.597399998, 0.0]]
+2017-08-01 10:04:43,617 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,617 : INFO : groupdata = [('warplda_nytimes_t1000_1x1_i1000_50_0.01_4_Basic', '1'), ('warplda_nytimes_t1000_1x2_i1000_50_0.01_4_Basic', '2'), ('warplda_nytimes_t1000_1x4_i1000_50_0.01_4_Basic', '4'), ('warplda_nytimes_t1000_1x8_i1000_50_0.01_4_Basic', '8'), ('warplda_nytimes_t1000_1x16_i1000_50_0.01_4_Basic', '16'), ('warplda_nytimes_t1000_1x32_i1000_50_0.01_4_Basic', '32'), ('warplda_nytimes_t1000_1x64_i1200_50_0.01_4_Basic', '64')]
+2017-08-01 10:04:43,617 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,617 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,618 : INFO : curves: [[1, 20965586.743445497, 0.0], [2, 33999314.010000817, 0.0], [4, 62953655.550425127, 0.0], [8, 120441376.39944616, 0.0], [16, 208737678.81065288, 0.0], [32, 343195594.41973233, 0.0], [64, 451425669.01486325, 0.0]]
+2017-08-01 10:04:43,635 : INFO : idx=1, dataset=pubmed2m
+2017-08-01 10:04:43,635 : INFO : set_subplot curax = Axes(0.175,0.567391;0.133621x0.173913)
+2017-08-01 10:04:43,636 : INFO : ====================
+2017-08-01 10:04:43,636 : INFO : StartPlot: accuracy_itertime
+2017-08-01 10:04:43,636 : INFO : ====================
+2017-08-01 10:04:43,640 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,641 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.likelihood
+2017-08-01 10:04:43,641 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,642 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,654 : DEBUG : load data from lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,654 : DEBUG : load data from lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.likelihood
+2017-08-01 10:04:43,655 : DEBUG : load data from lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,658 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,659 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,660 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,660 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.likelihood
+2017-08-01 10:04:43,662 : DEBUG : load data from warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,664 : DEBUG : load data from warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.likelihood
+2017-08-01 10:04:43,665 : DEBUG : load data from warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,670 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.update-stat
+2017-08-01 10:04:43,671 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.iter-stat
+2017-08-01 10:04:43,672 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,672 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.likelihood
+2017-08-01 10:04:43,674 : ERROR : lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,674 : ERROR : warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,674 : DEBUG : runtime_name=harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,674 : DEBUG : runtime_name=harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,674 : DEBUG : runtime_name=lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,674 : DEBUG : runtime_name=nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,674 : DEBUG : runtime_name=warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,674 : INFO : shortest iternum = None
+2017-08-01 10:04:43,674 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,675 : INFO : _trace_shortest_x = 1e+24, x[-1]=6253.056
+2017-08-01 10:04:43,676 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,677 : INFO : _trace_shortest_x = 6253.056, x[-1]=11978.356
+2017-08-01 10:04:43,677 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,678 : INFO : _trace_shortest_x = 6253.056, x[-1]=25111.0
+2017-08-01 10:04:43,678 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,679 : INFO : _trace_shortest_x = 6253.056, x[-1]=12000.0
+2017-08-01 10:04:43,679 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,680 : INFO : _trace_shortest_x = 6253.056, x[-1]=7762.14665
+2017-08-01 10:04:43,680 : INFO : _trace_shortest_x = 6253.056
+2017-08-01 10:04:43,681 : INFO : set_subplot curax = Axes(0.335345,0.567391;0.133621x0.173913)
+2017-08-01 10:04:43,681 : INFO : ====================
+2017-08-01 10:04:43,681 : INFO : StartPlot: accuracy_iter
+2017-08-01 10:04:43,681 : INFO : ====================
+2017-08-01 10:04:43,703 : ERROR : lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,704 : ERROR : warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,704 : DEBUG : runtime_name=harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,704 : DEBUG : runtime_name=harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,704 : DEBUG : runtime_name=lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,704 : DEBUG : runtime_name=nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,704 : DEBUG : runtime_name=warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,704 : INFO : shortest iternum = None
+2017-08-01 10:04:43,704 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,705 : INFO : _trace_shortest_x = 1e+24, x[-1]=100.0
+2017-08-01 10:04:43,705 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,706 : INFO : _trace_shortest_x = 100.0, x[-1]=200.0
+2017-08-01 10:04:43,706 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,708 : INFO : _trace_shortest_x = 100.0, x[-1]=196
+2017-08-01 10:04:43,708 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,709 : INFO : _trace_shortest_x = 100.0, x[-1]=219.26
+2017-08-01 10:04:43,709 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,710 : INFO : _trace_shortest_x = 100.0, x[-1]=996
+2017-08-01 10:04:43,710 : INFO : _trace_shortest_x = 100.0
+2017-08-01 10:04:43,710 : INFO : set_subplot curax = Axes(0.49569,0.567391;0.133621x0.173913)
+2017-08-01 10:04:43,710 : INFO : ====================
+2017-08-01 10:04:43,711 : INFO : StartPlot: throughput_runtime
+2017-08-01 10:04:43,711 : INFO : ====================
+2017-08-01 10:04:43,715 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,727 : DEBUG : load data from lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,730 : DEBUG : load data from harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,735 : ERROR : lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,735 : ERROR : nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,736 : ERROR : warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,736 : ERROR : warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,736 : DEBUG : runtime_name=harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,736 : DEBUG : runtime_name=harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,736 : DEBUG : runtime_name=lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,736 : DEBUG : runtime_name=nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,736 : DEBUG : runtime_name=warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,736 : INFO : grp_size:5
+2017-08-01 10:04:43,736 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,737 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,738 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,740 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,741 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:43,742 : INFO : set_subplot curax = Axes(0.656034,0.567391;0.133621x0.173913)
+2017-08-01 10:04:43,743 : INFO : ====================
+2017-08-01 10:04:43,743 : INFO : StartPlot: accuracy_itertime
+2017-08-01 10:04:43,743 : INFO : ====================
+2017-08-01 10:04:43,747 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,748 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.likelihood
+2017-08-01 10:04:43,748 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,749 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,761 : DEBUG : load data from lightlda_pubmed2m_t1000_1x32_i600_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,762 : DEBUG : load data from lightlda_pubmed2m_t1000_1x32_i600_.05000000_0.01_4_Basic.likelihood
+2017-08-01 10:04:43,763 : DEBUG : load data from lightlda_pubmed2m_t1000_1x32_i600_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,767 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,768 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,769 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,770 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.likelihood
+2017-08-01 10:04:43,771 : DEBUG : load data from warplda_pubmed2m_t1000_1x32_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,774 : DEBUG : load data from warplda_pubmed2m_t1000_1x32_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,776 : DEBUG : load data from warplda_pubmed2m_t1000_1x32_i1000_50_0.01_4_Basic.likelihood
+2017-08-01 10:04:43,779 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x32_i100_50_0.01_t20_Basic.runtime-stat
+2017-08-01 10:04:43,780 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x32_i100_50_0.01_t20_Basic.update-stat
+2017-08-01 10:04:43,780 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x32_i100_50_0.01_t20_Basic.likelihood
+2017-08-01 10:04:43,781 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x32_i100_50_0.01_t20_Basic.iter-stat
+2017-08-01 10:04:43,782 : ERROR : lightlda_pubmed2m_t1000_1x32_i600_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,782 : ERROR : warplda_pubmed2m_t1000_1x32_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,782 : DEBUG : runtime_name=harp_pubmed2m_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,782 : DEBUG : runtime_name=harp_pubmed2m_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,782 : DEBUG : runtime_name=lightlda_pubmed2m_t1000_1x32_i600_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,782 : DEBUG : runtime_name=nomadlda_pubmed2m_t1000_1x32_i100_50_0.01_t20_Basic.runtime-stat
+2017-08-01 10:04:43,782 : DEBUG : runtime_name=warplda_pubmed2m_t1000_1x32_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,782 : INFO : shortest iternum = None
+2017-08-01 10:04:43,782 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,783 : INFO : _trace_shortest_x = 1e+24, x[-1]=318.112
+2017-08-01 10:04:43,784 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,785 : INFO : _trace_shortest_x = 318.112, x[-1]=817.539
+2017-08-01 10:04:43,785 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,786 : INFO : _trace_shortest_x = 318.112, x[-1]=5568.0
+2017-08-01 10:04:43,786 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,787 : INFO : _trace_shortest_x = 318.112, x[-1]=2000.0
+2017-08-01 10:04:43,787 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:43,788 : INFO : _trace_shortest_x = 318.112, x[-1]=502.70305
+2017-08-01 10:04:43,788 : INFO : _trace_shortest_x = 318.112
+2017-08-01 10:04:43,788 : INFO : set_subplot curax = Axes(0.816379,0.567391;0.133621x0.173913)
+2017-08-01 10:04:43,789 : INFO : ====================
+2017-08-01 10:04:43,789 : INFO : StartPlot: scalability
+2017-08-01 10:04:43,789 : INFO : ====================
+2017-08-01 10:04:43,794 : DEBUG : load data from harp_pubmed2m_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,795 : DEBUG : load data from harp_pubmed2m_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,795 : DEBUG : load data from harp_pubmed2m_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,796 : DEBUG : load data from harp_pubmed2m_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,797 : DEBUG : load data from harp_pubmed2m_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,798 : DEBUG : load data from harp_pubmed2m_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,798 : DEBUG : load data from harp_pubmed2m_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,799 : DEBUG : load data from harp_pubmed2m_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,800 : DEBUG : load data from harp_pubmed2m_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,801 : DEBUG : load data from harp_pubmed2m_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,802 : DEBUG : load data from harp_pubmed2m_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,802 : DEBUG : load data from harp_pubmed2m_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,803 : DEBUG : load data from harp_pubmed2m_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,804 : DEBUG : load data from harp_pubmed2m_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,804 : DEBUG : load data from harp_pubmed2m_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:43,805 : DEBUG : load data from harp_pubmed2m_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,806 : DEBUG : load data from harp_pubmed2m_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,806 : DEBUG : load data from harp_pubmed2m_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,807 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:43,807 : DEBUG : load data from harp_pubmed2m_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:43,808 : DEBUG : load data from harp_pubmed2m_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:43,823 : DEBUG : load data from lightlda_pubmed2m_t1000_1x2_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,823 : DEBUG : load data from lightlda_pubmed2m_t1000_1x4_i250_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,824 : DEBUG : load data from lightlda_pubmed2m_t1000_1x64_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,825 : DEBUG : load data from lightlda_pubmed2m_t1000_1x4_i250_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,825 : DEBUG : load data from lightlda_pubmed2m_t1000_1x8_i300_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,826 : DEBUG : load data from lightlda_pubmed2m_t1000_1x16_i400_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,827 : DEBUG : load data from lightlda_pubmed2m_t1000_1x2_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,828 : DEBUG : load data from lightlda_pubmed2m_t1000_1x8_i300_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,829 : DEBUG : load data from lightlda_pubmed2m_t1000_1x16_i400_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,830 : DEBUG : load data from lightlda_pubmed2m_t1000_1x64_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,831 : DEBUG : load data from lightlda_pubmed2m_t1000_1x32_i600_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,832 : DEBUG : load data from lightlda_pubmed2m_t1000_1x16_i400_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,833 : DEBUG : load data from lightlda_pubmed2m_t1000_1x64_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:43,834 : DEBUG : load data from lightlda_pubmed2m_t1000_1x8_i300_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,835 : DEBUG : load data from lightlda_pubmed2m_t1000_1x4_i250_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,835 : DEBUG : load data from lightlda_pubmed2m_t1000_1x2_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,839 : DEBUG : load data from harp_pubmed2m_j128_1x64_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,840 : DEBUG : load data from harp_pubmed2m_j128_1x2_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,840 : DEBUG : load data from harp_pubmed2m_j128_1x8_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,841 : DEBUG : load data from harp_pubmed2m_j128_1x64_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,841 : DEBUG : load data from harp_pubmed2m_j128_1x64_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,842 : DEBUG : load data from harp_pubmed2m_j128_1x64_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,843 : DEBUG : load data from harp_pubmed2m_j128_1x2_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,844 : DEBUG : load data from harp_pubmed2m_j128_1x4_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,845 : DEBUG : load data from harp_pubmed2m_j128_1x32_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,845 : DEBUG : load data from harp_pubmed2m_j128_1x4_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,846 : DEBUG : load data from harp_pubmed2m_j128_1x16_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,847 : DEBUG : load data from harp_pubmed2m_j128_1x8_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,847 : DEBUG : load data from harp_pubmed2m_j128_1x4_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,848 : DEBUG : load data from harp_pubmed2m_j128_1x4_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,849 : DEBUG : load data from harp_pubmed2m_j128_1x8_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,849 : DEBUG : load data from harp_pubmed2m_j128_1x16_k1000_timer_l40_h80_r2_exp1basic.iter-stat
+2017-08-01 10:04:43,850 : DEBUG : load data from harp_pubmed2m_j128_1x2_k1000_timer_l40_h80_r2_exp1basic.comput-stat
+2017-08-01 10:04:43,851 : DEBUG : load data from harp_pubmed2m_j128_1x16_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,852 : DEBUG : load data from harp_pubmed2m_j128_1x8_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,852 : DEBUG : load data from harp_pubmed2m_j128_1x2_k1000_timer_l40_h80_r2_exp1basic.update-stat
+2017-08-01 10:04:43,853 : DEBUG : load data from harp_pubmed2m_j128_1x16_k1000_timer_l40_h80_r2_exp1basic.runtime-stat
+2017-08-01 10:04:43,856 : DEBUG : load data from warplda_pubmed2m_t1000_1x4_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,858 : DEBUG : load data from warplda_pubmed2m_t1000_1x64_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,861 : DEBUG : load data from warplda_pubmed2m_t1000_1x8_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,863 : DEBUG : load data from warplda_pubmed2m_t1000_1x16_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,866 : DEBUG : load data from warplda_pubmed2m_t1000_1x2_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,868 : DEBUG : load data from warplda_pubmed2m_t1000_1x8_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,870 : DEBUG : load data from warplda_pubmed2m_t1000_1x16_i1000_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,873 : DEBUG : load data from warplda_pubmed2m_t1000_1x4_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,875 : DEBUG : load data from warplda_pubmed2m_t1000_1x64_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:43,878 : DEBUG : load data from warplda_pubmed2m_t1000_1x2_i1000_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:43,883 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x2_i200_50_0.01_t60_Basic.update-stat
+2017-08-01 10:04:43,884 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x16_i100_50_0.01_t20_Basic.runtime-stat
+2017-08-01 10:04:43,884 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x4_i150_50_0.01_t40_Basic.iter-stat
+2017-08-01 10:04:43,885 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x8_i150_50_0.01_t40_Basic.update-stat
+2017-08-01 10:04:43,885 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x4_i150_50_0.01_t40_Basic.runtime-stat
+2017-08-01 10:04:43,886 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x8_i150_50_0.01_t40_Basic.runtime-stat
+2017-08-01 10:04:43,887 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x16_i100_50_0.01_t20_Basic.update-stat
+2017-08-01 10:04:43,887 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x16_i100_50_0.01_t20_Basic.iter-stat
+2017-08-01 10:04:43,888 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.iter-stat
+2017-08-01 10:04:43,888 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x8_i150_50_0.01_t40_Basic.iter-stat
+2017-08-01 10:04:43,888 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:43,889 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x4_i150_50_0.01_t40_Basic.update-stat
+2017-08-01 10:04:43,890 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x2_i200_50_0.01_t60_Basic.runtime-stat
+2017-08-01 10:04:43,891 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.update-stat
+2017-08-01 10:04:43,891 : DEBUG : load data from nomadlda_pubmed2m_t1000_1x2_i200_50_0.01_t60_Basic.iter-stat
+2017-08-01 10:04:43,892 : ERROR : lightlda_pubmed2m_t1000_1x16_i400_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,892 : ERROR : lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,892 : ERROR : lightlda_pubmed2m_t1000_1x2_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : lightlda_pubmed2m_t1000_1x32_i600_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : lightlda_pubmed2m_t1000_1x64_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : lightlda_pubmed2m_t1000_1x4_i250_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : lightlda_pubmed2m_t1000_1x8_i300_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : nomadlda_pubmed2m_t1000_1x16_i100_50_0.01_t20_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : nomadlda_pubmed2m_t1000_1x2_i200_50_0.01_t60_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : nomadlda_pubmed2m_t1000_1x32_i100_50_0.01_t20_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : nomadlda_pubmed2m_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : nomadlda_pubmed2m_t1000_1x4_i150_50_0.01_t40_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : nomadlda_pubmed2m_t1000_1x8_i150_50_0.01_t40_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x16_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x16_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x2_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x2_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x32_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x32_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x64_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x64_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x4_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x4_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x8_i1000_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,893 : ERROR : warplda_pubmed2m_t1000_1x8_i1000_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:43,928 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,928 : INFO : groupdata = [('harp_pubmed2m_j128_1x1_k1000_timer_l40_h80_r2_exp1basic', '1'), ('harp_pubmed2m_j128_1x2_k1000_timer_l40_h80_r2_exp1basic', '2'), ('harp_pubmed2m_j128_1x4_k1000_timer_l40_h80_r2_exp1basic', '4'), ('harp_pubmed2m_j128_1x8_k1000_timer_l40_h80_r2_exp1basic', '8'), ('harp_pubmed2m_j128_1x16_k1000_timer_l40_h80_r2_exp1basic', '16'), ('harp_pubmed2m_j128_1x32_k1000_timer_l40_h80_r2_exp1basic', '32'), ('harp_pubmed2m_j128_1x64_k1000_timer_l40_h80_r2_exp1basic', '64')]
+2017-08-01 10:04:43,928 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,928 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,928 : INFO : curves: [[1, 2383328.6205976722, 0.0], [2, 5023275.3764131572, 0.0], [4, 10318608.815985275, 0.0], [8, 19645803.234312516, 0.0], [16, 31791723.887638807, 0.0], [32, 53601153.137888566, 0.0], [64, 81384647.727814212, 0.0]]
+2017-08-01 10:04:43,939 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,939 : INFO : groupdata = [('harp_pubmed2m_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog', '1'), ('harp_pubmed2m_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog', '2'), ('harp_pubmed2m_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog', '4'), ('harp_pubmed2m_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog', '8'), ('harp_pubmed2m_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog', '16'), ('harp_pubmed2m_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog', '32'), ('harp_pubmed2m_j128_1x64_k1000_notimer_l100_h100_r1_Shift-Threadlog', '64')]
+2017-08-01 10:04:43,940 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,940 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,940 : INFO : curves: [[1, 2488339.9357975358, 0.0], [2, 4927801.5482631978, 0.0], [4, 9289814.6289649568, 0.0], [8, 17188354.033864368, 0.0], [16, 22306857.028673273, 0.0], [32, 36458470.605072044, 0.0], [64, 55022468.848645963, 0.0]]
+2017-08-01 10:04:43,951 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,951 : INFO : groupdata = [('lightlda_pubmed2m_t1000_1x1_i200_.05000000_0.01_4_Basic', '1'), ('lightlda_pubmed2m_t1000_1x2_i200_.05000000_0.01_4_Basic', '2'), ('lightlda_pubmed2m_t1000_1x4_i250_.05000000_0.01_4_Basic', '4'), ('lightlda_pubmed2m_t1000_1x8_i300_.05000000_0.01_4_Basic', '8'), ('lightlda_pubmed2m_t1000_1x16_i400_.05000000_0.01_4_Basic', '16'), ('lightlda_pubmed2m_t1000_1x32_i600_.05000000_0.01_4_Basic', '32'), ('lightlda_pubmed2m_t1000_1x64_i200_.05000000_0.01_4_Basic', '64')]
+2017-08-01 10:04:43,952 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,952 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,952 : INFO : curves: [[1, 1165128.8792331265, 0.0], [2, 2350015.0944532487, 0.0], [4, 4274708.6616749223, 0.0], [8, 7933113.9918105751, 0.0], [16, 12719446.436791444, 0.0], [32, 15963811.461373391, 0.0], [64, 12408866.314644352, 0.0]]
+2017-08-01 10:04:43,963 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,964 : INFO : groupdata = [('nomadlda_pubmed2m_t1000_1x1_i200_50_0.01_t60_Basic', '1'), ('nomadlda_pubmed2m_t1000_1x2_i200_50_0.01_t60_Basic', '2'), ('nomadlda_pubmed2m_t1000_1x4_i150_50_0.01_t40_Basic', '4'), ('nomadlda_pubmed2m_t1000_1x8_i150_50_0.01_t40_Basic', '8'), ('nomadlda_pubmed2m_t1000_1x16_i100_50_0.01_t20_Basic', '16'), ('nomadlda_pubmed2m_t1000_1x32_i100_50_0.01_t20_Basic', '32'), ('nomadlda_pubmed2m_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2', '64')]
+2017-08-01 10:04:43,964 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,964 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,964 : INFO : curves: [[1, 2723045.4570833333, 0.0], [2, 5553595.9800833333, 0.0], [4, 7929699.0294950837, 0.0], [8, 8978453.7073821034, 0.0], [16, 8921259.6096951533, 0.0], [32, 10850632.702500001, 0.0], [64, 19793750.0902, 0.0]]
+2017-08-01 10:04:43,976 : INFO : min rowcnt=-1
+2017-08-01 10:04:43,977 : INFO : groupdata = [('warplda_pubmed2m_t1000_1x1_i1000_50_0.01_4_Basic', '1'), ('warplda_pubmed2m_t1000_1x2_i1000_50_0.01_4_Basic', '2'), ('warplda_pubmed2m_t1000_1x4_i1000_50_0.01_4_Basic', '4'), ('warplda_pubmed2m_t1000_1x8_i1000_50_0.01_4_Basic', '8'), ('warplda_pubmed2m_t1000_1x16_i1000_50_0.01_4_Basic', '16'), ('warplda_pubmed2m_t1000_1x32_i1000_50_0.01_4_Basic', '32'), ('warplda_pubmed2m_t1000_1x64_i1200_50_0.01_4_Basic', '64')]
+2017-08-01 10:04:43,977 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:43,977 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:43,977 : INFO : curves: [[1, 19122666.341195825, 0.0], [2, 32353134.641799573, 0.0], [4, 56741515.223858558, 0.0], [8, 105878712.86117561, 0.0], [16, 189263071.36388972, 0.0], [32, 295277840.45343333, 0.0], [64, 408141717.20911574, 0.0]]
+2017-08-01 10:04:43,995 : INFO : idx=2, dataset=enwiki-1k
+2017-08-01 10:04:43,995 : INFO : set_subplot curax = Axes(0.175,0.358696;0.133621x0.173913)
+2017-08-01 10:04:43,995 : INFO : ====================
+2017-08-01 10:04:43,995 : INFO : StartPlot: accuracy_itertime
+2017-08-01 10:04:43,995 : INFO : ====================
+2017-08-01 10:04:44,000 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,001 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog.likelihood
+2017-08-01 10:04:44,001 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,001 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,002 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,003 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.likelihood
+2017-08-01 10:04:44,003 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,003 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,015 : DEBUG : load data from lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,016 : DEBUG : load data from lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,016 : DEBUG : load data from lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.likelihood
+2017-08-01 10:04:44,021 : DEBUG : load data from warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,024 : DEBUG : load data from warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.likelihood
+2017-08-01 10:04:44,025 : DEBUG : load data from warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,030 : DEBUG : load data from nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-noreid.update-stat
+2017-08-01 10:04:44,032 : DEBUG : load data from nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-noreid.iter-stat
+2017-08-01 10:04:44,033 : DEBUG : load data from nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-noreid.runtime-stat
+2017-08-01 10:04:44,035 : DEBUG : load data from nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-noreid.likelihood
+2017-08-01 10:04:44,038 : ERROR : lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,038 : ERROR : warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,038 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,038 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,038 : DEBUG : runtime_name=lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,038 : DEBUG : runtime_name=nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-noreid.runtime-stat
+2017-08-01 10:04:44,038 : DEBUG : runtime_name=warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,038 : INFO : shortest iternum = None
+2017-08-01 10:04:44,038 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,039 : INFO : _trace_shortest_x = 1e+24, x[-1]=62824.934
+2017-08-01 10:04:44,039 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,040 : INFO : _trace_shortest_x = 62824.934, x[-1]=70978.246
+2017-08-01 10:04:44,041 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,042 : INFO : _trace_shortest_x = 62824.934, x[-1]=182213.0
+2017-08-01 10:04:44,042 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,043 : INFO : _trace_shortest_x = 62824.934, x[-1]=99820.0
+2017-08-01 10:04:44,043 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,044 : INFO : _trace_shortest_x = 62824.934, x[-1]=80871.28067
+2017-08-01 10:04:44,044 : INFO : _trace_shortest_x = 62824.934
+2017-08-01 10:04:44,044 : INFO : set_subplot curax = Axes(0.335345,0.358696;0.133621x0.173913)
+2017-08-01 10:04:44,044 : INFO : ====================
+2017-08-01 10:04:44,045 : INFO : StartPlot: accuracy_iter
+2017-08-01 10:04:44,045 : INFO : ====================
+2017-08-01 10:04:44,067 : ERROR : lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,067 : ERROR : warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,067 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,068 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,068 : DEBUG : runtime_name=lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,068 : DEBUG : runtime_name=nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-noreid.runtime-stat
+2017-08-01 10:04:44,068 : DEBUG : runtime_name=warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,068 : INFO : shortest iternum = None
+2017-08-01 10:04:44,068 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,069 : INFO : _trace_shortest_x = 1e+24, x[-1]=108.0
+2017-08-01 10:04:44,069 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,070 : INFO : _trace_shortest_x = 108.0, x[-1]=100.0
+2017-08-01 10:04:44,070 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,072 : INFO : _trace_shortest_x = 100.0, x[-1]=196
+2017-08-01 10:04:44,072 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,073 : INFO : _trace_shortest_x = 100.0, x[-1]=190.57
+2017-08-01 10:04:44,073 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,074 : INFO : _trace_shortest_x = 100.0, x[-1]=1196
+2017-08-01 10:04:44,074 : INFO : _trace_shortest_x = 100.0
+2017-08-01 10:04:44,074 : INFO : set_subplot curax = Axes(0.49569,0.358696;0.133621x0.173913)
+2017-08-01 10:04:44,074 : INFO : ====================
+2017-08-01 10:04:44,074 : INFO : StartPlot: throughput_runtime
+2017-08-01 10:04:44,075 : INFO : ====================
+2017-08-01 10:04:44,079 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,080 : DEBUG : load data from harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,091 : DEBUG : load data from lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,099 : ERROR : lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,099 : ERROR : nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-noreid.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,099 : ERROR : warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,099 : ERROR : warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,099 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,099 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,099 : DEBUG : runtime_name=lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,099 : DEBUG : runtime_name=nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-noreid.runtime-stat
+2017-08-01 10:04:44,100 : DEBUG : runtime_name=warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,100 : INFO : grp_size:5
+2017-08-01 10:04:44,100 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,101 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,102 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,103 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,105 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,106 : INFO : set_subplot curax = Axes(0.656034,0.358696;0.133621x0.173913)
+2017-08-01 10:04:44,106 : INFO : ====================
+2017-08-01 10:04:44,106 : INFO : StartPlot: accuracy_itertime
+2017-08-01 10:04:44,106 : INFO : ====================
+2017-08-01 10:04:44,111 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,112 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_timer_l40_h90_r2_DynaSched-Threadlog.likelihood
+2017-08-01 10:04:44,112 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,112 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.likelihood
+2017-08-01 10:04:44,113 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,114 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,114 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,115 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,127 : DEBUG : load data from lightlda_enwiki_t1000_1x32_i200_.05000000_0.01_4_Basic.likelihood
+2017-08-01 10:04:44,127 : DEBUG : load data from lightlda_enwiki_t1000_1x32_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,128 : DEBUG : load data from lightlda_enwiki_t1000_1x32_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,133 : DEBUG : load data from warplda_enwiki_t1000_1x32_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,136 : DEBUG : load data from warplda_enwiki_t1000_1x32_i1200_50_0.01_4_Basic.likelihood
+2017-08-01 10:04:44,137 : DEBUG : load data from warplda_enwiki_t1000_1x32_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,142 : DEBUG : load data from nomadlda_enwiki_t1000_1x32_i100_50_0.01_t50_Basic-mvapich2.likelihood
+2017-08-01 10:04:44,143 : DEBUG : load data from nomadlda_enwiki_t1000_1x32_i100_50_0.01_t50_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,143 : DEBUG : load data from nomadlda_enwiki_t1000_1x32_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,144 : DEBUG : load data from nomadlda_enwiki_t1000_1x32_i100_50_0.01_t50_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,145 : ERROR : lightlda_enwiki_t1000_1x32_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,145 : ERROR : warplda_enwiki_t1000_1x32_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,145 : DEBUG : runtime_name=harp_enwiki_j128_1x32_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,145 : DEBUG : runtime_name=harp_enwiki_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,145 : DEBUG : runtime_name=lightlda_enwiki_t1000_1x32_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,145 : DEBUG : runtime_name=nomadlda_enwiki_t1000_1x32_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,145 : DEBUG : runtime_name=warplda_enwiki_t1000_1x32_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,145 : INFO : shortest iternum = None
+2017-08-01 10:04:44,145 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,146 : INFO : _trace_shortest_x = 1e+24, x[-1]=3463.353
+2017-08-01 10:04:44,146 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,147 : INFO : _trace_shortest_x = 3463.353, x[-1]=5643.061
+2017-08-01 10:04:44,147 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,149 : INFO : _trace_shortest_x = 3463.353, x[-1]=20462.0
+2017-08-01 10:04:44,149 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,150 : INFO : _trace_shortest_x = 3463.353, x[-1]=5001.0
+2017-08-01 10:04:44,150 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,151 : INFO : _trace_shortest_x = 3463.353, x[-1]=4524.57419
+2017-08-01 10:04:44,151 : INFO : _trace_shortest_x = 3463.353
+2017-08-01 10:04:44,151 : INFO : set_subplot curax = Axes(0.816379,0.358696;0.133621x0.173913)
+2017-08-01 10:04:44,152 : INFO : ====================
+2017-08-01 10:04:44,152 : INFO : StartPlot: scalability
+2017-08-01 10:04:44,152 : INFO : ====================
+2017-08-01 10:04:44,157 : DEBUG : load data from harp_enwiki_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,157 : DEBUG : load data from harp_enwiki_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,158 : DEBUG : load data from harp_enwiki_j128_1x16_k1000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,159 : DEBUG : load data from harp_enwiki_j128_1x4_k1000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,160 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,161 : DEBUG : load data from harp_enwiki_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,161 : DEBUG : load data from harp_enwiki_j128_1x16_k1000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,162 : DEBUG : load data from harp_enwiki_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,163 : DEBUG : load data from harp_enwiki_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,163 : DEBUG : load data from harp_enwiki_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,164 : DEBUG : load data from harp_enwiki_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,165 : DEBUG : load data from harp_enwiki_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,165 : DEBUG : load data from harp_enwiki_j128_1x4_k1000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,166 : DEBUG : load data from harp_enwiki_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,167 : DEBUG : load data from harp_enwiki_j128_1x2_k1000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,168 : DEBUG : load data from harp_enwiki_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,168 : DEBUG : load data from harp_enwiki_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,169 : DEBUG : load data from harp_enwiki_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,170 : DEBUG : load data from harp_enwiki_j128_1x2_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,171 : DEBUG : load data from harp_enwiki_j128_1x16_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,171 : DEBUG : load data from harp_enwiki_j128_1x16_k1000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,172 : DEBUG : load data from harp_enwiki_j128_1x8_k1000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,173 : DEBUG : load data from harp_enwiki_j128_1x2_k1000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,173 : DEBUG : load data from harp_enwiki_j128_1x4_k1000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,174 : DEBUG : load data from harp_enwiki_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,175 : DEBUG : load data from harp_enwiki_j128_1x8_k1000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,175 : DEBUG : load data from harp_enwiki_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,176 : DEBUG : load data from harp_enwiki_j128_1x2_k1000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,176 : DEBUG : load data from harp_enwiki_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,177 : DEBUG : load data from harp_enwiki_j128_1x4_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,178 : DEBUG : load data from harp_enwiki_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,179 : DEBUG : load data from harp_enwiki_j128_1x8_k1000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,179 : DEBUG : load data from harp_enwiki_j128_1x8_k1000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,180 : DEBUG : load data from harp_enwiki_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,194 : DEBUG : load data from lightlda_enwiki_t1000_1x32_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,195 : DEBUG : load data from lightlda_enwiki_t1000_1x8_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,196 : DEBUG : load data from lightlda_enwiki_t1000_1x64_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,196 : DEBUG : load data from lightlda_enwiki_t1000_1x2_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,197 : DEBUG : load data from lightlda_enwiki_t1000_1x64_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,198 : DEBUG : load data from lightlda_enwiki_t1000_1x2_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,198 : DEBUG : load data from lightlda_enwiki_t1000_1x8_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,199 : DEBUG : load data from lightlda_enwiki_t1000_1x64_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,200 : DEBUG : load data from lightlda_enwiki_t1000_1x16_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,200 : DEBUG : load data from lightlda_enwiki_t1000_1x16_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,201 : DEBUG : load data from lightlda_enwiki_t1000_1x4_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,202 : DEBUG : load data from lightlda_enwiki_t1000_1x8_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,202 : DEBUG : load data from lightlda_enwiki_t1000_1x2_i200_.05000000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,203 : DEBUG : load data from lightlda_enwiki_t1000_1x4_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,204 : DEBUG : load data from lightlda_enwiki_t1000_1x16_i200_.05000000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,204 : DEBUG : load data from lightlda_enwiki_t1000_1x4_i200_.05000000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,210 : DEBUG : load data from warplda_enwiki_t1000_1x2_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,213 : DEBUG : load data from warplda_enwiki_t1000_1x16_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,216 : DEBUG : load data from warplda_enwiki_t1000_1x2_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,218 : DEBUG : load data from warplda_enwiki_t1000_1x4_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,221 : DEBUG : load data from warplda_enwiki_t1000_1x8_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,224 : DEBUG : load data from warplda_enwiki_t1000_1x16_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,227 : DEBUG : load data from warplda_enwiki_t1000_1x64_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,230 : DEBUG : load data from warplda_enwiki_t1000_1x4_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,232 : DEBUG : load data from warplda_enwiki_t1000_1x64_i1200_50_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,235 : DEBUG : load data from warplda_enwiki_t1000_1x8_i1200_50_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,240 : DEBUG : load data from nomadlda_enwiki_t1000_1x8_i200_50_0.01_t100_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,241 : DEBUG : load data from nomadlda_enwiki_t1000_1x16_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,241 : DEBUG : load data from nomadlda_enwiki_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,242 : DEBUG : load data from nomadlda_enwiki_t1000_1x8_i200_50_0.01_t100_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,243 : DEBUG : load data from nomadlda_enwiki_t1000_1x8_i200_50_0.01_t100_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,243 : DEBUG : load data from nomadlda_enwiki_t1000_1x2_i500_50_0.01_t200_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,245 : DEBUG : load data from nomadlda_enwiki_t1000_1x2_i500_50_0.01_t200_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,246 : DEBUG : load data from nomadlda_enwiki_t1000_1x4_i400_50_0.01_t100_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,248 : DEBUG : load data from nomadlda_enwiki_t1000_1x4_i400_50_0.01_t100_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,249 : DEBUG : load data from nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,250 : DEBUG : load data from nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,251 : DEBUG : load data from nomadlda_enwiki_t1000_1x16_i100_50_0.01_t50_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,252 : DEBUG : load data from nomadlda_enwiki_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,252 : DEBUG : load data from nomadlda_enwiki_t1000_1x16_i100_50_0.01_t50_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,253 : DEBUG : load data from nomadlda_enwiki_t1000_1x2_i500_50_0.01_t200_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,254 : DEBUG : load data from nomadlda_enwiki_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,255 : DEBUG : load data from nomadlda_enwiki_t1000_1x4_i400_50_0.01_t100_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,256 : DEBUG : load data from nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,259 : ERROR : lightlda_enwiki_t1000_1x16_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : lightlda_enwiki_t1000_1x2_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : lightlda_enwiki_t1000_1x32_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : lightlda_enwiki_t1000_1x64_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : lightlda_enwiki_t1000_1x4_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : lightlda_enwiki_t1000_1x8_i200_.05000000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : nomadlda_enwiki_t1000_1x16_i100_50_0.01_t50_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : nomadlda_enwiki_t1000_1x2_i500_50_0.01_t200_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : nomadlda_enwiki_t1000_1x32_i100_50_0.01_t50_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : nomadlda_enwiki_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : nomadlda_enwiki_t1000_1x4_i400_50_0.01_t100_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : nomadlda_enwiki_t1000_1x8_i200_50_0.01_t100_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : warplda_enwiki_t1000_1x16_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : warplda_enwiki_t1000_1x16_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,259 : ERROR : warplda_enwiki_t1000_1x2_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x2_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x32_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x32_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x64_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x64_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x4_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x4_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x8_i1200_50_0.01_4_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,260 : ERROR : warplda_enwiki_t1000_1x8_i1200_50_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,294 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,294 : INFO : groupdata = [('harp_enwiki_j128_1x1_k1000_timer_l40_h90_r2_DynaSched-Threadlog', '1'), ('harp_enwiki_j128_1x2_k1000_timer_l40_h90_r2_DynaSched-Threadlog', '2'), ('harp_enwiki_j128_1x4_k1000_timer_l40_h90_r2_DynaSched-Threadlog', '4'), ('harp_enwiki_j128_1x8_k1000_timer_l40_h90_r2_DynaSched-Threadlog', '8'), ('harp_enwiki_j128_1x16_k1000_timer_l40_h90_r2_DynaSched-Threadlog', '16'), ('harp_enwiki_j128_1x32_k1000_timer_l40_h90_r2_DynaSched-Threadlog', '32')]
+2017-08-01 10:04:44,294 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32')]
+2017-08-01 10:04:44,294 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,295 : INFO : curves: [[1, 1904556.5955867134, 0.0], [2, 3669727.3566708094, 0.0], [4, 6966289.8926221235, 0.0], [8, 13207491.410827016, 0.0], [16, 24995563.465990961, 0.0], [32, 45360571.957002357, 0.0]]
+2017-08-01 10:04:44,305 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,305 : INFO : groupdata = [('harp_enwiki_j128_1x1_k1000_notimer_l100_h100_r1_Shift-Threadlog', '1'), ('harp_enwiki_j128_1x2_k1000_notimer_l100_h100_r1_Shift-Threadlog', '2'), ('harp_enwiki_j128_1x4_k1000_notimer_l100_h100_r1_Shift-Threadlog', '4'), ('harp_enwiki_j128_1x8_k1000_notimer_l100_h100_r1_Shift-Threadlog', '8'), ('harp_enwiki_j128_1x16_k1000_notimer_l100_h100_r1_Shift-Threadlog', '16'), ('harp_enwiki_j128_1x32_k1000_notimer_l100_h100_r1_Shift-Threadlog', '32')]
+2017-08-01 10:04:44,305 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32')]
+2017-08-01 10:04:44,305 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,306 : INFO : curves: [[1, 1566037.6170245521, 0.0], [2, 3937449.4250975042, 0.0], [4, 7798974.1767803142, 0.0], [8, 13323146.945983227, 0.0], [16, 21485795.762081891, 0.0], [32, 39266053.335237734, 0.0]]
+2017-08-01 10:04:44,316 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,316 : INFO : groupdata = [('lightlda_enwiki_t1000_1x1_i200_.05000000_0.01_4_Basic', '1'), ('lightlda_enwiki_t1000_1x2_i200_.05000000_0.01_4_Basic', '2'), ('lightlda_enwiki_t1000_1x4_i200_.05000000_0.01_4_Basic', '4'), ('lightlda_enwiki_t1000_1x8_i200_.05000000_0.01_4_Basic', '8'), ('lightlda_enwiki_t1000_1x16_i200_.05000000_0.01_4_Basic', '16'), ('lightlda_enwiki_t1000_1x32_i200_.05000000_0.01_4_Basic', '32'), ('lightlda_enwiki_t1000_1x64_i200_.05000000_0.01_4_Basic', '64')]
+2017-08-01 10:04:44,316 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:44,316 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,317 : INFO : curves: [[1, 1192595.9642988511, 0.0], [2, 2302660.4564947207, 0.0], [4, 4149451.9550561798, 0.0], [8, 7445639.4828948705, 0.0], [16, 10354239.925233645, 0.0], [32, 10665803.818296164, 0.0], [64, 12269621.610996716, 0.0]]
+2017-08-01 10:04:44,328 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,328 : INFO : groupdata = [('nomadlda_enwiki_t1000_1x1_i500_50_0.01_t200_Basic-mvapich2', '1'), ('nomadlda_enwiki_t1000_1x2_i500_50_0.01_t200_Basic-mvapich2', '2'), ('nomadlda_enwiki_t1000_1x4_i400_50_0.01_t100_Basic-mvapich2', '4'), ('nomadlda_enwiki_t1000_1x8_i200_50_0.01_t100_Basic-mvapich2', '8'), ('nomadlda_enwiki_t1000_1x16_i100_50_0.01_t50_Basic-mvapich2', '16'), ('nomadlda_enwiki_t1000_1x32_i100_50_0.01_t50_Basic-mvapich2', '32'), ('nomadlda_enwiki_t1000_1x64_i100_50_0.01_t50_Basic-mvapich2', '64')]
+2017-08-01 10:04:44,328 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:44,328 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,329 : INFO : curves: [[1, 2114352.7625626125, 0.0], [2, 4176066.6506061517, 0.0], [4, 6492145.361834541, 0.0], [8, 6530825.9098950522, 0.0], [16, 9163453.2123575285, 0.0], [32, 10240281.061187763, 0.0], [64, 18226009.062187564, 0.0]]
+2017-08-01 10:04:44,340 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,340 : INFO : groupdata = [('warplda_enwiki_t1000_1x1_i1200_50_0.01_4_Basic', '1'), ('warplda_enwiki_t1000_1x2_i1200_50_0.01_4_Basic', '2'), ('warplda_enwiki_t1000_1x4_i1200_50_0.01_4_Basic', '4'), ('warplda_enwiki_t1000_1x8_i1200_50_0.01_4_Basic', '8'), ('warplda_enwiki_t1000_1x16_i1200_50_0.01_4_Basic', '16'), ('warplda_enwiki_t1000_1x32_i1200_50_0.01_4_Basic', '32'), ('warplda_enwiki_t1000_1x64_i1200_50_0.01_4_Basic', '64')]
+2017-08-01 10:04:44,341 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:44,341 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,341 : INFO : curves: [[1, 16383904.611783128, 0.0], [2, 26988485.453462489, 0.0], [4, 49669842.659784175, 0.0], [8, 91719659.369458586, 0.0], [16, 165908689.01611739, 0.0], [32, 292841723.22302586, 0.0], [64, 382976766.90211356, 0.0]]
+2017-08-01 10:04:44,359 : INFO : idx=3, dataset=enwiki-10k
+2017-08-01 10:04:44,359 : INFO : set_subplot curax = Axes(0.175,0.15;0.133621x0.173913)
+2017-08-01 10:04:44,359 : INFO : ====================
+2017-08-01 10:04:44,359 : INFO : StartPlot: accuracy_itertime
+2017-08-01 10:04:44,359 : INFO : ====================
+2017-08-01 10:04:44,364 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,364 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog.likelihood
+2017-08-01 10:04:44,365 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,365 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog.likelihood
+2017-08-01 10:04:44,366 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,366 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,367 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,368 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,380 : DEBUG : load data from lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,380 : DEBUG : load data from lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,381 : DEBUG : load data from lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.likelihood
+2017-08-01 10:04:44,386 : DEBUG : load data from warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.iter-stat
+2017-08-01 10:04:44,388 : DEBUG : load data from warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.likelihood
+2017-08-01 10:04:44,390 : DEBUG : load data from warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,395 : DEBUG : load data from nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,396 : DEBUG : load data from nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,398 : DEBUG : load data from nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.likelihood
+2017-08-01 10:04:44,401 : DEBUG : load data from nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,402 : ERROR : lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,402 : ERROR : warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,402 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,402 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,402 : DEBUG : runtime_name=lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,403 : DEBUG : runtime_name=nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,403 : DEBUG : runtime_name=warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,403 : INFO : shortest iternum = None
+2017-08-01 10:04:44,403 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,404 : INFO : _trace_shortest_x = 1e+24, x[-1]=165774.041
+2017-08-01 10:04:44,404 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,405 : INFO : _trace_shortest_x = 165774.041, x[-1]=142840.985
+2017-08-01 10:04:44,405 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,406 : INFO : _trace_shortest_x = 142840.985, x[-1]=254190.0
+2017-08-01 10:04:44,406 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,407 : INFO : _trace_shortest_x = 142840.985, x[-1]=99820.0
+2017-08-01 10:04:44,408 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,409 : INFO : _trace_shortest_x = 99820.0, x[-1]=81371.91408
+2017-08-01 10:04:44,409 : INFO : _trace_shortest_x = 81371.91408
+2017-08-01 10:04:44,409 : INFO : set_subplot curax = Axes(0.335345,0.15;0.133621x0.173913)
+2017-08-01 10:04:44,409 : INFO : ====================
+2017-08-01 10:04:44,409 : INFO : StartPlot: accuracy_iter
+2017-08-01 10:04:44,409 : INFO : ====================
+2017-08-01 10:04:44,432 : ERROR : lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,432 : ERROR : warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,432 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,432 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,432 : DEBUG : runtime_name=lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,432 : DEBUG : runtime_name=nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,432 : DEBUG : runtime_name=warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,433 : INFO : shortest iternum = None
+2017-08-01 10:04:44,433 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,435 : INFO : _trace_shortest_x = 1e+24, x[-1]=198.23
+2017-08-01 10:04:44,435 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,436 : INFO : _trace_shortest_x = 198.23, x[-1]=200.0
+2017-08-01 10:04:44,436 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,437 : INFO : _trace_shortest_x = 198.23, x[-1]=196
+2017-08-01 10:04:44,437 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,438 : INFO : _trace_shortest_x = 196, x[-1]=168.97
+2017-08-01 10:04:44,438 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,440 : INFO : _trace_shortest_x = 168.97, x[-1]=1196
+2017-08-01 10:04:44,440 : INFO : _trace_shortest_x = 168.97
+2017-08-01 10:04:44,440 : INFO : set_subplot curax = Axes(0.49569,0.15;0.133621x0.173913)
+2017-08-01 10:04:44,440 : INFO : ====================
+2017-08-01 10:04:44,440 : INFO : StartPlot: throughput_runtime
+2017-08-01 10:04:44,440 : INFO : ====================
+2017-08-01 10:04:44,445 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,446 : DEBUG : load data from harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,457 : DEBUG : load data from lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,465 : ERROR : lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,465 : ERROR : nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,465 : ERROR : warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,465 : ERROR : warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,465 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,465 : DEBUG : runtime_name=harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,465 : DEBUG : runtime_name=lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,466 : DEBUG : runtime_name=nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,466 : DEBUG : runtime_name=warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,466 : INFO : grp_size:5
+2017-08-01 10:04:44,466 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,467 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,468 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,528 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,529 : INFO : do sampling on data before render,sample=10
+2017-08-01 10:04:44,537 : INFO : set_subplot curax = Axes(0.656034,0.15;0.133621x0.173913)
+2017-08-01 10:04:44,537 : INFO : ====================
+2017-08-01 10:04:44,537 : INFO : StartPlot: accuracy_itertime
+2017-08-01 10:04:44,537 : INFO : ====================
+2017-08-01 10:04:44,542 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,543 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,544 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_notimer_l100_h100_r1_Shift-Threadlog.likelihood
+2017-08-01 10:04:44,544 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,545 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,546 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,546 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_timer_l40_h90_r2_DynaSched-Threadlog.likelihood
+2017-08-01 10:04:44,547 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,559 : DEBUG : load data from lightlda_enwiki_t10000_1x32_i200_.00500000_0.01_4_Basic-2.likelihood
+2017-08-01 10:04:44,560 : DEBUG : load data from lightlda_enwiki_t10000_1x32_i200_.00500000_0.01_4_Basic-2.runtime-stat
+2017-08-01 10:04:44,560 : DEBUG : load data from lightlda_enwiki_t10000_1x32_i200_.00500000_0.01_4_Basic-2.iter-stat
+2017-08-01 10:04:44,566 : DEBUG : load data from warplda_enwiki_t10000_1x32_i1200_50_0.01_8_Basic.iter-stat
+2017-08-01 10:04:44,569 : DEBUG : load data from warplda_enwiki_t10000_1x32_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,572 : DEBUG : load data from warplda_enwiki_t10000_1x32_i1200_50_0.01_8_Basic.likelihood
+2017-08-01 10:04:44,575 : DEBUG : load data from nomadlda_enwiki_t10000_1x32_i100_50_0.01_t50_Basic-mvapich2.likelihood
+2017-08-01 10:04:44,576 : DEBUG : load data from nomadlda_enwiki_t10000_1x32_i100_50_0.01_t50_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,577 : DEBUG : load data from nomadlda_enwiki_t10000_1x32_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,577 : DEBUG : load data from nomadlda_enwiki_t10000_1x32_i100_50_0.01_t50_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,578 : ERROR : lightlda_enwiki_t10000_1x32_i200_.00500000_0.01_4_Basic-2.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,578 : ERROR : warplda_enwiki_t10000_1x32_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,578 : DEBUG : runtime_name=harp_enwiki_j128_1x32_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,578 : DEBUG : runtime_name=harp_enwiki_j128_1x32_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,578 : DEBUG : runtime_name=lightlda_enwiki_t10000_1x32_i200_.00500000_0.01_4_Basic-2.runtime-stat
+2017-08-01 10:04:44,578 : DEBUG : runtime_name=nomadlda_enwiki_t10000_1x32_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,578 : DEBUG : runtime_name=warplda_enwiki_t10000_1x32_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,578 : INFO : shortest iternum = None
+2017-08-01 10:04:44,578 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,580 : INFO : _trace_shortest_x = 1e+24, x[-1]=4065.688
+2017-08-01 10:04:44,580 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,581 : INFO : _trace_shortest_x = 4065.688, x[-1]=7391.532
+2017-08-01 10:04:44,581 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,582 : INFO : _trace_shortest_x = 4065.688, x[-1]=20409.0
+2017-08-01 10:04:44,582 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,583 : INFO : _trace_shortest_x = 4065.688, x[-1]=5001.0
+2017-08-01 10:04:44,583 : INFO : do sampling on ['harp', 'harp', 'ligh', 'noma', 'warp'] before render,sample=10
+2017-08-01 10:04:44,584 : INFO : _trace_shortest_x = 4065.688, x[-1]=4707.70357
+2017-08-01 10:04:44,584 : INFO : _trace_shortest_x = 4065.688
+2017-08-01 10:04:44,585 : INFO : set_subplot curax = Axes(0.816379,0.15;0.133621x0.173913)
+2017-08-01 10:04:44,585 : INFO : ====================
+2017-08-01 10:04:44,585 : INFO : StartPlot: scalability
+2017-08-01 10:04:44,585 : INFO : ====================
+2017-08-01 10:04:44,590 : DEBUG : load data from harp_enwiki_j128_1x8_k10000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,591 : DEBUG : load data from harp_enwiki_j128_1x8_k10000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,591 : DEBUG : load data from harp_enwiki_j128_1x8_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,592 : DEBUG : load data from harp_enwiki_j128_1x4_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,593 : DEBUG : load data from harp_enwiki_j128_1x16_k10000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,594 : DEBUG : load data from harp_enwiki_j128_1x8_k10000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,594 : DEBUG : load data from harp_enwiki_j128_1x4_k10000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,595 : DEBUG : load data from harp_enwiki_j128_1x2_k10000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,596 : DEBUG : load data from harp_enwiki_j128_1x16_k10000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,596 : DEBUG : load data from harp_enwiki_j128_1x4_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,597 : DEBUG : load data from harp_enwiki_j128_1x16_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,598 : DEBUG : load data from harp_enwiki_j128_1x64_k10000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,598 : DEBUG : load data from harp_enwiki_j128_1x8_k10000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,599 : DEBUG : load data from harp_enwiki_j128_1x8_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,600 : DEBUG : load data from harp_enwiki_j128_1x8_k10000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,600 : DEBUG : load data from harp_enwiki_j128_1x16_k10000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,601 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,602 : DEBUG : load data from harp_enwiki_j128_1x64_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,602 : DEBUG : load data from harp_enwiki_j128_1x64_k10000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,603 : DEBUG : load data from harp_enwiki_j128_1x8_k10000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,604 : DEBUG : load data from harp_enwiki_j128_1x64_k10000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,604 : DEBUG : load data from harp_enwiki_j128_1x4_k10000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,605 : DEBUG : load data from harp_enwiki_j128_1x32_k10000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,606 : DEBUG : load data from harp_enwiki_j128_1x16_k10000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,606 : DEBUG : load data from harp_enwiki_j128_1x16_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,607 : DEBUG : load data from harp_enwiki_j128_1x16_k10000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,608 : DEBUG : load data from harp_enwiki_j128_1x16_k10000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,609 : DEBUG : load data from harp_enwiki_j128_1x4_k10000_notimer_l100_h100_r1_Shift-Threadlog.comput-stat
+2017-08-01 10:04:44,609 : DEBUG : load data from harp_enwiki_j128_1x2_k10000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,610 : DEBUG : load data from harp_enwiki_j128_1x2_k10000_notimer_l100_h100_r1_Shift-Threadlog.update-stat
+2017-08-01 10:04:44,611 : DEBUG : load data from harp_enwiki_j128_1x64_k10000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,612 : DEBUG : load data from harp_enwiki_j128_1x4_k10000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,612 : DEBUG : load data from harp_enwiki_j128_1x2_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,613 : DEBUG : load data from harp_enwiki_j128_1x64_k10000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,614 : DEBUG : load data from harp_enwiki_j128_1x4_k10000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,615 : DEBUG : load data from harp_enwiki_j128_1x2_k10000_notimer_l100_h100_r1_Shift-Threadlog.iter-stat
+2017-08-01 10:04:44,615 : DEBUG : load data from harp_enwiki_j128_1x2_k10000_timer_l40_h90_r2_DynaSched-Threadlog.comput-stat
+2017-08-01 10:04:44,616 : DEBUG : load data from harp_enwiki_j128_1x64_k10000_notimer_l100_h100_r1_Shift-Threadlog.runtime-stat
+2017-08-01 10:04:44,617 : DEBUG : load data from harp_enwiki_j128_1x2_k10000_timer_l40_h90_r2_DynaSched-Threadlog.runtime-stat
+2017-08-01 10:04:44,617 : DEBUG : load data from harp_enwiki_j128_1x64_k10000_timer_l40_h90_r2_DynaSched-Threadlog.update-stat
+2017-08-01 10:04:44,618 : DEBUG : load data from harp_enwiki_j128_1x2_k10000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,619 : DEBUG : load data from harp_enwiki_j128_1x4_k10000_timer_l40_h90_r2_DynaSched-Threadlog.iter-stat
+2017-08-01 10:04:44,633 : DEBUG : load data from lightlda_enwiki_t10000_1x16_i200_.00500000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,633 : DEBUG : load data from lightlda_enwiki_t10000_1x4_i200_.00500000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,634 : DEBUG : load data from lightlda_enwiki_t10000_1x8_i200_.00500000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,635 : DEBUG : load data from lightlda_enwiki_t10000_1x16_i200_.00500000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,636 : DEBUG : load data from lightlda_enwiki_t10000_1x16_i200_.00500000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,636 : DEBUG : load data from lightlda_enwiki_t10000_1x4_i200_.00500000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,637 : DEBUG : load data from lightlda_enwiki_t10000_1x32_i200_.00500000_0.01_4_Basic-2.comput-stat
+2017-08-01 10:04:44,637 : DEBUG : load data from lightlda_enwiki_t10000_1x64_i200_.00500000_0.01_4_Basic-2.runtime-stat
+2017-08-01 10:04:44,638 : DEBUG : load data from lightlda_enwiki_t10000_1x8_i200_.00500000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,639 : DEBUG : load data from lightlda_enwiki_t10000_1x64_i200_.00500000_0.01_4_Basic-2.comput-stat
+2017-08-01 10:04:44,639 : DEBUG : load data from lightlda_enwiki_t10000_1x8_i200_.00500000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,640 : DEBUG : load data from lightlda_enwiki_t10000_1x64_i200_.00500000_0.01_4_Basic-2.iter-stat
+2017-08-01 10:04:44,641 : DEBUG : load data from lightlda_enwiki_t10000_1x4_i200_.00500000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,641 : DEBUG : load data from lightlda_enwiki_t10000_1x2_i200_.00500000_0.01_4_Basic.comput-stat
+2017-08-01 10:04:44,642 : DEBUG : load data from lightlda_enwiki_t10000_1x2_i200_.00500000_0.01_4_Basic.iter-stat
+2017-08-01 10:04:44,643 : DEBUG : load data from lightlda_enwiki_t10000_1x2_i200_.00500000_0.01_4_Basic.runtime-stat
+2017-08-01 10:04:44,648 : DEBUG : load data from warplda_enwiki_t10000_1x2_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,651 : DEBUG : load data from warplda_enwiki_t10000_1x64_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,654 : DEBUG : load data from warplda_enwiki_t10000_1x4_i1200_50_0.01_8_Basic.iter-stat
+2017-08-01 10:04:44,657 : DEBUG : load data from warplda_enwiki_t10000_1x8_i1200_50_0.01_8_Basic.iter-stat
+2017-08-01 10:04:44,660 : DEBUG : load data from warplda_enwiki_t10000_1x64_i1200_50_0.01_8_Basic.iter-stat
+2017-08-01 10:04:44,662 : DEBUG : load data from warplda_enwiki_t10000_1x2_i1200_50_0.01_8_Basic.iter-stat
+2017-08-01 10:04:44,665 : DEBUG : load data from warplda_enwiki_t10000_1x16_i1200_50_0.01_8_Basic.iter-stat
+2017-08-01 10:04:44,668 : DEBUG : load data from warplda_enwiki_t10000_1x4_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,671 : DEBUG : load data from warplda_enwiki_t10000_1x16_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,674 : DEBUG : load data from warplda_enwiki_t10000_1x8_i1200_50_0.01_8_Basic.runtime-stat
+2017-08-01 10:04:44,679 : DEBUG : load data from nomadlda_enwiki_t10000_1x2_i500_50_0.01_t200_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,680 : DEBUG : load data from nomadlda_enwiki_t10000_1x16_i100_50_0.01_t50_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,680 : DEBUG : load data from nomadlda_enwiki_t10000_1x8_i200_50_0.01_t100_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,681 : DEBUG : load data from nomadlda_enwiki_t10000_1x64_i100_50_0.01_t50_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,681 : DEBUG : load data from nomadlda_enwiki_t10000_1x2_i500_50_0.01_t200_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,683 : DEBUG : load data from nomadlda_enwiki_t10000_1x2_i500_50_0.01_t200_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,683 : DEBUG : load data from nomadlda_enwiki_t10000_1x8_i200_50_0.01_t100_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,685 : DEBUG : load data from nomadlda_enwiki_t10000_1x16_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,685 : DEBUG : load data from nomadlda_enwiki_t10000_1x4_i400_50_0.01_t100_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,686 : DEBUG : load data from nomadlda_enwiki_t10000_1x64_i100_50_0.01_t50_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,686 : DEBUG : load data from nomadlda_enwiki_t10000_1x64_i100_50_0.01_t50_Basic-mvapich2.runtime-stat
+2017-08-01 10:04:44,687 : DEBUG : load data from nomadlda_enwiki_t10000_1x4_i400_50_0.01_t100_Basic-mvapich2.update-stat
+2017-08-01 10:04:44,689 : DEBUG : load data from nomadlda_enwiki_t10000_1x8_i200_50_0.01_t100_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,689 : DEBUG : load data from nomadlda_enwiki_t10000_1x4_i400_50_0.01_t100_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,690 : DEBUG : load data from nomadlda_enwiki_t10000_1x16_i100_50_0.01_t50_Basic-mvapich2.iter-stat
+2017-08-01 10:04:44,691 : ERROR : lightlda_enwiki_t10000_1x16_i200_.00500000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,691 : ERROR : lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,691 : ERROR : lightlda_enwiki_t10000_1x2_i200_.00500000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,691 : ERROR : lightlda_enwiki_t10000_1x32_i200_.00500000_0.01_4_Basic-2.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,691 : ERROR : lightlda_enwiki_t10000_1x64_i200_.00500000_0.01_4_Basic-2.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,691 : ERROR : lightlda_enwiki_t10000_1x4_i200_.00500000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : lightlda_enwiki_t10000_1x8_i200_.00500000_0.01_4_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : nomadlda_enwiki_t10000_1x16_i100_50_0.01_t50_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : nomadlda_enwiki_t10000_1x2_i500_50_0.01_t200_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : nomadlda_enwiki_t10000_1x32_i100_50_0.01_t50_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : nomadlda_enwiki_t10000_1x64_i100_50_0.01_t50_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : nomadlda_enwiki_t10000_1x4_i400_50_0.01_t100_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : nomadlda_enwiki_t10000_1x8_i200_50_0.01_t100_Basic-mvapich2.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x16_i1200_50_0.01_8_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x16_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x2_i1200_50_0.01_8_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x2_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x32_i1200_50_0.01_8_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x32_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x64_i1200_50_0.01_8_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x64_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x4_i1200_50_0.01_8_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x4_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x8_i1200_50_0.01_8_Basic.comput-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,692 : ERROR : warplda_enwiki_t10000_1x8_i1200_50_0.01_8_Basic.update-stat not found under /tmp/hpda/test/experiments/results/, .....
+2017-08-01 10:04:44,726 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,726 : INFO : groupdata = [('harp_enwiki_j128_1x1_k10000_timer_l40_h90_r2_DynaSched-Threadlog', '1'), ('harp_enwiki_j128_1x2_k10000_timer_l40_h90_r2_DynaSched-Threadlog', '2'), ('harp_enwiki_j128_1x4_k10000_timer_l40_h90_r2_DynaSched-Threadlog', '4'), ('harp_enwiki_j128_1x8_k10000_timer_l40_h90_r2_DynaSched-Threadlog', '8'), ('harp_enwiki_j128_1x16_k10000_timer_l40_h90_r2_DynaSched-Threadlog', '16'), ('harp_enwiki_j128_1x32_k10000_timer_l40_h90_r2_DynaSched-Threadlog', '32'), ('harp_enwiki_j128_1x64_k10000_timer_l40_h90_r2_DynaSched-Threadlog', '64')]
+2017-08-01 10:04:44,726 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:44,726 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,726 : INFO : curves: [[1, 1324811.1380176828, 0.0], [2, 2514527.6761029712, 0.0], [4, 4709187.2719787834, 0.0], [8, 9254165.7654604539, 0.0], [16, 16195817.574948732, 0.0], [32, 29368815.885281917, 0.0], [64, 40564858.235411659, 0.0]]
+2017-08-01 10:04:44,737 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,738 : INFO : groupdata = [('harp_enwiki_j128_1x1_k10000_notimer_l100_h100_r1_Shift-Threadlog', '1'), ('harp_enwiki_j128_1x2_k10000_notimer_l100_h100_r1_Shift-Threadlog', '2'), ('harp_enwiki_j128_1x4_k10000_notimer_l100_h100_r1_Shift-Threadlog', '4'), ('harp_enwiki_j128_1x8_k10000_notimer_l100_h100_r1_Shift-Threadlog', '8'), ('harp_enwiki_j128_1x16_k10000_notimer_l100_h100_r1_Shift-Threadlog', '16'), ('harp_enwiki_j128_1x32_k10000_notimer_l100_h100_r1_Shift-Threadlog', '32'), ('harp_enwiki_j128_1x64_k10000_notimer_l100_h100_r1_Shift-Threadlog', '64')]
+2017-08-01 10:04:44,738 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:44,738 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,738 : INFO : curves: [[1, 1551240.5924672119, 0.0], [2, 2820858.3207660965, 0.0], [4, 5686918.1553606112, 0.0], [8, 10374908.28457889, 0.0], [16, 17365684.555477809, 0.0], [32, 29977646.609660871, 0.0], [64, 39622589.593552418, 0.0]]
+2017-08-01 10:04:44,750 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,750 : INFO : groupdata = [('lightlda_enwiki_t10000_1x1_i200_.00500000_0.01_4_Basic', '1'), ('lightlda_enwiki_t10000_1x2_i200_.00500000_0.01_4_Basic', '2'), ('lightlda_enwiki_t10000_1x4_i200_.00500000_0.01_4_Basic', '4'), ('lightlda_enwiki_t10000_1x8_i200_.00500000_0.01_4_Basic', '8'), ('lightlda_enwiki_t10000_1x16_i200_.00500000_0.01_4_Basic', '16'), ('lightlda_enwiki_t10000_1x32_i200_.00500000_0.01_4_Basic-2', '32'), ('lightlda_enwiki_t10000_1x64_i200_.00500000_0.01_4_Basic-2', '64')]
+2017-08-01 10:04:44,751 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:44,751 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,751 : INFO : curves: [[1, 855202.17348197452, 0.0], [2, 1664586.6010917409, 0.0], [4, 3199106.6170611023, 0.0], [8, 5449828.9637374859, 0.0], [16, 9456265.5255414974, 0.0], [32, 10683376.010466637, 0.0], [64, 10619055.521048069, 0.0]]
+2017-08-01 10:04:44,762 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,763 : INFO : groupdata = [('nomadlda_enwiki_t10000_1x1_i500_50_0.01_t200_Basic-mvapich2', '1'), ('nomadlda_enwiki_t10000_1x2_i500_50_0.01_t200_Basic-mvapich2', '2'), ('nomadlda_enwiki_t10000_1x4_i400_50_0.01_t100_Basic-mvapich2', '4'), ('nomadlda_enwiki_t10000_1x8_i200_50_0.01_t100_Basic-mvapich2', '8'), ('nomadlda_enwiki_t10000_1x16_i100_50_0.01_t50_Basic-mvapich2', '16'), ('nomadlda_enwiki_t10000_1x32_i100_50_0.01_t50_Basic-mvapich2', '32'), ('nomadlda_enwiki_t10000_1x64_i100_50_0.01_t50_Basic-mvapich2', '64')]
+2017-08-01 10:04:44,763 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:44,763 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,763 : INFO : curves: [[1, 1875351.9992686836, 0.0], [2, 3357122.3744214801, 0.0], [4, 6035813.9002498752, 0.0], [8, 8433192.9906030148, 0.0], [16, 8086202.2742902841, 0.0], [32, 12899050.548090382, 0.0], [64, 17522458.443911217, 0.0]]
+2017-08-01 10:04:44,774 : INFO : min rowcnt=-1
+2017-08-01 10:04:44,775 : INFO : groupdata = [('warplda_enwiki_t10000_1x1_i1200_50_0.01_8_Basic', '1'), ('warplda_enwiki_t10000_1x2_i1200_50_0.01_8_Basic', '2'), ('warplda_enwiki_t10000_1x4_i1200_50_0.01_8_Basic', '4'), ('warplda_enwiki_t10000_1x8_i1200_50_0.01_8_Basic', '8'), ('warplda_enwiki_t10000_1x16_i1200_50_0.01_8_Basic', '16'), ('warplda_enwiki_t10000_1x32_i1200_50_0.01_8_Basic', '32'), ('warplda_enwiki_t10000_1x64_i1200_50_0.01_8_Basic', '64')]
+2017-08-01 10:04:44,775 : INFO : countindex=[(0, 1, '1'), (1, 2, '2'), (2, 3, '4'), (3, 4, '8'), (4, 5, '16'), (5, 6, '32'), (6, 7, '64')]
+2017-08-01 10:04:44,775 : INFO : Set fit_style to fit_all, fit_time =0
+2017-08-01 10:04:44,775 : INFO : curves: [[1, 16284696.655447079, 0.0], [2, 26405331.464000612, 0.0], [4, 49257069.485039033, 0.0], [8, 89384766.485663339, 0.0], [16, 160631117.70016938, 0.0], [32, 281504147.97998202, 0.0], [64, 346047429.80401522, 0.0]]
+/N/u/pengb/anaconda2/lib/python2.7/site-packages/matplotlib/font_manager.py:1282: UserWarning: findfont: Font family [u'serif'] not found. Falling back to Bitstream Vera Sans
+  (prop.get_family(), self.defaultFamily[fontext]))
+/N/u/pengb/anaconda2/lib/python2.7/site-packages/matplotlib/collections.py:590: FutureWarning: elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison
+  if self._edgecolors == str('face'):
