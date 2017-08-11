@@ -1469,6 +1469,8 @@ class PlotEngine():
         predict_pt =  200
         #draw_speedup = False
         draw_speedup = True
+        draw_barchart = True if 'draw_barchart' in conf else False
+        #draw_barchart = False
         #use_x_logscale = True
 
         dataflist = []
@@ -1510,9 +1512,11 @@ class PlotEngine():
 
 
         # twin plot the time/update count bar chart
-        if draw_speedup:
+        if draw_barchart:
             ax2 = self.curax.twinx()
-            ax2.set_yscale("log", basey=2, nonposy='clip')
+        if draw_speedup:
+            self.curax.set_yscale("log", basey=2, nonposy='clip')
+
         seq = 0
         width = 0.2
         curveCnt = len(groups.keys())
@@ -1680,35 +1684,33 @@ class PlotEngine():
                 _x = np.arange(mat[:,0].shape[0])
 
 
-            #logger.info('mat = %s',mat)
-            #logger.info('bar %s,%s,%s',_x, mat[:,0],mat[:,1])
 
             ### draw bar chart
-            #bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig_shade[seq],yerr = mat[:,2], label=label)
-            #bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=self.colors_orig[seq],yerr = mat[:,2], label=label)
-            bars = self.curax.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=colors[seq],yerr = mat[:,2], label=label)
-            rects.append(bars)
-            #if (mat[:,0][-1] > maxX):
-            #    maxX = mat[:,0][-1]
-
+            #conf['yscale'] = True
+            if draw_barchart:
+                #if 'yscale' in conf:
+                #    ax2.set_yscale('log')
+                __x = _x - curveCnt*width*1./2  + seq*width
+                __y = mat[:,1]
+                _sample = 1 if 'sample' not in conf else conf['sample']
+                bars = ax2.bar(__x[::i_sample],__y[::_sample], width, color=colors[seq],label=label)
+                #bars = ax2.bar(__x[::2],__y[::2], width, color=colors[seq],label=label)
+                #bars = ax2.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=colors[seq],yerr = mat[:,2], label=label)
+                rects.append(bars)
+    
             ### draw speedup line
             if draw_speedup:
                 _y = mat[:,1] *1.0 / mat[0,1]
                 #plots = ax2.plot(_x , _y, self.colors_orig[seq]+'.-', label = label)
-                plots = ax2.plot(_x , _y, lines[seq], color=colors[seq], label = label)
+                plots = self.curax.plot(_x , _y, lines[seq], color=colors[seq], label = label)
                 if 'text' in conf:
                     for _p in range(_x.shape[0]):
-                        ax2.text(_x[_p] - 0.1, _y[_p]+0.003,'%.1f'%(_y[_p]))
-            
+                        self.curax.text(_x[_p] - 0.1, _y[_p]+0.003,'%.1f'%(_y[_p]))
+
             #go to next group
             seq += 1
 
         ### end draw
-        #self.curax.set_ylabel('Model Update Count@%ds'%predict_pt if normalize_byfit else
-        #self.curax.set_ylabel('Throughput of First %ds(tokens/sec)'%predict_pt if normalize_byfit else
-        #self.curax.set_ylabel('Throughput of First 10 Iter(tokens/sec)' if normalize_byfit else
-        self.curax.set_ylabel('Average Throughput(tokens/sec)' if normalize_byfit else
-                "Training Time Per Iteration(s)")
         if use_x_logscale:
             _x = np.arange(maxX)
             self.curax.set_xticks(_x)
@@ -1721,7 +1723,7 @@ class PlotEngine():
         if 'xlabel' in conf:
             self.curax.set_xlabel(conf['xlabel'])
         else:
-            self.curax.set_xlabel('Nodes Number')
+            self.curax.set_xlabel('Number of Nodes')
         if 'title' in conf:
             self.curax.set_title(conf['title'])
         else:
@@ -1732,26 +1734,42 @@ class PlotEngine():
             for rect in rects:
                 self.autolabel(rect, 1e+8)
 
+
+
+
+        if draw_barchart:
+            if 'yscale' in conf:
+                ax2.set_yscale('log')
+ 
+            if 'ylim_h' in conf:
+                ax2.set_ylim(conf['ylim_l'], conf['ylim_h'])
+            #ax2.set_ylim(1e+6,1e+10)
+            ax2.set_ylabel('Throughput(tokens/sec)' if normalize_byfit else
+                "Training Time Per Iteration(s)")
+
         if draw_speedup:
-            #ax2.set_ylabel('SpeedUp T(1)/T(N)' if use_x_logscale else 'SpeedUp')
-            ax2.set_ylabel('Throughput SpeedUp TP(N)/TP(%d)'%mat[0,0].astype(np.int))
+            #self.curax.set_ylabel('Throughput SpeedUp TP(N)/TP(%d)'%mat[0,0].astype(np.int))
+            #self.curax.set_ylabel('SpeedUp TP(N)/TP(%d)'%mat[0,0].astype(np.int))
+            self.curax.set_ylabel('SpeedUp TP(N)/TP(%d)'%mat[0,0].astype(np.int))
             if 'loc' in conf:
                 _loc = conf['loc']
             else:
                 _loc = 0
                 
             if not 'nolegend' in conf:
-                ax2.legend(loc = _loc)
+                self.curax.legend(loc = _loc)
                 #ax2.legend(loc = 0)
         else:
             if not 'nolegend' in conf:
                 self.curax.legend(loc = 0)
 
+        #set zorders
+        #logger.info('ax2=%d, ax1=%d', ax2.get_zorder(), self.curax.get_zorder())
+        #self.curax.set_zorder(ax2.get_zorder()+1) # put ax in front of ax2 
+        #self.curax.patch.set_visible(False) # hide the 'canvas' 
+
         if figname:
             self.savefig(figname)
-
-
-
 
 
     def plot_scalability_byiterthroughput(self, figname, conf):
@@ -1782,6 +1800,7 @@ class PlotEngine():
         predict_pt =  200
         #draw_speedup = False
         draw_speedup = True
+        draw_barchart= True
         #use_x_logscale = True
 
         dataflist = []

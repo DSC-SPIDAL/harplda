@@ -90,14 +90,16 @@ def draw_ldascale(outname, compact = False):
     #
     # init
     #
-    dnames=['nytimes','pubmed2m','enwiki-1k','enwiki-10k']
-    #dnames=['nytimes','pubmed2m','enwiki-10k']
+    #dnames=['nytimes','pubmed2m','enwiki-1k','enwiki-10k']
+    dnames=['nytimes','pubmed2m','enwiki-10k']
     rowCnt = len(dnames)
 
     setxlim = True
 
     #plt.rcParams.update({'figure.figsize':(4.5*5,3*4.5)})
-    plt.rcParams.update({'figure.figsize':(4.5*5,4.5*3/4*rowCnt)})
+    #plt.rcParams.update({'figure.figsize':(4.5*5,4.5*3/4*rowCnt)})
+    plt.rcParams.update({'figure.figsize':(4*0.96*5,3*rowCnt)})
+
     plt.rcParams.update({'axes.titlesize':12})
     plt.rcParams.update({'axes.titleweight':'bold'})
     plt.rcParams.update({'legend.fontsize':12})
@@ -117,8 +119,8 @@ def draw_ldascale(outname, compact = False):
         #conf['colors']=['r','b','g', 'm','y','c','k','r','b','m','g','c','y','k']*10
         #conf['colors']=['C0','C1','C2', 'C3','C4','C5','C6','C7','C8','C9']*10
         #conf['colors']=['#1f77b4','#ff7f0e','#2ca02c', '#d62728','#9467bd','#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf']*10
-        conf['colors']=['r','b','#ff7f00','g','m','y','k','r','b','m','g','c','y','k']*10
-        conf['lines']=['o-','^-','*-','d-','+-']*10
+        conf['colors']=['r','b','g','m','c','y','k','r','b','m','g','c','y','k']*10
+        conf['lines']=['o-','^-','d-','+-']*10
         conf['nolegend'] = True
         confset['default'] = conf
 
@@ -173,7 +175,7 @@ def draw_ldascale(outname, compact = False):
         ploter.set_subplot(idx+1,5)
         if idx == 0:
             confset['default']['title'] = 'Speedup in Throughput'
-        confset['default']['xlabel'] = 'Threads Number'
+        confset['default']['xlabel'] = 'Number of Threads'
      
         call_plot('scalability', '', conffiles[dataset]['scale'], '',confset) 
 
@@ -181,7 +183,10 @@ def draw_ldascale(outname, compact = False):
     #
     # save
     #
-    ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
+    #plt.tight_layout(pad=1.2,rect=(0,-0.5,1,1))
+    plt.tight_layout(pad=0.5, h_pad=-1, w_pad=-1, rect=(0,0.04,1,1))
+    #ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
+    ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,))
 
 
 if __name__ == "__main__":

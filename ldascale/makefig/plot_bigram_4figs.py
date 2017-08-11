@@ -52,33 +52,28 @@ def draw_ldascale(outname, compact = False):
     # conf names
     #
     conffiles={
-        'clueweb30b-5k':{
-            '1':'distclueweb_40x16_straggler.conf'
+        'bigram-500':{
+            '1':'distbigram.conf',
             }
     }
 
-
     confxlim={
-        'clueweb30b-5k':[20000, 10000, 10000,10000]
+        'bigram-500':[10000, 200, 10000,10000]
     }
-    confylim={
-        'clueweb30b-5k':[0, 0, 0,(0,1.1)]
-    }
-
 
 
     #
     # init
     #
     #dnames=['enwiki-1k','enwiki-10k']
-    dnames=['clueweb30b-5k']
+    dnames=['bigram-500']
     rowCnt = len(dnames)
  
     confset = {}
     conf={}
     conf['title']=''
     conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
-    conf['lines']=['o-','^-','d-','+-','x-']*10
+    conf['lines']=['o-','^-','d-']*10
     #conf['nolegend'] = True
     confset['default'] = conf
 
@@ -86,63 +81,49 @@ def draw_ldascale(outname, compact = False):
     #setxlim = False
 
     #plt.rcParams.update({'figure.figsize':(4.5*5,3*4.5)})
-    plt.rcParams.update({'figure.figsize':(4*2,3*2)})
+    plt.rcParams.update({'figure.figsize':(4,3)})
     plt.rcParams.update({'axes.titlesize':12})
     plt.rcParams.update({'axes.titleweight':'bold'})
     plt.rcParams.update({'legend.fontsize':12})
     logger.info('set large view')
 
     #set number of subplots
-    ploter.init_subplot(2,2)
+    #ploter.init_subplot(2,2)
 
     for idx, dataset in enumerate(dnames):
         logger.info('idx=%d, dataset=%s', idx, dataset)
 
-        confset['default']['nolegend'] = True
+        ploter.init_subplot(1,1)
         ploter.set_subplot(1,1)
-        #confset['default']['sample'] = 3
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][0]
-        confset['default']['title'] = '(a) Convergence Speed'
-        call_plot('accuracy_itertime', '', conffiles[dataset]['1'], '',confset) 
+        call_plot('accuracy_itertime', '', conffiles[dataset]['1'], outname + '-1.pdf',confset) 
 
 
         confset['default']['nolegend'] = True
-        confset['default']['loc'] = 7
-        ploter.set_subplot(1,2)
-        confset['default']['sample'] = 10
+        ploter.init_subplot(1,1)
+        ploter.set_subplot(1,1)
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][1]
-        confset['default']['title'] = '(b) Throughput'
-        call_plot('throughput_runtime', '', conffiles[dataset]['1'], '',confset) 
-
-        confset['default'].pop('nolegend',None)
-        ploter.set_subplot(2,1)
-        if setxlim:
-            confset['default']['xlim'] = confxlim[dataset][2]
-        confset['default']['sample'] = 10
-        confset['default']['title'] = '(c) Load Balance'
-        call_plot('loadbalance_runtime', '', conffiles[dataset]['1'], '',confset) 
+        call_plot('accuracy_iter', '', conffiles[dataset]['1'], outname + '-2.pdf',confset) 
 
 
-        confset['default']['nolegend'] = True
-        ploter.set_subplot(2,2)
+        ploter.init_subplot(1,1)
+        conf['xtick_scale'] = 1e+11
+        ploter.set_subplot(1,1)
+        #if setxlim:
+        #    confset['default']['xlim'] = confxlim[dataset][3]
+        call_plot('speedup', '', conffiles[dataset]['1'], outname + '-3.pdf',confset) 
+
+        ploter.init_subplot(1,1)
+        ploter.set_subplot(1,1)
         confset['default']['sample'] = 10
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][3]
         
-        confset['default']['ylim'] = True
-        confset['default']['ylim_l'] = confylim[dataset][3][0]
-        confset['default']['ylim_h'] = confylim[dataset][3][1]
-        confset['default']['title'] = '(d) Overhead'
-        call_plot('overhead_only', '', conffiles[dataset]['1'], '',confset) 
-    #
-    # save
-    #
-    #ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
-    plt.tight_layout()
-    ploter.fig.savefig(outname + '.pdf')
-
+        #confset['default']['xtick_scale'] = 1000
+        confset['default'].pop('xtick_scale', None)
+        call_plot('overhead_only', '', conffiles[dataset]['1'], outname + '-4.pdf',confset) 
 
 
 def draw_ldascale_single(outname, compact = False):

@@ -2,14 +2,17 @@
 # -*- coding: utf-8 -*-
 
 """
-Plot the bigram figures in one pdf file for ldascale paper
+Plot the 1xn figures in one pdf file for ldascale paper
 
-bigram 500  10x8
+nytimes 1k, 10k   accuracy_itertime   
+pubmed  1k, 10k
+enwiki  1k, 10k
 
-accuracy_itertime   
-accuracy_iter   
-speedup         ; speedup on convergence speed
-overhead_only
+accuracy_itertime   1x1
+accuracy_iter
+throughput_runtime
+accuracy_itertime   1x32
+scalability
 
 legend outside
 
@@ -41,9 +44,10 @@ def call_plot(plotname, datadir, namefile, figname, confset):
     ploter.init_data(plotconf.dataroot, perfname)
     ploter.curax.grid(gridFlag)
     if plotname in confset:
-        ploter.plot(plotname, figname, confset[plotname])
+        ploter.plot(plotname, '', confset[plotname])
     else:
-        ploter.plot(plotname, figname, confset['default'])
+        ploter.plot(plotname, '', confset['default'])
+
 
 def draw_ldascale(outname, compact = False):
     nullconf={'default':{'title':''}}
@@ -52,17 +56,33 @@ def draw_ldascale(outname, compact = False):
     # conf names
     #
     conffiles={
-        'clueweb30b-5k':{
-            '1':'distclueweb_40x16_straggler.conf'
+        'nytimes':{
+            '1':'newlda_nytimes_1x1.conf',
+            '32':'newlda_nytimes_1x32.conf',
+            'scale':'newlda_nytimes_scale.conf'
+            },
+        'pubmed2m':{
+            '1':'newlda_pubmed2m_1x1.conf',
+            '32':'newlda_pubmed2m_1x32.conf',
+            'scale':'newlda_pubmed2m_scale.conf'
+            },
+        'enwiki-1k':{
+            '1':'newlda_enwiki-1k_1x1.conf',
+            '32':'newlda_enwiki-1k_1x32.conf',
+            'scale':'newlda_enwiki-1k_scale.conf'
+            },
+        'enwiki-10k':{
+            '1':'newlda_enwiki-10k_1x1.conf',
+            '32':'newlda_enwiki-10k_1x32.conf',
+            'scale':'newlda_enwiki-10k_scale.conf'
             }
     }
 
-
     confxlim={
-        'clueweb30b-5k':[20000, 10000, 10000,10000]
-    }
-    confylim={
-        'clueweb30b-5k':[0, 0, 0,(0,1.1)]
+        'nytimes':[6000,200,6000,500],
+        'pubmed2m':[10000, 200, 10000, 2000],
+        'enwiki-1k':[100000,200,100000, 6000],
+        'enwiki-10k':[100000, 200, 100000, 6000]
     }
 
 
@@ -70,130 +90,42 @@ def draw_ldascale(outname, compact = False):
     #
     # init
     #
-    #dnames=['enwiki-1k','enwiki-10k']
-    dnames=['clueweb30b-5k']
+    #dnames=['nytimes','pubmed2m','enwiki-1k','enwiki-10k']
+    dnames=['nytimes','pubmed2m','enwiki-10k']
     rowCnt = len(dnames)
- 
-    confset = {}
-    conf={}
-    conf['title']=''
-    conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
-    conf['lines']=['o-','^-','d-','+-','x-']*10
-    #conf['nolegend'] = True
-    confset['default'] = conf
 
     setxlim = True
-    #setxlim = False
 
     #plt.rcParams.update({'figure.figsize':(4.5*5,3*4.5)})
-    plt.rcParams.update({'figure.figsize':(4*2,3*2)})
+    #plt.rcParams.update({'figure.figsize':(4.5*5,4.5*3/4*rowCnt)})
+    plt.rcParams.update({'figure.figsize':(4*5,3*rowCnt)})
+
     plt.rcParams.update({'axes.titlesize':12})
     plt.rcParams.update({'axes.titleweight':'bold'})
     plt.rcParams.update({'legend.fontsize':12})
     logger.info('set large view')
 
-    #set number of subplots
-    ploter.init_subplot(2,2)
+    #matplotlib.style.use('ggplot')
+    #matplotlib.style.use('seaborn')
+
+    ploter.init_subplot(rowCnt,5)
 
     for idx, dataset in enumerate(dnames):
         logger.info('idx=%d, dataset=%s', idx, dataset)
 
-        confset['default']['nolegend'] = True
-        ploter.set_subplot(1,1)
-        #confset['default']['sample'] = 3
-        if setxlim:
-            confset['default']['xlim'] = confxlim[dataset][0]
-        confset['default']['title'] = '(a) Convergence Speed'
-        call_plot('accuracy_itertime', '', conffiles[dataset]['1'], '',confset) 
+        confset = {}
+        conf={}
+        conf['title']=''
+        #conf['colors']=['r','b','g', 'm','y','c','k','r','b','m','g','c','y','k']*10
+        #conf['colors']=['C0','C1','C2', 'C3','C4','C5','C6','C7','C8','C9']*10
+        #conf['colors']=['#1f77b4','#ff7f0e','#2ca02c', '#d62728','#9467bd','#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf']*10
+        conf['colors']=['r','b','g','m','c','y','k','r','b','m','g','c','y','k']*10
+        conf['lines']=['o-','^-','d-','+-']*10
+        conf['nolegend'] = True
+        confset['default'] = conf
 
 
-        confset['default']['nolegend'] = True
-        confset['default']['loc'] = 7
-        ploter.set_subplot(1,2)
-        confset['default']['sample'] = 10
-        if setxlim:
-            confset['default']['xlim'] = confxlim[dataset][1]
-        confset['default']['title'] = '(b) Throughput'
-        call_plot('throughput_runtime', '', conffiles[dataset]['1'], '',confset) 
-
-        confset['default'].pop('nolegend',None)
-        ploter.set_subplot(2,1)
-        if setxlim:
-            confset['default']['xlim'] = confxlim[dataset][2]
-        confset['default']['sample'] = 10
-        confset['default']['title'] = '(c) Load Balance'
-        call_plot('loadbalance_runtime', '', conffiles[dataset]['1'], '',confset) 
-
-
-        confset['default']['nolegend'] = True
-        ploter.set_subplot(2,2)
-        confset['default']['sample'] = 10
-        if setxlim:
-            confset['default']['xlim'] = confxlim[dataset][3]
-        
-        confset['default']['ylim'] = True
-        confset['default']['ylim_l'] = confylim[dataset][3][0]
-        confset['default']['ylim_h'] = confylim[dataset][3][1]
-        confset['default']['title'] = '(d) Overhead'
-        call_plot('overhead_only', '', conffiles[dataset]['1'], '',confset) 
-    #
-    # save
-    #
-    #ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
-    plt.tight_layout()
-    ploter.fig.savefig(outname + '.pdf')
-
-
-
-def draw_ldascale_single(outname, compact = False):
-    nullconf={'default':{'title':''}}
-
-    #
-    # conf names
-    #
-    conffiles={
-        'bigram-500':{
-            '1':'distbigram.conf',
-            }
-    }
-
-    confxlim={
-        'bigram-500':[10000, 200, 10000,10000]
-    }
-
-
-    #
-    # init
-    #
-    #dnames=['enwiki-1k','enwiki-10k']
-    dnames=['bigram-500']
-    rowCnt = len(dnames)
- 
-    confset = {}
-    conf={}
-    conf['title']=''
-    conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
-    conf['lines']=['o-','^-','d-']*10
-    conf['nolegend'] = True
-    confset['default'] = conf
-
-    setxlim = True
-    #setxlim = False
-
-    #plt.rcParams.update({'figure.figsize':(4.5*5,3*4.5)})
-    plt.rcParams.update({'figure.figsize':(4.5*2.4,4.5*3/4.*2)})
-    plt.rcParams.update({'axes.titlesize':12})
-    plt.rcParams.update({'axes.titleweight':'bold'})
-    plt.rcParams.update({'legend.fontsize':12})
-    logger.info('set large view')
-
-    #set number of subplots
-    ploter.init_subplot(2,2)
-
-    for idx, dataset in enumerate(dnames):
-        logger.info('idx=%d, dataset=%s', idx, dataset)
-
-        ploter.set_subplot(1,1)
+        ploter.set_subplot(idx+1,1)
         if idx == 0:
             confset['default']['title'] = 'Convergence Speed'
         else:
@@ -201,50 +133,57 @@ def draw_ldascale_single(outname, compact = False):
             #confset['default'].pop('title', None)
             confset['default']['title'] = ''
 
+        confset['default']['sample'] = 10
+        confset['default']['dosample'] = 'warp nomad'
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][0]
         call_plot('accuracy_itertime', '', conffiles[dataset]['1'], '',confset) 
 
-        ploter.set_subplot(1,2)
+        ploter.set_subplot(idx+1,2)
         if idx == 0:
-            confset['default']['title'] = 'Convergence Rate' 
-        else:
-            #remove title
-            #confset['default'].pop('title', None)
-            confset['default']['title'] = ''
-
+            confset['default']['title'] = 'Convergence Rate'
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][1]
+        confset['default']['sample'] = 10
+        confset['default']['dosample'] = 'warp nomad'
+            
         call_plot('accuracy_iter', '', conffiles[dataset]['1'], '',confset) 
 
+        ploter.set_subplot(idx+1,3)
+        if idx == 0:
+            confset['default']['title'] = 'Throughput'
+        confset['default']['sample'] = 10
+        confset['default']['yscale'] = 'log'
+        if setxlim:
+            confset['default']['xlim'] = confxlim[dataset][2]
+        call_plot('throughput_runtime', '', conffiles[dataset]['1'], '',confset) 
 
         #the middle plot
-        if idx == rowCnt - 1:
-            conf['xtick_scale'] = 1e+11
-        ploter.set_subplot(2,1)
-        if idx == 0:
-            confset['default']['title'] = 'Speedup of Time'
-        #if setxlim:
-        #    confset['default']['xlim'] = confxlim[dataset][3]
-        call_plot('speedup', '', conffiles[dataset]['1'], '',confset) 
+        if idx == rowCnt -1:
+            lgd = ploter.curax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
+                  fancybox=True, shadow=False, ncol=5)
 
-        #the middle plot
-        if idx == rowCnt - 1:
-            lgd = ploter.curax.legend(loc='upper left', bbox_to_anchor=(-0.05, -0.15),
-                  fancybox=True, shadow=True, ncol=5)
- 
-        ploter.set_subplot(2,2)
+        ploter.set_subplot(idx+1,4)
         if idx == 0:
-            confset['default']['title'] = 'Overhead'
+            confset['default']['title'] = 'Convergence Speed'
+     
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][3]
-        confset['default']['sample'] = 10
-        call_plot('overhead_only', '', conffiles[dataset]['1'], '',confset) 
+        call_plot('accuracy_itertime', '', conffiles[dataset]['32'], '',confset) 
+
+
+        ploter.set_subplot(idx+1,5)
+        if idx == 0:
+            confset['default']['title'] = 'Speedup in Throughput'
+        confset['default']['xlabel'] = 'Threads Number'
+     
+        call_plot('scalability', '', conffiles[dataset]['scale'], '',confset) 
 
 
     #
     # save
     #
+    #plt.tight_layout()
     ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
     #ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,))
 

@@ -108,7 +108,7 @@ def draw_ldascale(outname, compact = False):
         conf={}
         conf['title']=''
         conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
-        conf['lines']=['o-','^-','d-']*10
+        conf['lines']=['o-','^-','d-','+-']*10
         conf['nolegend'] = True
         confset['default'] = conf
 
@@ -133,7 +133,8 @@ def draw_ldascale(outname, compact = False):
             conf['xtick_scale'] = 1e+11
         ploter.set_subplot(idx+1,2)
         if idx == 0:
-            confset['default']['title'] = 'Speedup in Time'
+            #confset['default']['title'] = 'Speedup in Time'
+            confset['default']['title'] = 'Convergence Time Ratio'
         #if setxlim:
         #    confset['default']['xlim'] = confxlim[dataset][3]
         confset['default']['yscale'] = 'log'

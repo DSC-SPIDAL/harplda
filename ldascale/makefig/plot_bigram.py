@@ -73,7 +73,7 @@ def draw_ldascale(outname, compact = False):
     conf={}
     conf['title']=''
     conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
-    conf['lines']=['o-','^-','d-']*10
+    conf['lines']=['o-','^-','d-','+-','x-']*10
     #conf['nolegend'] = True
     confset['default'] = conf
 
@@ -81,49 +81,58 @@ def draw_ldascale(outname, compact = False):
     #setxlim = False
 
     #plt.rcParams.update({'figure.figsize':(4.5*5,3*4.5)})
-    plt.rcParams.update({'figure.figsize':(4,3)})
+    #plt.rcParams.update({'figure.figsize':(4,3)})
+    plt.rcParams.update({'figure.figsize':(4*2,3*2)})
     plt.rcParams.update({'axes.titlesize':12})
     plt.rcParams.update({'axes.titleweight':'bold'})
     plt.rcParams.update({'legend.fontsize':12})
     logger.info('set large view')
 
     #set number of subplots
-    #ploter.init_subplot(2,2)
+    ploter.init_subplot(2,2)
 
     for idx, dataset in enumerate(dnames):
         logger.info('idx=%d, dataset=%s', idx, dataset)
 
-        ploter.init_subplot(1,1)
         ploter.set_subplot(1,1)
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][0]
-        call_plot('accuracy_itertime', '', conffiles[dataset]['1'], outname + '-1.pdf',confset) 
+
+        confset['default']['title'] = '(a) Convergence Speed'
+        call_plot('accuracy_itertime', '', conffiles[dataset]['1'], '',confset) 
 
 
         confset['default']['nolegend'] = True
-        ploter.init_subplot(1,1)
-        ploter.set_subplot(1,1)
+        ploter.set_subplot(1,2)
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][1]
-        call_plot('accuracy_iter', '', conffiles[dataset]['1'], outname + '-2.pdf',confset) 
+        confset['default']['title'] = '(b) Convergence Rate'
+        call_plot('accuracy_iter', '', conffiles[dataset]['1'], '',confset) 
 
 
-        ploter.init_subplot(1,1)
         conf['xtick_scale'] = 1e+11
-        ploter.set_subplot(1,1)
+        ploter.set_subplot(2,1)
         #if setxlim:
         #    confset['default']['xlim'] = confxlim[dataset][3]
-        call_plot('speedup', '', conffiles[dataset]['1'], outname + '-3.pdf',confset) 
+        confset['default']['title'] = '(c) Convergence Time Ratio'
+        call_plot('speedup', '', conffiles[dataset]['1'],  '',confset) 
 
-        ploter.init_subplot(1,1)
-        ploter.set_subplot(1,1)
+        ploter.set_subplot(2,2)
         confset['default']['sample'] = 10
         if setxlim:
             confset['default']['xlim'] = confxlim[dataset][3]
         
+        confset['default']['title'] = '(d) Overhead'
         #confset['default']['xtick_scale'] = 1000
         confset['default'].pop('xtick_scale', None)
-        call_plot('overhead_only', '', conffiles[dataset]['1'], outname + '-4.pdf',confset) 
+        call_plot('overhead_only', '', conffiles[dataset]['1'], '',confset) 
+    #
+    # save
+    #
+    #ploter.fig.savefig(outname + '.pdf', bbox_extra_artists=(lgd,), bbox_inches='tight')
+    plt.tight_layout()
+    ploter.fig.savefig(outname + '.pdf')
+
 
 
 def draw_ldascale_single(outname, compact = False):

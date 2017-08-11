@@ -1,2 +1,2 @@
-python ../plot_enwikithreadlog.py 1_enwiki_threadlog.conf
-mv 1_enwiki*.pdf ~/tmp/runsocc
+python ../plot_enwikithreadlog.py $1
+mv *.pdf ~/tmp/runsocc

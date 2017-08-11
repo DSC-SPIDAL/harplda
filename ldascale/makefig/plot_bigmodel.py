@@ -33,104 +33,50 @@ prefix = 'nlda'
 def call_plot(plotname, datadir, namefile, figname, confset):
     perfname = PerfName(namefile)
     ploter.init_data(plotconf.dataroot, perfname)
-    if plotname in confset:
-        ploter.plot(plotname, prefix + figname, confset[plotname])
-    else:
-        ploter.plot(plotname, prefix + figname, confset['default'])
-
-
-def draw_eval_bars(namefile, conf):
-
-    level = 1.36e+11
-
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
     ploter.curax.grid(gridFlag)
- 
-    perfname = PerfName(namefile)
-    ploter.init_data(dataroot, perfname)
-    #draw eval_bar chart
-    figdata = draw_eval(ploter.perfdata, ploter.perfname, level)
-    ploter.plot_converge_level(prefix + '-converge-bar.pdf', figdata)
+    if plotname in confset:
+        ploter.plot(plotname, figname, confset[plotname])
+    else:
+        ploter.plot(plotname, figname, confset['default'])
 
+def draw_newharp(outname):
 
-def draw_newharp(conffile, conf):
+    plt.rcParams.update({'figure.figsize':(4*2,3)})
+    plt.rcParams.update({'axes.titlesize':12})
+    plt.rcParams.update({'axes.titleweight':'bold'})
+    plt.rcParams.update({'legend.fontsize':12})
+
     nullconf={'default':{'title':''}}
+    confset = {}
+    conf={}
+    conf['title']=''
+    conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
+    conf['lines']=['o-','^-','d-','+-']*10
+    confset['default'] = conf
 
-    #draw_eval_bars(conffile, nullconf)
+    #set number of subplots
+    ploter.init_subplot(1,2)
+
+    conffiles=['bigmodel_clueweb_100K.conf','bigmodel_clueweb_1M.conf']
 
     #conffile='enwiki-1M_30x60-ib'
-    ploter.init_subplot(1,1)
     ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
     confset['default']['xtick_scale'] = 1000
-    call_plot('accuracy_itertime', '', conffile, '-1-4.pdf',conf) 
+    #confset['default']['title'] = '(a) Convergence Speed K=100K'
+    confset['default']['title'] = '(a) K=100K'
+    call_plot('accuracy_itertime', '', conffiles[0], '',confset) 
 
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
-    call_plot('scalability', '', conffile, '-throughput-2.pdf',conf) 
+    ploter.set_subplot(1,2)
+    confset['default']['xtick_scale'] = 1000
+    #confset['default']['title'] = '(b) Convergence Speed K=1M'
+    confset['default']['title'] = '(b) K=1M'
+    call_plot('accuracy_itertime', '', conffiles[1], '',confset) 
 
-    conf['default']['iter-throughput'] = 1
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
-    call_plot('scalability', '', conffile, '-throughput-3.pdf',conf) 
-
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
-    call_plot('throughput_runtime', '', conffile, '-throughput-1.pdf',conf) 
-
-
-
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
-    call_plot('accuracy_overalltime', '', conffile, '-1-1.pdf',conf) 
-
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
-    call_plot('accuracy_runtime', '', conffile, '-1-2.pdf',conf) 
-
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
-    call_plot('accuracy_iter', '', conffile, '-1-3.pdf',conf) 
-
-    #ploter.init_subplot(1,1)
-    #ploter.set_subplot(1,1)
-    #call_plot('overhead', '', conffile, '-3-2.pdf', nullconf)
-    #ploter.init_subplot(1,1)
-    #ploter.set_subplot(1,1)
-    #call_plot('overhead_end', '', conffile, '-3-3.pdf', nullconf)
-    #ploter.init_subplot(1,1)
-    #ploter.set_subplot(1,1)
-    #ploter.curax.grid(gridFlag)
-    #call_plot('overhead_all', '', conffile, '-3-4.pdf', conf)
-
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
-    call_plot('loadbalance_runtime', '', conffile, '-2-3.pdf', conf)
-
-    ploter.init_subplot(1,1)
-    ploter.set_subplot(1,1)
-    ploter.curax.grid(gridFlag)
-    call_plot('overhead_all', '', conffile, '-3-4.pdf', conf)
-
-
-    
-#ploter.init_subplot(1,1)
-#ploter.set_subplot(1,1)
-#call_plot('overall_runtime', '', conffile, '-4-4.pdf', '')
- 
-    #ploter.init_subplot(1,1)
-    #ploter.set_subplot(1,1)
-    #ploter.curax.grid(gridFlag)
-    #call_plot('converge_level', '', conffile, '-converge-bar-1.pdf',conf) 
-
+    #
+    # save
+    #
+    plt.tight_layout()
+    ploter.fig.savefig(outname + '.pdf')
 
 
 if __name__ == "__main__":
@@ -149,79 +95,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     plotconf.draw_init()
-    prefix = sys.argv[1].split('.')[0]
 
-    confset = {}
-    if len(sys.argv) > 2:
-        if sys.argv[2] == 'TRUE':
-            if len(sys.argv) > 3:
-                #set xlim by sys.argv[3]
-                ploter.use_shortest_x = True
-                conf={}
-                conf['title']=''
-                conf['xlim'] = int(sys.argv[3])
-                conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']
-                conf['lines']=['o-','^-','d-']*10
-                confset['default'] = conf
-                conf={}
-                conf['title']=''
-                conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']
-                conf['lines']=['o-','^-','d-']*10
-                confset['accuracy_iter'] = conf
- 
-                conf={}
-                conf['title']=''
-                conf['xlim'] = int(sys.argv[3])
-                conf['colors']=['r','r','b','b','g', 'g','c','c','y','k','r','b','m','g','c','y','k']
-                conf['lines']=['-','--']*10
-                confset['overhead_all'] = conf
-                logger.info('set use_xlim_x as : %s', conf['xlim'])
-            else:
-                #only shortview
-                shortview = (sys.argv[2] == 'True')
-                ploter.use_shortest_x = shortview
-                logger.info('set use_shortest_x as : %s', shortview)
-        else:
-            # maybe special to STRAGGLER
-            # there are 4 lines with 2 groups
-            ploter.use_shortest_x = True
-            conf={}
-            conf['title']=''
-            conf['xlim'] = int(sys.argv[3])
-#conf['colors']=['r','salmon','g', 'olivedrab','c','y','k','r','b','m','g','c','y','k']
-            conf['colors']=['r','r','g', 'g','c','y','k','r','b','m','g','c','y','k']
-            conf['lines']=['o-','o--','d-','d--']*10
-            confset['default'] = conf
-            conf={}
-            conf['title']=''
-#           conf['colors']=['r','salmon','g', 'olivedrab','c','y','k','r','b','m','g','c','y','k']
-            conf['colors']=['r','r','g', 'g','c','y','k','r','b','m','g','c','y','k']
-            conf['lines']=['o-','o--','d-','d--']*10
-            confset['accuracy_iter'] = conf
- 
-            conf={}
-            conf['title']=''
-            conf['xlim'] = int(sys.argv[3])
-            conf['colors']=['r','r','salmon','salmon','g', 'g','olivedrab','olivedrab','y','k','r','b','m','g','c','y','k']
-#conf['colors']=['r','r','g', 'g','c','y','k','r','b','m','g','c','y','k']
-            conf['lines']=['-','--']*10
-            confset['overhead_all'] = conf
-            logger.info('set use_xlim_x as : %s', conf['xlim'])
-
-    else:
-        conf={}
-        conf['title']=''
-        conf['colors']=['r','b','g', 'm','c','y','k','r','b','m','g','c','y','k']*10
-        conf['lines']=['o-','^-','d-']*10
- 
-        confset['default'] = conf
-        #plt.rcParams.update({'figure.figsize':(8,6)})
-        #plt.rcParams.update({'figure.figsize':(6,3*6./4)})
-        plt.rcParams.update({'figure.figsize':(4.5,3*4.5/4)})
-        logger.info('set large view')
-
-
-    #draw_ylda()
-    #draw_petuum()
-    #draw_iteracc()
-    draw_newharp(sys.argv[1], confset)
+    draw_newharp(sys.argv[1])
