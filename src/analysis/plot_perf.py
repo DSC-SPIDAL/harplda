@@ -1220,7 +1220,8 @@ class PlotEngine():
 
         # all plots goes here
         if plottype == 3:
-            self.curax.set_ylabel('Overhead Ratio of Each Iteration')
+            #self.curax.set_ylabel('Overhead Ratio of Each Iteration')
+            self.curax.set_ylabel('Overhead Ratio Per Iteration')
         else:
             self.curax.set_ylabel('ExecutionTime Per Iteration (s)')
         if 'title' in conf:
