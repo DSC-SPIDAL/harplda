@@ -1515,6 +1515,7 @@ class PlotEngine():
         # twin plot the time/update count bar chart
         if draw_barchart:
             ax2 = self.curax.twinx()
+            ax2.grid(zorder=0)
         if draw_speedup:
             self.curax.set_yscale("log", basey=2, nonposy='clip')
 
@@ -1694,7 +1695,10 @@ class PlotEngine():
                 __x = _x - curveCnt*width*1./2  + seq*width
                 __y = mat[:,1]
                 _sample = 1 if 'sample' not in conf else conf['sample']
-                bars = ax2.bar(__x[::i_sample],__y[::_sample], width, color=colors[seq],label=label)
+                if 'noedgecolor' in conf:
+                    bars = ax2.bar(__x[::_sample],__y[::_sample], width, color=colors[seq],label=label,edgecolor = "#ffffff", zorder = 3)
+                else:
+                    bars = ax2.bar(__x[::_sample],__y[::_sample], width, color=colors[seq],label=label)
                 #bars = ax2.bar(__x[::2],__y[::2], width, color=colors[seq],label=label)
                 #bars = ax2.bar(_x - curveCnt*width*1./2  + seq*width, mat[:,1], width, color=colors[seq],yerr = mat[:,2], label=label)
                 rects.append(bars)
@@ -1766,8 +1770,10 @@ class PlotEngine():
 
         #set zorders
         #logger.info('ax2=%d, ax1=%d', ax2.get_zorder(), self.curax.get_zorder())
-        #self.curax.set_zorder(ax2.get_zorder()+1) # put ax in front of ax2 
-        #self.curax.patch.set_visible(False) # hide the 'canvas' 
+        #ax2.set_zorder(6) # put ax in front of ax2 
+        self.curax.set_zorder(ax2.get_zorder()+1) # put ax in front of ax2 
+        #self.curax.set_zorder(ax2.get_zorder()+6) # put ax in front of ax2 
+        self.curax.patch.set_visible(False) # hide the 'canvas' 
 
         if figname:
             self.savefig(figname)
