@@ -1,1 +1,0 @@
-../2_dist_fin/list.txt

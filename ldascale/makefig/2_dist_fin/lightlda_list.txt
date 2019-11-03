@@ -1,2 +1,0 @@
-lightlda_enwiki_t10000_4x16_i300_.00500000_0.01_16_0610 lightlda 4
-lightlda_enwiki_t10000_8x16_i300_.00500000_0.01_16_0610 lightlda 8

@@ -1,0 +1,4 @@
+harp_clueweb30b_j128_30x30_k5000_timer_l30_h80_r2_exp5   harp 30   
+harp_bigram_j128_10x8_k500_notimer_l100_h100_r2_exp5     harp 10
+lightlda_bigram_t500_10x8_i200_.10000000_0.01_4_500Test  lightlda 10
+nomadlda_bigram_t500_10x8_i200_50_0.01_t50_500Test       nomadlda 10

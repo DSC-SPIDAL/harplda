@@ -1,0 +1,93 @@
+Performance of LDA trainer is related to many factors. There are three main aspects, which are Data, Cluster  and Algorithm. 
+
+In a parallel LDA solution, the training data are documents partitioned among the nodes in cluster which is call input data characterized by total numbers of tokens, denoted as W, and number of documents, denoted as D. Another important data are the word-topic count matrix Nwk and document-topic count matrix Ndk, which are the shared global model data needed by all computation. The model data are V*K and D*K matrix, where V is the vocabulary size and K is the topic number. 
+
+Cluster configurations include nodes number N and networking bandwidth B, memory size M for each node, and threads number T for each node. As manycore technology brings more powerful machines for complicated computation applications, large scale machine learning applications will definitely benefit from it. Relatively small number of N with large number of T can reach high scale of parallelism, which is more like a traditional HPC cluster other than a cloud cluster.
+
+Algorithm is the most important aspect, which determines computation and communication complexity. The state-of-the-art large-scale LDA trainers all follow the work os AD-LDA, in which input data are partitioned into n document collections, a GibbsSampler running parallel on each collection, and each sampler synchronize it's model data with others at some points. Input data is actually a document-word matrix, data partition can be done either in the rows or in the columns. In general applications, the row number is much larger than column number, so partition by rows will get smaller model data size. (So, in our paper we only use the partition strategy by documents and call the shared word-topic matrix as model data.). Besides that, there are many possible communication strategies which control how to do model data synchronization among distributed nodes. In this paper, we focus on exploring the differences among the communication strategies under the same computation algorithm setting.  \\
+
+What's the relationship of performance to the parameters? \\
+
+1. First, we try to find out the relationship between input data W and model data V, K.  \\
+
+Power law distribution is a general phenomenon. It has another equal form for text data as Zipf's law, where the frequency of a word is propotional to the reciprocal of it's rank.
+
+$freq(i) = C*i^{-\lambda}$, for word with rank i, and $\lambda$ is near 1.
+
+If there are total V uniq words in the input data, the vocabulary size is V, then we have:  
+
+$W = \sum_{i=1}^{V}(freq(i))) = \sum_{i=1}^{V}(C*i^{-\lambda})$
+
+If $\lambda$ is 1, this is the partial sum of harmonic series which have logarithmic growth, and we get:
+
+$W \approx C*(ln(V) + \gamma + \frac{1}{2V})$, where $\gamma$ is the Euler–Mascheroni constant $\approx$ 0.57721
+
+Model data is a very huge but sparse V*K matrix. In general setting, V is 1M, K is 1K, while for big model it can even reach 1M*1M. The non-zero count of model data is the true model size, denoted as S, $S << V*K$. 
+
+In the begining of Gibbs Sampling, word-topic count matrix is initialized by random topic assignment for each work. So the word i will get max(K, freq(i)) non-zero cells. 
+if $freq(J) = K$, we get:
+\begin{eqnarray*}
+J &=& C/K \\
+S &=& \sum_{i=1}^{J}K + \sum_{i=J+1}^{V}freq(i)  \\
+  &=& W - \sum_{i=1}^{J}freq(i) + \sum_{i=1}^{J}K  \\
+  &=& C*(lnV + lnK- lnC +1)
+\end{eqnarray*}
+
+The true model size S is logarithmic to matrix size V*K. This does not mean S is small, for the constant $C = freq(1)$ can be very large, even $C*lnV*K$ can be huge. But it really means that the increase of dimension of the model will not increase the model data size dramatically. That's a good news.
+
+With the progress of iterations and algorithm converges, the model data size will shrink too. $\alpha$ and $\beta$ are two hyper parameter in LDA, which are called concentration parameters controlling the final sparsity of the topic distribution. As to word-topic matrix, the average count of unique topics for all the words is controlled by $\alpha$ and $\beta$. When sampled with enough data, the average count value will drop to a certain small value determined by $\alpha$, $\beta$ and K.
+
+$ S=mean(word-topic count)*V = f(\alpha, \beta, K)*V = \delta*K*V$ \\
+
+2. Second, we try to find out how the model data is distributed among the nodes. \\
+
+Input data is actually a document-word matrix, data partition can be done either in the rows or in the columns. In general applications, the row number is much larger than column number, so partition by rows will get smaller model data size. 
+
+After input data is partitioned by documents to each node of the cluster, a local model data S' will be built up and used in local computation, and this local model data should synchronize with global model data S frequently to make the training process converge. In fact, the synchronization frequency is highly relevant to the final model accuracy.
+
+This data partition strategy can decrease local input data W' linear to node number N, we get:
+
+$W' = W / N$
+
+For computation is proportional to the total word number W', this strategy is friendly to computation, and the more nodes the better performance we can expect. 
+
+And, the actual local model size S' in initialization:
+\begin{eqnarray*}
+S' &=& C' * (lnV' + lnK -lnC' +1)  \\
+   &=& C' * (lnV' + lnK -lnC + lnN +1)  \\
+   &\approx& \frac{C}{N}(lnV +lnK -lnC + 1 +lnN),  C' \approx C/N  \\
+   &\approx& \frac{S}{N} + \frac{C}{N}lnN
+\end{eqnarray*}
+
+In general configurations $lnN$ is smaller than $lnV+lnK-lnC+1$, so local model size S' is no more than $\frac{2}{N}S$, the initialization model data size is controllable by document partition,  that's good too.
+
+But, when we investigate the V', there comes the problem.
+
+$W' \approx C'*(ln(V') + \gamma + \frac{1}{2V'})$
+
+where $C' \approx C/N, W' = W/N$
+
+we can get:
+
+$V' \approx V$
+
+This is also easy to understand that when documents partitioned to N nodes, every words with frequency larger than N will get a high probability occurring on each node. 
+
+assume at rank L, $freq(L) = N$, we get:
+$L = \frac{W}{ (lnV + \gamma) * N}$
+
+e.g. enwiki-3.7M dataset,W=1B, V=1M, N=100, we get $L = 0.69V$.  clueweb-10B dataset, W = 10B, V=1M, N = 100, $L > V$. For reasonable large input data set, L should be easily larger than V.
+
+And, as we noted in section 1, the model size S will shrink to $\delta *K*V$, where the constant $\delta$ is almost the same for local and global model data. In this case, local model size will be not much smaller than the global one. And even in the initialization phrase, when local model try to synchronize with others, it will receive almost all the global model data.
+
+So, we get a conclusion that because of the power law distribution of words, the words can not be separated among the nodes but be distributed almost on all of them. Local vocabulary size V' will not decrease linear to the node number N, and the local model size will not decrease linear to the node number N too. This means when more nodes introduced, model data synchronization can become a problem. \\
+
+3. Computation and Communication Cost Model \\
+
+LDA is an iterative algorithm, it keeps sampling on the input documents data, updating(synchronizing) the model data, until converges. In the computation part, one iteration is one pass on the input document data. In the synchronization part, one iteration is one pass to all the model data. We can now define:
+
+computation time of iteration i,$C(i) = f(i| W, D, V, K, N, T, M, B)$
+
+communication time of iteration j,$S(i) = g(j |W, D, V, K, N, T, M, B)$ \\
+
+There are some fast sampling algorithm for LDA proposed in literature. SparseLDA is one of them and is the core in state-of-the-art large-scale LDA trainers. The amortized sampling complexity is $\mathcal{O}(K_{d}+K_{w})$. 

@@ -1,0 +1,207 @@
+options:
+mpiexec -n 8 /tmp/hpda/test//nomadlda/bin/f+nomad-lda.eval -T 500 -k 10000 -a 50 -b 0.01 -t 20 -n 16 /tmp/hpda/test//dataset//enwiki/nomadlda
+Data loading done (1.51636 sec)!
+start model init
+starting model init
+done model init
+[2017-06-15 16:15:34] init phase done! 1107903671 tokens
+rank 2 iter 1 localNwt 434957777 localNt 75552
+rank 7 iter 1 localNwt 449125018 localNt 75552
+rank 5 iter 1 localNwt 460753165 localNt 75568
+rank 6 iter 1 localNwt 467340440 localNt 75552
+rank 4 iter 1 localNwt 442922744 localNt 75568
+rank 0 iter 1 localNwt 453018170 localNt 75552
+[2017-06-15 16:30:26] iter 1 time 503 totaltime 503 rank 1 iter 1 localNwt 436657466 localNt 75552
+rank 3 iter 1 localNwt 453434032 localNt 75552
+time-1 876.3 time-2 15.6 eplasetime 891.9 training-LL -1.02515e+10 Nwt 3598208812 avg 3.24776 Nt 604448 nxt 8x16, throughput 3.208001e+04
+after250228/253588 124926/106607 125113/25680 124951/182602 124860/5632 125019/59771 125081/271276 94845/94845 
+rank 2 iter 2 localNwt 872019849 localNt 204928
+rank 3 iter 2 localNwt 890867420 localNt 204928
+rank 7 iter 2 localNwt 883180386 localNt 204944
+rank 5 iter 2 localNwt 902958173 localNt 204944
+rank 6 iter 2 localNwt 917415844 localNt 204944
+rank 4 iter 2 localNwt 883132884 localNt 204944
+rank 1 iter 2 localNwt 878509110 localNt 204928
+rank 0 iter 2 localNwt 870333796 localNt 204944
+[2017-06-15 16:44:33] iter 2 time 500 totaltime 1003 time-1 833.1 time-2 13.59 eplasetime 1739 training-LL -8.92164e+09 Nwt 7098417462 avg 6.40707 Nt 1639504 nxt 8x16, throughput 3.282406e+04
+after75328/75369 124926/168727 125113/80 124951/156662 124860/20 125019/240 125081/382198 216685/216705 
+rank 3 iter 3 localNwt 1326121626 localNt 364274
+rank 7 iter 3 localNwt 1306596210 localNt 364288
+rank 4 iter 3 localNwt 1321655260 localNt 364288
+rank 0 iter 3 localNwt 1293076619 localNt 364288
+[2017-06-15 16:58:07] iter 3 time 500 totaltime 1503 time-1 801.7 time-2 12.42 eplasetime 2553 training-LL -7.97655e+09 Nwt 10564475624 avg 9.53555 Nt 2914290 nxt 8x16, throughput 3.377636e+04
+rank 2 iter 3 localNwt 1306986631 localNt 364288
+rank 1 iter 3 localNwt 1311644187 localNt 364288
+rank 5 iter 3 localNwt 1342396829 localNt 364288
+rank 6 iter 3 localNwt 1355998262 localNt 364288
+after635/655 124926/152920 125113/303 124951/129960 124860/243 125019/390 125081/497425 218085/218105 
+rank 2 iter 4 localNwt 1738553534 localNt 537408
+rank 1 iter 4 localNwt 1739398257 localNt 537408
+rank 3 iter 4 localNwt 1758033004 localNt 537408
+rank 7 iter 4 localNwt 1726296559 localNt 537408
+rank 5 iter 4 localNwt 1775409408 localNt 537418
+rank 6 iter 4 localNwt 1788078776 localNt 537408
+rank 4 iter 4 localNwt 1753730586 localNt 537424
+rank 0 iter 4 localNwt 1720473798 localNt 537408
+[2017-06-15 17:11:40] iter 4 time 500 totaltime 2003 time-1 801 time-2 12.04 eplasetime 3366 training-LL -7.52517e+09 Nwt 13999973922 avg 12.6365 Nt 4299290 nxt 8x16, throughput 3.350965e+04
+after218/258 124926/119857 125113/200 124951/127182 124860/240 125019/236 125081/585943 166065/166085 
+rank 2 iter 5 localNwt 2167995476 localNt 715632
+rank 1 iter 5 localNwt 2165933635 localNt 715632
+rank 7 iter 5 localNwt 2146509534 localNt 715648
+rank 5 iter 5 localNwt 2205804131 localNt 715648
+rank 6 iter 5 localNwt 2217681192 localNt 715648
+rank 4 iter 5 localNwt 2183147342 localNt 715648
+rank 0 iter 5 localNwt 2146720128 localNt 715648
+[2017-06-15 17:25:15] iter 5 time 500 totaltime 2503 time-1 803.4 time-2 11.57 eplasetime 4181 training-LL -7.24811e+09 Nwt 17420417022 avg 15.7238 Nt 5725136 nxt 8x16, throughput 3.326001e+04
+rank 3 iter 5 localNwt 2186625584 localNt 715632
+after21/62 124926/91454 125113/8402 124951/112760 124860/58 125019/67 125081/658753 128425/128445 
+rank 2 iter 6 localNwt 2606829036 localNt 897728
+rank 1 iter 6 localNwt 2597696731 localNt 897728
+rank 3 iter 6 localNwt 2626837780 localNt 897728
+rank 7 iter 6 localNwt 2571036163 localNt 897744
+rank 5 iter 6 localNwt 2637643080 localNt 897744
+rank 6 iter 6 localNwt 2648666501 localNt 897744
+rank 4 iter 6 localNwt 2614113877 localNt 897744
+rank 0 iter 6 localNwt 2578210360 localNt 897728
+[2017-06-15 17:38:45] iter 6 time 500 totaltime 3003 time-1 799 time-2 11.59 eplasetime 4991 training-LL -7.04939e+09 Nwt 20881033528 avg 18.8473 Nt 7181888 nxt 8x16, throughput 3.383844e+04
+after100/120 124926/43215 125113/2580 124951/163502 124860/174 125019/318 125081/715826 74246/74266 
+rank 2 iter 7 localNwt 3039502379 localNt 1081328
+rank 5 iter 7 localNwt 3072084464 localNt 1081341
+rank 6 iter 7 localNwt 3082209500 localNt 1081328
+rank 4 iter 7 localNwt 3047576147 localNt 1081344
+rank 0 iter 7 localNwt 3006652339 localNt 1081328
+rank 1 iter 7 localNwt 3026372800 localNt 1081328
+rank 3 iter 7 localNwt 3060040884 localNt 1081328
+rank 7 iter 7 localNwt 2990573754 localNt 1081328
+[2017-06-15 17:52:19] iter 7 time 500 totaltime 3503 time-1 801.9 time-2 11.22 eplasetime 5804 training-LL -6.89963e+09 Nwt 24325012267 avg 21.9559 Nt 8650653 nxt 8x16, throughput 3.355423e+04
+after154/214 124926/5861 125113/179 124951/165263 124860/133 125019/537 125081/815509 12285/12305 
+rank 7 iter 8 localNwt 3412352389 localNt 1267680
+rank 4 iter 8 localNwt 3478041546 localNt 1267680
+rank 2 iter 8 localNwt 3463894486 localNt 1267680
+rank 1 iter 8 localNwt 3450065023 localNt 1267680
+rank 3 iter 8 localNwt 3484682404 localNt 1267680
+rank 5 iter 8 localNwt 3503536224 localNt 1267680
+rank 6 iter 8 localNwt 3512797266 localNt 1267680
+rank 0 iter 8 localNwt 3430091673 localNt 1267680
+[2017-06-15 18:05:49] iter 8 time 500 totaltime 4003 time-1 799.1 time-2 11.38 eplasetime 6615 training-LL -6.78256e+09 Nwt 27735461011 avg 25.0342 Nt 10141440 nxt 8x16, throughput 3.334239e+04
+after95/95 124926/239 125113/326 124951/107806 124860/154 125019/381 125081/890803 117/197 
+rank 2 iter 9 localNwt 3887690348 localNt 1454560
+rank 1 iter 9 localNwt 3874273752 localNt 1454560
+rank 3 iter 9 localNwt 3908795574 localNt 1454560
+rank 7 iter 9 localNwt 3836199709 localNt 1454560
+rank 5 iter 9 localNwt 3935530274 localNt 1454576
+rank 6 iter 9 localNwt 3943996946 localNt 1454576
+rank 4 iter 9 localNwt 3909120681 localNt 1454576
+rank 0 iter 9 localNwt 3854025173 localNt 1454560
+[2017-06-15 18:19:29] iter 9 time 500 totaltime 4503 time-1 808.5 time-2 11.32 eplasetime 7435 training-LL -6.6874e+09 Nwt 31149632457 avg 28.1158 Nt 11636528 nxt 8x16, throughput 3.299146e+04
+after9/69 124926/149 125113/766 124951/54495 124860/202 125019/316 125081/943581 383/423 
+rank 3 iter 10 localNwt 4331201920 localNt 1643104
+rank 7 iter 10 localNwt 4258177282 localNt 1643104
+rank 5 iter 10 localNwt 4365377444 localNt 1643120
+rank 6 iter 10 localNwt 4372978254 localNt 1643120
+rank 4 iter 10 localNwt 4338040995 localNt 1643120
+rank 2 iter 10 localNwt 4309660797 localNt 1643104
+rank 1 iter 10 localNwt 4296678716 localNt 1643104
+rank 0 iter 10 localNwt 4276155204 localNt 1643104
+[2017-06-15 18:33:48] iter 10 time 500 totaltime 5003 time-1 847.4 time-2 11.27 eplasetime 8293 training-LL -6.60902e+09 Nwt 34548270612 avg 31.1835 Nt 13144880 nxt 8x16, throughput 3.133240e+04
+after120/160 124926/139 125113/160 124951/164 124860/117 125019/343 125081/998801 77/117 
+rank 2 iter 11 localNwt 4733212503 localNt 1834544
+rank 1 iter 11 localNwt 4720677250 localNt 1834544
+rank 3 iter 11 localNwt 4755059558 localNt 1834544
+rank 7 iter 11 localNwt 4681785933 localNt 1834544
+rank 5 iter 11 localNwt 4789279249 localNt 1834560
+rank 6 iter 11 localNwt 4796057297 localNt 1834560
+rank 4 iter 11 localNwt 4761014227 localNt 1834560
+rank 0 iter 11 localNwt 4699858512 localNt 1834544
+[2017-06-15 18:48:12] iter 11 time 500 totaltime 5503 time-1 853.6 time-2 11.16 eplasetime 9158 training-LL -6.54296e+09 Nwt 37936944529 avg 34.2421 Nt 14676400 nxt 8x16, throughput 3.101509e+04
+after98/118 124926/401 125113/538 124951/119 124860/100 125019/226 125081/998312 144/187 
+rank 2 iter 12 localNwt 5157021621 localNt 2023936
+rank 1 iter 12 localNwt 5144929145 localNt 2023936
+rank 3 iter 12 localNwt 5179210541 localNt 2023936
+rank 7 iter 12 localNwt 5105701187 localNt 2023936
+rank 5 iter 12 localNwt 5213414276 localNt 2023952
+rank 6 iter 12 localNwt 5219329938 localNt 2023952
+rank 4 iter 12 localNwt 5184245530 localNt 2023952
+rank 0 iter 12 localNwt 5123843751 localNt 2023936
+[2017-06-15 19:03:11] iter 12 time 500 totaltime 6003 time-1 887.7 time-2 11.15 eplasetime 1.006e+04 training-LL -6.48678e+09 Nwt 41327695989 avg 37.3026 Nt 16191536 nxt 8x16, throughput 2.984045e+04
+after99/119 124926/161 125113/292 124951/275 124860/296 125019/439 125081/998244 134/175 
+rank 2 iter 13 localNwt 5580866570 localNt 2214000
+rank 3 iter 13 localNwt 5603390246 localNt 2214000
+rank 7 iter 13 localNwt 5529614649 localNt 2214016
+rank 5 iter 13 localNwt 5637637631 localNt 2214016
+rank 6 iter 13 localNwt 5642757622 localNt 2214016
+rank 4 iter 13 localNwt 5607518167 localNt 2214016
+rank 1 iter 13 localNwt 5569241924 localNt 2214016
+rank 0 iter 13 localNwt 5547875661 localNt 2214016
+[2017-06-15 19:17:41] iter 13 time 500 totaltime 6503 time-1 858.4 time-2 11.22 eplasetime 1.093e+04 training-LL -6.4382e+09 Nwt 44718902470 avg 40.3635 Nt 17712096 nxt 8x16, throughput 3.086573e+04
+after205/239 124926/581 125113/200 124951/180 124860/36 125019/343 125081/998215 187/207 
+rank 2 iter 14 localNwt 6003912214 localNt 2404656
+rank 1 iter 14 localNwt 5992640728 localNt 2404656
+rank 7 iter 14 localNwt 5952660066 localNt 2404656
+rank 5 iter 14 localNwt 6061018062 localNt 2404656
+rank 6 iter 14 localNwt 6065305732 localNt 2404656
+rank 4 iter 14 localNwt 6030006115 localNt 2404656
+rank 0 iter 14 localNwt 5971014488 localNt 2404656
+rank 3 iter 14 localNwt 6026808614 localNt 2404653
+[2017-06-15 19:31:57] iter 14 time 500 totaltime 7003 time-1 845.1 time-2 10.96 eplasetime 1.178e+04 training-LL -6.39588e+09 Nwt 48103366019 avg 43.4184 Nt 19237245 nxt 8x16, throughput 3.128766e+04
+after126/166 124926/254 125113/33 124951/183 124860/120 125019/364 125081/998641 200/240 
+rank 3 iter 15 localNwt 6453645888 localNt 2595216
+rank 7 iter 15 localNwt 6380070552 localNt 2595216
+rank 5 iter 15 localNwt 6487720320 localNt 2595216
+rank 6 iter 15 localNwt 6491187230 localNt 2595216
+rank 4 iter 15 localNwt 6455860140 localNt 2595219
+rank 0 iter 15 localNwt 6398145466 localNt 2595216
+rank 2 iter 15 localNwt 6430563445 localNt 2595216
+rank 1 iter 15 localNwt 6420016734 localNt 2595216
+[2017-06-15 19:46:28] iter 15 time 500 totaltime 7503 time-1 859.7 time-2 11.13 eplasetime 1.265e+04 training-LL -6.35828e+09 Nwt 51517209775 avg 46.4997 Nt 20761731 nxt 8x16, throughput 3.102304e+04
+after402/442 124926/2478 125113/949 124951/310 124860/302 125019/0 125081/992440 3060/3080 
+rank 2 iter 16 localNwt 6853682730 localNt 2788428
+rank 6 iter 16 localNwt 6913913888 localNt 2788432
+rank 0 iter 16 localNwt 6821151037 localNt 2788432
+[2017-06-15 20:00:32] iter 16 time 500 totaltime 8003 time-1 833.3 time-2 11.13 eplasetime 1.35e+04 training-LL -6.32552e+09 Nwt 54901620662 avg 49.5545 Nt 22307436 nxt 8x16, throughput 3.172936e+04
+rank 1 iter 16 localNwt 6843318995 localNt 2788432
+rank 3 iter 16 localNwt 6877214726 localNt 2788416
+rank 7 iter 16 localNwt 6802581249 localNt 2788432
+rank 5 iter 16 localNwt 6911320377 localNt 2788432
+rank 4 iter 16 localNwt 6878437660 localNt 2788432
+after131/160 124926/355 125113/162 124951/325 124860/41 125019/299 125081/998440 199/219 
+rank 2 iter 17 localNwt 7276058010 localNt 2982640
+rank 6 iter 17 localNwt 7335885095 localNt 2982640
+rank 4 iter 17 localNwt 7300320187 localNt 2982656
+rank 3 iter 17 localNwt 7299949091 localNt 2982640
+rank 7 iter 17 localNwt 7225014712 localNt 2982640
+rank 5 iter 17 localNwt 7334140602 localNt 2982656
+rank 0 iter 17 localNwt 7243660643 localNt 2982640
+[2017-06-15 20:14:14] iter 17 time 500 totaltime 8503 time-1 811.1 time-2 11.1 eplasetime 1.432e+04 training-LL -6.29651e+09 Nwt 58281117205 avg 52.6049 Nt 23861152 nxt 8x16, throughput 3.255039e+04
+rank 1 iter 17 localNwt 7266088865 localNt 2982640
+after120/160 124926/469 125113/119 124951/166 124860/21 125019/140 125081/998686 219/240 
+rank 2 iter 18 localNwt 7698557587 localNt 3175808
+rank 1 iter 18 localNwt 7689027421 localNt 3175808
+rank 3 iter 18 localNwt 7722785012 localNt 3175808
+rank 7 iter 18 localNwt 7647613904 localNt 3175808
+rank 5 iter 18 localNwt 7756977862 localNt 3175824
+rank 6 iter 18 localNwt 7757826417 localNt 3175824
+rank 4 iter 18 localNwt 7722266166 localNt 3175824
+rank 0 iter 18 localNwt 7666344658 localNt 3175808
+[2017-06-15 20:27:59] iter 18 time 500 totaltime 9003 time-1 813.6 time-2 10.83 eplasetime 1.514e+04 training-LL -6.27068e+09 Nwt 61661399027 avg 55.6559 Nt 25406512 nxt 8x16, throughput 3.245899e+04
+after120/160 124926/160 125113/280 124951/280 124860/137 125019/220 125081/998564 180/200 
+rank 2 iter 19 localNwt 8121598324 localNt 3368944
+rank 1 iter 19 localNwt 8112447622 localNt 3368960
+rank 3 iter 19 localNwt 8146177079 localNt 3368944
+rank 7 iter 19 localNwt 8070571348 localNt 3368960
+rank 5 iter 19 localNwt 8180351803 localNt 3368960
+rank 6 iter 19 localNwt 8180431595 localNt 3368960
+rank 4 iter 19 localNwt 8144728380 localNt 3368960
+rank 0 iter 19 localNwt 8089470212 localNt 3368960
+[2017-06-15 20:41:49] iter 19 time 500 totaltime 9503 time-1 818.8 time-2 11.07 eplasetime 1.597e+04 training-LL -6.2472e+09 Nwt 65045776363 avg 58.7107 Nt 26951648 nxt 8x16, throughput 3.229281e+04
+after70/110 124926/122 125113/112 124951/327 124860/300 125019/160 125081/998771 79/99 
+rank 2 iter 20 localNwt 8545726557 localNt 3560640
+rank 1 iter 20 localNwt 8536988804 localNt 3560640
+rank 7 iter 20 localNwt 8494742100 localNt 3560640
+rank 5 iter 20 localNwt 8604784383 localNt 3560653
+rank 6 iter 20 localNwt 8603978326 localNt 3560640
+rank 3 iter 20 localNwt 8570633356 localNt 3560640
+rank 4 iter 20 localNwt 8568250163 localNt 3560656
+rank 0 iter 20 localNwt 8513740748 localNt 3560640
+[2017-06-15 20:55:44] iter 20 time 500 totaltime 1e+04 time-1 824 time-2 11.05 eplasetime 1.681e+04 training-LL -6.22612e+09 Nwt 68438844437 avg 61.7733 Nt 28485149 nxt 8x16, throughput 3.217210e+04
+after179/199 124926/169 125113/116 124951/428 124860/178 125019/383 125081/998365 123/163 

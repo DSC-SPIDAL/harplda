@@ -1,3 +1,0 @@
-nomadlda_enwiki_t10000_8x16_i300_50_0.01_t50_0603 nomadlda 8
-nomadlda_enwiki_t10000_2x16_i300_50_0.01_t50_0603 nomadlda 2
-nomadlda_enwiki_t10000_4x16_i300_50_0.01_t50_0603 nomadlda 4

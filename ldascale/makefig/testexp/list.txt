@@ -1,9 +1,0 @@
-nomadlda_enwiki_t10000_2x16_i20_50_0.01_t500_0613 nomad 2
-nomadlda_enwiki_t10000_2x16_i20_50_0.01_t500_0613-noreid nomad-noreid 2
-nomadlda_enwiki_t10000_2x16_i20_50_0.01_t500_l1_L0_0613-noreid nomad-sche 2
-nomadlda_enwiki_t10000_4x16_i20_50_0.01_t500_0613 nomad 4
-nomadlda_enwiki_t10000_4x16_i20_50_0.01_t500_0613-noreid nomad-noreid 4
-nomadlda_enwiki_t10000_4x16_i20_50_0.01_t500_l1_L0_0613-noreid nomad-sche 4
-nomadlda_enwiki_t10000_8x16_i20_50_0.01_t500_0613-noreid nomad-noreid 8
-nomadlda_enwiki_t10000_8x16_i300_50_0.01_t50_0613 nomad 8
-nomadlda_enwiki_t10000_4x16_i20_50_0.01_t500_l1_L0_0613-noreid-threadlog nomad-threadlog 4

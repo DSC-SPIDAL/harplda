@@ -936,7 +936,8 @@ if __name__ == "__main__":
     # logging configure
     import logging.config
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-    logging.root.setLevel(level=logging.DEBUG)
+    #logging.root.setLevel(level=logging.DEBUG)
+    logging.root.setLevel(level=logging.INFO)
     logger.info("running %s" % ' '.join(sys.argv))
 
     # check and process input arguments
